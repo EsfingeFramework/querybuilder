@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>QueryBuilder_JDBC</name>
+	<comment></comment>
+	<projects>
+		<project>QueryBuilder</project>
+		<project>QueryBuilder_JDBC_IntegrationTests</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>querybuilder</name>
+			<type>2</type>
+			<locationURI>TCC/17022012_2/QueryBuilder/src/org/esfinge/querybuilder</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

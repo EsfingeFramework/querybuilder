@@ -1,0 +1,3 @@
+org.esfinge.querybuilder.utils.LowPriority
+org.esfinge.querybuilder.utils.MediumPriority
+org.esfinge.querybuilder.utils.HighPriority
