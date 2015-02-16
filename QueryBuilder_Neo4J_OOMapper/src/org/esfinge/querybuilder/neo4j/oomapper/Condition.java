@@ -54,7 +54,7 @@ public class Condition {
 	
 	public void verifyIndexedProperties(MappingInfo info){
 		if(propertyName != null){
-			if(!info.isIndexedProperty(propertyName))
+			if(!(info.isIndexedProperty(propertyName)||info.isRelatedProperty(propertyName)))
 				throw new UnindexedPropertyException("Property " + propertyName + " of NodeEntity Class " + info.getClazz().getName());
 		}else if(or != null){
 			for(Condition c : or)

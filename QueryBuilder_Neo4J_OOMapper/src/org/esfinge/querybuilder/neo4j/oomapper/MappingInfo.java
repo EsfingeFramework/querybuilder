@@ -39,6 +39,12 @@ public class MappingInfo {
 		return indexedProperties;
 	}
 	
+	public boolean isRelatedProperty(String propertyName){
+		if(getRelatedEntities().contains(propertyName.substring(0, propertyName.indexOf("."))))
+			return true;
+		return false;		
+	}
+	
 	public boolean isMappedProperty(String propertyName){
 		if(properties.contains(propertyName))
 			return true;
