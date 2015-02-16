@@ -260,7 +260,7 @@ public class TestNeo4JQueryVisitor {
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
 		String query = qr.getQuery().toString();
-		assertEquals("{ \"address.city\" : \"cidade\"}", query);
+		assertEquals("((address.city:\"cidade\"))", query);
 	}
 	
 	@Test
@@ -289,7 +289,7 @@ public class TestNeo4JQueryVisitor {
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
 		String query = qr.getQuery().toString();
-		assertEquals("{ \"$or\" : [ { \"name\" : \"nome\"} , { \"$and\" : [ { \"lastName\" : \"sobrenome\"} , { \"address.city\" : \"cidade\"}]}]}", query);
+		assertEquals("((name:\"nome\") OR ((lastName:\"sobrenome\") AND (address.city:\"cidade\")))", query);
 	}
 	
 	@Test
@@ -297,21 +297,22 @@ public class TestNeo4JQueryVisitor {
 		
 		Method m = null;
 		try {
-			Class[] args = new Class[0];
-			m = TestQuery.class.getMethod("getPersonCarioca", args);
+			m = TestQuery.class.getMethod("getPersonCarioca");
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 		
-		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), null);
+		Object[] args = new Object[0];
+				
+		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m),args);
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
 		String query = qr.getQuery().toString();
 		
-		assertEquals("{ \"address.city\" : \"Rio de Janeiro\"}", query);
+		assertEquals("((address.city:\"Rio de Janeiro\"))", query);
 		
 		assertEquals(qr.getFixParameterValue("cityEQUALS"), "Rio de Janeiro");
 		assertTrue(qr.getFixParameters().contains("cityEQUALS"));
@@ -340,7 +341,7 @@ public class TestNeo4JQueryVisitor {
 		
 		String query = qr.getQuery().toString();
 		
-		assertEquals("{ \"$and\" : [ { \"address.city\" : \"Rio de Janeiro\"} , { \"name\" : \"nome\"}]}", query);
+		assertEquals("(((address.city:\"Rio de Janeiro\") AND (name:\"nome\")))", query);
 		assertEquals(qr.getFixParameterValue("cityEQUALS"), "Rio de Janeiro");
 		assertTrue(qr.getFixParameters().contains("cityEQUALS"));
 	}

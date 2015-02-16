@@ -17,7 +17,6 @@ public class Person {
 	@Indexed
 	private Integer age;
 	
-	@RelatedTo(targetClass = Address.class)
 	private Address address;
 
 	public Integer getId() {
