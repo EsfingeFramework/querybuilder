@@ -48,7 +48,7 @@ public class QueryBuilderNeo4JQueryObject extends QueryBuilderDatabaseTest {
 	public void queryObjectWithDomainTerm(){
 		ComparisonTypeQueryObject qo = new ComparisonTypeQueryObject();
 		qo.setAgeGreater(1);
-		qo.setAgeLesser(100);
+		qo.setAgeLesser(93);
 		qo.setName("a");
 		qo.setLastName("e");
 		
@@ -90,7 +90,7 @@ public class QueryBuilderNeo4JQueryObject extends QueryBuilderDatabaseTest {
 	public void queryObjectWithOrderBy(){
 		ComparisonTypeQueryObject qo = new ComparisonTypeQueryObject();
 		qo.setAgeGreater(1);
-		qo.setAgeLesser(100);
+		qo.setAgeLesser(93);
 		qo.setName("a");
 		qo.setLastName("e");
 		
