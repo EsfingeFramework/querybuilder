@@ -27,8 +27,8 @@ public abstract class BasicMethodParser implements MethodParser {
 
 	protected String getEntityName(List<String> words, IndexCounter index) {
 		StringBuilder entityNameBuilder = new StringBuilder();
-		if(!"get".contains(words.get(index.get()))){
-			throw new InvalidQuerySequenceException("Query method should start with get, but "+words.get(index.get())+"was found.");
+		if(!"get".equals(words.get(index.get()))){
+			throw new InvalidQuerySequenceException("Query method should start with get, but "+words.get(index.get())+" was found.");
 		}
 		index.increment();
 		while(isPartOfEntityName(words, index)){
@@ -138,7 +138,12 @@ public abstract class BasicMethodParser implements MethodParser {
 			while(words.size() > index.get()){
 				if(index.get(words).equals("and"))
 					index.increment();
+
 				String orderProp = getPropertyName(words, index, qi.getEntityType());
+
+				//validates typo on orderBy properties (eclipse plugin)
+				ReflectionUtils.getPropertyType(qi.getEntityType(), orderProp);
+
 				OrderingDirection dir = OrderingDirection.ASC;
 				if(words.size() > index.get() && isComparisonOrder(index.get(words))){
 					if(index.get(words).equals("desc")){

@@ -87,13 +87,35 @@ public class DSLMethodParserTest extends MethodParserTest {
 	@Test
 	public void typoOnParamName() throws Exception{
 		final Method m = createMethodForTesting(Object.class, "getPersonByNam", String.class);
-// Espera-se a exceção InvalidPropertyException 
-// e que sua mensagem contenha a string "Nam"
-new AssertException(InvalidPropertyException.class, "Nam") {
-	protected void run() {
-		parser.parse(m);
+		// Espera-se a excecao InvalidPropertyException
+		// e que sua mensagem contenha a string "Nam"
+		new AssertException(InvalidPropertyException.class, "Nam") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
 	}
-};
+
+	@Test
+	public void typoOnOrderByParamName() throws Exception {
+		final Method m = createMethodForTesting(Object.class, "getPersonOrderByNam");
+		//It is expected a InvalidPropertyException containing a "Nam" String in its message
+		new AssertException(InvalidPropertyException.class, "Nam") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
+
+	@Test
+	public void typoOnGet() throws Exception {
+		final Method m = createMethodForTesting(Object.class, "etPerson");
+		//It is expected a InvalidQuerySequenceException containing a "et" String in its message
+		new AssertException(InvalidQuerySequenceException.class, "et") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
 	}
 	
 	@Test
