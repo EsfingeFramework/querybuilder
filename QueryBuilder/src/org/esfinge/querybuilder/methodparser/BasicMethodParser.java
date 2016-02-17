@@ -70,6 +70,11 @@ public abstract class BasicMethodParser implements MethodParser {
 	public void setInterface(Class<?> interf) {
 		termLib = new TermLibrary(interf);
 	}
+	
+	@Override
+	public void setInterface(Class<?> interf, ClassLoader loader) {
+		termLib = new TermLibrary(interf, loader);
+	}
 
 	protected QueryInfo createQueryInfo(Method m, List<String> words, IndexCounter index) {
 		QueryInfo qi = new QueryInfo();

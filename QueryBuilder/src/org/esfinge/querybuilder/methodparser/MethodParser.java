@@ -11,5 +11,9 @@ public interface MethodParser {
 	public boolean fitParserConvention(Method m);
 
 	public abstract void setInterface(Class<?> interf);
+	
+	// adding this only for the recognition of domain terms by the plugin
+	// this does not imply any change in the main flow
+	public abstract void setInterface(Class<?> interf, ClassLoader loader);
 
 }

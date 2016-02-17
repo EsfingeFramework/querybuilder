@@ -49,6 +49,14 @@ public class SelectorMethodParser implements MethodParser{
 		}
 	}
 	
+	// adding this only for the recognition of domain terms by the plugin
+	// this does not imply any change in the main flow
+	public void setInterface(Class<?> interf, ClassLoader loader) {
+		for(MethodParser mp : parserList){
+			mp.setInterface(interf, loader);
+		}
+	}
+	
 	public EntityClassProvider getEntityClassProvider() {
 		return classProvider;
 	}
