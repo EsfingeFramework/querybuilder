@@ -1,5 +1,6 @@
 entities\NotAnnotadedPerson.class
 entities\RelatedSetPerson.class
+tests\Testes.class
 entities\IndexedPropertyPerson.class
 entities\IterablePropertiesPerson.class
 entities\RelatedPerson.class
