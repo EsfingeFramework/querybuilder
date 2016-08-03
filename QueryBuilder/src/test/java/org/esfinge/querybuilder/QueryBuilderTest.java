@@ -49,6 +49,7 @@ public class QueryBuilderTest {
 		final DSLMethodParser mp = context.mock(DSLMethodParser.class);
 		final QueryExecutor qe = context.mock(QueryExecutor.class);
 		
+		QueryBuilder.clearQueryInfoCache();
 		QueryBuilder.configureMethodParser(mp);
 		QueryBuilder.configureQueryExecutor(qe);
 		
@@ -89,14 +90,14 @@ public class QueryBuilderTest {
     		will(returnValue(qi));
     		one(qe).executeQuery(qi, new Object[]{"Pedro"});
     		will(returnValue(new Person("Pedro")));
-    		one(qe).executeQuery(qi, new Object[]{"João"});
-    		will(returnValue(new Person("João")));
+    		one(qe).executeQuery(qi, new Object[]{"Joï¿½o"});
+    		will(returnValue(new Person("Joï¿½o")));
     	}});
 		
 		Person p1 = tq.getPersonByName("Pedro");
 		assertEquals("The name should be the same returned by QueryExecutor", "Pedro", p1.getName());
-		Person p2 = tq.getPersonByName("João");
-		assertEquals("The name should be the same returned by QueryExecutor", "João", p2.getName());
+		Person p2 = tq.getPersonByName("Joï¿½o");
+		assertEquals("The name should be the same returned by QueryExecutor", "Joï¿½o", p2.getName());
 	}
 	
 	@Test
