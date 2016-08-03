@@ -1,0 +1,6 @@
+entities\NotAnnotadedPerson.class
+entities\RelatedSetPerson.class
+entities\IndexedPropertyPerson.class
+entities\IterablePropertiesPerson.class
+entities\RelatedPerson.class
+entities\SimplePerson.class
