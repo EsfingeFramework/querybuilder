@@ -5,7 +5,6 @@
   <classpathentry kind="output" path="target/classes"/>
   <classpathentry kind="var" path="M2_REPO/javax/el/javax.el-api/2.2.4/javax.el-api-2.2.4.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-  <classpathentry kind="var" path="M2_REPO/org/neo4j/neo4j-jdbc/2.0.0-M06/neo4j-jdbc-2.0.0-M06.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/esfinge/querybuilder/1.0.0-SNAPSHOT/querybuilder-1.0.0-SNAPSHOT.jar"/>
   <classpathentry kind="var" path="M2_REPO/asm/asm/3.1/asm-3.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/cglib/cglib/2.1_3/cglib-2.1_3.jar"/>
@@ -20,6 +19,7 @@
   <classpathentry kind="var" path="M2_REPO/org/objenesis/objenesis/1.2/objenesis-1.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-jasper-el/7.0.8/tomcat-jasper-el-7.0.8.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-el-api/7.0.8/tomcat-el-api-7.0.8.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/neo4j/neo4j-jdbc/2.0.0-M06/neo4j-jdbc-2.0.0-M06.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/neo4j/neo4j-kernel/2.0.0-M06/neo4j-kernel-2.0.0-M06.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/neo4j/test/neo4j-harness/2.1.8/neo4j-harness-2.1.8.jar"/>
@@ -47,7 +47,7 @@
   <classpathentry kind="var" path="M2_REPO/org/neo4j/app/neo4j-browser/2.1.8/neo4j-browser-2.1.8.jar"/>
   <classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.7.14/slf4j-api-1.7.14.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar"/>
   <classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-access/1.1.2/logback-access-1.1.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/codehaus/janino/janino/2.6.1/janino-2.6.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/codehaus/janino/commons-compiler/2.6.1/commons-compiler-2.6.1.jar"/>
@@ -76,9 +76,4 @@
   <classpathentry kind="var" path="M2_REPO/org/neo4j/neo4j-kernel/2.1.8/neo4j-kernel-2.1.8-tests.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/neo4j/neo4j-primitive-collections/2.1.8/neo4j-primitive-collections-2.1.8.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-client/1.9/jersey-client-1.9.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/neo4j/neo4j-ogm-api/2.0.4/neo4j-ogm-api-2.0.4.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.7.1/jackson-databind-2.7.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.7.0/jackson-annotations-2.7.0.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.7.1/jackson-core-2.7.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.10/commons-codec-1.10.jar"/>
 </classpath>
