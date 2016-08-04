@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.esfinge</groupId>
-	<artifactId>querybuilder-neo4j</artifactId>
+	<artifactId>querybuilder-neo4j-oomapper</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
