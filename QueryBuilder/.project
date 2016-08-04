@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>querybuilder</name>
+	<name>Querybuilder</name>
 	<comment>The Esfinge QueryBuilder is a framework for creating queries based on method names. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
 	<projects>
 	</projects>
