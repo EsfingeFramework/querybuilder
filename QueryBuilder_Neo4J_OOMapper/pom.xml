@@ -38,7 +38,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 <!--         <neo4j.version>3.0.4</neo4j.version> -->
-        <neo4j.version>2.0.0-M06</neo4j.version>
 	</properties>
 
 	<build>
@@ -62,42 +61,53 @@
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
-        <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-jdbc</artifactId>
-            <version>${neo4j.version}</version>
-        </dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-kernel -->
+		<dependency>
+		    <groupId>org.apache.lucene</groupId>
+		    <artifactId>lucene-core</artifactId>
+		    <version>3.6.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-udc</artifactId>
+		    <version>1.9</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-shell</artifactId>
+		    <version>1.9</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.servicemix.bundles</groupId>
+		    <artifactId>org.apache.servicemix.bundles.jline</artifactId>
+		    <version>0.9.94_1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.geronimo.specs</groupId>
+		    <artifactId>geronimo-jta_1.1_spec</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-lucene-index</artifactId>
+		    <version>1.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 		    <groupId>org.neo4j</groupId>
 		    <artifactId>neo4j-kernel</artifactId>
-		    <version>${neo4j.version}</version>
-		<!--     <version>3.0.4</version> -->
+		    <version>1.8.M07</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.neo4j.test/neo4j-harness -->
 		<dependency>
-		    <groupId>org.neo4j.test</groupId>
-		    <artifactId>neo4j-harness</artifactId>
-		    <version>2.1.8</version>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-kernel</artifactId>
+		    <version>1.8.M07</version>
+		    <type>test-jar</type>
+		    <scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-ogm-api -->
-		<!-- <dependency> -->
-		<!--     <groupId>org.neo4j</groupId> -->
-		<!--     <artifactId>neo4j-unsafe</artifactId> -->
-		<!--     <version>3.0.4</version> -->
-		<!-- </dependency> -->
-        <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j</artifactId>
-            <version>${neo4j.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.neo4j</groupId>
-                    <artifactId>neo4j-jmx</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
 	</dependencies>
 </project>
