@@ -37,7 +37,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <neo4j.version>2.1.8</neo4j.version>
+        <neo4j.version>2.2.10</neo4j.version>
 	</properties>
 
 	<build>
@@ -107,6 +107,13 @@
 		    <groupId>org.neo4j</groupId>
 		    <artifactId>neo4j-shell</artifactId>
 		    <version>${neo4j.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-io</artifactId>
+		    <version>${neo4j.version}</version>
+		    <type>test-jar</type>
 		</dependency>
 	</dependencies>
 </project>
