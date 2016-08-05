@@ -60,15 +60,11 @@ public class Neo4J {
 			}
 			classInfoMap = new HashMap<Class<?>, MappingInfo>();
 			nameClassMap = new HashMap<String, Class<?>>();
-			t.success();
+			successTx(t);
 		}
 		catch(Exception e){
+			failureTx(t);
 			e.printStackTrace();
-			t.failure();
-		}
-		finally{
-			t.finish();
-//			t.terminate();
 		}
 	}
 
@@ -146,18 +142,14 @@ public class Neo4J {
 				
 			}
 
-			t.success();
+			successTx(t);
 			return newNode;
 			
 		}
 		catch(Exception e){
+			failureTx(t);
 			e.printStackTrace();
-			t.failure();
 			return null;
-		}
-		finally{
-			t.finish();
-//			t.terminate();
 		}
 	
 	}
