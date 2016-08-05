@@ -3,8 +3,6 @@ package org.esfinge.querybuilder.neo4j.oomapper;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.esfinge.querybuilder.neo4j.oomapper.MappingInfo;
-import org.esfinge.querybuilder.neo4j.oomapper.Query;
 import org.esfinge.querybuilder.neo4j.oomapper.parser.Parser;
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.ClassNotMappedException;
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.InvalidRemovalException;
@@ -50,10 +48,9 @@ public class Neo4J {
 		graphdb.shutdown();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void clearDB(){
 		
-		Transaction t = graphdb.beginTx();
+		Transaction t = beginTx();
 		
 		try{
 			for(Node node : graphdb.getAllNodes()){
@@ -71,6 +68,7 @@ public class Neo4J {
 		}
 		finally{
 			t.finish();
+//			t.terminate();
 		}
 	}
 
@@ -81,7 +79,7 @@ public class Neo4J {
 		if(!classInfoMap.containsKey(entity.getClass()))
 			throw new ClassNotMappedException(entity.getClass());
 
-		Transaction t = graphdb.beginTx();
+		Transaction t = beginTx();
 		Node newNode = null;
 
 		try{
@@ -159,6 +157,7 @@ public class Neo4J {
 		}
 		finally{
 			t.finish();
+//			t.terminate();
 		}
 	
 	}
@@ -169,25 +168,39 @@ public class Neo4J {
 	
 	public void delete(Class<?> clazz, Object id){
 		MappingInfo info = getMappingInfo(clazz);
+		Transaction t = beginTx();
 		Index<Node> index = getIndex(clazz);
 		
 		Node node = index.get(info.getId(), id).getSingle();
 		
-		Transaction t = graphdb.beginTx();
 		
 		try{
 			deleteNode(node);
-			t.success();
-			t.finish();
+			successTx(t);
 		}
 		catch(Exception e){
-			t.failure();
-			t.finish();
+			failureTx(t);
 			throw new InvalidRemovalException("The entity of " + clazz + " and Id " + id + " cannot be removed because it is part of a Relationship");
 		}
 		
 	}
+
+	public Transaction beginTx() {
+		return graphdb.beginTx();
+	}
 	
+	public void successTx(Transaction t) {
+		t.success();
+		t.finish();
+//		t.terminate();
+	}
+	
+	public void failureTx(Transaction t) {
+		t.failure();
+		t.finish();
+//		t.terminate();
+	}
+
 	private void deleteNode(Node node){
 		for(Relationship relation : node.getRelationships(Direction.OUTGOING)){
 			Node otherNode = relation.getOtherNode(node);

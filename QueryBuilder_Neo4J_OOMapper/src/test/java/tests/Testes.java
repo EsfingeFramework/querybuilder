@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.esfinge.querybuilder.methodparser.ComparisonType;
 import org.esfinge.querybuilder.neo4j.oomapper.Condition;
@@ -34,6 +33,7 @@ public class Testes {
 	@Before
 	public void initializeDB(){
 		neo = new Neo4J();
+//		neo = new Neo4J("neo4j-236");
 	}
 	
 	@After
@@ -98,7 +98,6 @@ public class Testes {
 		
 		Query<RelatedPerson> q = neo.query(RelatedPerson.class);
 		q.setProperty("nome", "Tem amigo");
-		
 		RelatedPerson retrievedRelatedPerson = q.getSingle();
 		
 		assertEquals("Tem amigo", retrievedRelatedPerson.getNome());
@@ -116,7 +115,7 @@ public class Testes {
 		int[] nums = {1, 2, 3, 7, 4, 9};
 		p.setNumeros(nums);
 		p.setNome("Fulano");
-		String[] strings = {"oi", "isso é", "um teste"};
+		String[] strings = {"oi", "isso ï¿½", "um teste"};
 		p.setStrings(strings);
 		p.setIdade(20);
 		p.setSobrenome("De Tal");
@@ -285,7 +284,6 @@ public class Testes {
 	
 	@Test
 	public void sort(){
-		Sort s = new Sort();
 		SortField sf = new SortField("campo", SortField.INT);
 		System.out.println(sf);
 	}

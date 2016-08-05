@@ -13,6 +13,7 @@ import org.esfinge.querybuilder.neo4j.oomapper.parser.Parser;
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.UnindexedPropertyException;
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.UnmappedPropertyException;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
 
 public class Query <E> {
 	
@@ -107,7 +108,7 @@ public class Query <E> {
 	
 	public E getSingle(){
 		List<E> results = asList();
-		if(results.size() == 0)
+		if (results.size() == 0)
 			return null;
 		return results.get(0);
 	}
@@ -124,20 +125,22 @@ public class Query <E> {
 
 		 */
 		
-		
+		Transaction t = neo.beginTx();
 		Iterator<Node> i = neo.getIndex(info.getClazz()).query(toString()).iterator();
 		
-		while(i.hasNext()){
-			Parser parser = neo.getParser();
-			E entity;
-			try {
-				entity = parser.<E>getEntity(i.next(), info);
-				output.add(entity);
-			} catch (IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | InstantiationException e) {
-				e.printStackTrace();
+		try {
+			while(i.hasNext()){
+				Parser parser = neo.getParser();
+				E entity;
+					entity = parser.<E>getEntity(i.next(), info);
+					output.add(entity);
 			}
-			
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | InstantiationException e) {
+			neo.failureTx(t);
+			e.printStackTrace();
+		} finally {
+			neo.successTx(t);
 		}
 		
 		if(sortFields != null){
