@@ -32,8 +32,8 @@ public class Testes {
 	
 	@Before
 	public void initializeDB(){
-		neo = new Neo4J();
-//		neo = new Neo4J("neo4j-236");
+//		neo = new Neo4J();
+		neo = new Neo4J("neo4j-236");
 	}
 	
 	@After
