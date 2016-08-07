@@ -8,7 +8,9 @@ import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.ClassNotMappedE
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.InvalidRemovalException;
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.NullIdException;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -81,6 +83,9 @@ public class Neo4J {
 		try{
 			MappingInfo info = classInfoMap.get(entity.getClass());
 			newNode = graphdb.createNode();
+			
+			Label label = DynamicLabel.label(entity.getClass().getSimpleName());
+			newNode.addLabel(label);
 			
 			String id = info.getId();
 			Object idValue = parser.getPropertyValue(id, entity);
