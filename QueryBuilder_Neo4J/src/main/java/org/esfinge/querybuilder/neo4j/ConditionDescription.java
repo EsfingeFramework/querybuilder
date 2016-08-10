@@ -18,6 +18,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 
 public class ConditionDescription {
@@ -127,35 +128,42 @@ public class ConditionDescription {
 		
 		String[] properties = propertyName.split("\\.");
 		
-		IndexHits<Node> nodes = neo.getIndex(ecp.getEntityClass(properties[properties.length - 2])).query(new Condition(properties[properties.length - 1], value, compType).toString());
+		Transaction t = neo.beginTx();
+		try {
+			IndexHits<Node> nodes = neo.getIndex(ecp.getEntityClass(properties[properties.length - 2])).query(new Condition(properties[properties.length - 1], value, compType).toString());
 		
-		List<Node> results = new ArrayList<Node>();
-		for(Node n : nodes)
-			results.add(n);
-		
-		List<Node> related;
-		
-		for(int i = properties.length - 3; i >= 0; i--){
+			List<Node> results = new ArrayList<Node>();
+			for(Node n : nodes)
+				results.add(n);
+			
+			List<Node> related;
+			
+			for(int i = properties.length - 3; i >= 0; i--){
+				related = new ArrayList<Node>();
+				for(Node n : results){
+					RelationshipType relationType = neo.getMappingInfo(ecp.getEntityClass(properties[i])).getRelationshipType(properties[i+1]);
+					for(Relationship relation : n.getRelationships(Direction.INCOMING, relationType))
+						related.add(relation.getStartNode());
+				}results = related;
+			}
+			
 			related = new ArrayList<Node>();
 			for(Node n : results){
-				RelationshipType relationType = neo.getMappingInfo(ecp.getEntityClass(properties[i])).getRelationshipType(properties[i+1]);
+				RelationshipType relationType = neo.getMappingInfo(clazz).getRelationshipType(properties[0]);
 				for(Relationship relation : n.getRelationships(Direction.INCOMING, relationType))
 					related.add(relation.getStartNode());
 			}results = related;
+			
+			List<Condition> conditions = new ArrayList<Condition>();
+			for(Node n : results){
+				conditions.add(new Condition(neo.getMappingInfo(clazz).getId(), n.getProperty(neo.getMappingInfo(clazz).getId())));
+			}
+			neo.successTx(t);
+			return new Condition(ConditionType.OR, conditions);
+		} catch (Exception e) {
+			neo.failureTx(t);
+			return null;
 		}
-		
-		related = new ArrayList<Node>();
-		for(Node n : results){
-			RelationshipType relationType = neo.getMappingInfo(clazz).getRelationshipType(properties[0]);
-			for(Relationship relation : n.getRelationships(Direction.INCOMING, relationType))
-				related.add(relation.getStartNode());
-		}results = related;
-		
-		List<Condition> conditions = new ArrayList<Condition>();
-		for(Node n : results){
-			conditions.add(new Condition(neo.getMappingInfo(clazz).getId(), n.getProperty(neo.getMappingInfo(clazz).getId())));
-		}
-		return new Condition(ConditionType.OR, conditions);
 	}
 	
 	private Query<?> getQuery(Class<?> clazz) {
