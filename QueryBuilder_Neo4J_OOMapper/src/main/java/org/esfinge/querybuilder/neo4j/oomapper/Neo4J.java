@@ -1,5 +1,6 @@
 package org.esfinge.querybuilder.neo4j.oomapper;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -8,7 +9,6 @@ import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.ClassNotMappedE
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.InvalidRemovalException;
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.NullIdException;
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -27,7 +27,7 @@ public class Neo4J {
 	private Parser parser = new Parser(this);
 
 	public Neo4J(String databasePath){
-		graphdb = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
+		graphdb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(databasePath));
 	}
 	
 	public Neo4J(){
@@ -84,7 +84,7 @@ public class Neo4J {
 			MappingInfo info = classInfoMap.get(entity.getClass());
 			newNode = graphdb.createNode();
 			
-			Label label = DynamicLabel.label(entity.getClass().getSimpleName());
+			Label label = Label.label(entity.getClass().getSimpleName());
 			newNode.addLabel(label);
 			
 			String id = info.getId();
@@ -188,14 +188,12 @@ public class Neo4J {
 	
 	public void successTx(Transaction t) {
 		t.success();
-		t.finish();
-//		t.terminate();
+		t.close();
 	}
 	
 	public void failureTx(Transaction t) {
 		t.failure();
-		t.finish();
-//		t.terminate();
+		t.close();
 	}
 
 	private void deleteNode(Node node){

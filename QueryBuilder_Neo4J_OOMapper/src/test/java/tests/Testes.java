@@ -284,7 +284,7 @@ public class Testes {
 	
 	@Test
 	public void sort(){
-		SortField sf = new SortField("campo", SortField.INT);
+		SortField sf = new SortField("campo", SortField.Type.INT);
 		System.out.println(sf);
 	}
 }
