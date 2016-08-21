@@ -28,10 +28,12 @@ public class Neo4J {
 
 	public Neo4J(String databasePath){
 		graphdb = new GraphDatabaseFactory().newEmbeddedDatabase(new File(databasePath));
+		Runtime.getRuntime().addShutdownHook(ensureNeo4JShutdown());
 	}
-	
+
 	public Neo4J(){
 		graphdb = new TestGraphDatabaseFactory().newImpermanentDatabaseBuilder().newGraphDatabase();
+		Runtime.getRuntime().addShutdownHook(ensureNeo4JShutdown());
 	}
 	
 	public void map(Class<?> clazz) throws RuntimeException{
@@ -221,4 +223,8 @@ public class Neo4J {
 		return parser;
 	}
 
+	private Thread ensureNeo4JShutdown() {
+		return new Thread(() -> graphdb.shutdown());
+	}
+	
 }
