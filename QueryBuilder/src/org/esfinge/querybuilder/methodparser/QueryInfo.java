@@ -9,8 +9,6 @@ import org.esfinge.querybuilder.exception.EntityClassNotFoundException;
 import org.esfinge.querybuilder.methodparser.conditions.CompositeCondition;
 import org.esfinge.querybuilder.methodparser.conditions.NullCondition;
 import org.esfinge.querybuilder.methodparser.conditions.QueryCondition;
-import org.esfinge.querybuilder.methodparser.conditions.SimpleCondition;
-import org.esfinge.querybuilder.utils.StringUtils;
 
 public class QueryInfo {
 	
@@ -104,5 +102,40 @@ public class QueryInfo {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	private int pageNumberParameterIndex = -1;
+	private int pageSizeParameterIndex = -1;
+	private Integer pageSize;
+	
+	public int getPageNumberParameterIndex() {
+		return pageNumberParameterIndex;
+	}
+
+	public void setPageNumberParameterIndex(int index) {
+		pageNumberParameterIndex = index;
+	}
+	
+	public int getPageSizeParameterIndex() {
+		return pageSizeParameterIndex;
+	}
+
+	public void setPageSizeParameterIndex(int index) {
+		pageSizeParameterIndex = index;
+	}
+	
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int size) {
+		pageSize = size;
+	}
 
 }

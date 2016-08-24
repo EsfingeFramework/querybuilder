@@ -19,6 +19,7 @@ import org.esfinge.querybuilder.annotation.QueryObject;
 import org.esfinge.querybuilder.exception.InvalidPropertyException;
 import org.esfinge.querybuilder.exception.InvalidPropertyTypeException;
 import org.esfinge.querybuilder.exception.QueryObjectException;
+import org.esfinge.querybuilder.exception.WrongParamNumberException;
 import org.esfinge.querybuilder.methodparser.conditions.NullOption;
 import org.esfinge.querybuilder.utils.AssertException;
 import org.jmock.Expectations;
@@ -79,7 +80,6 @@ public class QueryObjectMethodParserTest extends MethodParserTest{
 		assertEquals("Entity should be Person", "Person", qi.getEntityName());
 		assertEquals("Entity should be Person", Person.class, qi.getEntityType());
 		assertEquals("The query type should be RETRIEVE_LIST", QueryType.RETRIEVE_LIST, qi.getQueryType());	
-		
 	}
 	
 	@Test
@@ -136,7 +136,6 @@ public class QueryObjectMethodParserTest extends MethodParserTest{
 				QueryInfo qi = parser.parse(m);
 			}
 		};
-		
 	}
 	
 	@Test
@@ -411,6 +410,36 @@ public class QueryObjectMethodParserTest extends MethodParserTest{
 	    
 	    qi.visit(visitorMock);	
 	}
-	 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Test
+	public void queryWithMoreThanOneParameter() throws Exception{
+		queryMockClass.addMethod(Person.class, "getPerson");
+		queryClass = queryMockClass.createClass();
+		
+		mockClass.addAbstractMethod(queryClass, "getPerson", queryClass, Boolean.class);
+		mockClass.addMethodParamAnnotation(0, "getPerson", QueryObject.class);
+		
+		Class<?> c = mockClass.createClass();
+		parser = createParserClass();
+		parser.setInterface(c);
+		
+		parser.setEntityClassProvider(classProviderMock);
+		final Method m = c.getMethod("getPerson", queryClass, Boolean.class);
+		
+		new AssertException(WrongParamNumberException.class, "The method getPerson is using @QueryObject annotation but have more than one parameter") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
 
 }

@@ -41,7 +41,7 @@ public class TermLibrary {
     				}
     			}
     		}
-		} catch (ClassNotFoundException | IOException exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 	}
@@ -59,12 +59,26 @@ public class TermLibrary {
 		}
 	}
 
-	private void addTerm(Annotation domain) throws ClassNotFoundException, IOException {
-		DomainTerm term = cloneDomainTerm(domain);
+	private void addTerm(Annotation domain) throws IOException, ClassNotFoundException {
+		DomainTerm term = (DomainTerm) TermLibrary.cloneAnnotationBySerialization(domain);
 		terms.put(term.term(), term);
 	}
 
-	private DomainTerm cloneDomainTerm(Annotation annotation) throws IOException, ClassNotFoundException {
+	/**
+	 * Makes a deep cloning by serialization of a given annotation.
+	 * This is necessary when a given annotation came from another ClassLoader
+	 * and it's not possible to extract the annotation from it's source or even
+	 * compare it's type (due the incompatibility with the ClassLoaders) which is
+	 * what basically happens on QueryBuilder Eclipse Plugin for example.
+	 * When a deep cloning by serialization is done the annotation which 
+	 * was initially loaded by a distinct ClassLoader is reloaded with
+	 * the appropriate ClassLoader during the deserializing process.
+	 * @param annotation - the annotation to be cloned.
+	 * @return The annotation clone with the appropriate ClassLoader.
+	 * When it's not possible to clone the annotation by serialization
+	 * then return the own annotation without changing it's ClassLoader.
+	 */
+	public static Annotation cloneAnnotationBySerialization(Annotation annotation) throws IOException, ClassNotFoundException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ObjectOutputStream serializer = new ObjectOutputStream(out);
 		serializer.writeObject(annotation);
@@ -74,11 +88,12 @@ public class TermLibrary {
  	    
 		ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
 		ObjectInputStream deserializer = new ObjectInputStream(in);
-		DomainTerm domainTerm = (DomainTerm) deserializer.readObject();
+		Annotation clone = (Annotation) deserializer.readObject();
 		
 		in.close();
 		deserializer.close();
-		return domainTerm;
+		
+		return clone;
 	}
 	
 	public boolean hasDomainTerm(List<String> words, int i){

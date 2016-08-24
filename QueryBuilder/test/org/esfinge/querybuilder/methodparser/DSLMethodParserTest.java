@@ -17,11 +17,15 @@ import org.esfinge.querybuilder.annotation.Ends;
 import org.esfinge.querybuilder.annotation.Greater;
 import org.esfinge.querybuilder.annotation.GreaterOrEquals;
 import org.esfinge.querybuilder.annotation.IgnoreWhenNull;
+import org.esfinge.querybuilder.annotation.InvariablePageSize;
 import org.esfinge.querybuilder.annotation.Lesser;
 import org.esfinge.querybuilder.annotation.LesserOrEquals;
 import org.esfinge.querybuilder.annotation.NotEquals;
+import org.esfinge.querybuilder.annotation.PageNumber;
 import org.esfinge.querybuilder.annotation.Starts;
+import org.esfinge.querybuilder.annotation.VariablePageSize;
 import org.esfinge.querybuilder.exception.EntityClassNotFoundException;
+import org.esfinge.querybuilder.exception.InvalidPaginationAnnotationSchemeException;
 import org.esfinge.querybuilder.exception.InvalidPropertyException;
 import org.esfinge.querybuilder.exception.InvalidPropertyTypeException;
 import org.esfinge.querybuilder.exception.InvalidQuerySequenceException;
@@ -209,7 +213,6 @@ public class DSLMethodParserTest extends MethodParserTest {
 	}
 	
 	/* RContribution: wrong property type */
-	
 	@Test(expected=InvalidPropertyTypeException.class)
 	public void wrongPropertyTypeInteger() throws Exception{
 		final Method m = createMethodForTesting(Object.class, "getPersonByName", int.class);
@@ -288,7 +291,6 @@ public class DSLMethodParserTest extends MethodParserTest {
 	    qi.visit(visitorMock);	
 	}
 	
-	
 	@Test
 	public void orConditions() throws Exception{
 		Method m = createMethodForTesting(Object.class, "getPersonByNameOrAge", String.class, int.class);
@@ -350,8 +352,6 @@ public class DSLMethodParserTest extends MethodParserTest {
 		executeConditionTypes(Ends.class, ComparisonType.ENDS,8);
 	}
 	
-
-	
 	private void executeConditionTypes(Class annotation, final ComparisonType expectedType, int mockNumber) throws NoSuchMethodException {
 		mockClass = new ClassMock("ExampleInterface", true);
 		Method m = createMethodWithAnnotationForTesting(Object.class, "getPersonByAge", annotation, int.class);
@@ -394,7 +394,6 @@ public class DSLMethodParserTest extends MethodParserTest {
     	}});
 	    
 	    qi.visit(visitorMock);
-		
 	}
 
 	@Test
@@ -716,5 +715,144 @@ public class DSLMethodParserTest extends MethodParserTest {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Test
+	public void queryPaginationWithPageNumberAnnotationOnly() throws Exception {
+		final Method m = createMethodWithAnnotationForTesting(Person.class, "getPerson", PageNumber.class, Integer.class);
+		new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson is using the @PageNumber annotation but no variable or invariable page size annotation was found") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
+	
+	@Test
+	public void queryPaginationWithVariablePageSizeAnnotationOnly() throws Exception {
+		final Method m = createMethodWithAnnotationForTesting(Person.class, "getPerson", VariablePageSize.class, Integer.class);
+		new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson is using an page size annotation but no parameter with @PageNumber was found") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
+	
+	@Test
+	public void queryPaginationWithInvariablePageSizeAnnotationOnly() throws Exception {
+		ClassMock queryMockClass = new ClassMock("QueryClass");
+		queryMockClass.addMethod(Person.class, "getPerson");
+		
+		mockClass.addAbstractMethod(Person.class, "getPerson");
+		mockClass.addMethodAnnotation("getPerson", InvariablePageSize.class, 10);
+		
+		Class<?> c = mockClass.createClass();
+		parser = createParserClass();
+		parser.setInterface(c);
+		
+		parser.setEntityClassProvider(classProviderMock);
+		final Method m = c.getMethod("getPerson");
+		
+		new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson is using an page size annotation but no parameter with @PageNumber was found") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
+	
+	@Test
+	public void queryPaginationWithTwoPageNumberAnnotations() throws Exception {
+		ClassMock queryMockClass = new ClassMock("QueryClass");
+		queryMockClass.addMethod(Person.class, "getPerson");
+		
+		mockClass.addAbstractMethod(Person.class, "getPerson", Integer.class, Integer.class);
+		mockClass.addMethodAnnotation("getPerson", InvariablePageSize.class, 10);
+		mockClass.addMethodParamAnnotation(0, "getPerson", PageNumber.class);
+		mockClass.addMethodParamAnnotation(1, "getPerson", PageNumber.class);
+		
+		Class<?> c = mockClass.createClass();
+		parser = createParserClass();
+		parser.setInterface(c);
+		
+		parser.setEntityClassProvider(classProviderMock);
+		final Method m = c.getMethod("getPerson", Integer.class, Integer.class);
+		
+		new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson should have only one @PageNumber annotation") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
+	
+	@Test
+	public void queryPaginationWithTwoVariablePageSizeAnnotations() throws Exception {
+		ClassMock queryMockClass = new ClassMock("QueryClass");
+		queryMockClass.addMethod(Person.class, "getPerson");
+		
+		mockClass.addAbstractMethod(Person.class, "getPerson", Integer.class, Integer.class);
+		mockClass.addMethodParamAnnotation(0, "getPerson", VariablePageSize.class);
+		mockClass.addMethodParamAnnotation(1, "getPerson", VariablePageSize.class);
+		
+		Class<?> c = mockClass.createClass();
+		parser = createParserClass();
+		parser.setInterface(c);
+		
+		parser.setEntityClassProvider(classProviderMock);
+		final Method m = c.getMethod("getPerson", Integer.class, Integer.class);
+		
+		new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson should have only one page size annotation") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
+	
+	@Test
+	public void queryPaginationWrongPageNumberParameterType() throws Exception {
+		final Method m = createMethodWithAnnotationForTesting(Person.class, "getPerson", PageNumber.class, Long.class);
+		new AssertException(InvalidPropertyTypeException.class, "The parameter with @PageNumber should be an integer number but is java.lang.Long") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
+	
+	@Test
+	public void queryPaginationWrongVariablePageSizeParameterType() throws Exception {
+		final Method m = createMethodWithAnnotationForTesting(Person.class, "getPerson", VariablePageSize.class, Long.class);
+		new AssertException(InvalidPropertyTypeException.class, "The parameter with @VariablePageSize should be an integer number but is java.lang.Long") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
+	
+	@Test
+	public void queryPaginationWithVariableInvariablePageSizeAnnotations() throws Exception {
+		ClassMock queryMockClass = new ClassMock("QueryClass");
+		queryMockClass.addMethod(Person.class, "getPerson");
+		
+		mockClass.addAbstractMethod(Person.class, "getPerson", Integer.class, Integer.class);
+		mockClass.addMethodAnnotation("getPerson", InvariablePageSize.class, 10);
+		mockClass.addMethodParamAnnotation(0, "getPerson", VariablePageSize.class);
+		
+		Class<?> c = mockClass.createClass();
+		parser = createParserClass();
+		parser.setInterface(c);
+		
+		parser.setEntityClassProvider(classProviderMock);
+		final Method m = c.getMethod("getPerson", Integer.class, Integer.class);
+		
+		new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson should have only one page size annotation") {
+			protected void run() {
+				parser.parse(m);
+			}
+		};
+	}
 
 }
