@@ -3,9 +3,9 @@ package org.esfinge.querybuilder.jpa1;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.metamodel.EntityType;
 
-import org.esfinge.querybuilder.exception.EntityClassNotFoundException;
-import org.esfinge.querybuilder.methodparser.EntityClassProvider;
-import org.esfinge.querybuilder.utils.ServiceLocator;
+import net.sf.esfinge.querybuilder.exception.EntityClassNotFoundException;
+import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class JPAEntityClassProvider implements EntityClassProvider {
 

@@ -2,13 +2,14 @@ package org.esfinge.querybuilder.jpa1.integration;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.Repository;
-import org.esfinge.querybuilder.annotation.Condition;
-import org.esfinge.querybuilder.annotation.DomainTerm;
-import org.esfinge.querybuilder.annotation.Greater;
-import org.esfinge.querybuilder.annotation.Starts;
 import org.esfinge.querybuilder.jpa1.testresources.Person;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
+
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.annotation.Condition;
+import net.sf.esfinge.querybuilder.annotation.DomainTerm;
+import net.sf.esfinge.querybuilder.annotation.Greater;
+import net.sf.esfinge.querybuilder.annotation.Starts;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 public interface TestQuery extends Repository<Person>{
 	public List<Person> getPerson();

@@ -2,16 +2,17 @@ package org.esfinge.querybuilder.jpa1.pagination;
 
 import java.util.Collection;
 
-import org.esfinge.querybuilder.annotation.Condition;
-import org.esfinge.querybuilder.annotation.DomainTerm;
-import org.esfinge.querybuilder.annotation.InvariablePageSize;
-import org.esfinge.querybuilder.annotation.PageNumber;
-import org.esfinge.querybuilder.annotation.QueryBuilder;
-import org.esfinge.querybuilder.annotation.QueryObject;
-import org.esfinge.querybuilder.annotation.Starts;
-import org.esfinge.querybuilder.annotation.VariablePageSize;
 import org.esfinge.querybuilder.jpa1.testresources.Person;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
+
+import net.sf.esfinge.querybuilder.annotation.Condition;
+import net.sf.esfinge.querybuilder.annotation.DomainTerm;
+import net.sf.esfinge.querybuilder.annotation.InvariablePageSize;
+import net.sf.esfinge.querybuilder.annotation.PageNumber;
+import net.sf.esfinge.querybuilder.annotation.QueryBuilder;
+import net.sf.esfinge.querybuilder.annotation.QueryObject;
+import net.sf.esfinge.querybuilder.annotation.Starts;
+import net.sf.esfinge.querybuilder.annotation.VariablePageSize;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 @QueryBuilder
 @DomainTerm(term = "teenager",

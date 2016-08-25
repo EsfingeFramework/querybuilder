@@ -1,8 +1,9 @@
 package org.esfinge.querybuilder.jdbc;
 
-import org.esfinge.querybuilder.methodparser.EntityClassProvider;
 import org.esfinge.querybuilder.finder.FinderManager;
 import org.esfinge.querybuilder.finder.XmlEntityFinder;
+
+import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
 
 public class JDBCEntityClassProvider implements EntityClassProvider {
 

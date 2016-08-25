@@ -2,7 +2,7 @@ package org.esfinge.querybuilder.utils;
 
 import java.util.Map;
 
-import org.esfinge.querybuilder.methodparser.conditions.NullOption;
+import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
 public class DynamicHelperObject {
 

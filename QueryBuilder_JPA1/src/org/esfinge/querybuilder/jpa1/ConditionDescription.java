@@ -1,8 +1,8 @@
 package org.esfinge.querybuilder.jpa1;
 
-import org.esfinge.querybuilder.methodparser.ComparisonType;
-import org.esfinge.querybuilder.methodparser.conditions.NullOption;
-import org.esfinge.querybuilder.utils.StringUtils;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
+import net.sf.esfinge.querybuilder.utils.StringUtils;
 
 public class ConditionDescription {
 	

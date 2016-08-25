@@ -2,12 +2,13 @@ package org.esfinge.querybuilder.jpa1.queryobjects;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.annotation.CompareToNull;
-import org.esfinge.querybuilder.annotation.Condition;
-import org.esfinge.querybuilder.annotation.Contains;
-import org.esfinge.querybuilder.annotation.DomainTerm;
-import org.esfinge.querybuilder.annotation.QueryObject;
 import org.esfinge.querybuilder.jpa1.testresources.Person;
+
+import net.sf.esfinge.querybuilder.annotation.CompareToNull;
+import net.sf.esfinge.querybuilder.annotation.Condition;
+import net.sf.esfinge.querybuilder.annotation.Contains;
+import net.sf.esfinge.querybuilder.annotation.DomainTerm;
+import net.sf.esfinge.querybuilder.annotation.QueryObject;
 
 @DomainTerm(term="paulista", conditions=@Condition(property="address.state",value="SP"))
 public interface TestQueryObject {

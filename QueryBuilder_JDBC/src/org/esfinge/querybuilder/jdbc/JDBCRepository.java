@@ -3,11 +3,13 @@ package org.esfinge.querybuilder.jdbc;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import org.esfinge.querybuilder.Repository;
+
 import org.esfinge.querybuilder.utils.DataBaseChannel;
 import org.esfinge.querybuilder.utils.EntityParser;
 import org.esfinge.querybuilder.utils.Query;
-import org.esfinge.querybuilder.utils.ServiceLocator;
+
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class JDBCRepository<E> implements Repository<E> {
 
