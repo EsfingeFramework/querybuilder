@@ -6,8 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.el.lang.EvaluationContext;
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
-import org.esfinge.querybuilder.utils.ELUtils;
+
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.utils.ELUtils;
 
 public class JPAQueryRepresentation implements QueryRepresentation{
 	

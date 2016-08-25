@@ -2,8 +2,9 @@ package org.esfinge.querybuilder.jpa1;
 
 import static org.junit.Assert.*;
 
-import org.esfinge.querybuilder.exception.EntityClassNotFoundException;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.exception.EntityClassNotFoundException;
 
 public class TestJPAEntityClassProvider {
 	

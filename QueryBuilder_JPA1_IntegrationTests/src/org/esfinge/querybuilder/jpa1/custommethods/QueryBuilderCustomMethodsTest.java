@@ -3,10 +3,11 @@ package org.esfinge.querybuilder.jpa1.custommethods;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.esfinge.querybuilder.QueryBuilder;
 import org.esfinge.querybuilder.jpa1.testresources.Address;
 import org.esfinge.querybuilder.jpa1.testresources.Person;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.QueryBuilder;
 
 public class QueryBuilderCustomMethodsTest {
 	

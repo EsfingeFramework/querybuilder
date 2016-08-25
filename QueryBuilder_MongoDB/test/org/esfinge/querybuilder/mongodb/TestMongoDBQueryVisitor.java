@@ -5,14 +5,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Method;
 
-import org.esfinge.querybuilder.methodparser.DSLMethodParser;
-import org.esfinge.querybuilder.methodparser.EntityClassProvider;
-import org.esfinge.querybuilder.methodparser.MethodParser;
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
-import org.esfinge.querybuilder.methodparser.QueryVisitor;
-import org.esfinge.querybuilder.utils.ServiceLocator;
 import org.junit.Before;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.methodparser.DSLMethodParser;
+import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
+import net.sf.esfinge.querybuilder.methodparser.MethodParser;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 @SuppressWarnings("rawtypes")
 public class TestMongoDBQueryVisitor {

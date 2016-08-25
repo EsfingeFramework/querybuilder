@@ -4,15 +4,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esfinge.querybuilder.methodparser.ComparisonType;
-import org.esfinge.querybuilder.methodparser.EntityClassProvider;
-import org.esfinge.querybuilder.methodparser.conditions.NullOption;
-import org.esfinge.querybuilder.methodparser.formater.ParameterFormater;
-import org.esfinge.querybuilder.utils.ServiceLocator;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.annotations.Reference;
-import org.mongodb.morphia.query.Criteria;
-import org.mongodb.morphia.query.Query;
+import com.google.code.morphia.Datastore;
+import com.google.code.morphia.annotations.Reference;
+import com.google.code.morphia.query.Criteria;
+import com.google.code.morphia.query.Query;
+
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
+import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
+import net.sf.esfinge.querybuilder.methodparser.formater.ParameterFormater;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class ConditionDescription {
 	

@@ -1,7 +1,8 @@
 package org.esfinge.querybuilder.jpa1;
 
-import org.esfinge.querybuilder.methodparser.QueryVisitor;
 import org.junit.Before;
+
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
 public class GenericTestJPAQLQueryVisitor {
 

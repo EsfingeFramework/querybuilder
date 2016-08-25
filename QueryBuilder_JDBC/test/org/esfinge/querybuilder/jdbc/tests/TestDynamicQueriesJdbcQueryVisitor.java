@@ -8,10 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.esfinge.querybuilder.jdbc.JDBCQueryVisitor;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
-import org.esfinge.querybuilder.methodparser.conditions.NullOption;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
 public class TestDynamicQueriesJdbcQueryVisitor {
 

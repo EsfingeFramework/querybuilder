@@ -3,11 +3,13 @@ package org.esfinge.querybuilder.jdbc.integration;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
-import org.esfinge.querybuilder.QueryBuilder;
+
 import org.esfinge.querybuilder.jdbc.testresources.DataBaseCommunicator;
 import org.esfinge.querybuilder.jdbc.testresources.Person;
 import org.junit.Before;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.QueryBuilder;
 
 public class QueryBuilderJDBCIntegrationTest {
 

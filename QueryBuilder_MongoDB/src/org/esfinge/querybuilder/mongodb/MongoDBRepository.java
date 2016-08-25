@@ -3,12 +3,13 @@ package org.esfinge.querybuilder.mongodb;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.esfinge.querybuilder.Repository;
-import org.esfinge.querybuilder.exception.InvalidPropertyException;
-import org.esfinge.querybuilder.utils.ServiceLocator;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
-import org.mongodb.morphia.query.Query;
+import com.google.code.morphia.Datastore;
+import com.google.code.morphia.Key;
+import com.google.code.morphia.query.Query;
+
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.exception.InvalidPropertyException;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class MongoDBRepository<E> implements Repository<E>{
 	
@@ -28,7 +29,7 @@ public class MongoDBRepository<E> implements Repository<E>{
 
 	@Override
 	public void delete(Object id) {
-		Key<E> key = new Key<E>(clazz, null, id);
+		Key<E> key = new Key<E>(clazz, id);
 		E e = ds.getByKey(clazz, key);
 		ds.delete(e);
 	}
@@ -40,7 +41,7 @@ public class MongoDBRepository<E> implements Repository<E>{
 
 	@Override
 	public E getById(Object id) {
-		Key<E> key = new Key<E>(clazz, null, id);
+		Key<E> key = new Key<E>(clazz, id);
 		return ds.getByKey(clazz, key);
 	}
 

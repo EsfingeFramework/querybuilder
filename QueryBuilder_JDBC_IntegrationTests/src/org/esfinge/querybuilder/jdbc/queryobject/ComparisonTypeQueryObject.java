@@ -1,6 +1,6 @@
 package org.esfinge.querybuilder.jdbc.queryobject;
 
-import org.esfinge.querybuilder.annotation.Contains;
+import net.sf.esfinge.querybuilder.annotation.Contains;
 
 public class ComparisonTypeQueryObject {
 	

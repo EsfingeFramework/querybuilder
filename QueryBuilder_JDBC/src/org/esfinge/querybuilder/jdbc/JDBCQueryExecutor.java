@@ -6,15 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.esfinge.querybuilder.executor.QueryExecutor;
-import org.esfinge.querybuilder.methodparser.QueryInfo;
-import org.esfinge.querybuilder.methodparser.QueryStyle;
-import org.esfinge.querybuilder.methodparser.QueryType;
 import org.esfinge.querybuilder.utils.DataBaseChannel;
 import org.esfinge.querybuilder.utils.EntityParser;
 import org.esfinge.querybuilder.utils.Line;
-import org.esfinge.querybuilder.utils.ReflectionUtils;
-import org.esfinge.querybuilder.utils.ServiceLocator;
+
+import net.sf.esfinge.querybuilder.executor.QueryExecutor;
+import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
+import net.sf.esfinge.querybuilder.methodparser.QueryStyle;
+import net.sf.esfinge.querybuilder.methodparser.QueryType;
+import net.sf.esfinge.querybuilder.utils.ReflectionUtils;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class JDBCQueryExecutor implements QueryExecutor {
 

@@ -7,15 +7,15 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.esfinge.querybuilder.executor.QueryExecutor;
-import org.esfinge.querybuilder.methodparser.QueryInfo;
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
-import org.esfinge.querybuilder.methodparser.QueryStyle;
-import org.esfinge.querybuilder.methodparser.QueryType;
-import org.esfinge.querybuilder.methodparser.QueryVisitor;
-import org.esfinge.querybuilder.methodparser.formater.ParameterFormater;
-import org.esfinge.querybuilder.utils.ReflectionUtils;
-import org.esfinge.querybuilder.utils.ServiceLocator;
+import net.sf.esfinge.querybuilder.executor.QueryExecutor;
+import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryStyle;
+import net.sf.esfinge.querybuilder.methodparser.QueryType;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+import net.sf.esfinge.querybuilder.methodparser.formater.ParameterFormater;
+import net.sf.esfinge.querybuilder.utils.ReflectionUtils;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class JPAQueryExecutor implements QueryExecutor {
 

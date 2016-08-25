@@ -1,7 +1,7 @@
 package org.esfinge.querybuilder.jpa1;
 
-import org.esfinge.querybuilder.methodparser.QueryVisitor;
-import org.esfinge.querybuilder.methodparser.ValidationQueryVisitor;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+import net.sf.esfinge.querybuilder.methodparser.ValidationQueryVisitor;
 
 public class JPAVisitorFactory {
 	

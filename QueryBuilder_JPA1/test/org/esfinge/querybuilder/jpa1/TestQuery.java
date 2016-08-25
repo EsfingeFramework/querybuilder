@@ -2,9 +2,9 @@ package org.esfinge.querybuilder.jpa1;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.Repository;
-import org.esfinge.querybuilder.annotation.Greater;
-import org.esfinge.querybuilder.annotation.Starts;
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.annotation.Greater;
+import net.sf.esfinge.querybuilder.annotation.Starts;
 
 
 public interface TestQuery extends Repository<Person>{
