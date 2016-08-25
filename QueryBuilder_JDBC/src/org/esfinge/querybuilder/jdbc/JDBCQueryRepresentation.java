@@ -3,8 +3,9 @@ package org.esfinge.querybuilder.jdbc;
 import java.util.Map;
 import java.util.Set;
 
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
 import org.esfinge.querybuilder.utils.DynamicHelperObject;
+
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 
 public class JDBCQueryRepresentation implements QueryRepresentation {
 

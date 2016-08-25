@@ -1,6 +1,6 @@
 package org.esfinge.querybuilder.custommethods;
 
-import org.esfinge.querybuilder.NeedClassConfiguration;
+import net.sf.esfinge.querybuilder.NeedClassConfiguration;
 
 public interface GenericMethodInterface<E> extends NeedClassConfiguration<E> {
 	

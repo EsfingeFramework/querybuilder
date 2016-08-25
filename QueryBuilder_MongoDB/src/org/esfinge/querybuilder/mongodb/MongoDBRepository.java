@@ -3,13 +3,13 @@ package org.esfinge.querybuilder.mongodb;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.esfinge.querybuilder.Repository;
-import org.esfinge.querybuilder.exception.InvalidPropertyException;
-import org.esfinge.querybuilder.utils.ServiceLocator;
-
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Key;
 import com.google.code.morphia.query.Query;
+
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.exception.InvalidPropertyException;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class MongoDBRepository<E> implements Repository<E>{
 	

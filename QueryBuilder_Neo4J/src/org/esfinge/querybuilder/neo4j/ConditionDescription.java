@@ -4,21 +4,22 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esfinge.querybuilder.methodparser.ComparisonType;
-import org.esfinge.querybuilder.methodparser.EntityClassProvider;
-import org.esfinge.querybuilder.methodparser.conditions.NullOption;
-import org.esfinge.querybuilder.methodparser.formater.ParameterFormater;
 import org.esfinge.querybuilder.neo4j.oomapper.Condition;
 import org.esfinge.querybuilder.neo4j.oomapper.ConditionType;
 import org.esfinge.querybuilder.neo4j.oomapper.Neo4J;
 import org.esfinge.querybuilder.neo4j.oomapper.Query;
 import org.esfinge.querybuilder.neo4j.oomapper.annotations.RelatedTo;
-import org.esfinge.querybuilder.utils.ServiceLocator;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
+
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
+import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
+import net.sf.esfinge.querybuilder.methodparser.formater.ParameterFormater;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class ConditionDescription {
 	

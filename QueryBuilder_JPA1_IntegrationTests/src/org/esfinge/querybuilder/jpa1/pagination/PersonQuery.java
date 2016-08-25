@@ -1,7 +1,7 @@
 package org.esfinge.querybuilder.jpa1.pagination;
 
-import org.esfinge.querybuilder.annotation.Greater;
-import org.esfinge.querybuilder.annotation.IgnoreWhenNull;
+import net.sf.esfinge.querybuilder.annotation.Greater;
+import net.sf.esfinge.querybuilder.annotation.IgnoreWhenNull;
 
 public class PersonQuery {
 

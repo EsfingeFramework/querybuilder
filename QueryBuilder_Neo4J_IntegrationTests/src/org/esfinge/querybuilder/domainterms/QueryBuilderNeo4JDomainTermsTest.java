@@ -4,11 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.QueryBuilder;
 import org.esfinge.querybuilder.neo4j.testresources.Person;
 import org.esfinge.querybuilder.neo4j.testresources.QueryBuilderDatabaseTest;
 import org.junit.Before;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.QueryBuilder;
 
 public class QueryBuilderNeo4JDomainTermsTest extends QueryBuilderDatabaseTest{
 	

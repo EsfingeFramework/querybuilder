@@ -4,7 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.esfinge.querybuilder.jdbc.DatabaseConnectionProvider;
-import org.esfinge.querybuilder.utils.ServiceLocator;
+
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class DatabaseCreator {
 

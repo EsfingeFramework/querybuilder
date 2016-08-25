@@ -3,13 +3,14 @@ package org.esfinge.querybuilder.neo4j;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.esfinge.querybuilder.Repository;
-import org.esfinge.querybuilder.annotation.ServicePriority;
-import org.esfinge.querybuilder.exception.InvalidPropertyException;
 import org.esfinge.querybuilder.neo4j.oomapper.MappingInfo;
 import org.esfinge.querybuilder.neo4j.oomapper.Neo4J;
 import org.esfinge.querybuilder.neo4j.oomapper.Query;
-import org.esfinge.querybuilder.utils.ServiceLocator;
+
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.annotation.ServicePriority;
+import net.sf.esfinge.querybuilder.exception.InvalidPropertyException;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 @ServicePriority(1)
 public class Neo4JRepository<E> implements Repository<E>{

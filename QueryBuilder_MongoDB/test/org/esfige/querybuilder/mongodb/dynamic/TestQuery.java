@@ -2,13 +2,13 @@ package org.esfige.querybuilder.mongodb.dynamic;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.Repository;
-import org.esfinge.querybuilder.annotation.CompareToNull;
-import org.esfinge.querybuilder.annotation.Condition;
-import org.esfinge.querybuilder.annotation.DomainTerm;
-import org.esfinge.querybuilder.annotation.IgnoreWhenNull;
-import org.esfinge.querybuilder.annotation.Starts;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.annotation.CompareToNull;
+import net.sf.esfinge.querybuilder.annotation.Condition;
+import net.sf.esfinge.querybuilder.annotation.DomainTerm;
+import net.sf.esfinge.querybuilder.annotation.IgnoreWhenNull;
+import net.sf.esfinge.querybuilder.annotation.Starts;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 @DomainTerm(term="carioca", conditions=@Condition(property="address.city",comparison=ComparisonType.EQUALS,value="Rio de Janeiro"))
 

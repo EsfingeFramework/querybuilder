@@ -3,8 +3,9 @@ package org.esfinge.querybuilder.neo4j;
 import java.util.Map;
 import java.util.Set;
 
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
 import org.esfinge.querybuilder.neo4j.oomapper.Query;
+
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 
 @SuppressWarnings("rawtypes")
 public class Neo4JQueryRepresentation implements QueryRepresentation{

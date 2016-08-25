@@ -3,12 +3,13 @@ package org.esfinge.querybuilder.jpa1;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.esfinge.querybuilder.exception.InvalidQuerySequenceException;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
-import org.esfinge.querybuilder.methodparser.OrderingDirection;
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
-import org.esfinge.querybuilder.methodparser.QueryVisitor;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
 public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
 	

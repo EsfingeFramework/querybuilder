@@ -1,9 +1,10 @@
 package org.esfinge.querybuilder.neo4j;
 
-import org.esfinge.querybuilder.annotation.ServicePriority;
-import org.esfinge.querybuilder.methodparser.EntityClassProvider;
 import org.esfinge.querybuilder.neo4j.oomapper.Neo4J;
-import org.esfinge.querybuilder.utils.ServiceLocator;
+
+import net.sf.esfinge.querybuilder.annotation.ServicePriority;
+import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 @ServicePriority(1)
 public class Neo4JEntityClassProvider implements EntityClassProvider {

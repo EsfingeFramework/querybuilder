@@ -8,13 +8,14 @@ import java.util.List;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.util.fileloader.DataFileLoader;
-import org.esfinge.querybuilder.QueryBuilder;
 import org.esfinge.querybuilder.jpa1.testresources.Person;
 import org.esfinge.querybuilder.jpa1.testresources.QueryBuilderDatabaseTest;
 import org.esfinge.querybuilder.jpa1.testresources.TestEntityManagerProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.QueryBuilder;
 
 public class RepositoryJPA1IntegrationTest extends QueryBuilderDatabaseTest{
 	

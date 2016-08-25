@@ -1,0 +1,20 @@
+<dataset>
+	<ADDRESS ID="1" CITY="SJCampos" STATE="SP"/>
+	<ADDRESS ID="2" CITY="Campinas" STATE="SP"/>
+	<ADDRESS ID="3" CITY="Ourinhos" STATE="SP"/>
+
+	<PERSON ID="1" NAME="Maria" AGE="17" ADDRESS_ID="1"/>
+	<PERSON ID="2" NAME="Eduardo" AGE="35" ADDRESS_ID="1"/>
+	<PERSON ID="3" NAME="Rogerio" AGE="30" ADDRESS_ID="1"/>
+	<PERSON ID="4" NAME="Gabriela" AGE="14" ADDRESS_ID="1"/>
+
+	<PERSON ID="5" NAME="Rose" AGE="30" ADDRESS_ID="2"/>
+	<PERSON ID="6" NAME="Pedro" AGE="15" ADDRESS_ID="2"/>
+	<PERSON ID="7" NAME="Silvia" AGE="70" ADDRESS_ID="2"/>
+	<PERSON ID="8" NAME="Marcos" AGE="10" ADDRESS_ID="2"/>
+	
+	<PERSON ID="9" NAME="Joao" AGE="13" ADDRESS_ID="3"/>
+	<PERSON ID="10" NAME="Marcia" AGE="18" ADDRESS_ID="3"/>
+	<PERSON ID="11" NAME="Guilherme" AGE="34" ADDRESS_ID="3"/>
+	<PERSON ID="12" NAME="Alessandra" AGE="28" ADDRESS_ID="3"/>
+</dataset>

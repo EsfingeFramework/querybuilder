@@ -1,6 +1,6 @@
 package org.esfinge.querybuilder.neo4j.formaters;
 
-import org.esfinge.querybuilder.methodparser.formater.ParameterFormater;
+import net.sf.esfinge.querybuilder.methodparser.formater.ParameterFormater;
 
 public class EndsParameterFormater implements ParameterFormater {
 

@@ -3,8 +3,9 @@ package org.esfinge.querybuilder.neo4j.oomapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esfinge.querybuilder.methodparser.ComparisonType;
 import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.UnindexedPropertyException;
+
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 
 public class Condition {

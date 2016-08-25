@@ -1,12 +1,12 @@
 package org.esfinge.querybuilder.mongodb;
 
-import org.esfinge.querybuilder.executor.QueryExecutor;
-import org.esfinge.querybuilder.methodparser.QueryInfo;
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
-import org.esfinge.querybuilder.methodparser.QueryType;
-import org.esfinge.querybuilder.methodparser.QueryVisitor;
-
 import com.google.code.morphia.query.Query;
+
+import net.sf.esfinge.querybuilder.executor.QueryExecutor;
+import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryType;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
 public class MongoDBQueryExecutor implements QueryExecutor {
 	

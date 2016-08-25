@@ -1,0 +1,10 @@
+<dataset>
+	<ADDRESS ID="1" CITY="SJCampos" STATE="SP"/>
+	<ADDRESS ID="2" CITY="Campinas" STATE="SP"/>
+	<ADDRESS ID="3" CITY="Juiz de Fora" STATE="MG"/>
+	<PERSON ID="1" NAME="Pedro" LASTNAME="Silva" AGE="20" ADDRESS_ID="1"/>
+	<PERSON ID="2" NAME="Maria" LASTNAME="Ferreira" AGE="23" ADDRESS_ID="1"/>
+	<PERSON ID="3" NAME="Marcos" LASTNAME="Silva" AGE="50" ADDRESS_ID="2"/>
+	<PERSON ID="4" NAME="Antonio" LASTNAME="Marques" AGE="33" ADDRESS_ID="3"/>
+	<PERSON ID="5" NAME="Silvia" LASTNAME="Bressan" AGE="90" ADDRESS_ID="3"/>
+</dataset>

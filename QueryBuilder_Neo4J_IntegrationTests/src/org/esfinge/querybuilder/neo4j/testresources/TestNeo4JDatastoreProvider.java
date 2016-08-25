@@ -1,9 +1,10 @@
 package org.esfinge.querybuilder.neo4j.testresources;
 
 
-import org.esfinge.querybuilder.annotation.ServicePriority;
 import org.esfinge.querybuilder.neo4j.DatastoreProvider;
 import org.esfinge.querybuilder.neo4j.oomapper.Neo4J;
+
+import net.sf.esfinge.querybuilder.annotation.ServicePriority;
 
 @ServicePriority(1)
 public class TestNeo4JDatastoreProvider implements DatastoreProvider{

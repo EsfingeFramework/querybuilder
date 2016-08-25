@@ -2,11 +2,11 @@ package org.esfinge.querybuilder.mongodb;
 
 import java.util.Set;
 
-import org.esfinge.querybuilder.methodparser.EntityClassProvider;
-import org.esfinge.querybuilder.utils.ServiceLocator;
-
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.mapping.MappedClass;
+
+import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class MongoDBEntityClassProvider implements EntityClassProvider {
 

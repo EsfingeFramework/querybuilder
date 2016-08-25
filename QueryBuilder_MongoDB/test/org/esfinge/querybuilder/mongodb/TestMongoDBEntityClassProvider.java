@@ -2,8 +2,9 @@ package org.esfinge.querybuilder.mongodb;
 
 import static org.junit.Assert.assertEquals;
 
-import org.esfinge.querybuilder.exception.EntityClassNotFoundException;
 import org.junit.Test;
+
+import net.sf.esfinge.querybuilder.exception.EntityClassNotFoundException;
 
 public class TestMongoDBEntityClassProvider {
 	

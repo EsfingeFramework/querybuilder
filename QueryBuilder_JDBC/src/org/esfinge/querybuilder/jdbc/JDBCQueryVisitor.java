@@ -5,16 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.esfinge.querybuilder.exception.InvalidQuerySequenceException;
+
 import org.esfinge.querybuilder.jdbc.QueryElement;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
-import org.esfinge.querybuilder.methodparser.OrderingDirection;
-import org.esfinge.querybuilder.methodparser.QueryRepresentation;
-import org.esfinge.querybuilder.methodparser.QueryVisitor;
-import org.esfinge.querybuilder.methodparser.conditions.NullOption;
 import org.esfinge.querybuilder.utils.DynamicHelperObject;
 import org.esfinge.querybuilder.utils.QueryFormatter;
 import org.esfinge.querybuilder.utils.SQLUtils;
+
+import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
 public class JDBCQueryVisitor implements QueryVisitor {
 

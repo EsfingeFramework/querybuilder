@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
 import org.esfinge.querybuilder.neo4j.oomapper.Condition;
 import org.esfinge.querybuilder.neo4j.oomapper.Neo4J;
 import org.esfinge.querybuilder.neo4j.oomapper.Query;
@@ -23,6 +22,7 @@ import entities.NotAnnotadedPerson;
 import entities.RelatedPerson;
 import entities.RelatedSetPerson;
 import entities.SimplePerson;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 
 public class Testes {

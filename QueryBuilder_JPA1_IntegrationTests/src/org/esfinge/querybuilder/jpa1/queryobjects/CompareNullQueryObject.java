@@ -1,9 +1,9 @@
 package org.esfinge.querybuilder.jpa1.queryobjects;
 
-import org.esfinge.querybuilder.annotation.CompareToNull;
-import org.esfinge.querybuilder.annotation.Contains;
-import org.esfinge.querybuilder.annotation.IgnoreWhenNull;
-import org.esfinge.querybuilder.annotation.Starts;
+import net.sf.esfinge.querybuilder.annotation.CompareToNull;
+import net.sf.esfinge.querybuilder.annotation.Contains;
+import net.sf.esfinge.querybuilder.annotation.IgnoreWhenNull;
+import net.sf.esfinge.querybuilder.annotation.Starts;
 
 public class CompareNullQueryObject {
 	

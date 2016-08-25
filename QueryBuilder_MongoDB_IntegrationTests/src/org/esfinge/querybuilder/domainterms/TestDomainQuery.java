@@ -2,13 +2,14 @@ package org.esfinge.querybuilder.domainterms;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.Repository;
-import org.esfinge.querybuilder.annotation.Condition;
-import org.esfinge.querybuilder.annotation.DomainTerm;
-import org.esfinge.querybuilder.annotation.DomainTerms;
-import org.esfinge.querybuilder.annotation.Greater;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
 import org.esfinge.querybuilder.mongodb.testresources.Person;
+
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.annotation.Condition;
+import net.sf.esfinge.querybuilder.annotation.DomainTerm;
+import net.sf.esfinge.querybuilder.annotation.DomainTerms;
+import net.sf.esfinge.querybuilder.annotation.Greater;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 @DomainTerm(term="teenager",
 		conditions={@Condition(property="age",comparison=ComparisonType.GREATER_OR_EQUALS,value="13"),

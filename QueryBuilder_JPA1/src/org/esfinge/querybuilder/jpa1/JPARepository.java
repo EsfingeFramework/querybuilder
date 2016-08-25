@@ -8,9 +8,9 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.esfinge.querybuilder.Repository;
-import org.esfinge.querybuilder.exception.InvalidPropertyException;
-import org.esfinge.querybuilder.utils.ServiceLocator;
+import net.sf.esfinge.querybuilder.Repository;
+import net.sf.esfinge.querybuilder.exception.InvalidPropertyException;
+import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class JPARepository<E> implements Repository<E>{
 	
