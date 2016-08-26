@@ -2,11 +2,10 @@ package org.esfinge.querybuilder.jdbc.integration.worker;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.jdbc.testresources.Worker;
-
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.Greater;
 import net.sf.esfinge.querybuilder.annotation.Starts;
+import net.sf.esfinge.querybuilder.jdbc.testresources.Worker;
 
 public interface  TestQueryWorker extends Repository<Worker>{
 	public List<Worker> getWorker();

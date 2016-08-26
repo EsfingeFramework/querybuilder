@@ -2,17 +2,17 @@
 <Entities>
    <Entity>
         <name>Person</name>
-		<class>org.esfinge.querybuilder.jdbc.testresources.Person</class>
+		<class>net.sf.esfinge.querybuilder.jdbc.testresources.Person</class>
    </Entity>
 
    <Entity>
         <name>Address</name>
-		<class>org.esfinge.querybuilder.jdbc.testresources.Address</class>
+		<class>net.sf.esfinge.querybuilder.jdbc.testresources.Address</class>
    </Entity>
 
     <Entity>
         <name>Worker</name>
-		<class>org.esfinge.querybuilder.jdbc.testresources.Worker</class>
+		<class>net.sf.esfinge.querybuilder.jdbc.testresources.Worker</class>
     </Entity>
 
    <Entity>
