@@ -2,11 +2,10 @@ package org.esfinge.querybuilder.jdbc.queryobject;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.jdbc.testresources.Person;
-
 import net.sf.esfinge.querybuilder.annotation.Condition;
 import net.sf.esfinge.querybuilder.annotation.DomainTerm;
 import net.sf.esfinge.querybuilder.annotation.QueryObject;
+import net.sf.esfinge.querybuilder.jdbc.testresources.Person;
 
 @DomainTerm(term="paulista", conditions=@Condition(property="address.state",value="SP"))
 public interface TestQueryObject {

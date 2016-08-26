@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <Entities>
    <Entity>
-		<class>org.esfinge.querybuilder.model.Person</class>
+		<class>net.sf.esfinge.querybuilder.model.Person</class>
    </Entity>
 
     <Entity>
-		<class>org.esfinge.querybuilder.model.Address</class>
+		<class>net.sf.esfinge.querybuilder.model.Address</class>
     </Entity>
    
     <Entity>
-		<class>org.esfinge.querybuilder.model.Contact</class>
+		<class>net.sf.esfinge.querybuilder.model.Contact</class>
     </Entity>
     
 </Entities>
