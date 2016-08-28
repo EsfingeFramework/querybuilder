@@ -3,7 +3,8 @@ package org.esfinge.querybuilder.mongodb;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import com.google.code.morphia.annotations.Transient;
+import org.mongodb.morphia.annotations.Transient;
+
 
 public class MongoDBDAOUtils {
 	

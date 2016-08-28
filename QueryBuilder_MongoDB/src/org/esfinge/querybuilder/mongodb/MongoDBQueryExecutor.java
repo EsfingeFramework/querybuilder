@@ -5,8 +5,7 @@ import org.esfinge.querybuilder.methodparser.QueryInfo;
 import org.esfinge.querybuilder.methodparser.QueryRepresentation;
 import org.esfinge.querybuilder.methodparser.QueryType;
 import org.esfinge.querybuilder.methodparser.QueryVisitor;
-
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.query.Query;
 
 public class MongoDBQueryExecutor implements QueryExecutor {
 	

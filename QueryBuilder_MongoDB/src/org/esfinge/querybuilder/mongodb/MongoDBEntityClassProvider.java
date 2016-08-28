@@ -4,9 +4,8 @@ import java.util.Set;
 
 import org.esfinge.querybuilder.methodparser.EntityClassProvider;
 import org.esfinge.querybuilder.utils.ServiceLocator;
-
-import com.google.code.morphia.Morphia;
-import com.google.code.morphia.mapping.MappedClass;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.mapping.MappedClass;
 
 public class MongoDBEntityClassProvider implements EntityClassProvider {
 

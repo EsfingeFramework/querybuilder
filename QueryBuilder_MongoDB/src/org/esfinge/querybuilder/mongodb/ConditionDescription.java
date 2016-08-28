@@ -9,11 +9,10 @@ import org.esfinge.querybuilder.methodparser.EntityClassProvider;
 import org.esfinge.querybuilder.methodparser.conditions.NullOption;
 import org.esfinge.querybuilder.methodparser.formater.ParameterFormater;
 import org.esfinge.querybuilder.utils.ServiceLocator;
-
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.annotations.Reference;
-import com.google.code.morphia.query.Criteria;
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.annotations.Reference;
+import org.mongodb.morphia.query.Criteria;
+import org.mongodb.morphia.query.Query;
 
 public class ConditionDescription {
 	

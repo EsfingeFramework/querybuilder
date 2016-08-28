@@ -213,7 +213,7 @@ public class TestDynamicQueriesMongoDBQueryVisitor {
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("{ \"$and\" : [ { \"name\" : { \"$regex\" : \"M.*\" , \"$options\" : \"\"}} , { \"age\" :  null }]}", qr.getQuery().toString());
+		assertEquals("{ \"$and\" : [ { \"name\" : { \"$regex\" : \"M.*\"}} , { \"age\" :  null }]}", qr.getQuery().toString());
 	
 		args[0] = "Eduardo";
 		args[1] = 15;
@@ -224,7 +224,7 @@ public class TestDynamicQueriesMongoDBQueryVisitor {
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("{ \"$and\" : [ { \"name\" : { \"$regex\" : \"Eduardo.*\" , \"$options\" : \"\"}} , { \"age\" : 15}]}", qr.getQuery().toString());
+		assertEquals("{ \"$and\" : [ { \"name\" : { \"$regex\" : \"Eduardo.*\"}} , { \"age\" : 15}]}", qr.getQuery().toString());
 	
 	}
 	

@@ -4,8 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.esfinge.querybuilder.methodparser.QueryRepresentation;
-
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.query.Query;
 
 @SuppressWarnings("rawtypes")
 public class MongoDBQueryRepresentation implements QueryRepresentation{
