@@ -1,7 +1,7 @@
 package org.esfige.querybuilder.mongodb.dynamic;
 
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 @Entity
 public class Person {
