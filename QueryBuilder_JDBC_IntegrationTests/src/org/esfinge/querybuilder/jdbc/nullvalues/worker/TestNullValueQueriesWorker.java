@@ -2,10 +2,11 @@ package org.esfinge.querybuilder.jdbc.nullvalues.worker;
 
 import java.util.List;
 
+import org.esfinge.querybuilder.jdbc.testresources.Worker;
+
 import net.sf.esfinge.querybuilder.annotation.CompareToNull;
 import net.sf.esfinge.querybuilder.annotation.IgnoreWhenNull;
 import net.sf.esfinge.querybuilder.annotation.Starts;
-import net.sf.esfinge.querybuilder.jdbc.testresources.Worker;
 
 public interface TestNullValueQueriesWorker {
 

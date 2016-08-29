@@ -4,8 +4,8 @@
 	version="1.0">
 	<persistence-unit name="database_test" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>net.sf.esfinge.querybuilder.jpa1.testresources.Person</class>
-		<class>net.sf.esfinge.querybuilder.jpa1.testresources.Address</class>
+		<class>org.esfinge.querybuilder.jpa1.testresources.Person</class>
+		<class>org.esfinge.querybuilder.jpa1.testresources.Address</class>
 		<properties>
 		    <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
 		    <property name="hibernate.connection.url" value="jdbc:hsqldb:file:./db/example-db" />

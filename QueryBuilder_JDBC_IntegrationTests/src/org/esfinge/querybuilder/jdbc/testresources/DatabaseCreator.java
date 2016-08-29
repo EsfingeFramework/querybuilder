@@ -3,8 +3,8 @@ package org.esfinge.querybuilder.jdbc.testresources;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.esfinge.querybuilder.jdbc.DatabaseConnectionProvider;
 
-import net.sf.esfinge.querybuilder.jdbc.DatabaseConnectionProvider;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 public class DatabaseCreator {
