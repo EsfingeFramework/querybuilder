@@ -3,12 +3,12 @@ package org.esfinge.querybuilder.mongodb;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 
 public abstract class DatastoreProvider {
 	
 	private Morphia morphia = new Morphia();
-	protected Mongo mongo;
+	protected MongoClient mongo;
 	
 	public abstract Datastore getDatastore();
 	
