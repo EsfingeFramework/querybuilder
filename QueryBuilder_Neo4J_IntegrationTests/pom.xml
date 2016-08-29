@@ -32,7 +32,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/EsfingeFramework/querybuilder.git</connection>
 		<developerConnection>scm:git:ssh://github.com:EsfingeFramework/querybuilder.git</developerConnection>
-		<url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_Neo4J</url>
+		<url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_Neo4J_IntegrationTests</url>
 	</scm>
 
 	<properties>
