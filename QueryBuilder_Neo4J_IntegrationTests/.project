@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>querybuilder-neo4j-integration-tests</name>
+  <name>QueryBuilder_Neo4J_IntegrationTests</name>
   <comment>The Esfinge QueryBuilder Neo4J Integration Tests is a project to test the integration between the QueryBuilder framework and the persistence layer using Neo4J Graph Database. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects/>
   <buildSpec>

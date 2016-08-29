@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>querybuilder-mongodb-integration-tests</name>
+  <name>QueryBuilder_MongoDB_IntegrationTests</name>
   <comment>The Esfinge QueryBuilder MongoDB Integration Tests is a project to test the integration between the QueryBuilder framework and the persistence layer using Mongo Database. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects/>
   <buildSpec>
