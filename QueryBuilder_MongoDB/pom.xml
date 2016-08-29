@@ -41,6 +41,11 @@
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/resources/</directory>
+			</resource>
+		</resources>
 		<testSourceDirectory>test</testSourceDirectory>
 		<testResources>
 			<testResource>
