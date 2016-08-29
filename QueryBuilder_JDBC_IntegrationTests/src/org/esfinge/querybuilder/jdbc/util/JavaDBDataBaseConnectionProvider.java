@@ -3,7 +3,7 @@ package org.esfinge.querybuilder.jdbc.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import net.sf.esfinge.querybuilder.jdbc.DatabaseConnectionProvider;
+import org.esfinge.querybuilder.jdbc.DatabaseConnectionProvider;
 
 public class JavaDBDataBaseConnectionProvider implements
 		DatabaseConnectionProvider {
