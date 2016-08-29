@@ -1,0 +1,4 @@
+/*C2*/SET SCHEMA PUBLIC
+create table Address (id integer not null, city varchar(255), state varchar(255), primary key (id))
+create table Person (id integer not null, age integer, lastName varchar(255), name varchar(255), ADDRESS_ID integer, primary key (id))
+alter table Person add constraint FK8E48877550774A0 foreign key (ADDRESS_ID) references Address

@@ -2,11 +2,12 @@ package org.esfinge.querybuilder.jdbc.domainterms.worker;
 
 import java.util.List;
 
+import org.esfinge.querybuilder.jdbc.testresources.Worker;
+
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.Condition;
 import net.sf.esfinge.querybuilder.annotation.DomainTerm;
 import net.sf.esfinge.querybuilder.annotation.DomainTerms;
-import net.sf.esfinge.querybuilder.jdbc.testresources.Worker;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 @DomainTerm(term="teenager",

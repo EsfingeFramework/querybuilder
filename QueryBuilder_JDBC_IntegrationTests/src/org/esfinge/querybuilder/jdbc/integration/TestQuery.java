@@ -2,10 +2,11 @@ package org.esfinge.querybuilder.jdbc.integration;
 
 import java.util.List;
 
+import org.esfinge.querybuilder.jdbc.testresources.Person;
+
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.Greater;
 import net.sf.esfinge.querybuilder.annotation.Starts;
-import net.sf.esfinge.querybuilder.jdbc.testresources.Person;
 
 public interface  TestQuery extends Repository<Person>{
 	public List<Person> getPerson();
