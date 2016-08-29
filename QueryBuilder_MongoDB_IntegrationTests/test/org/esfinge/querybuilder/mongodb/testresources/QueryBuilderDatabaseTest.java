@@ -12,8 +12,7 @@ import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 import org.esfinge.querybuilder.mongodb.MongoDBEntityClassProvider;
 import org.junit.After;
-
-import com.google.code.morphia.Datastore;
+import org.mongodb.morphia.Datastore;
 
 public class QueryBuilderDatabaseTest {
 	

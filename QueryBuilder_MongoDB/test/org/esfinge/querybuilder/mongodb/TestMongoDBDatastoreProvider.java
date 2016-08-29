@@ -1,7 +1,5 @@
 package org.esfinge.querybuilder.mongodb;
 
-import java.net.UnknownHostException;
-
 import org.mongodb.morphia.Datastore;
 
 import com.mongodb.MongoClient;
@@ -12,8 +10,6 @@ public class TestMongoDBDatastoreProvider extends DatastoreProvider{
 	public TestMongoDBDatastoreProvider(){
 		try {
 			mongo = new MongoClient("localhost", 27017);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
 		} catch (MongoException e) {
 			e.printStackTrace();
 		}

@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.esfinge</groupId>
-	<artifactId>querybuilder-mongodb</artifactId>
+	<artifactId>querybuilder-mongodb-integration-tests</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Esfinge QueryBuilder MongoDB</name>
+	<name>Esfinge QueryBuilder MongoDB Integration Tests</name>
 	<url>http://esfinge.sourceforge.net/</url>
-	<description>The Esfinge QueryBuilder MongoDB is the persistence framework for Esfinge QueryBuilder using Mongo Database.</description>
+	<description>The Esfinge QueryBuilder MongoDB Integration Tests is a project to test the integration between the QueryBuilder framework and the persistence layer using Mongo Database.</description>
 
 	<licenses>
 		<license>
@@ -32,7 +32,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/EsfingeFramework/querybuilder.git</connection>
 		<developerConnection>scm:git:ssh://github.com:EsfingeFramework/querybuilder.git</developerConnection>
-		<url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_MongoDB</url>
+		<url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_MongoDB_IntegrationTests</url>
 	</scm>
 
 	<properties>
@@ -40,7 +40,6 @@
 	</properties>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
 		<testResources>
 			<testResource>
@@ -57,43 +56,40 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
+
 		<dependency>
 			<groupId>org.esfinge</groupId>
 			<artifactId>querybuilder</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
+			<groupId>org.esfinge</groupId>
+			<artifactId>querybuilder-mongodb</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.dbunit</groupId>
+		    <artifactId>dbunit</artifactId>
+		    <version>2.4.8</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.mongodb</groupId>
-		    <artifactId>mongo-java-driver</artifactId>
-		    <version>3.0.2</version>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>1.2.17</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mongodb.morphia</groupId>
-			<artifactId>morphia</artifactId>
-		    <version>1.0.1</version>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>1.7.7</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
+		    <version>1.7.7</version>
 		</dependency>
 	</dependencies>
 </project>
