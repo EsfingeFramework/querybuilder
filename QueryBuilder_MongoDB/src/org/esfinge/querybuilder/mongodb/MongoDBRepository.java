@@ -3,9 +3,9 @@ package org.esfinge.querybuilder.mongodb;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Key;
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Key;
+import org.mongodb.morphia.query.Query;
 
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.exception.InvalidPropertyException;
@@ -29,7 +29,7 @@ public class MongoDBRepository<E> implements Repository<E>{
 
 	@Override
 	public void delete(Object id) {
-		Key<E> key = new Key<E>(clazz, id);
+		Key<E> key = new Key<E>(clazz, null, id);
 		E e = ds.getByKey(clazz, key);
 		ds.delete(e);
 	}
@@ -41,7 +41,7 @@ public class MongoDBRepository<E> implements Repository<E>{
 
 	@Override
 	public E getById(Object id) {
-		Key<E> key = new Key<E>(clazz, id);
+		Key<E> key = new Key<E>(clazz, null, id);
 		return ds.getByKey(clazz, key);
 	}
 
@@ -54,7 +54,7 @@ public class MongoDBRepository<E> implements Repository<E>{
 	public List<E> queryByExample(E obj) {
 		
 		Class<?> clazz = obj.getClass();
-        Query query = ds.createQuery(clazz);
+        Query<?> query = ds.createQuery(clazz);
         
         try {
             for (Method m : clazz.getMethods()) {
@@ -73,7 +73,7 @@ public class MongoDBRepository<E> implements Repository<E>{
             throw new InvalidPropertyException("Error building query", e);
         }
 
-        return query.asList();
+        return (List<E>) query.asList();
         
     }
 

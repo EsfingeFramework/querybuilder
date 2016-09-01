@@ -3,7 +3,7 @@ package org.esfinge.querybuilder.mongodb;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.query.Query;
 
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 

@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.query.Criteria;
-import com.google.code.morphia.query.Query;
-import com.google.code.morphia.query.QueryImpl;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.Criteria;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.QueryImpl;
 
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
