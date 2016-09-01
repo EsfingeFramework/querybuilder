@@ -1,6 +1,6 @@
 package org.esfinge.querybuilder.mongodb;
 
-import com.google.code.morphia.query.Query;
+import org.mongodb.morphia.query.Query;
 
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.QueryInfo;

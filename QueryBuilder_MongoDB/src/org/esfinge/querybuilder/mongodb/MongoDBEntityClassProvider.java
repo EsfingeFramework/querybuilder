@@ -2,8 +2,8 @@ package org.esfinge.querybuilder.mongodb;
 
 import java.util.Set;
 
-import com.google.code.morphia.Morphia;
-import com.google.code.morphia.mapping.MappedClass;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.mapping.MappedClass;
 
 import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
