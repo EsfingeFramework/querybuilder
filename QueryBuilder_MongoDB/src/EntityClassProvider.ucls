@@ -1,8 +1,8 @@
 <class-diagram version="1.0.10" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
   associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.mongodb.MongoDBEntityClassProvider" 
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.mongodb.MongoDBEntityClassProvider" 
     project="QueryBuilder_MongoDB" 
-    file="/QueryBuilder_MongoDB/src/org/esfinge/querybuilder/mongodb/MongoDBEntityClassProvider.java" binary="false">    
+    file="/QueryBuilder_MongoDB/src/net.sf/esfinge/querybuilder/mongodb/MongoDBEntityClassProvider.java" binary="false">    
     <position height="-1" width="-1" x="551" y="251"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
@@ -10,17 +10,17 @@
     </display>  
   </class>  
   <interface id="2" corner="BOTTOM_RIGHT" language="java" 
-    name="org.esfinge.querybuilder.methodparser.EntityClassProvider" project="QueryBuilder" 
-    file="/QueryBuilder/src/org/esfinge/querybuilder/methodparser/EntityClassProvider.java" binary="false">    
+    name="net.sf.esfinge.querybuilder.methodparser.EntityClassProvider" project="QueryBuilder" 
+    file="/QueryBuilder/src/net.sf/esfinge/querybuilder/methodparser/EntityClassProvider.java" binary="false">    
     <position height="-1" width="-1" x="550" y="95"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
-  <class id="3" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.mongodb.DatastoreProvider" 
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.mongodb.DatastoreProvider" 
     project="QueryBuilder_MongoDB" 
-    file="/QueryBuilder_MongoDB/src/org/esfinge/querybuilder/mongodb/DatastoreProvider.java" binary="false">    
+    file="/QueryBuilder_MongoDB/src/net.sf/esfinge/querybuilder/mongodb/DatastoreProvider.java" binary="false">    
     <position height="-1" width="-1" x="551" y="444"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      

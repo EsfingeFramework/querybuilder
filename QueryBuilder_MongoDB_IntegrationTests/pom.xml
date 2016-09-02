@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.esfinge</groupId>
+	<groupId>net.sf.esfinge</groupId>
 	<artifactId>querybuilder-mongodb-integration-tests</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -13,12 +13,11 @@
 
 	<licenses>
 		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
 
 	<developers>
 		<developer>
@@ -61,12 +60,12 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.esfinge</groupId>
-			<artifactId>querybuilder</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<groupId>net.sf.esfinge</groupId>
+			<artifactId>querybuilder-core</artifactId>
+			<version>1.3.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.esfinge</groupId>
+			<groupId>net.sf.esfinge</groupId>
 			<artifactId>querybuilder-mongodb</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>

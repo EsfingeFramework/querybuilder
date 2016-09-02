@@ -1,8 +1,8 @@
-package org.esfinge.querybuilder.integration;
+package net.sf.esfinge.querybuilder.integration;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.mongodb.testresources.Person;
+import net.sf.esfinge.querybuilder.mongodb.testresources.Person;
 
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.Greater;

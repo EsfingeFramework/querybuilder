@@ -1,13 +1,13 @@
-package org.esfinge.querybuilder.domainterms;
+package net.sf.esfinge.querybuilder.domainterms;
 
-import static org.junit.Assert.assertEquals;
+import static net.sf.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.mongodb.testresources.Person;
-import org.esfinge.querybuilder.mongodb.testresources.QueryBuilderDatabaseTest;
-import org.junit.Before;
-import org.junit.Test;
+import net.sf.esfinge.querybuilder.mongodb.testresources.Person;
+import net.sf.esfinge.querybuilder.mongodb.testresources.QueryBuilderDatabaseTest;
+import net.sf.junit.Before;
+import net.sf.junit.Test;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
 
