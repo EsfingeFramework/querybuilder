@@ -1,8 +1,8 @@
-package org.esfinge.querybuilder.queryobjects;
+package net.sf.esfinge.querybuilder.queryobjects;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.mongodb.testresources.Person;
+import net.sf.esfinge.querybuilder.mongodb.testresources.Person;
 
 import net.sf.esfinge.querybuilder.annotation.Condition;
 import net.sf.esfinge.querybuilder.annotation.DomainTerm;

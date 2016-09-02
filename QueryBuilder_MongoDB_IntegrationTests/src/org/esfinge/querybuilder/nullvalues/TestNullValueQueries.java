@@ -1,8 +1,8 @@
-package org.esfinge.querybuilder.nullvalues;
+package net.sf.esfinge.querybuilder.nullvalues;
 
 import java.util.List;
 
-import org.esfinge.querybuilder.mongodb.testresources.Person;
+import net.sf.esfinge.querybuilder.mongodb.testresources.Person;
 
 import net.sf.esfinge.querybuilder.annotation.CompareToNull;
 import net.sf.esfinge.querybuilder.annotation.IgnoreWhenNull;
