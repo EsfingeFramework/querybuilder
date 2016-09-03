@@ -1,7 +1,7 @@
 package entities;
-import org.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
-import org.esfinge.querybuilder.neo4j.oomapper.annotations.Indexed;
-import org.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Indexed;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
 
 @NodeEntity
 public class SimplePerson {

@@ -1,7 +1,7 @@
 <class-diagram version="1.0.10" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
   associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.Neo4JQueryExecutor" 
-    project="QueryBuilder_Neo4J" file="/QueryBuilder_Neo4J/src/org/esfinge/querybuilder/neo4j/Neo4JQueryExecutor.java" 
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.Neo4JQueryExecutor" 
+    project="QueryBuilder_Neo4J" file="/QueryBuilder_Neo4J/src/net/sf/esfinge/querybuilder/neo4j/Neo4JQueryExecutor.java" 
     binary="false">    
     <position height="-1" width="-1" x="182" y="76"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -9,8 +9,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="2" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.Neo4JQueryVisitor" 
-    project="QueryBuilder_Neo4J" file="/QueryBuilder_Neo4J/src/org/esfinge/querybuilder/neo4j/Neo4JQueryVisitor.java" 
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.Neo4JQueryVisitor" 
+    project="QueryBuilder_Neo4J" file="/QueryBuilder_Neo4J/src/net/sf/esfinge/querybuilder/neo4j/Neo4JQueryVisitor.java" 
     binary="false">    
     <position height="-1" width="-1" x="895" y="345"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -18,8 +18,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="3" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.Neo4JVisitorFactory" 
-    project="QueryBuilder_Neo4J" file="/QueryBuilder_Neo4J/src/org/esfinge/querybuilder/neo4j/Neo4JVisitorFactory.java" 
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.Neo4JVisitorFactory" 
+    project="QueryBuilder_Neo4J" file="/QueryBuilder_Neo4J/src/net/sf/esfinge/querybuilder/neo4j/Neo4JVisitorFactory.java" 
     binary="false">    
     <position height="-1" width="-1" x="534" y="70"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -28,7 +28,7 @@
     </display>  
   </class>  
   <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.methodparser.QueryInfo" 
-    project="QueryBuilder" file="/QueryBuilder/src/org/esfinge/querybuilder/methodparser/QueryInfo.java" binary="false">    
+    project="QueryBuilder" file="/QueryBuilder/src/net/sf/esfinge/querybuilder/methodparser/QueryInfo.java" binary="false">    
     <position height="-1" width="-1" x="182" y="586"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
@@ -36,7 +36,7 @@
     </display>  
   </class>  
   <interface id="5" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.methodparser.QueryVisitor" 
-    project="QueryBuilder" file="/QueryBuilder/src/org/esfinge/querybuilder/methodparser/QueryVisitor.java" 
+    project="QueryBuilder" file="/QueryBuilder/src/net/sf/esfinge/querybuilder/methodparser/QueryVisitor.java" 
     binary="false">    
     <position height="-1" width="-1" x="534" y="765"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      

@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.esfinge</groupId>
+	<groupId>net.sf.esfinge</groupId>
 	<artifactId>querybuilder-neo4j-integration-tests</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.7.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Esfinge QueryBuilder Neo4J Integration Tests</name>
@@ -13,12 +13,11 @@
 
 	<licenses>
 		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
 
 	<developers>
 		<developer>
@@ -69,19 +68,19 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.esfinge</groupId>
-			<artifactId>querybuilder</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<groupId>net.sf.esfinge</groupId>
+			<artifactId>querybuilder-core</artifactId>
+			<version>1.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.esfinge</groupId>
+			<groupId>net.sf.esfinge</groupId>
 			<artifactId>querybuilder-neo4j-oomapper</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<version>1.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.esfinge</groupId>
+			<groupId>net.sf.esfinge</groupId>
 			<artifactId>querybuilder-neo4j</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<version>1.7.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
