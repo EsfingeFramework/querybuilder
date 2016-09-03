@@ -13,12 +13,11 @@
 
 	<licenses>
 		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
 
 	<developers>
 		<developer>
@@ -37,7 +36,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <neo4j.version>2.3.6</neo4j.version>
+        <neo4j.version>3.0.4</neo4j.version>
 	</properties>
 
 	<build>
