@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.RelationshipType;
 
 public class MappingInfo {
 
@@ -75,8 +75,8 @@ public class MappingInfo {
 		return relatedTo.get(propertyName);
 	}
 
-	public DynamicRelationshipType getRelationshipType(String relatedEntityName){
-		return DynamicRelationshipType.withName(relatedEntityName);
+	public RelationshipType getRelationshipType(String relatedEntityName){
+		return RelationshipType.withName(relatedEntityName);
 	}
 
 	public void setId(String name) {
