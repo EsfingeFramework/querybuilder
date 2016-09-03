@@ -50,6 +50,7 @@ public class MongoDBRepository<E> implements Repository<E>{
 		this.clazz = clazz;		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<E> queryByExample(E obj) {
 		

@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import net.sf.esfinge.querybuilder.exception.EntityClassNotFoundException;
-import net.sf.esfinge.querybuilder.mongodb.MongoDBEntityClassProvider;
-
 public class TestMongoDBEntityClassProvider {
 	
 	@Test

@@ -13,7 +13,7 @@ import net.sf.esfinge.querybuilder.methodparser.conditions.QueryCondition;
 public class QueryInfo {
 	
 	private String entityName;
-	private Class entityType;
+	private Class<?> entityType;
 	private QueryType queryType;
 	private QueryCondition condition = new NullCondition();
 	private List<QueryOrder> order = new ArrayList<QueryOrder>();
@@ -51,11 +51,11 @@ public class QueryInfo {
 		addCondition(qp, "and");
 	}
 	
-	public Class getEntityType() {
+	public Class<?> getEntityType() {
 		return entityType;
 	}
 
-	public void setEntityType(Class entityType) {
+	public void setEntityType(Class<?> entityType) {
 		if(entityType == null){
 			throw new EntityClassNotFoundException("The entity class was not found by the class provider");
 		}
