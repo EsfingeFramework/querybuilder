@@ -1,8 +1,8 @@
 package entities;
 
-import org.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
-import org.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
-import org.esfinge.querybuilder.neo4j.oomapper.annotations.RelatedTo;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.RelatedTo;
 
 @NodeEntity
 public class RelatedPerson {

@@ -8,12 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.lucene.search.SortField;
-import org.esfinge.querybuilder.methodparser.ComparisonType;
-import org.esfinge.querybuilder.neo4j.oomapper.Condition;
-import org.esfinge.querybuilder.neo4j.oomapper.Neo4J;
-import org.esfinge.querybuilder.neo4j.oomapper.Query;
-import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.NoNodeEntityException;
-import org.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.UnindexedPropertyException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +18,12 @@ import entities.NotAnnotadedPerson;
 import entities.RelatedPerson;
 import entities.RelatedSetPerson;
 import entities.SimplePerson;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.Condition;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.Neo4J;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.Query;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.NoNodeEntityException;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.parser.exceptions.UnindexedPropertyException;
 
 
 public class Testes {

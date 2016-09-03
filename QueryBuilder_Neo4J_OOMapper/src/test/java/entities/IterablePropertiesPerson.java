@@ -2,8 +2,8 @@ package entities;
 
 import java.util.LinkedList;
 
-import org.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
-import org.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
+import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
 
 @NodeEntity
 public class IterablePropertiesPerson {
