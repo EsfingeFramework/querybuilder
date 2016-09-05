@@ -1,53 +1,53 @@
 <class-diagram version="1.0.10" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
   associations="true" dependencies="true" nesting-relationships="true">  
-  <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.oomapper.Neo4J" 
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.oomapper.Neo4J" 
     project="QueryBuilder_Neo4J_OOMapper" 
-    file="/QueryBuilder_Neo4J_OOMapper/src/org/esfinge/querybuilder/neo4j/oomapper/Neo4J.java" binary="false">    
+    file="/QueryBuilder_Neo4J_OOMapper/src/net/sf/esfinge/querybuilder/neo4j/oomapper/Neo4J.java" binary="false">    
     <position height="-1" width="-1" x="171" y="195"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="2" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.oomapper.Query" 
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.oomapper.Query" 
     project="QueryBuilder_Neo4J_OOMapper" 
-    file="/QueryBuilder_Neo4J_OOMapper/src/org/esfinge/querybuilder/neo4j/oomapper/Query.java" binary="false">    
+    file="/QueryBuilder_Neo4J_OOMapper/src/net/sf/esfinge/querybuilder/neo4j/oomapper/Query.java" binary="false">    
     <position height="-1" width="-1" x="172" y="625"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="3" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.oomapper.Condition" 
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.oomapper.Condition" 
     project="QueryBuilder_Neo4J_OOMapper" 
-    file="/QueryBuilder_Neo4J_OOMapper/src/org/esfinge/querybuilder/neo4j/oomapper/Condition.java" binary="false">    
+    file="/QueryBuilder_Neo4J_OOMapper/src/net/sf/esfinge/querybuilder/neo4j/oomapper/Condition.java" binary="false">    
     <position height="-1" width="-1" x="493" y="983"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.oomapper.MappingInfo" 
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.oomapper.MappingInfo" 
     project="QueryBuilder_Neo4J_OOMapper" 
-    file="/QueryBuilder_Neo4J_OOMapper/src/org/esfinge/querybuilder/neo4j/oomapper/MappingInfo.java" binary="false">    
+    file="/QueryBuilder_Neo4J_OOMapper/src/net/sf/esfinge/querybuilder/neo4j/oomapper/MappingInfo.java" binary="false">    
     <position height="-1" width="-1" x="666" y="590"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.oomapper.parser.Parser" 
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.oomapper.parser.Parser" 
     project="QueryBuilder_Neo4J_OOMapper" 
-    file="/QueryBuilder_Neo4J_OOMapper/src/org/esfinge/querybuilder/neo4j/oomapper/parser/Parser.java" binary="false">    
+    file="/QueryBuilder_Neo4J_OOMapper/src/net/sf/esfinge/querybuilder/neo4j/oomapper/parser/Parser.java" binary="false">    
     <position height="-1" width="-1" x="667" y="154"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <enumeration id="6" corner="BOTTOM_RIGHT" language="java" name="org.esfinge.querybuilder.neo4j.oomapper.ConditionType" 
+  <enumeration id="6" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.neo4j.oomapper.ConditionType" 
     project="QueryBuilder_Neo4J_OOMapper" 
-    file="/QueryBuilder_Neo4J_OOMapper/src/org/esfinge/querybuilder/neo4j/oomapper/ConditionType.java" binary="false">    
+    file="/QueryBuilder_Neo4J_OOMapper/src/net/sf/esfinge/querybuilder/neo4j/oomapper/ConditionType.java" binary="false">    
     <position height="-1" width="-1" x="172" y="983"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      

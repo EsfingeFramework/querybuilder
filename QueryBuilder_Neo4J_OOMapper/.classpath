@@ -1,42 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src">
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="target/test-classes" path="tests">
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/neo4j-kernel-1.8.M07-tests.jar"/>
-	<classpathentry kind="lib" path="lib/geronimo-jta_1.1_spec-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/org.apache.servicemix.bundles.jline-0.9.94_1.jar"/>
-	<classpathentry kind="lib" path="lib/scala-library-2.9.1-1.jar"/>
-	<classpathentry kind="lib" path="lib/neo4j-cypher-1.9-20120912.103508-32.jar"/>
-	<classpathentry kind="lib" path="lib/neo4j-graph-algo-1.9-20120912.103034-33.jar"/>
-	<classpathentry kind="lib" path="lib/neo4j-graph-matching-1.9-20120912.103048-33.jar"/>
-	<classpathentry kind="lib" path="lib/neo4j-jmx-1.9-20120912.102620-33.jar"/>
-	<classpathentry kind="lib" path="lib/neo4j-kernel-1.9-20120912.102607-33.jar"/>
-	<classpathentry kind="lib" path="lib/neo4j-lucene-index-1.9-20120912.103015-33.jar"/>
-	<classpathentry kind="lib" path="lib/neo4j-shell-1.9-20120912.103809-32.jar"/>
-	<classpathentry kind="lib" path="lib/neo4j-udc-1.9-20120912.102654-33.jar"/>
-	<classpathentry kind="lib" path="lib/server-api-1.9-20120912.103915-31.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-core-3.6.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/QueryBuilder_Core"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

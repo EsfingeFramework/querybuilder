@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>QueryBuilder_Neo4J_OOMapper</name>
-	<comment></comment>
+	<name>Querybuilder_Neo4J_OOMapper</name>
+	<comment>The Esfinge QueryBuilder Neo4J is the persistence framework for Esfinge QueryBuilder using Neo4J Graph Database. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

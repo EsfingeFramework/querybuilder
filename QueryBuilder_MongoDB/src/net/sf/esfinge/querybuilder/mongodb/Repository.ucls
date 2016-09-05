@@ -1,0 +1,59 @@
+<class-diagram version="1.0.10" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.mongodb.MongoDBRepository" 
+    project="QueryBuilder_MongoDB" 
+    file="/QueryBuilder_MongoDB/src/net.sf/esfinge/querybuilder/mongodb/MongoDBRepository.java" binary="false">    
+    <position height="-1" width="-1" x="212" y="-72"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="2" corner="BOTTOM_RIGHT" language="java" name="com.google.code.morphia.Datastore" 
+    project="QueryBuilder_MongoDB" file="/QueryBuilder_MongoDB/lib/morphia-0.99.1-SNAPSHOT.jar" binary="true">    
+    <position height="-1" width="-1" x="742" y="148"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface id="3" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.Repository" 
+    project="QueryBuilder" file="/QueryBuilder/src/net.sf/esfinge/querybuilder/Repository.java" binary="false">    
+    <position height="-1" width="-1" x="213" y="-311"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="net.sf.esfinge.querybuilder.mongodb.MongoDBDAOUtils" 
+    project="QueryBuilder_MongoDB" 
+    file="/QueryBuilder_MongoDB/src/net.sf/esfinge/querybuilder/mongodb/MongoDBDAOUtils.java" binary="false">    
+    <position height="-1" width="-1" x="213" y="185"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <dependency id="5">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="6">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="7" name="ds"/>      
+      <multiplicity id="8" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="9">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </realization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

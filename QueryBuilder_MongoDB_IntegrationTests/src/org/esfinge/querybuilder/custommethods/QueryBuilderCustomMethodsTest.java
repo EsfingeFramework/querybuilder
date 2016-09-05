@@ -1,11 +1,11 @@
-package org.esfinge.querybuilder.custommethods;
+package net.sf.esfinge.querybuilder.custommethods;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static net.sf.junit.Assert.assertEquals;
+import static net.sf.junit.Assert.assertTrue;
 
-import org.esfinge.querybuilder.mongodb.testresources.Address;
-import org.esfinge.querybuilder.mongodb.testresources.Person;
-import org.junit.Test;
+import net.sf.esfinge.querybuilder.mongodb.testresources.Address;
+import net.sf.esfinge.querybuilder.mongodb.testresources.Person;
+import net.sf.junit.Test;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
 
