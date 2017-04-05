@@ -56,7 +56,9 @@ public class QueryBuilderDatabaseTest {
 						Query q = ds.query(foreignObjectClass);
 						q.setProperty(foreignField.getName(), getCorrectFieldValue(foreignField, value));
 						Object retrieved = q.getSingle();
-						setField(entity, retrieved);
+						if(retrieved != null) {
+							setField(entity, retrieved);
+						}
 					}
 					
 				}
