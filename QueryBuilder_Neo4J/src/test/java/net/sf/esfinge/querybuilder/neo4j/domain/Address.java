@@ -1,18 +1,17 @@
-package net.sf.esfinge.querybuilder.neo4j.dynamic;
+package net.sf.esfinge.querybuilder.neo4j.domain;
 
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Indexed;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
-
+import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.NodeEntity;
 
 @NodeEntity
 public class Address {
 	
-	@Id
+	@GraphId
 	private int id;
-	@Indexed
+	@Index
 	private String city;
-	@Indexed
+	@Index
 	private String state;
 	
 	public int getId() {

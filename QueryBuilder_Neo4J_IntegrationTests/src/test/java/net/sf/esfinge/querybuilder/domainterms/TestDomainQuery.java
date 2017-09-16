@@ -8,7 +8,7 @@ import net.sf.esfinge.querybuilder.annotation.DomainTerm;
 import net.sf.esfinge.querybuilder.annotation.DomainTerms;
 import net.sf.esfinge.querybuilder.annotation.Greater;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 
 @DomainTerm(term="teenager",
 		conditions={@Condition(property="age",comparison=ComparisonType.GREATER_OR_EQUALS,value="13"),

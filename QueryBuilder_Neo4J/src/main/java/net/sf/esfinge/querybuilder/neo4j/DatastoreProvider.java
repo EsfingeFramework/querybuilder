@@ -1,9 +1,9 @@
 package net.sf.esfinge.querybuilder.neo4j;
 
-import net.sf.esfinge.querybuilder.neo4j.oomapper.Neo4J;
+import org.neo4j.ogm.session.Neo4jSession;
 
 public interface DatastoreProvider {
 	
-	public Neo4J getDatastore();
+	public Neo4jSession getDatastore();
 	
 }

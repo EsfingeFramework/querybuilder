@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 import net.sf.esfinge.querybuilder.neo4j.testresources.QueryBuilderDatabaseTest;
 
 public class QueryBuilderNeo4JQueryObject extends QueryBuilderDatabaseTest {

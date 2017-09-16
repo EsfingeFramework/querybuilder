@@ -4,17 +4,14 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.Query;
 
-@SuppressWarnings("rawtypes")
-public class Neo4JQueryRepresentation implements QueryRepresentation{
+public class Neo4JQueryRepresentation implements QueryRepresentation {
 	
-	private Query neo4JQuery;
+	private Neo4JQueryParameters neo4JQuery;
 	private boolean dynamic;
 	private Map<String, Object> fixParameters;
 	
-	public Neo4JQueryRepresentation(Query neo4JQuery, boolean dynamic,
-			Map<String, Object> fixParameters) {
+	public Neo4JQueryRepresentation(Neo4JQueryParameters neo4JQuery, boolean dynamic, Map<String, Object> fixParameters) {
 		this.neo4JQuery = neo4JQuery;
 		this.dynamic = dynamic;
 		this.fixParameters = fixParameters;

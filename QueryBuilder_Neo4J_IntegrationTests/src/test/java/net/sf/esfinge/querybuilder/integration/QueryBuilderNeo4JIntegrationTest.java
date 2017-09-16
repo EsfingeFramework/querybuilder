@@ -4,14 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 import net.sf.esfinge.querybuilder.neo4j.testresources.QueryBuilderDatabaseTest;
-import net.sf.esfinge.querybuilder.neo4j.testresources.TestNeo4JDatastoreProvider;
 
 
 public class QueryBuilderNeo4JIntegrationTest extends QueryBuilderDatabaseTest {
@@ -24,11 +22,6 @@ public class QueryBuilderNeo4JIntegrationTest extends QueryBuilderDatabaseTest {
 		tq = QueryBuilder.create(TestQuery.class);
 	}
 	
-	@After
-	public void clearDatabase(){
-		new TestNeo4JDatastoreProvider().clear();
-	}
-
 	@Test
 	public void simpleQuery(){
 		List<Person> list = tq.getPerson();
@@ -69,8 +62,8 @@ public class QueryBuilderNeo4JIntegrationTest extends QueryBuilderDatabaseTest {
 	public void queryWithOtherTable(){
 		List<Person> list = tq.getPersonByAddressCity("Juiz de Fora");
 		assertEquals("The list should have 2 persons", 2, list.size());
-		assertEquals("The first should be Antonio", "Antonio", list.get(0).getName());
-		assertEquals("The second should be Silvia", "Silvia", list.get(1).getName());
+		assertEquals("The first should be Silvia", "Silvia", list.get(0).getName());
+		assertEquals("The second should be Antonio", "Antonio", list.get(1).getName());
 	}
 	
 	@Test
@@ -103,6 +96,12 @@ public class QueryBuilderNeo4JIntegrationTest extends QueryBuilderDatabaseTest {
 	public void queryWithStringStarted(){
 		List<Person> list = tq.getPersonByName("M");
 		assertEquals("The list should have 2 persons", 2, list.size());
+	}
+	
+	@Test
+	public void queryWithStringContains(){
+		List<Person> list = tq.getPersonByNameContains("arc");
+		assertEquals("The list should have 1 persons", 1, list.size());
 	}
 	
 	@Test

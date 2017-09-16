@@ -1,24 +1,23 @@
-package net.sf.esfinge.querybuilder.neo4j.testresources;
+package net.sf.esfinge.querybuilder.neo4j.domain;
 
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Indexed;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.RelatedTo;
-
+import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
 public class Person {
 	
-	@Id
+	@GraphId
 	private Integer id;
-	@Indexed
+	@Index
 	private String name;
-	@Indexed
-	private String lastName = null;
-	@Indexed
+	@Index
+	private String lastName;
+	@Index
 	private Integer age;
 	
-	@RelatedTo(targetClass = Address.class)
+	@Relationship
 	private Address address;
 
 	public Integer getId() {
@@ -61,8 +60,5 @@ public class Person {
 		this.address = address;
 	}
 	
-	@Override
-	public String toString(){
-		return id + " " + name + " " + lastName + " " + age + " " + address.getId() + " " + address.getCity() + " " + address.getState();
-	}
+
 }

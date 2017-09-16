@@ -28,17 +28,10 @@ public class TestNeo4JQueryVisitor {
 	}
 	
 	@Test
-	public void singleEntity(){
+	public void singleEntity() throws NoSuchMethodException, SecurityException {
 		
-		Method m = null;
-		try {
-			m = TestQuery.class.getMethod("getPerson", new Class[0]);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-		
+		Method m = TestQuery.class.getMethod("getPerson", new Class[0]);
+
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), null);
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();

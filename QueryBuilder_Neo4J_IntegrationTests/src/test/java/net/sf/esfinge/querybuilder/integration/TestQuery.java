@@ -5,7 +5,7 @@ import java.util.List;
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.Greater;
 import net.sf.esfinge.querybuilder.annotation.Starts;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 
 public interface TestQuery extends Repository<Person>{
 	public List<Person> getPerson();
@@ -19,6 +19,7 @@ public interface TestQuery extends Repository<Person>{
 	public List<Person> getPersonByAgeLesser(Integer age);
 	public List<Person> getPersonByLastNameNotEquals(String name);
 	public List<Person> getPersonByName(@Starts String name);
+	public List<Person> getPersonByNameContains(String name);
 	public List<Person> getPersonByNameStartsAndAgeGreater(String name, Integer age);
 	public List<Person> getPersonOrderByName();
 	public List<Person> getPersonByAgeOrderByNameDesc(@Greater Integer age);

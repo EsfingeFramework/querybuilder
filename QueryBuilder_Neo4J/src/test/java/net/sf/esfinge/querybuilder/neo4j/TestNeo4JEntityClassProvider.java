@@ -4,9 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import net.sf.esfinge.querybuilder.neo4j.Neo4JEntityClassProvider;
-import net.sf.esfinge.querybuilder.neo4j.dynamic.Address;
-import net.sf.esfinge.querybuilder.neo4j.dynamic.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Address;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 
 public class TestNeo4JEntityClassProvider {
 	
