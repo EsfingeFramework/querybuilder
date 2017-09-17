@@ -1,13 +1,11 @@
 package net.sf.esfinge.querybuilder.neo4j;
 
-import static net.sf.esfinge.querybuilder.neo4j.Neo4JRepository.DEPTH_LIST;
-
-import java.util.Map;
-
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.Filters;
+import org.neo4j.ogm.cypher.query.PagingAndSortingQuery;
 import org.neo4j.ogm.cypher.query.SortOrder;
-import org.neo4j.ogm.session.request.strategy.impl.NodeQueryStatements;
+import org.neo4j.ogm.session.Neo4jSession;
+import org.neo4j.ogm.session.request.strategy.QueryStatements;
 
 public class Neo4JQueryParameters {
 
@@ -33,18 +31,36 @@ public class Neo4JQueryParameters {
 		return sortOrder;
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public String toString() {
-		String cypherQuery = new NodeQueryStatements<>().findByType(label, filters, DEPTH_LIST).getStatement();
-		for (Filter filter : filters) {
-			Map<String, Object> parameters = filter.getFunction().parameters();
-			for (String key : parameters.keySet()) {
-				Object value = parameters.get(key);
-				if(value != null) cypherQuery = cypherQuery.replace(key, value.toString());
+	public String resolveQuery(Class<?> type, Neo4jSession session) {
+		StringBuilder sb = new StringBuilder();
+		
+		int depth = Neo4JRepository.DEPTH_LIST;
+        QueryStatements<?> queryStatements = session.queryStatementsFor(type, depth);
+		session.resolvePropertyAnnotations(type, filters);
+        
+		PagingAndSortingQuery query;
+		if (filters.isEmpty()) {
+            query = queryStatements.findByType(label, depth);
+            query.setSortOrder(sortOrder);
+            sb.append(query.getStatement());
+        } else {
+            query = queryStatements.findByType(label, filters, depth);
+            query.setSortOrder(sortOrder);
+            String statement = query.getStatement();
+            for (Filter filter : filters) {
+            	for (String key : filter.parameters().keySet()) {
+            		Object object = filter.parameters().get(key);
+            		if(object instanceof String) {
+            			statement = statement.replace(String.format("{ `%s` }", key), String.format("'%s'", object));
+            		} else {
+            			statement = statement.replace(String.format("{ `%s` }", key), object.toString());
+            		}
+            	}
 			}
-		}
-		return cypherQuery;
+        	sb.append(statement);
+        }
+		
+		return sb.toString();
 	}
 
 }

@@ -7,12 +7,14 @@ import java.lang.reflect.Method;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.neo4j.ogm.session.Neo4jSession;
 
 import net.sf.esfinge.querybuilder.methodparser.DSLMethodParser;
 import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
 import net.sf.esfinge.querybuilder.methodparser.MethodParser;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 @SuppressWarnings("rawtypes")
@@ -20,6 +22,7 @@ public class TestNeo4JQueryVisitor {
 	
 	QueryVisitor visitor;
 	MethodParser mp = new DSLMethodParser();
+	Neo4jSession neo4j = new TestNeo4JDatastoreProvider().getDatastore();
 	
 	@Before
 	public void init(){
@@ -36,9 +39,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
-		assertEquals("id:*", query);
+		assertEquals("MATCH (n:`Person`) WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ]", query);
 	}
 	
 	@Test
@@ -62,9 +66,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
-		assertEquals("((name:\"nome\"))", query);
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'nome' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	}
 	
 	@Test
@@ -88,9 +93,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
-		assertEquals("((age:{10 TO *}))", query);
+		assertEquals("MATCH (n:`Person`) WHERE n.`age` > 10 WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 	}
 	
@@ -117,9 +123,38 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
-		assertEquals("(((age:[10 TO *]) AND (name:\"John\")))", query);
+		assertEquals("MATCH (n:`Person`) WHERE n.`age` >= 10 AND n.`name` = 'John' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
+		
+	}
+	
+	@Test
+	public void greaterNameDesc(){
+		
+		Method m = null;
+		try {
+			Class[] args = new Class[1];
+			args[0] = Integer.class;
+			m = TestQuery.class.getMethod("getPersonByAgeOrderByNameDesc", args);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		
+		Object[] args = new Object[2];
+		args[0] = new Integer(10);
+		
+		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
+		
+		QueryRepresentation qr = visitor.getQueryRepresentation();
+		
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		
+		assertEquals("MATCH (n:`Person`) WHERE n.`age` > 10 WITH n ORDER BY n.name DESC RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 	}
 	
@@ -144,9 +179,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
-		assertEquals("((age:{10 TO *}))", query);
+		assertEquals("MATCH (n:`Person`) WHERE n.`age` > 10 WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 	}
 	
@@ -171,9 +207,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
-		assertEquals("((*:* AND NOT name:\"John\"))", query);
+		assertEquals("MATCH (n:`Person`) WHERE NOT(n.`name` = 'John' ) WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 	}
 	
@@ -200,8 +237,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
-		assertEquals("(((name:\"nome\") AND (lastName:\"sobrenome\")))", query);
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'nome' AND n.`lastName` = 'sobrenome' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	}
 	
 	@Test
@@ -227,8 +266,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
-		assertEquals("((name:\"nome\") OR (lastName:\"sobrenome\"))", query);
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'nome' OR n.`lastName` = 'sobrenome' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	}
 	
 	@Test
@@ -252,8 +293,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
-		assertEquals("((address.city:\"cidade\"))", query);
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		
+		assertEquals("MATCH (n:`Person`) MATCH (m0:`Address`) WHERE m0.`city` = 'cidade' MATCH (n)-[:`LIVES`]->(m0) WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	}
 	
 	@Test
@@ -281,8 +324,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
-		assertEquals("((name:\"nome\") OR ((lastName:\"sobrenome\") AND (address.city:\"cidade\")))", query);
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'nome' OR n.`lastName` = 'sobrenome' MATCH (m0:`Address`) WHERE m0.`city` = 'cidade' MATCH (n)-[:`LIVES`]->(m0) WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	}
 	
 	@Test
@@ -303,9 +348,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
-		assertEquals("((address.city:\"Rio de Janeiro\"))", query);
+		assertEquals("MATCH (n:`Person`) MATCH (m0:`Address`) WHERE m0.`city` = 'Rio de Janeiro' MATCH (n)-[:`LIVES`]->(m0) WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		assertEquals(qr.getFixParameterValue("cityEQUALS"), "Rio de Janeiro");
 		assertTrue(qr.getFixParameters().contains("cityEQUALS"));
@@ -332,9 +378,10 @@ public class TestNeo4JQueryVisitor {
 		
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
-		String query = qr.getQuery().toString();
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
-		assertEquals("(((address.city:\"Rio de Janeiro\") AND (name:\"nome\")))", query);
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'nome' MATCH (m0:`Address`) WHERE m0.`city` = 'Rio de Janeiro' MATCH (n)-[:`LIVES`]->(m0) WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		assertEquals(qr.getFixParameterValue("cityEQUALS"), "Rio de Janeiro");
 		assertTrue(qr.getFixParameters().contains("cityEQUALS"));
 	}

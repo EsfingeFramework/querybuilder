@@ -8,14 +8,18 @@ import java.lang.reflect.Method;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.neo4j.ogm.session.Neo4jSession;
 
 import net.sf.esfinge.querybuilder.methodparser.DSLMethodParser;
 import net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
 import net.sf.esfinge.querybuilder.methodparser.MethodParser;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+import net.sf.esfinge.querybuilder.neo4j.Neo4JQueryParameters;
 import net.sf.esfinge.querybuilder.neo4j.Neo4JVisitorFactory;
+import net.sf.esfinge.querybuilder.neo4j.TestNeo4JDatastoreProvider;
 import net.sf.esfinge.querybuilder.neo4j.TestQuery;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 @SuppressWarnings("rawtypes")
@@ -23,6 +27,7 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 	
 	QueryVisitor visitor;
 	MethodParser mp = new DSLMethodParser();
+	Neo4jSession neo4j = new TestNeo4JDatastoreProvider().getDatastore();
 	
 	@Before
 	public void init(){
@@ -52,8 +57,10 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 		
 		assertFalse("Query should not be dynamic", qr.isDynamic());
-		String query = qr.getQuery().toString();
-		assertEquals("((name:\"nome\"))", query);
+
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'nome' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	}
 	
 	@Test
@@ -79,16 +86,20 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("id:*", qr.getQuery().toString());
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		assertEquals("MATCH (n:`Person`) WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ]", query);
 		
 		args[0] = new Integer(15);
 		
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("((age:\"15\"))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`age` = 15 WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 	}
 	
@@ -115,16 +126,21 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("((lastName:null))", qr.getQuery().toString());
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		
+		assertEquals("MATCH (n:`Person`) WHERE n.`lastName` IS NULL WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		args[0] = "Fonseca";
 		
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("((lastName:\"Fonseca\"))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`lastName` = 'Fonseca' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 	}
 	
@@ -153,7 +169,10 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((name:null) AND (lastName:null)))", qr.getQuery().toString());
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` IS NULL AND n.`lastName` IS NULL WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	
 		args[0] = "Eduardo";
 		args[1] = null;
@@ -161,10 +180,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((name:\"Eduardo\") AND (lastName:null)))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'Eduardo' AND n.`lastName` IS NULL WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		args[0] = null;
 		args[1] = "Guerra";
@@ -172,10 +193,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((name:null) AND (lastName:\"Guerra\")))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` IS NULL AND n.`lastName` = 'Guerra' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		args[0] = "Eduardo";
 		args[1] = "Guerra";
@@ -183,10 +206,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((name:\"Eduardo\") AND (lastName:\"Guerra\")))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'Eduardo' AND n.`lastName` = 'Guerra' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	
 	}
 	
@@ -214,7 +239,10 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((name:M*) AND (age:null)))", qr.getQuery().toString());
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` STARTS WITH 'M' AND n.`age` IS NULL WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	
 		args[0] = "Eduardo";
 		args[1] = 15;
@@ -222,10 +250,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((name:Eduardo*) AND (age:\"15\")))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` STARTS WITH 'Eduardo' AND n.`age` = 15 WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	
 	}
 	
@@ -254,7 +284,10 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("id:*", qr.getQuery().toString());
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		
+		assertEquals("MATCH (n:`Person`) WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ]", query);
 	
 		args[0] = "Eduardo";
 		args[1] = null;
@@ -262,9 +295,11 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
-		assertEquals("((name:\"Eduardo\"))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'Eduardo' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		args[0] = null;
 		args[1] = "Guerra";
@@ -272,10 +307,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("((lastName:\"Guerra\"))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`lastName` = 'Guerra' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		args[0] = "Eduardo";
 		args[1] = "Guerra";
@@ -283,10 +320,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("((name:\"Eduardo\") OR (lastName:\"Guerra\"))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'Eduardo' OR n.`lastName` = 'Guerra' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 	
 	}
 	
@@ -317,7 +356,9 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("((age:\"15\"))", qr.getQuery().toString());
+		Neo4JQueryParameters neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		String query =  neo4jQuery.resolveQuery(Person.class, neo4j);
+		assertEquals("MATCH (n:`Person`) WHERE n.`age` = 15 WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		args[0] = "Eduardo";
 		args[1] = new Integer(15);
@@ -326,10 +367,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((name:\"Eduardo\") AND (age:\"15\")))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'Eduardo' AND n.`age` = 15 WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		args[0] = null;
 		args[1] = new Integer(15);
@@ -338,10 +381,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((age:\"15\") AND (lastName:\"Guerra\")))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`age` = 15 AND n.`lastName` = 'Guerra' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 		args[0] = "Eduardo";
 		args[1] = new Integer(15);
@@ -350,10 +395,12 @@ public class TestDynamicQueriesNeo4JQueryVisitor {
 		visitor = Neo4JVisitorFactory.createQueryVisitor(mp.parse(m), args);
 		
 		qr = visitor.getQueryRepresentation();
+		neo4jQuery = (Neo4JQueryParameters) qr.getQuery();
+		query =  neo4jQuery.resolveQuery(Person.class, neo4j);
 		
 		assertTrue("Query should be dynamic", qr.isDynamic());
 		
-		assertEquals("(((name:\"Eduardo\") AND (age:\"15\") AND (lastName:\"Guerra\")))", qr.getQuery().toString());
+		assertEquals("MATCH (n:`Person`) WHERE n.`name` = 'Eduardo' AND n.`age` = 15 AND n.`lastName` = 'Guerra' WITH n RETURN n,[ [ (n)-[r_l1:`LIVES`]->(a1:`Address`) | [ r_l1, a1 ] ] ], ID(n)", query);
 		
 	}
 

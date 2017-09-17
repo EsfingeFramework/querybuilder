@@ -215,7 +215,7 @@ public class Neo4JQueryVisitor implements QueryVisitor {
 				return field.getType();
 			}
 		}
-		throw new RuntimeException("Nested property '" + nestedPropertyName + "' not found in Class " + entityType.getName());
+		throw new RuntimeException("Nested property '" + nestedPropertyName + "' not found in Class " + entityType);
 	}
 
 	private ComparisonOperator convertCompType(ComparisonType compType) {

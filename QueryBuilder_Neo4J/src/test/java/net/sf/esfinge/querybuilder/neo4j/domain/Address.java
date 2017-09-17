@@ -5,21 +5,16 @@ import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 
 @NodeEntity
+	
 public class Address {
 	
 	@GraphId
-	private int id;
+	private Long graphId;
+
 	@Index
 	private String city;
-	@Index
 	private String state;
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getCity() {
 		return city;
 	}
@@ -32,7 +27,5 @@ public class Address {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
-	
 	
 }

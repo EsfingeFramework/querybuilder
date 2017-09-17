@@ -1,7 +1,6 @@
 package net.sf.esfinge.querybuilder.neo4j.domain;
 
 import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -9,25 +8,19 @@ import org.neo4j.ogm.annotation.Relationship;
 public class Person {
 	
 	@GraphId
-	private Integer id;
-	@Index
+	private Long graphId;
+
 	private String name;
-	@Index
 	private String lastName;
-	@Index
 	private Integer age;
 	
-	@Relationship
+	@Relationship(type = "LIVES", direction = Relationship.OUTGOING)
 	private Address address;
 
-	public Integer getId() {
-		return id;
+	public Long getGraphId() {
+		return graphId;
 	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -60,5 +53,12 @@ public class Person {
 		this.address = address;
 	}
 	
-
+	@Override
+	public String toString(){
+		if(address != null) {
+			return name + " " + lastName + " " + age + " " + address.getCity() + " " + address.getState();
+		} else {
+			return name + " " + lastName + " " + age + " null";
+		}
+	}
 }

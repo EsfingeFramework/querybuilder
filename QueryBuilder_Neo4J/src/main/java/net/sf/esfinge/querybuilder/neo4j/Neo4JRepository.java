@@ -18,8 +18,8 @@ import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 @ServicePriority(1)
 public class Neo4JRepository<E> implements Repository<E> {
 	
-    public static final int DEPTH_LIST = 0;
-    public static final int DEPTH_ENTITY = 1;
+	public static final int DEPTH_ENTITY = 0;
+    public static final int DEPTH_LIST = 1;
 
     protected Neo4jSession neo4j;
 	protected Class<E> clazz;
