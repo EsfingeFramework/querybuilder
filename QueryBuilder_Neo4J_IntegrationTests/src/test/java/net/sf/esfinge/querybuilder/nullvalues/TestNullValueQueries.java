@@ -5,7 +5,7 @@ import java.util.List;
 import net.sf.esfinge.querybuilder.annotation.CompareToNull;
 import net.sf.esfinge.querybuilder.annotation.IgnoreWhenNull;
 import net.sf.esfinge.querybuilder.annotation.Starts;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 
 public interface TestNullValueQueries {
 	

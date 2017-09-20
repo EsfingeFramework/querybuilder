@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Address;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Address;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 
 public class QueryBuilderCustomMethodsTest {
 	

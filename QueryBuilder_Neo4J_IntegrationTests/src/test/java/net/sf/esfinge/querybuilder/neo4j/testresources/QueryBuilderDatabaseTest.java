@@ -3,6 +3,7 @@ package net.sf.esfinge.querybuilder.neo4j.testresources;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
@@ -10,9 +11,9 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.util.fileloader.DataFileLoader;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
-
-import net.sf.esfinge.querybuilder.neo4j.oomapper.Neo4J;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.Query;
+import org.neo4j.ogm.cypher.ComparisonOperator;
+import org.neo4j.ogm.cypher.Filter;
+import org.neo4j.ogm.session.Neo4jSession;
 
 public class QueryBuilderDatabaseTest {
 	
@@ -22,43 +23,50 @@ public class QueryBuilderDatabaseTest {
 		IDataSet dataSet = loader.load(filename);
 
 		TestNeo4JDatastoreProvider dsp = new TestNeo4JDatastoreProvider();
-		Neo4J ds = dsp.getDatastore();
+		dsp.clear();
+		Neo4jSession ds = dsp.getDatastore();
 		
 		for(String tableName : dataSet.getTableNames()){
 			ITable table = dataSet.getTable(tableName);
 			for(int row = 0; row < table.getRowCount(); row++){
-				if(ds.getEntityClass(tableName) == null){
-					System.out.println(tableName);
+				Class<?> tableEntityClass = dsp.getEntityClass(tableName);
+				if(tableEntityClass == null){
+					System.err.println(tableName + " not found!");
+					continue;
 				}
-				Object entity = ds.getEntityClass(tableName).newInstance();
+				Object entity = tableEntityClass.newInstance();
 				for(Column column : table.getTableMetaData().getColumns()){
 					
-					String value = (String) table.getValue(row, column.getColumnName());
+					String columnName = column.getColumnName();
+					String value = (String) table.getValue(row, columnName);
 					boolean encontrou = false;
 					for(Field field : entity.getClass().getDeclaredFields()){
-						if(field.getName().equalsIgnoreCase(column.getColumnName())){
+						if(field.getName().equalsIgnoreCase(columnName)){
 							setField(entity, value, field);
 							encontrou = true;
+							break;
 						}
 					}
 					
 					if(!encontrou){
-						String foreignCollection = column.getColumnName().substring(0, column.getColumnName().indexOf("_"));
-						String foreignKey = column.getColumnName().substring(column.getColumnName().indexOf("_") + 1);
-						Class<?> foreignObjectClass = ds.getEntityClass(foreignCollection);
+						String foreignCollection = columnName.substring(0, columnName.indexOf("_"));
+						String foreignKey = columnName.substring(columnName.indexOf("_") + 1);
+						Class<?> foreignObjectClass = dsp.getEntityClass(foreignCollection);
 						Field foreignField = null;
 						for(Field field : foreignObjectClass.getDeclaredFields()){
 							if(field.getName().equalsIgnoreCase(foreignKey)){
 								foreignField = field;
+								break;
 							}
 						}
-						@SuppressWarnings("rawtypes")
-						Query q = ds.query(foreignObjectClass);
-						q.setProperty(foreignField.getName(), getCorrectFieldValue(foreignField, value));
-						Object retrieved = q.getSingle();
-						if(retrieved != null) {
-							setField(entity, retrieved);
+						
+						Filter filter = new Filter(foreignField.getName(), ComparisonOperator.EQUALS, Long.parseLong(value));
+						Collection<?> entities = ds.loadAll(foreignObjectClass, filter);
+						
+						if(!entities.isEmpty()) {
+							setField(entity, entities.iterator().next());
 						}
+						
 					}
 					
 				}

@@ -9,6 +9,7 @@ import net.sf.esfinge.querybuilder.annotation.DomainTerm;
 import net.sf.esfinge.querybuilder.annotation.IgnoreWhenNull;
 import net.sf.esfinge.querybuilder.annotation.Starts;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 
 @DomainTerm(term="carioca", conditions=@Condition(property="address.city",comparison=ComparisonType.EQUALS,value="Rio de Janeiro"))
 

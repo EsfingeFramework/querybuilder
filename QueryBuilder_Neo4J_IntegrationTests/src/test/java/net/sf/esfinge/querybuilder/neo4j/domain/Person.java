@@ -1,26 +1,29 @@
-package net.sf.esfinge.querybuilder.neo4j.testresources;
+package net.sf.esfinge.querybuilder.neo4j.domain;
 
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Id;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.Indexed;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.NodeEntity;
-import net.sf.esfinge.querybuilder.neo4j.oomapper.annotations.RelatedTo;
-
+import org.neo4j.ogm.annotation.GraphId;
+import org.neo4j.ogm.annotation.Index;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
 public class Person {
 	
-	@Id
+	@GraphId
+	private Long graphId;
+
+	@Index
 	private Integer id;
-	@Indexed
 	private String name;
-	@Indexed
 	private String lastName = null;
-	@Indexed
 	private Integer age;
 	
-	@RelatedTo(targetClass = Address.class)
+	@Relationship(type = "LIVES", direction = Relationship.OUTGOING)
 	private Address address;
 
+	public Long getGraphId() {
+		return graphId;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -63,6 +66,10 @@ public class Person {
 	
 	@Override
 	public String toString(){
-		return id + " " + name + " " + lastName + " " + age + " " + address.getId() + " " + address.getCity() + " " + address.getState();
+		if(address != null) {
+			return id + " " + name + " " + lastName + " " + age + " " + address.getId() + " " + address.getCity() + " " + address.getState();
+		} else {
+			return id + " " + name + " " + lastName + " " + age + " null";
+		}
 	}
 }

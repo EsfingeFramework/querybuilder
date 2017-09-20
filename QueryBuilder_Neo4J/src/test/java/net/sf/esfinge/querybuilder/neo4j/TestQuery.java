@@ -6,11 +6,12 @@ import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.CompareToNull;
 import net.sf.esfinge.querybuilder.annotation.Condition;
 import net.sf.esfinge.querybuilder.annotation.DomainTerm;
+import net.sf.esfinge.querybuilder.annotation.Greater;
 import net.sf.esfinge.querybuilder.annotation.GreaterOrEquals;
 import net.sf.esfinge.querybuilder.annotation.IgnoreWhenNull;
 import net.sf.esfinge.querybuilder.annotation.Starts;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
-import net.sf.esfinge.querybuilder.neo4j.dynamic.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 
 @DomainTerm(term="carioca", conditions=@Condition(property="address.city",comparison=ComparisonType.EQUALS,value="Rio de Janeiro"))
 
@@ -30,4 +31,5 @@ public interface TestQuery extends Repository<Person>{
 	public List<Person> getPersonByLastName(@CompareToNull String name);
 	public List<Person> getPersonByNameAndAge(@Starts String name, @CompareToNull Integer age);
 	public List<Person> getPersonByNameAndAgeAndLastName(@IgnoreWhenNull String name, Integer age, @IgnoreWhenNull String lastName);
+	public List<Person> getPersonByAgeOrderByNameDesc(@Greater Integer age);
 }

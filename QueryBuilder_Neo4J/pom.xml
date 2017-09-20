@@ -4,7 +4,7 @@
 
 	<groupId>net.sf.esfinge</groupId>
 	<artifactId>querybuilder-neo4j</artifactId>
-	<version>1.7.0-SNAPSHOT</version>
+	<version>1.8.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Esfinge QueryBuilder Neo4J</name>
@@ -37,6 +37,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <neo4j.version>3.2.3</neo4j.version>
+        <neo4j.ogm.version>3.0.0-RC1</neo4j.ogm.version>
 	</properties>
 
 	<build>
@@ -71,19 +72,44 @@
 		<dependency>
 			<groupId>net.sf.esfinge</groupId>
 			<artifactId>querybuilder-core</artifactId>
-			<version>1.7.0-SNAPSHOT</version>
+			<version>1.7.0</version>
 		</dependency>
 
 		<dependency>
-			<groupId>net.sf.esfinge</groupId>
-			<artifactId>querybuilder-neo4j-oomapper</artifactId>
-			<version>1.7.0-SNAPSHOT</version>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-kernel</artifactId>
+		    <version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-lucene-index</artifactId>
+		    <version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-cypher</artifactId>
+		    <version>${neo4j.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-ogm-core</artifactId>
+		    <version>${neo4j.ogm.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-ogm-embedded-driver</artifactId>
+		    <version>${neo4j.ogm.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.neo4j</groupId>
+		    <artifactId>neo4j-ogm-bolt-driver</artifactId>
+		    <version>${neo4j.ogm.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

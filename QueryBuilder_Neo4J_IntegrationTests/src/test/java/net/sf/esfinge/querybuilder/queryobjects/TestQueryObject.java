@@ -7,7 +7,7 @@ import net.sf.esfinge.querybuilder.annotation.DomainTerm;
 import net.sf.esfinge.querybuilder.annotation.DomainTerms;
 import net.sf.esfinge.querybuilder.annotation.QueryObject;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 
 @DomainTerms({
 	@DomainTerm(term="paulista", conditions=@Condition(property="address.state",value="SP")),

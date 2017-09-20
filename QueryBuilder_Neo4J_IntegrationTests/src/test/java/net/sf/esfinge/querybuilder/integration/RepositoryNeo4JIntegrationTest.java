@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.neo4j.testresources.Person;
+import net.sf.esfinge.querybuilder.neo4j.domain.Person;
 import net.sf.esfinge.querybuilder.neo4j.testresources.QueryBuilderDatabaseTest;
 
 public class RepositoryNeo4JIntegrationTest extends QueryBuilderDatabaseTest{
@@ -19,7 +19,6 @@ public class RepositoryNeo4JIntegrationTest extends QueryBuilderDatabaseTest{
 		initializeDatabase("/initial_db.xml");
 	}
 
-	
 	@Test
 	public void list(){
 		TestQuery tq = QueryBuilder.create(TestQuery.class);
@@ -39,21 +38,22 @@ public class RepositoryNeo4JIntegrationTest extends QueryBuilderDatabaseTest{
 	@Test
 	public void getById(){
 		TestQuery tq = QueryBuilder.create(TestQuery.class);
-		Person p = tq.getById(3);
+		Person p = tq.getPersonById(3);
 		assertEquals("It should get Marcus", "Marcos", p.getName());
 	}
 	
 	@Test
 	public void delete() throws Exception{
 		TestQuery tq = QueryBuilder.create(TestQuery.class);
-		tq.delete(3);
+		Person p = tq.getPersonById(3);
+		tq.delete(p.getGraphId());
 		compareTables("/after_delete_db.xml","PERSON");
 	}
 	
 	@Test
 	public void save() throws Exception{
 		TestQuery tq = QueryBuilder.create(TestQuery.class);
-		Person p = tq.getById(3);
+		Person p = tq.getPersonById(3);
 		p.setAge(p.getAge()+1);
 		tq.save(p);
 		compareTables("/after_update_db.xml","PERSON");
