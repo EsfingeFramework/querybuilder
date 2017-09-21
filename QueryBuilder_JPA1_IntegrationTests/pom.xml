@@ -130,8 +130,9 @@
 		</dependency>
 		<dependency>
 			<groupId>net.sf.esfinge</groupId>
-			<artifactId>querybuilder-jpa1-local</artifactId>
+			<artifactId>querybuilder-jpa1</artifactId>
 			<version>1.7.1</version>
+			<classifier>local</classifier>
 		</dependency>
 	</dependencies>
 	
