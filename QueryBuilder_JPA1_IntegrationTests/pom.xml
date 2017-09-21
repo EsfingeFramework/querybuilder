@@ -124,16 +124,19 @@
 		
 		<!-- PROJECTS -->
 		<dependency>
-			<groupId>net.sf.esfinge</groupId>
-			<artifactId>querybuilder-jpa1</artifactId>
-			<version>1.7.1</version>
+		  <groupId>net.sf.esfinge</groupId>
+		  <artifactId>querybuilder-jpa1</artifactId>
+		  <version>1.7.2</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>net.sf.esfinge</groupId>
 			<artifactId>querybuilder-jpa1</artifactId>
-			<version>1.7.1</version>
+			<version>1.7.2</version>
 			<classifier>local</classifier>
 		</dependency>
+		
+
 	</dependencies>
 	
 	<build>

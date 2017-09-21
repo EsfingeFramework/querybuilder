@@ -6,7 +6,7 @@
 
 	<groupId>net.sf.esfinge</groupId>
 	<artifactId>querybuilder-jpa1</artifactId>
-	<version>1.7.1</version>
+	<version>1.7.2</version>
 	<packaging>jar</packaging>
 
 	<name>Esfinge QueryBuilder JPA1</name>
@@ -166,7 +166,6 @@
 						<version>2.5</version>
 						<configuration>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
-							<useReleaseProfile>false</useReleaseProfile>
 							<releaseProfiles>release</releaseProfiles>
 							<goals>deploy</goals>
 						</configuration>
@@ -252,6 +251,8 @@
 				</plugins>
 			</build>
 		</profile>
+		
+
 		<profile>
 			<id>local</id>
 			<properties>
@@ -273,7 +274,6 @@
 						<version>2.5</version>
 						<configuration>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
-							<useReleaseProfile>false</useReleaseProfile>
 							<releaseProfiles>release</releaseProfiles>
 							<goals>deploy</goals>
 						</configuration>
@@ -339,7 +339,6 @@
 						<artifactId>maven-jar-plugin</artifactId>
 						<version>2.4</version>
 						<configuration>
-							<classifier>local</classifier>
 							<includes>
 								<include>**/JPALocalRepository*</include>
 								<include>**/META-INF/services/*Repository*</include>
