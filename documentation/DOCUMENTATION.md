@@ -476,20 +476,20 @@ The plugin can be installed manually by following the steps below:
 ## Use
 The plugin is automatically activated as soon as it is installed, but you can disable or enable it whenever needed by right-clicking on the project and then choosing the Remove Esfinge Builder or Add Esfinge Builder option.
 
-<img src="../images/querybuilder_plugin_menu.png">
+<img src="./images/querybuilder_plugin_menu.png">
 
 Once enabled, the plugin is able to indicate naming errors present in the signature of query methods as well as in their parameter types and numbers. The naming errors are underlined in red in the code, as can be seen in the image below:
 
-<img src="../images/querybuilder_plugin_exemplo.png">
+<img src="./images/querybuilder_plugin_exemplo.png">
 
 Os marcadores são atualizados a cada novo evento de construção e, caso a configuração de construção automática esteja ativada (como indicado na figura abaixo), a validação é feita sempre que um arquivo é salvo.
 
-<img src="../images/querybuilder_plugin_auto.png">
+<img src="./images/querybuilder_plugin_auto.png">
 
 ## Refactoring
 Whenever an entity or the getters of its attributes are renamed, the plugin will also rename any occurrences alluding to these entities or their properties in the query methods present in each DAO.
 
-<img src="../images/querybuilder_plugin_refatoracao.gif">
+<img src="./images/querybuilder_plugin_refatoracao.gif">
 
 It is important to remember that refactoring an attribute does not trigger automatic refactoring in the interfaces, for this reason it is necessary to refactor the getters of the entities so that the plugin will automatically refactor the methods in the query interfaces.
 
@@ -517,25 +517,25 @@ org.esfinge.querybuilder.mongodb.MongoDBDatastoreProvider
 
 Create a class to be persisted in Java/MongoDB. Use the @Id annotation to indicate who is the unique pointer to the object/document (e.g. Client class) 
 
-<img src="../images/qbm_c_cliente.png">
+<img src="./images/qbm_c_cliente.png">
 
 If this class contains references, create them as well (e.g., class Dog and Payment 
 
-<img src="../images/qbm_c_cachorro.png">
-<img src="../images/qbm_c_pagamento.png">
+<img src="./images/qbm_c_cachorro.png">
+<img src="./images/qbm_c_pagamento.png">
 
 Create a class that inherits DatastoreProvider, putting the MongoDB connection in its constructor. Remember to use the IP/port of your database, which by default is 127.0.0.1/27017. Overwrite the getDatastore() method, creating a Datastore passing the bank connection with the name of the DB used. Use the getMorphia().map() method passing as parameter which classes are to be persisted. The @ServicePriority(1) annotation is used to give priority to the service, in this case the highest priority (e.g. MongoDBDatastoreProvider class).
 
-<img src="../images/qbm_c_datastore.png">
+<img src="./images/qbm_c_datastore.png">
 
 ## Saving an Object
 
 Create an object of the class that inherits from the DatastoreProvider and from there get the Datastore, with this obtained object use the save method to save the objects in the database. 
 
-<img src="../images/qbm_crud_save.png">
+<img src="./images/qbm_crud_save.png">
 
 ## Querying Data
 
 Create an object of the class that inherits from the DatastoreProvider and from it get the Datastore, with this obtained object, use the find method to return the objects in the database, convert it to a List and iterate it. 
 
-<img src="../images/qbm_crud_read.png">
+<img src="./images/qbm_crud_read.png">
