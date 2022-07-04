@@ -10,7 +10,9 @@ public class TestCassandraSessionProvider implements SessionProvider {
 
     private Session session;
 
-    public void connect(final String node, final Integer port) {
+    public void connect() {
+        String node = "127.0.0.1";
+        Integer port = 9042;
 
         Cluster.Builder b = Cluster.builder().addContactPoint(node);
 
@@ -24,6 +26,9 @@ public class TestCassandraSessionProvider implements SessionProvider {
 
     @Override
     public Session getSession() {
+        if (session == null)
+            connect();
+
         return this.session;
     }
 

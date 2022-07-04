@@ -12,12 +12,9 @@ public class CassandraDBSessionTest {
     @Test
     public void cassandraDBConnectionTest(){
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
-        client.connect("127.0.0.1", 9042);
         this.session = client.getSession();
 
-        System.out.println(session.getCluster());
-
-        assertTrue(true);
+        assertNotNull(session.getCluster());
     }
 
 
