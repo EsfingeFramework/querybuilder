@@ -4,6 +4,6 @@ import com.datastax.driver.core.Session;
 
 public interface CassandraDBSessionProvider {
 
-    public Session getSession();
+    Session getSession();
 
 }

@@ -4,13 +4,14 @@ import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CassandraDBConnectionIntegrationTest {
     private Session session;
 
     @Test
-    public void cassandraDBConnectionTest(){
+    public void cassandraDBConnectionTest() {
         CassandraDBSessionProvider sp = ServiceLocator.getServiceImplementation(CassandraDBSessionProvider.class);
         this.session = sp.getSession();
 

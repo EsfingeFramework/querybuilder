@@ -10,7 +10,7 @@ public class CassandraDBEntityClassProvider implements EntityClassProvider {
     public Class<?> getEntityClass(String s) {
         ServiceLoader<CassandraDBEntity> cassandraDBEntities = ServiceLoader.load(CassandraDBEntity.class);
 
-        for (CassandraDBEntity e : cassandraDBEntities){
+        for (CassandraDBEntity e : cassandraDBEntities) {
             System.out.println("current: " + e.getClass());
             if (e.getClass().getSimpleName().equals(s))
                 return e.getClass();
