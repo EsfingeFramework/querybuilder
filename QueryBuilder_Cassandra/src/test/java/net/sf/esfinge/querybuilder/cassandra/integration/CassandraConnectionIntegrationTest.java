@@ -1,6 +1,7 @@
-package net.sf.esfinge.querybuilder.cassandra;
+package net.sf.esfinge.querybuilder.cassandra.integration;
 
 import com.datastax.driver.core.Session;
+import net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 import org.junit.Test;
 
@@ -12,10 +13,10 @@ public class CassandraConnectionIntegrationTest {
 
     @Test
     public void cassandraDBConnectionTest() {
-        CassandraSessionProvider sp = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
-        this.session = sp.getSession();
+        CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
+        this.session = client.getSession();
 
-        assertTrue(sp.getClass().getSimpleName().equals("TestCassandraSessionProvider"));
+        assertTrue(client.getClass().getSimpleName().equals("TestCassandraSessionProvider"));
         assertNotNull(session.getCluster());
     }
 
