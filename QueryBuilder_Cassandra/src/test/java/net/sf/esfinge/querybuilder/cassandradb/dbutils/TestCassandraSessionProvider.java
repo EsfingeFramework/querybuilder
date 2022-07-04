@@ -2,9 +2,9 @@ package net.sf.esfinge.querybuilder.cassandradb.dbutils;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import net.sf.esfinge.querybuilder.cassandradb.SessionProvider;
+import net.sf.esfinge.querybuilder.cassandradb.CassandraDBSessionProvider;
 
-public class TestCassandraSessionProvider implements SessionProvider {
+public class TestCassandraSessionProvider implements CassandraDBSessionProvider {
 
     private Cluster cluster;
 

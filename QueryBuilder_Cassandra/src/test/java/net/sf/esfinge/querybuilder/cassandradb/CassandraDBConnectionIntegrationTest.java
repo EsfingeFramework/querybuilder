@@ -11,7 +11,7 @@ public class CassandraDBConnectionIntegrationTest {
 
     @Test
     public void cassandraDBConnectionTest(){
-        SessionProvider sp = ServiceLocator.getServiceImplementation(SessionProvider.class);
+        CassandraDBSessionProvider sp = ServiceLocator.getServiceImplementation(CassandraDBSessionProvider.class);
         this.session = sp.getSession();
 
         assertTrue(sp.getClass().getSimpleName().equals("TestCassandraSessionProvider"));
