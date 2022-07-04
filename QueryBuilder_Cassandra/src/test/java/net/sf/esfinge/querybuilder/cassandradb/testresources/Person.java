@@ -2,9 +2,10 @@ package net.sf.esfinge.querybuilder.cassandradb.testresources;
 
 import net.sf.esfinge.querybuilder.cassandradb.annotations.ID;
 import net.sf.esfinge.querybuilder.cassandradb.annotations.Table;
+import net.sf.esfinge.querybuilder.cassandradb.entity.CassandraDBEntity;
 
-@Table(name="address")
-public class Person {
+@Table(name="person")
+public class Person implements CassandraDBEntity {
 
 	@ID
 	private Integer id;
