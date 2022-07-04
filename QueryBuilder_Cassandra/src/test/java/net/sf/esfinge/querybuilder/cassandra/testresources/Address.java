@@ -1,11 +1,11 @@
-package net.sf.esfinge.querybuilder.cassandradb.testresources;
+package net.sf.esfinge.querybuilder.cassandra.testresources;
 
-import net.sf.esfinge.querybuilder.cassandradb.annotations.ID;
-import net.sf.esfinge.querybuilder.cassandradb.annotations.Table;
-import net.sf.esfinge.querybuilder.cassandradb.entity.CassandraDBEntity;
+import net.sf.esfinge.querybuilder.cassandra.annotations.ID;
+import net.sf.esfinge.querybuilder.cassandra.annotations.Table;
+import net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity;
 
 @Table(name = "address")
-public class Address implements CassandraDBEntity {
+public class Address implements CassandraEntity {
 
     @ID
     private int id;

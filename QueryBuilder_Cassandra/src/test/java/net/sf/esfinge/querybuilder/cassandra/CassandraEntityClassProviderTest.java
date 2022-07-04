@@ -1,23 +1,23 @@
-package net.sf.esfinge.querybuilder.cassandradb;
+package net.sf.esfinge.querybuilder.cassandra;
 
-import net.sf.esfinge.querybuilder.cassandradb.testresources.Address;
-import net.sf.esfinge.querybuilder.cassandradb.testresources.Person;
+import net.sf.esfinge.querybuilder.cassandra.testresources.Address;
+import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class CassandraDBEntityClassProviderTest {
+public class CassandraEntityClassProviderTest {
 
     @Test
     public void getEntityClass() {
-        CassandraDBEntityClassProvider provider = new CassandraDBEntityClassProvider();
+        CassandraEntityClassProvider provider = new CassandraEntityClassProvider();
         assertEquals("Should retrieve Person", Person.class, provider.getEntityClass("Person"));
         assertEquals("Should retrieve Address", Address.class, provider.getEntityClass("Address"));
     }
 
     @Test
     public void entityClassNotFound() {
-        CassandraDBEntityClassProvider provider = new CassandraDBEntityClassProvider();
+        CassandraEntityClassProvider provider = new CassandraEntityClassProvider();
         assertEquals("Should retrieve null", null, provider.getEntityClass("Other"));
     }
 

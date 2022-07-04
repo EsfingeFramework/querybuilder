@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandradb.annotations;
+package net.sf.esfinge.querybuilder.cassandra.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
