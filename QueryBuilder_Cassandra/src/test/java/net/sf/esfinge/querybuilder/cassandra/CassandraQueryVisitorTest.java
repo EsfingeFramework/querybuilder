@@ -1,18 +1,12 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
-import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
-import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
-import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
-import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
-import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class CassandraQueryVisitorTest {
 
-    private CassandraQueryVisitor visitor = new CassandraQueryVisitor();
+    private final CassandraQueryVisitor visitor = new CassandraQueryVisitor();
 
     @Test
     public void singleEntity() {
@@ -20,9 +14,7 @@ public class CassandraQueryVisitorTest {
         visitor.visitEnd();
         String query = visitor.getQuery();
 
-        assertEquals(
-                query,
-                "SELECT, address where person.address_id = address.id");
+        assertEquals("SELECT * FROM Person", query);
     }
 
     /*@Test

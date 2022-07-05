@@ -11,6 +11,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
+    private String query = "";
 
     @Override
     public void visitEntity(String s) {
@@ -18,7 +19,9 @@ public class CassandraQueryVisitor implements QueryVisitor {
             throw new InvalidQuerySequenceException(
                     "Entity should be called only in the beginning.");
 
-        this.entity = entity;
+        lastCalled = QueryElement.ENTITY;
+
+        this.entity = s;
     }
 
     @Override
@@ -48,7 +51,32 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitEnd() {
+        if (lastCalled == QueryElement.CONECTOR)
+            throw new InvalidQuerySequenceException(
+                    "A connector should not be called right before the end.");
 
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM " + entity);
+
+
+
+        addWhere(sb);
+        addConditions(sb);
+        addOrderBy(sb);
+
+        query = sb.toString();
+    }
+
+    private void addOrderBy(StringBuilder sb) {
+        // TODO: IMPLEMENT
+    }
+
+    private void addConditions(StringBuilder sb) {
+        // TODO: IMPLEMENT
+    }
+
+    private void addWhere(StringBuilder sb) {
+        // TODO: IMPLEMENT
     }
 
     @Override
@@ -58,7 +86,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public String getQuery() {
-        return null;
+        return query;
     }
 
     @Override

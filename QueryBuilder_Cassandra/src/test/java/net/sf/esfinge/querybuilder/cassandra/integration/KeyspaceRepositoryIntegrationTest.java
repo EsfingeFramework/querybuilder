@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class KeyspaceRepositoryIntegrationTest {
 
-    private static final String KEYSPACE_NAME = "library";
+    private static final String KEYSPACE_NAME = "persons";
 
     private KeyspaceRepository schemaRepository;
     private Session session;
@@ -72,7 +72,6 @@ public class KeyspaceRepositoryIntegrationTest {
 
         assertEquals(matchedKeyspaces.size(), 0);
     }
-
 
     @AfterAll
     public void clean() {
