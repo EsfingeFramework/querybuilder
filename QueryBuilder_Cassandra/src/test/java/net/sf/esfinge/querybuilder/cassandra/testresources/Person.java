@@ -4,21 +4,23 @@ import net.sf.esfinge.querybuilder.cassandra.annotations.ID;
 import net.sf.esfinge.querybuilder.cassandra.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity;
 
+import java.util.UUID;
+
 @Table(name = "person")
 public class Person implements CassandraEntity {
 
     @ID
-    private Integer id;
+    private UUID id;
     private String name;
     private String lastName;
     private Integer age;
-    private Address address;
+    //private Address address;
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -46,11 +48,11 @@ public class Person implements CassandraEntity {
         this.age = age;
     }
 
-    public Address getAddress() {
+    /*public Address getAddress() {
         return address;
     }
 
     public void setAddress(Address address) {
         this.address = address;
-    }
+    }*/
 }

@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.integration;
+package net.sf.esfinge.querybuilder.cassandra.integration.dbcommunication;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class KeyspaceRepositoryIntegrationTest {
 
-    private static final String KEYSPACE_NAME = "persons";
+    private static final String KEYSPACE_NAME = "test";
 
     private KeyspaceRepository schemaRepository;
     private Session session;

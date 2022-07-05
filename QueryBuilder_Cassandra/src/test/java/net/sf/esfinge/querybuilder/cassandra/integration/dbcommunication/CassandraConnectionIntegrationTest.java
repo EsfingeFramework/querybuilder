@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.integration;
+package net.sf.esfinge.querybuilder.cassandra.integration.dbcommunication;
 
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider;
