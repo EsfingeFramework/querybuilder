@@ -2,9 +2,12 @@ package net.sf.esfinge.querybuilder.cassandra.integration;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
+import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +31,7 @@ public class CassandraRepositoryIntegrationTest {
 
 	@Test
 	public void list() {
-		//List<Person> list = tq.list();
+		List<Person> list = testQuery.list();
 		//assertEquals("The list should have 5 persons", 5, list.size());
 	}
 
