@@ -5,6 +5,8 @@ import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.*;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,6 +16,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
+
+    private List<String> connectors = new ArrayList<>();
     private String query = "";
 
     @Override
@@ -36,7 +40,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
         if (!s.equalsIgnoreCase("AND") && !s.equalsIgnoreCase("OR"))
             throw new InvalidConnectorException("Invalid connector \"" + s + "\", valid values are: AND, OR");
 
-
+        connectors.add(s.toUpperCase());
     }
 
     @Override
@@ -64,6 +68,10 @@ public class CassandraQueryVisitor implements QueryVisitor {
         if (lastCalled == QueryElement.CONECTOR)
             throw new InvalidQuerySequenceException(
                     "A connector should not be called right before the end.");
+
+        if (lastCalled == QueryElement.NONE)
+            throw new InvalidQuerySequenceException(
+                    "Cannot end an empty query sequence.");
 
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT * FROM " + entity);
