@@ -31,7 +31,7 @@ public class CassandraRepositoryIntegrationTest {
 	@Test
 	public void list() {
 		List<Person> list = testQuery.list();
-		//assertEquals("The list should have 5 persons", 5, list.size());
+		assertEquals("The list should have 2 persons", 2, list.size());
 	}
 
 	/*@Test

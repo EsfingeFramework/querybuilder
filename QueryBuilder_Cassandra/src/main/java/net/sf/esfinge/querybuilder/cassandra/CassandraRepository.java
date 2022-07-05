@@ -12,6 +12,7 @@ public class CassandraRepository<E> implements Repository<E> {
 
     private String keyspaceName;
     private KeyspaceRepository schemaRepository;
+    private EntityRepository entityRepository;
     private Session session;
 
     protected Class<E> clazz;
@@ -21,7 +22,8 @@ public class CassandraRepository<E> implements Repository<E> {
         this.session = client.getSession();
         this.keyspaceName = client.getKeyspaceName();
 
-        schemaRepository = new KeyspaceRepository(session);
+        this.schemaRepository = new KeyspaceRepository(session);
+        this.entityRepository = new EntityRepository(session);
     }
 
     @Override
@@ -36,8 +38,6 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public List<E> list() {
-        EntityRepository entityRepository = new EntityRepository(session);
-
         return entityRepository.selectAll(clazz,keyspaceName);
     }
 

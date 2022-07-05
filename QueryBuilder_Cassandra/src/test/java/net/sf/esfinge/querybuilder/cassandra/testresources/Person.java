@@ -55,4 +55,14 @@ public class Person implements CassandraEntity {
     public void setAddress(Address address) {
         this.address = address;
     }*/
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }

@@ -3,6 +3,7 @@ package net.sf.esfinge.querybuilder.cassandra.keyspace;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -26,13 +27,7 @@ public class EntityRepository {
      * Creates the books table.
      */
     public void createTable() {
-        StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-                .append(TABLE_NAME)
-                .append("(")
-                .append("id uuid PRIMARY KEY, ")
-                .append("title text,")
-                .append("author text,")
-                .append("subject text);");
+        StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ").append(TABLE_NAME).append("(").append("id uuid PRIMARY KEY, ").append("title text,").append("author text,").append("subject text);");
 
         final String query = sb.toString();
         System.out.println(query);
@@ -62,7 +57,7 @@ public class EntityRepository {
 
     /**
      * Insert a row in the table books. 
-     * 
+     *
      * @param book
      */
     /*public void insertbook(E obj) {
@@ -87,7 +82,7 @@ public class EntityRepository {
 
     /**
      * Insert a book into two identical tables using a batch query.
-     * 
+     *
      * @param book
      */
     /*public void insertBookBatch(Book book) {
@@ -101,7 +96,7 @@ public class EntityRepository {
 
     /**
      * Select book by id.
-     * 
+     *
      * @return
      */
     /*public Book selectByTitle(String title) {
@@ -122,41 +117,44 @@ public class EntityRepository {
     }*/
 
     /**
-     * Select all books from books
-     * 
+     * @param clazz
+     * @param keyspaceName
+     * @param <E>
      * @return
      */
-   public <E> List<E> selectAll(Class<E> clazz, String keyspaceName) {
-        StringBuilder sb = new StringBuilder("SELECT * FROM ")
-                .append(keyspaceName)
-                .append(".")
-                .append(clazz.getSimpleName());
+    public <E> List<E> selectAll(Class<E> clazz, String keyspaceName) {
+        StringBuilder sb = new StringBuilder("SELECT * FROM ").append(keyspaceName).append(".").append(clazz.getSimpleName());
 
         final String query = sb.toString();
 
-       System.out.println(query);
         ResultSet rs = session.execute(query);
 
         List<E> objects = new ArrayList<E>();
 
-        Method methods[] = clazz.getMethods();
+        Method setters[] = ReflectionUtils.getClassSetters(clazz);
 
         for (Row r : rs) {
-            //Book book = new Book(r.getUUID("id"), r.getString("title"), r.getString("author"), r.getString("subject"));
-            //objects.add(obj);
-            /*Constructor<E> constructor = null;
+
             try {
-                constructor = clazz.getConstructor();
-                Object obj = constructor.newInstance();
+                Object obj = clazz.newInstance();
+                for (Method m : setters) {
+                    String attributeName = m.getName().substring(3).toLowerCase();
 
+                    if (m.getParameterTypes()[0].getSimpleName().equals("String"))
+                        m.invoke(obj, r.getString(attributeName));
+                    else if (m.getParameterTypes()[0].getSimpleName().equals("UUID"))
+                        m.invoke(obj, r.getUUID(attributeName));
+                    else if (m.getParameterTypes()[0].getSimpleName().equals("Integer"))
+                        m.invoke(obj, r.getInt(attributeName));
+                }
 
+                objects.add((E) obj);
             } catch (Exception e) {
                 throw new RuntimeException(e);
-            }*/
-           System.out.println(r.getString("name"));
+            }
+
         }
-        //return objects;
-       return null;
+        return objects;
     }
 
     /**
@@ -190,7 +188,7 @@ public class EntityRepository {
 
     /**
      * Delete table.
-     * 
+     *
      * @param tableName the name of the table to delete.
      */
     /*public void deleteTable(String tableName) {
