@@ -6,4 +6,6 @@ public interface CassandraSessionProvider {
 
     Session getSession();
 
+    String getKeyspaceName();
+
 }

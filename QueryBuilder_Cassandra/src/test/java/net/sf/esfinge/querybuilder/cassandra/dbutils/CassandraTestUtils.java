@@ -9,7 +9,7 @@ import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 
 public class CassandraTestUtils {
 
-    private static final String KEYSPACE_NAME = "test";
+    private String keyspaceName;
     private static final String TABLE_NAME = "person";
 
     private KeyspaceRepository schemaRepository;
@@ -21,13 +21,15 @@ public class CassandraTestUtils {
         client.connect();
 
         this.session = client.getSession();
+        this.keyspaceName = client.getKeyspaceName();
+
         schemaRepository = new KeyspaceRepository(session);
 
-        schemaRepository.createKeyspace(KEYSPACE_NAME, ReplicationStrategy.SimpleStrategy, 1);
+        schemaRepository.createKeyspace(keyspaceName, ReplicationStrategy.SimpleStrategy, 1);
     }
 
     public void clearDB() {
-        schemaRepository.deleteKeyspace(KEYSPACE_NAME);
+        schemaRepository.deleteKeyspace(keyspaceName);
     }
 
     public void createTable() {
@@ -61,7 +63,7 @@ public class CassandraTestUtils {
     }
 
     public void populatePerson() {
-        schemaRepository.useKeyspace(KEYSPACE_NAME);
+        schemaRepository.useKeyspace(keyspaceName);
 
         createTable();
 

@@ -10,25 +10,24 @@ import static org.junit.Assert.assertEquals;
 
 public class CassandraRepositoryIntegrationTest {
 
-	CassandraTestUtils tu = new CassandraTestUtils();
-	CassandraTestQuery tq;
+	CassandraTestUtils utils = new CassandraTestUtils();
+	CassandraTestQuery testQuery;
 
 	@Before
 	public void init() {
-		tu.initDB();
-		tu.populatePerson();
-		tq = QueryBuilder.create(CassandraTestQuery.class);
+		utils.initDB();
+		utils.populatePerson();
+		testQuery = QueryBuilder.create(CassandraTestQuery.class);
 
 	}
 
 	@After
 	public void clear() {
-		tu.clearDB();
+		utils.clearDB();
 	}
 
 	@Test
 	public void list() {
-		//CassandraTestQuery tq = QueryBuilder.create(CassandraTestQuery.class);
 		//List<Person> list = tq.list();
 		//assertEquals("The list should have 5 persons", 5, list.size());
 	}

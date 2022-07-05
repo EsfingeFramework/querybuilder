@@ -32,6 +32,11 @@ public class TestCassandraSessionProvider implements CassandraSessionProvider {
         return this.session;
     }
 
+    @Override
+    public String getKeyspaceName() {
+        return "test";
+    }
+
     public void close() {
         session.close();
         cluster.close();
