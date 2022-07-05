@@ -1,14 +1,11 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.CassandraQueryVisitor;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
-import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
-import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
-import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class CassandraQueryVisitorTest {
 
@@ -23,7 +20,7 @@ public class CassandraQueryVisitorTest {
         assertEquals("SELECT * FROM Person", query);
     }
 
-    @Test(expected= InvalidQuerySequenceException.class)
+    @Test(expected = InvalidQuerySequenceException.class)
     public void singleEntityWithInvalidSequenceTest() {
         visitor.visitEnd();
         visitor.visitEntity("Person");
@@ -38,7 +35,7 @@ public class CassandraQueryVisitorTest {
         String query = visitor.getQuery();
 
         assertEquals(
-                "SELECT * FROM Person WHERE name = 1?",
+                "SELECT * FROM Person WHERE name = ?",
                 query);
     }
 
@@ -53,7 +50,7 @@ public class CassandraQueryVisitorTest {
         String query = visitor.getQuery();
 
         assertEquals(
-                "SELECT * FROM Person WHERE name = 1? AND city = 2?",
+                "SELECT * FROM Person WHERE name = ? AND city = ?",
                 query);
     }
 
@@ -70,11 +67,11 @@ public class CassandraQueryVisitorTest {
         String query = visitor.getQuery();
 
         assertEquals(
-                "SELECT * FROM Person WHERE name = 1? AND city = 2? OR age >= 3?",
+                "SELECT * FROM Person WHERE name = ? AND city = ? OR age >= ?",
                 query);
     }
 
-    @Test(expected= InvalidQuerySequenceException.class)
+    @Test(expected = InvalidQuerySequenceException.class)
     public void twoConditionsWithNoConnectorTest() {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS);
@@ -82,7 +79,7 @@ public class CassandraQueryVisitorTest {
         visitor.visitEnd();
     }
 
-   /* @Test(expected = InvalidQuerySequenceException.class)
+    /*@Test(expected = InvalidQuerySequenceException.class)
     public void conectorBeforeCondition() {
         visitor.visitEntity("Person");
         visitor.visitConector("and");

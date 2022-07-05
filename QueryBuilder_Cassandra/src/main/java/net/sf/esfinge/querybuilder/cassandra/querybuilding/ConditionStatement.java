@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra;
+package net.sf.esfinge.querybuilder.cassandra.querybuilding;
 
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
@@ -40,7 +40,7 @@ public class ConditionStatement {
 
     @Override
     public String toString() {
-        return propertyName + " " + comparisonType.getOperator();
+        return propertyName + " " + comparisonType.getOperator() + " ?";
 
     }
 }

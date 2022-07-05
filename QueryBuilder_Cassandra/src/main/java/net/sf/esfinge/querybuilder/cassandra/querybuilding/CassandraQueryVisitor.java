@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra;
+package net.sf.esfinge.querybuilder.cassandra.querybuilding;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
@@ -100,7 +100,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < conditions.size(); i++) {
-            sb.append(conditions.get(i).toString() + " " + (i + 1) + "?");
+            sb.append(conditions.get(i).toString());
 
             if (i < conditions.size() - 1)
                 sb.append(" " + conditions.get(i).getNextConnector() + " ");
