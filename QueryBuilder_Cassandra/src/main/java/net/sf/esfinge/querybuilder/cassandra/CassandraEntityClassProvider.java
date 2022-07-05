@@ -11,7 +11,6 @@ public class CassandraEntityClassProvider implements EntityClassProvider {
         ServiceLoader<CassandraEntity> cassandraDBEntities = ServiceLoader.load(CassandraEntity.class);
 
         for (CassandraEntity e : cassandraDBEntities) {
-            System.out.println("current: " + e.getClass());
             if (e.getClass().getSimpleName().equals(s))
                 return e.getClass();
         }

@@ -21,7 +21,6 @@ public class CassandraRepositoryIntegrationTest {
 		utils.initDB();
 		utils.populatePerson();
 		testQuery = QueryBuilder.create(CassandraTestQuery.class);
-
 	}
 
 	@After

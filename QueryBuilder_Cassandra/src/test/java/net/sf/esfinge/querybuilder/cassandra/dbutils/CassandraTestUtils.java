@@ -37,9 +37,9 @@ public class CassandraTestUtils {
                 .append(TABLE_NAME)
                 .append("(")
                 .append("id uuid PRIMARY KEY, ")
-                .append("title text,")
-                .append("author text,")
-                .append("subject text);");
+                .append("name text,")
+                .append("city text,")
+                .append("age int);");
 
         final String query = sb.toString();
 
@@ -49,13 +49,13 @@ public class CassandraTestUtils {
     public void insertPerson(Person person) {
         StringBuilder sb = new StringBuilder("INSERT INTO ")
                 .append(TABLE_NAME)
-                .append("(id, title, author, subject) ")
+                .append("(id, name, city, age) ")
                 .append("VALUES (")
                 .append(person.getId())
                 .append(", '")
                 .append(person.getName()).append("', '")
-                .append(person.getLastName()).append("', '")
-                .append(person.getAge()).append("');");
+                .append(person.getLastName()).append("', ")
+                .append(person.getAge()).append(");");
 
         final String query = sb.toString();
 
