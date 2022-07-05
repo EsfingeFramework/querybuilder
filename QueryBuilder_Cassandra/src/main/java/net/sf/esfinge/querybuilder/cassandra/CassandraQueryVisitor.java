@@ -1,6 +1,7 @@
-package net.sf.esfinge.querybuilder.cassandra.querybuilding;
+package net.sf.esfinge.querybuilder.cassandra;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.*;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
@@ -91,13 +92,16 @@ public class CassandraQueryVisitor implements QueryVisitor {
             sb.append(getConditions());
         }
 
-        addOrderBy(sb);
+        sb.append(addOrderBy());
 
         query = sb.toString();
     }
 
-    private void addOrderBy(StringBuilder sb) {
+    private String addOrderBy() {
+        StringBuilder sb = new StringBuilder();
         // TODO: IMPLEMENT
+
+        return sb.toString();
     }
 
     private String getConditions() {

@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.querybuilding;
+package net.sf.esfinge.querybuilder.cassandra;
 
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 
