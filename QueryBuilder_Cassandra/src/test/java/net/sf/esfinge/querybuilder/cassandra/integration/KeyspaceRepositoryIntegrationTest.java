@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class KeyspaceRepositoryIntegrationTest {
 
-    private static final String KEYSPACE_NAME = "persons";
+    private static final String KEYSPACE_NAME = "library";
 
     private KeyspaceRepository schemaRepository;
     private Session session;
