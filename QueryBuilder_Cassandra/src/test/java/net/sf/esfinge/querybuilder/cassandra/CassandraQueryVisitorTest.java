@@ -43,7 +43,7 @@ public class CassandraQueryVisitorTest {
     }
 
     @Test
-    public void twoConditionTest() {
+    public void twoConditionsTest() {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitConector("AND");
@@ -55,6 +55,31 @@ public class CassandraQueryVisitorTest {
         assertEquals(
                 "SELECT * FROM Person WHERE name = 1? AND city = 2?",
                 query);
+    }
+
+    @Test
+    public void threeConditionsTest() {
+        visitor.visitEntity("Person");
+        visitor.visitCondition("name", ComparisonType.EQUALS);
+        visitor.visitConector("AND");
+        visitor.visitCondition("city", ComparisonType.EQUALS);
+        visitor.visitConector("OR");
+        visitor.visitCondition("age", ComparisonType.GREATER_OR_EQUALS);
+        visitor.visitEnd();
+
+        String query = visitor.getQuery();
+
+        assertEquals(
+                "SELECT * FROM Person WHERE name = 1? AND city = 2? OR age >= 3?",
+                query);
+    }
+
+    @Test(expected= InvalidQuerySequenceException.class)
+    public void twoConditionsWithNoConnectorTest() {
+        visitor.visitEntity("Person");
+        visitor.visitCondition("name", ComparisonType.EQUALS);
+        visitor.visitCondition("city", ComparisonType.EQUALS);
+        visitor.visitEnd();
     }
 
    /* @Test(expected = InvalidQuerySequenceException.class)
