@@ -3,7 +3,7 @@ package net.sf.esfinge.querybuilder.cassandra.integration;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
-import net.sf.esfinge.querybuilder.cassandra.keyspace.InvalidNumberOfReplicasException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidNumberOfReplicasException;
 import net.sf.esfinge.querybuilder.cassandra.keyspace.KeyspaceRepository;
 import net.sf.esfinge.querybuilder.cassandra.keyspace.ReplicationStrategy;
 import org.junit.Before;

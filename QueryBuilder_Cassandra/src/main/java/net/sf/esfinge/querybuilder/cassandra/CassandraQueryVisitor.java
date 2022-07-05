@@ -1,5 +1,6 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
+import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.*;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
@@ -9,6 +10,8 @@ import java.util.Set;
 
 public class CassandraQueryVisitor implements QueryVisitor {
 
+
+
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
     private String query = "";
@@ -17,7 +20,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
     public void visitEntity(String s) {
         if (lastCalled != QueryElement.NONE)
             throw new InvalidQuerySequenceException(
-                    "Entity should be called only in the beginning.");
+                    "Entity should only be called in the beginning.");
 
         lastCalled = QueryElement.ENTITY;
 
@@ -26,6 +29,13 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitConector(String s) {
+        if (lastCalled != QueryElement.CONDITION)
+            throw new InvalidQuerySequenceException(
+                    "A connector should only be called after a condition.");
+
+        if (!s.equalsIgnoreCase("AND") && !s.equalsIgnoreCase("OR"))
+            throw new InvalidConnectorException("Invalid connector \"" + s + "\", valid values are: AND, OR");
+
 
     }
 
@@ -57,7 +67,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT * FROM " + entity);
-
 
 
         addWhere(sb);

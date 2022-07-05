@@ -1,6 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra.keyspace;
 
 import com.datastax.driver.core.Session;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidNumberOfReplicasException;
 
 /**
  * Repository to handle the Cassandra schema.
