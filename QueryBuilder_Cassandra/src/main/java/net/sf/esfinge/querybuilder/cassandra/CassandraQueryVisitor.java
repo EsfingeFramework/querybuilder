@@ -13,11 +13,9 @@ import java.util.Set;
 public class CassandraQueryVisitor implements QueryVisitor {
 
 
-
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
-
-    private List<String> connectors = new ArrayList<>();
+    private List<ConditionStatement> conditions = new ArrayList<>();
     private String query = "";
 
     @Override
@@ -40,12 +38,20 @@ public class CassandraQueryVisitor implements QueryVisitor {
         if (!s.equalsIgnoreCase("AND") && !s.equalsIgnoreCase("OR"))
             throw new InvalidConnectorException("Invalid connector \"" + s + "\", valid values are: AND, OR");
 
-        connectors.add(s.toUpperCase());
+        conditions.get(conditions.size() - 1).setNextConnector(s.toUpperCase());
+
+        lastCalled = QueryElement.CONECTOR;
     }
 
     @Override
     public void visitCondition(String s, ComparisonType comparisonType) {
+        if (lastCalled == QueryElement.CONDITION)
+            throw new InvalidQuerySequenceException(
+                    "A second condition can only be called after a connector.");
 
+        conditions.add(new ConditionStatement(s, comparisonType));
+
+        lastCalled = QueryElement.CONDITION;
     }
 
     @Override
@@ -76,9 +82,11 @@ public class CassandraQueryVisitor implements QueryVisitor {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT * FROM " + entity);
 
+        if (!conditions.isEmpty()) {
+            sb.append(" WHERE ");
+            sb.append(getConditions());
+        }
 
-        addWhere(sb);
-        addConditions(sb);
         addOrderBy(sb);
 
         query = sb.toString();
@@ -88,12 +96,17 @@ public class CassandraQueryVisitor implements QueryVisitor {
         // TODO: IMPLEMENT
     }
 
-    private void addConditions(StringBuilder sb) {
-        // TODO: IMPLEMENT
-    }
+    private String getConditions() {
+        StringBuilder sb = new StringBuilder();
 
-    private void addWhere(StringBuilder sb) {
-        // TODO: IMPLEMENT
+        for (int i = 0; i < conditions.size(); i++) {
+            sb.append(conditions.get(i).toString() + " " + (i + 1) + "?");
+
+            if (i < conditions.size() - 1)
+                sb.append(" " + conditions.get(i).getNextConnector() + " ");
+        }
+
+        return sb.toString();
     }
 
     @Override
