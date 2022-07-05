@@ -1,11 +1,13 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
+import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.CassandraQueryVisitor;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CassandraQueryVisitorTest {
 
@@ -78,27 +80,35 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("city", ComparisonType.EQUALS);
         visitor.visitEnd();
     }
+    @Test(expected = InvalidConnectorException.class)
+    public void invalidConnectorNameTest() {
+        visitor.visitEntity("Person");
+        visitor.visitCondition("name", ComparisonType.EQUALS);
+        visitor.visitConector("wrongConnector");
+        visitor.visitCondition("city", ComparisonType.EQUALS);
+        visitor.visitEnd();
+    }
 
-    /*@Test(expected = InvalidQuerySequenceException.class)
-    public void conectorBeforeCondition() {
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void connectorBeforeConditionTest() {
         visitor.visitEntity("Person");
         visitor.visitConector("and");
         visitor.visitEnd();
     }
 
     @Test(expected = InvalidQuerySequenceException.class)
-    public void firstConector() {
+    public void connectorAsFirstVisitTest() {
         visitor.visitConector("and");
         visitor.visitEnd();
     }
 
     @Test(expected = InvalidQuerySequenceException.class)
-    public void firstCondition() {
+    public void conditionAsFirstVisitTest() {
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitEnd();
     }
 
-    @Test
+    /*@Test
     public void twoConditions() {
         visitor.visitEntity("Person");
         visitor.visitCondition("personname", ComparisonType.EQUALS);
