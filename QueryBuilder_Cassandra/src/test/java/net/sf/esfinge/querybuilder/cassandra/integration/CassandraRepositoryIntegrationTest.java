@@ -27,7 +27,7 @@ public class CassandraRepositoryIntegrationTest {
 		utils.populatePerson();
 	}
 
-	@After
+	/*@After
 	public void clear() {
 		utils.clearDB();
 	}
@@ -40,7 +40,7 @@ public class CassandraRepositoryIntegrationTest {
 
 	@Test
 	public void delete() {
-	}
+	}*/
 	@Test
 	public void listTest() {
 		CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
@@ -62,12 +62,12 @@ public class CassandraRepositoryIntegrationTest {
 		List<ClassWithMissingKeyspaceValue> list = testQuery.list();
 	}
 
-	@Test
+	/*@Test
 	public void getById() {
 	}
 
 	@Test
 	public void queryByExample() {
-	}
+	}*/
 
 }

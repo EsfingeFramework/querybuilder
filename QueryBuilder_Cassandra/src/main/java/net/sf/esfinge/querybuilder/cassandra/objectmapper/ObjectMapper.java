@@ -18,11 +18,11 @@ public class ObjectMapper {
     private final Session session;
 
     public ObjectMapper(Session session) {
-        this.session = session;
-        this.manager = new MappingManager(session);
-    }
+        this.session = session;    }
 
     public <E> List<E> selectAll(Class<E> clazz) {
+        loadManager();
+
         if (!clazz.isAnnotationPresent(Table.class))
             throw new MissingAnnotationException("@Table annotation missing from class " + clazz.getSimpleName());
 
@@ -44,4 +44,8 @@ public class ObjectMapper {
         return objectsList;
     }
 
+    private void loadManager(){
+        if (manager == null)
+            this.manager = new MappingManager(session);
+    }
 }
