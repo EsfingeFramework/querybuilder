@@ -21,7 +21,6 @@ public class CassandraRepositoryIntegrationTest {
     CassandraTestQuery testQuery;
     TestCassandraSessionProvider provider;
 
-
     @Before
     public void init() {
         utils.initDB();
@@ -50,12 +49,21 @@ public class CassandraRepositoryIntegrationTest {
 
         Person actual = mapper.get(3);
 
-		assertEquals(actual,expected);
+		assertEquals(expected,actual);
     }
 
-    /*@Test
+    @Test
     public void deleteTest() {
-    }*/
+        testQuery.delete(2);
+
+        MappingManager manager = new MappingManager(provider.getSession());
+        Mapper<Person> mapper = manager.mapper(Person.class);
+
+        Person actual = mapper.get(2);
+
+        assertEquals(null,actual);
+    }
+
     @Test
     public void listTest() {
         List<Person> list = testQuery.list();

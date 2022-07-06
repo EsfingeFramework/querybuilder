@@ -34,8 +34,9 @@ public class CassandraRepository<E> implements Repository<E> {
     }
 
     @Override
-    public void delete(Object o) {
-
+    public void delete(Object id) {
+        Mapper<E> mapper = manager.mapper(clazz);
+        mapper.delete(id);
     }
 
     @Override
