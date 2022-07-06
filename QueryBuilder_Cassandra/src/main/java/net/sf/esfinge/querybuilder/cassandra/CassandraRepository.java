@@ -2,18 +2,17 @@ package net.sf.esfinge.querybuilder.cassandra;
 
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.Repository;
-import net.sf.esfinge.querybuilder.cassandra.objectmapper.ObjectMapper;
 import net.sf.esfinge.querybuilder.cassandra.keyspace.KeyspaceRepository;
+import net.sf.esfinge.querybuilder.cassandra.objectmapper.ObjectMapper;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 import java.util.List;
 
 public class CassandraRepository<E> implements Repository<E> {
-    private KeyspaceRepository schemaRepository;
-    private ObjectMapper entityRepository;
-    private Session session;
-
     protected Class<E> clazz;
+    private final KeyspaceRepository schemaRepository;
+    private final ObjectMapper entityRepository;
+    private final Session session;
 
     public CassandraRepository() {
         CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);

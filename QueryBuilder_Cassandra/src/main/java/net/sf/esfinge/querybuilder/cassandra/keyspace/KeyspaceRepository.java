@@ -8,7 +8,7 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidNumberOfReplicasE
  */
 public class KeyspaceRepository {
 
-    private Session session;
+    private final Session session;
 
     public KeyspaceRepository(Session session) {
         this.session = session;

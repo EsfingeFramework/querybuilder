@@ -12,17 +12,10 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingKeySpaceNameExcep
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: IMPLEMENT METHODS FOR CREATION AND DELETION OF TABLES AND INSERTION OF DATA
-
 public class ObjectMapper {
 
-    private static final String TABLE_NAME = "books";
-
-    private static final String TABLE_NAME_BY_TITLE = TABLE_NAME + "ByTitle";
-
-    private Session session;
     MappingManager manager;
-
+    private final Session session;
 
     public ObjectMapper(Session session) {
         this.session = session;

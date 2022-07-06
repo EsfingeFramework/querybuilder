@@ -16,7 +16,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
-    private List<ConditionStatement> conditions = new ArrayList<>();
+    private final List<ConditionStatement> conditions = new ArrayList<>();
     private String query = "";
 
     @Override
