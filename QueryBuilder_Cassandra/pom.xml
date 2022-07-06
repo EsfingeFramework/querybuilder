@@ -69,6 +69,14 @@
             <version>3.1.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-mapping -->
+        <dependency>
+            <groupId>com.datastax.cassandra</groupId>
+            <artifactId>cassandra-driver-mapping</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.cassandraunit/cassandra-unit -->
         <dependency>
             <groupId>org.cassandraunit</groupId>
