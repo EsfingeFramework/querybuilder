@@ -46,7 +46,6 @@ public class CassandraRepository<E> implements Repository<E> {
         if (clazz.getDeclaredAnnotation(Table.class).keyspace().equals(""))
             throw new MissingKeySpaceNameException("Missing keyspace value from class " + clazz.getSimpleName());
 
-        System.out.println(clazz);
         Mapper<E> mapper = manager.mapper(clazz);
 
         ResultSet results = session.execute("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName());

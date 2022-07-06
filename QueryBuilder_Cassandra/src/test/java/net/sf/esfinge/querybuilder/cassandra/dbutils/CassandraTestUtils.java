@@ -33,11 +33,7 @@ public class CassandraTestUtils {
         client.close();
     }
 
-    public void createTable() {
-        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
-        client.connect();
-        Session session = client.getSession();
-
+    public void createTable(Session session) {
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(KEYSPACE_NAME + "." + TABLE_NAME)
                 .append("(")
@@ -49,14 +45,9 @@ public class CassandraTestUtils {
         final String query = sb.toString();
 
         session.execute(query);
-        client.close();
     }
 
-    public void insertPerson(Person person) {
-        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
-        client.connect();
-        Session session = client.getSession();
-
+    public void insertPerson(Person person, Session session) {
         StringBuilder sb = new StringBuilder("INSERT INTO ")
                 .append(KEYSPACE_NAME + "." + TABLE_NAME)
                 .append("(id, name, lastname, age) ")
@@ -70,11 +61,14 @@ public class CassandraTestUtils {
         final String query = sb.toString();
 
         session.execute(query);
-        client.close();
     }
 
-    public void populatePerson() {
-        createTable();
+    public void populateDB() {
+        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
+        client.connect();
+        Session session = client.getSession();
+
+        createTable(session);
 
         Person person1 = new Person();
         person1.setId(1);
@@ -88,7 +82,9 @@ public class CassandraTestUtils {
         person2.setLastName("Power");
         person2.setAge(50);
 
-        insertPerson(person1);
-        insertPerson(person2);
+        insertPerson(person1,session);
+        insertPerson(person2,session);
+
+        client.close();
     }
 }

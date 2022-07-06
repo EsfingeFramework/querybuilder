@@ -25,7 +25,7 @@ public class CassandraRepositoryIntegrationTest {
     @Before
     public void init() {
         utils.initDB();
-        utils.populatePerson();
+        utils.populateDB();
         testQuery = QueryBuilder.create(CassandraTestQuery.class);
 		provider = new TestCassandraSessionProvider();
     }
