@@ -20,18 +20,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CassandraRepository<E> implements Repository<E> {
-    private final Session session;
+
+    private CassandraSessionProvider client;
+    private Session session;
     protected Class<E> clazz;
-    MappingManager manager;
+    private MappingManager manager;
 
     public CassandraRepository() {
-        CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
-        this.session = client.getSession();
-        this.manager = new MappingManager(session);
+        this.client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
+    }
+
+    private void loadManager(){
+        if (manager == null){
+            this.session = client.getSession();
+            this.manager = new MappingManager(session);
+        }
     }
 
     @Override
     public E save(E e) {
+        loadManager();
+
         Mapper<E> mapper = manager.mapper(clazz);
         mapper.save(e);
 
@@ -40,12 +49,16 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public void delete(Object id) {
+        loadManager();
+
         Mapper<E> mapper = manager.mapper(clazz);
         mapper.delete(id);
     }
 
     @Override
     public List<E> list() {
+        loadManager();
+
         Mapper<E> mapper = manager.mapper(clazz);
 
         ResultSet results = session.execute("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName());
@@ -61,6 +74,8 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public E getById(Object id) {
+        loadManager();
+
         Mapper<E> mapper = manager.mapper(clazz);
 
         return mapper.get(id);
@@ -68,6 +83,8 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public List<E> queryByExample(E e) {
+        loadManager();
+
         Method[] getters = ReflectionUtils.getClassGetters(e.getClass());
 
         if (getters.length == 0)
