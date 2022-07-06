@@ -11,11 +11,9 @@ import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingAnnotationException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingKeySpaceNameException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.NotEnoughExamplesException;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
 import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -133,7 +131,7 @@ public class CassandraRepository<E> implements Repository<E> {
         }
 
         if (!partitionAnnotationFound)
-            throw new MissingAnnotationException("@PartitionKey annotation missing from class " + aClass.getSimpleName());
+            throw new MissingAnnotationException("The @PartitionKey annotation needs to be assigned to a field " + aClass.getSimpleName());
 
         if (aClass.getDeclaredAnnotation(Table.class).keyspace().equals(""))
             throw new MissingKeySpaceNameException("Missing keyspace value from class " + aClass.getSimpleName());
