@@ -2,17 +2,15 @@ package net.sf.esfinge.querybuilder.cassandra;
 
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.Repository;
-import net.sf.esfinge.querybuilder.cassandra.keyspace.EntityRepository;
+import net.sf.esfinge.querybuilder.cassandra.objectmapper.ObjectMapper;
 import net.sf.esfinge.querybuilder.cassandra.keyspace.KeyspaceRepository;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
 import java.util.List;
 
 public class CassandraRepository<E> implements Repository<E> {
-
-    private String keyspaceName;
     private KeyspaceRepository schemaRepository;
-    private EntityRepository entityRepository;
+    private ObjectMapper entityRepository;
     private Session session;
 
     protected Class<E> clazz;
@@ -20,10 +18,9 @@ public class CassandraRepository<E> implements Repository<E> {
     public CassandraRepository() {
         CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
         this.session = client.getSession();
-        this.keyspaceName = client.getKeyspaceName();
 
         this.schemaRepository = new KeyspaceRepository(session);
-        this.entityRepository = new EntityRepository(session);
+        this.entityRepository = new ObjectMapper(session);
     }
 
     @Override
@@ -38,7 +35,7 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public List<E> list() {
-        return entityRepository.selectAll(clazz,keyspaceName);
+        return entityRepository.selectAll(clazz);
     }
 
     @Override

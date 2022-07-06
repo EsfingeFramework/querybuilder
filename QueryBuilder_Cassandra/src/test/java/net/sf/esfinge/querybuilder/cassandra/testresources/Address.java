@@ -1,13 +1,17 @@
 package net.sf.esfinge.querybuilder.cassandra.testresources;
 
-import net.sf.esfinge.querybuilder.cassandra.annotations.ID;
-import net.sf.esfinge.querybuilder.cassandra.annotations.Table;
+import com.datastax.driver.mapping.annotations.PartitionKey;
+import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity;
 
-@Table(name = "address")
+@Table(keyspace = "test", name = "address",
+        readConsistency = "QUORUM",
+        writeConsistency = "QUORUM",
+        caseSensitiveKeyspace = false,
+        caseSensitiveTable = false)
 public class Address implements CassandraEntity {
 
-    @ID
+    @PartitionKey
     private int id;
     private String city;
     private String state;

@@ -2,7 +2,13 @@ package net.sf.esfinge.querybuilder.cassandra.integration;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingAnnotationException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingKeySpaceNameException;
+import net.sf.esfinge.querybuilder.cassandra.testresources.*;
+import net.sf.esfinge.querybuilder.cassandra.testresources.wrongconfiguration.ClassWithMissingAnnotation;
+import net.sf.esfinge.querybuilder.cassandra.testresources.wrongconfiguration.ClassWithMissingKeyspaceValue;
+import net.sf.esfinge.querybuilder.cassandra.testresources.wrongconfiguration.MissingAnnotationTestQuery;
+import net.sf.esfinge.querybuilder.cassandra.testresources.wrongconfiguration.MissingKeySpaceTestQuery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,13 +20,11 @@ import static org.junit.Assert.assertEquals;
 public class CassandraRepositoryIntegrationTest {
 
 	CassandraTestUtils utils = new CassandraTestUtils();
-	CassandraTestQuery testQuery;
 
 	@Before
 	public void init() {
 		utils.initDB();
 		utils.populatePerson();
-		testQuery = QueryBuilder.create(CassandraTestQuery.class);
 	}
 
 	@After
@@ -29,9 +33,24 @@ public class CassandraRepositoryIntegrationTest {
 	}
 
 	@Test
-	public void list() {
+	public void listTest() {
+		CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
 		List<Person> list = testQuery.list();
 		assertEquals("The list should have 2 persons", 2, list.size());
+	}
+
+	@Test(expected = MissingAnnotationException.class)
+	public void listWithMissingAnnotationTest() {
+		MissingAnnotationTestQuery testQuery = QueryBuilder.create(MissingAnnotationTestQuery.class);
+
+		List<ClassWithMissingAnnotation> list = testQuery.list();
+	}
+
+	@Test(expected = MissingKeySpaceNameException.class)
+	public void listWithMissingKeyspaceValueTest() {
+		MissingKeySpaceTestQuery testQuery = QueryBuilder.create(MissingKeySpaceTestQuery.class);
+
+		List<ClassWithMissingKeyspaceValue> list = testQuery.list();
 	}
 
 	/*@Test

@@ -1,15 +1,19 @@
 package net.sf.esfinge.querybuilder.cassandra.testresources;
 
-import net.sf.esfinge.querybuilder.cassandra.annotations.ID;
-import net.sf.esfinge.querybuilder.cassandra.annotations.Table;
+import com.datastax.driver.mapping.annotations.PartitionKey;
+import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity;
 
 import java.util.UUID;
 
-@Table(name = "person")
+@Table(keyspace = "test", name = "person",
+        readConsistency = "QUORUM",
+        writeConsistency = "QUORUM",
+        caseSensitiveKeyspace = false,
+        caseSensitiveTable = false)
 public class Person implements CassandraEntity {
 
-    @ID
+    @PartitionKey
     private UUID id;
     private String name;
     private String lastName;
