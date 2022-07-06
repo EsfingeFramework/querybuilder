@@ -33,6 +33,15 @@ public class CassandraRepositoryIntegrationTest {
 	}
 
 	@Test
+	public void save() {
+
+
+	}
+
+	@Test
+	public void delete() {
+	}
+	@Test
 	public void listTest() {
 		CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
 		List<Person> list = testQuery.list();
@@ -53,63 +62,12 @@ public class CassandraRepositoryIntegrationTest {
 		List<ClassWithMissingKeyspaceValue> list = testQuery.list();
 	}
 
-	/*@Test
-	public void queryByExample() {
-		CassandraTestQuery tq = QueryBuilder.create(CassandraTestQuery.class);
-		Person p = new Person();
-		p.setLastName("Silva");
-		List<Person> list = tq.queryByExample(p);
-		assertEquals("The list should have 2 persons", 2, list.size());
-	}
-
-	@Test
-	public void queryByExampleWithTwoValues() {
-		CassandraTestQuery tq = QueryBuilder.create(CassandraTestQuery.class);
-		Person p = new Person();
-		p.setLastName("Silva");
-		p.setAge(20);
-		List<Person> list = tq.queryByExample(p);
-		assertEquals("The list should have 1 person", 1, list.size());
-	}
-		
 	@Test
 	public void getById() {
-		CassandraTestQuery tq = QueryBuilder.create(CassandraTestQuery.class);
-		Person p = tq.getById(3);
-		assertEquals("It should get Marcus", "Marcos", p.getName());
 	}
 
 	@Test
-	public void delete() throws Exception {
-		CassandraTestQuery tq = QueryBuilder.create(CassandraTestQuery.class);
-		tq.delete(3);
-		new DataBaseCommunicator().compareTables("/after_delete_db.xml","PERSON");
-
+	public void queryByExample() {
 	}
-
-	@Test
-	public void save() throws Exception {
-		CassandraTestQuery tq = QueryBuilder.create(CassandraTestQuery.class);
-		Person p = new Person();
-		p.setName("Beatriz");
-		p.setLastName("Tosetti");
-		p.setAge(0);
-		p.setId(6);
-		tq.save(p);
-		new DataBaseCommunicator().compareTables("/after_insert_db.xml",
-				"PERSON");
-	}
-
-	@Test
-	public void update() throws Exception {
-		CassandraTestQuery tq = QueryBuilder.create(CassandraTestQuery.class);
-		Person p = tq.getById(3);
-		p.setAge(p.getAge() + 1);
-		tq.save(p);
-		new DataBaseCommunicator().compareTables("/after_update_db.xml",
-				"PERSON");
-	}*/
-
-
 
 }

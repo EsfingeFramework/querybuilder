@@ -10,16 +10,14 @@ import java.util.List;
 
 public class CassandraRepository<E> implements Repository<E> {
     protected Class<E> clazz;
-    private final KeyspaceRepository schemaRepository;
-    private final ObjectMapper entityRepository;
+    private final ObjectMapper objectMapper;
     private final Session session;
 
     public CassandraRepository() {
         CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
         this.session = client.getSession();
 
-        this.schemaRepository = new KeyspaceRepository(session);
-        this.entityRepository = new ObjectMapper(session);
+        this.objectMapper = new ObjectMapper(session);
     }
 
     @Override
@@ -34,7 +32,7 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public List<E> list() {
-        return entityRepository.selectAll(clazz);
+        return objectMapper.selectAll(clazz);
     }
 
     @Override
