@@ -26,7 +26,7 @@ public class CassandraRepositoryIntegrationTest {
         utils.initDB();
         utils.populateDB();
         testQuery = QueryBuilder.create(CassandraTestQuery.class);
-		provider = new TestCassandraSessionProvider();
+        provider = new TestCassandraSessionProvider();
     }
 
     @After
@@ -49,7 +49,7 @@ public class CassandraRepositoryIntegrationTest {
 
         Person actual = mapper.get(3);
 
-		assertEquals("New Person should be added to the persons",expected,actual);
+        assertEquals("New Person should be added to the persons", expected, actual);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class CassandraRepositoryIntegrationTest {
 
         Person actual = mapper.get(2);
 
-        assertEquals("Should not retrieve any person",null,actual);
+        assertEquals("Should not retrieve any person", null, actual);
     }
 
     @Test
@@ -70,8 +70,8 @@ public class CassandraRepositoryIntegrationTest {
         assertEquals("The list should have 2 persons", 2, list.size());
     }
 
-	@Test
-	public void getByIdTest() {
+    @Test
+    public void getByIdTest() {
         Person expected = new Person();
         expected.setId(2);
         expected.setName("Max");
@@ -80,18 +80,18 @@ public class CassandraRepositoryIntegrationTest {
 
         Person actual = testQuery.getById(2);
 
-        assertEquals("Should retrieve person Max Power",expected,actual);
-	}
+        assertEquals("Should retrieve person Max Power", expected, actual);
+    }
 
-	@Test
-	public void queryByExampleTest() {
+    @Test
+    public void queryByExampleTest() {
         Person example = new Person();
         example.setName("Max");
 
         List<Person> list = testQuery.queryByExample(example);
 
         assertEquals("The list should have 1 person", 1, list.size());
-	}
+    }
 
     @Test
     public void queryByTwoExamplesTest() {

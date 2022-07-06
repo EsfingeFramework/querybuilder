@@ -14,9 +14,9 @@ import java.util.Set;
 public class CassandraQueryVisitor implements QueryVisitor {
 
 
+    private final List<ConditionStatement> conditions = new ArrayList<>();
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
-    private final List<ConditionStatement> conditions = new ArrayList<>();
     private String query = "";
 
     @Override

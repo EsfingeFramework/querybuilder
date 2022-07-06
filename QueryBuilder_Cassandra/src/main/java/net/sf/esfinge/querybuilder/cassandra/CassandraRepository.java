@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CassandraRepository<E> implements Repository<E> {
-    protected Class<E> clazz;
     private final Session session;
+    protected Class<E> clazz;
     MappingManager manager;
 
     public CassandraRepository() {
@@ -75,18 +75,18 @@ public class CassandraRepository<E> implements Repository<E> {
 
         StringBuilder queryBuilder = new StringBuilder();
 
-        queryBuilder.append("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName() + " WHERE ");
+        queryBuilder.append("SELECT * FROM ").append(clazz.getDeclaredAnnotation(Table.class).keyspace()).append(".").append(clazz.getSimpleName()).append(" WHERE ");
 
-        for (int i = 0; i < getters.length; i++){
+        for (int i = 0; i < getters.length; i++) {
             try {
-                if (getters[i].invoke(e) != null){
+                if (getters[i].invoke(e) != null) {
                     if (i > 0)
                         queryBuilder.append(" AND ");
 
-                    queryBuilder.append(getters[i].getName().substring(3).toLowerCase() + " = ");
+                    queryBuilder.append(getters[i].getName().substring(3).toLowerCase()).append(" = ");
 
                     if (getters[i].getReturnType() == String.class)
-                        queryBuilder.append("'" + getters[i].invoke(e) + "'");
+                        queryBuilder.append("'").append(getters[i].invoke(e)).append("'");
                     else
                         queryBuilder.append(getters[i].invoke(e));
                 }
@@ -118,16 +118,18 @@ public class CassandraRepository<E> implements Repository<E> {
         this.clazz = aClass;
     }
 
-    private void checkValidClassConfiguration(Class<E> aClass){
+    private void checkValidClassConfiguration(Class<E> aClass) {
         if (!aClass.isAnnotationPresent(Table.class))
             throw new MissingAnnotationException("@Table annotation missing from class " + aClass.getSimpleName());
 
         Field[] classFields = aClass.getDeclaredFields();
         boolean partitionAnnotationFound = false;
 
-        for(Field f : classFields){
-            if (f.isAnnotationPresent(PartitionKey.class))
+        for (Field f : classFields) {
+            if (f.isAnnotationPresent(PartitionKey.class)) {
                 partitionAnnotationFound = true;
+                break;
+            }
         }
 
         if (!partitionAnnotationFound)

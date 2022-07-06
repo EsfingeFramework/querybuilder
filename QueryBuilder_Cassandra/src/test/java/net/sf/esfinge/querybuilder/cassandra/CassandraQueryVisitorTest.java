@@ -6,7 +6,6 @@ import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CassandraQueryVisitorTest {
 
@@ -79,6 +78,7 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("city", ComparisonType.EQUALS);
         visitor.visitEnd();
     }
+
     @Test(expected = InvalidConnectorException.class)
     public void invalidConnectorNameTest() {
         visitor.visitEntity("Person");

@@ -5,7 +5,6 @@ import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Table(keyspace = "test", name = "person",
         readConsistency = "QUORUM",

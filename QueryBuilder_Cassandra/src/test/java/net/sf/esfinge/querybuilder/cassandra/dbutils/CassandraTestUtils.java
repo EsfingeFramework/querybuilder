@@ -2,15 +2,14 @@ package net.sf.esfinge.querybuilder.cassandra.dbutils;
 
 
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.utils.UUIDs;
 import net.sf.esfinge.querybuilder.cassandra.keyspace.KeyspaceRepository;
 import net.sf.esfinge.querybuilder.cassandra.keyspace.ReplicationStrategy;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 
 public class CassandraTestUtils {
 
-    private String KEYSPACE_NAME = "test";
     private static final String TABLE_NAME = "person";
+    private final String KEYSPACE_NAME = "test";
 
     public void initDB() {
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
@@ -82,8 +81,8 @@ public class CassandraTestUtils {
         person2.setLastName("Power");
         person2.setAge(50);
 
-        insertPerson(person1,session);
-        insertPerson(person2,session);
+        insertPerson(person1, session);
+        insertPerson(person2, session);
 
         client.close();
     }
