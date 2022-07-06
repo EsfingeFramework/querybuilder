@@ -5,12 +5,19 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
+import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingAnnotationException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingKeySpaceNameException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.NotEnoughExamplesException;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
+import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +29,7 @@ public class CassandraRepository<E> implements Repository<E> {
     public CassandraRepository() {
         CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
         this.session = client.getSession();
-        this.manager = new MappingManager(session);;
+        this.manager = new MappingManager(session);
     }
 
     @Override
@@ -41,12 +48,6 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public List<E> list() {
-        if (!clazz.isAnnotationPresent(Table.class))
-            throw new MissingAnnotationException("@Table annotation missing from class " + clazz.getSimpleName());
-
-        if (clazz.getDeclaredAnnotation(Table.class).keyspace().equals(""))
-            throw new MissingKeySpaceNameException("Missing keyspace value from class " + clazz.getSimpleName());
-
         Mapper<E> mapper = manager.mapper(clazz);
 
         ResultSet results = session.execute("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName());
@@ -61,17 +62,80 @@ public class CassandraRepository<E> implements Repository<E> {
     }
 
     @Override
-    public E getById(Object o) {
-        return null;
+    public E getById(Object id) {
+        Mapper<E> mapper = manager.mapper(clazz);
+
+        return mapper.get(id);
     }
 
     @Override
     public List<E> queryByExample(E e) {
-        return null;
+        Method[] getters = ReflectionUtils.getClassGetters(e.getClass());
+
+        if (getters.length == 0)
+            throw new NotEnoughExamplesException("At least one attribute needed for class " + e.getClass());
+
+        StringBuilder queryBuilder = new StringBuilder();
+
+        queryBuilder.append("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName() + " WHERE ");
+
+        for (int i = 0; i < getters.length; i++){
+            try {
+                if (getters[i].invoke(e) != null){
+                    if (i > 0)
+                        queryBuilder.append(" AND ");
+
+                    queryBuilder.append(getters[i].getName().substring(3).toLowerCase() + " = ");
+
+                    if (getters[i].getReturnType() == String.class)
+                        queryBuilder.append("'" + getters[i].invoke(e) + "'");
+                    else
+                        queryBuilder.append(getters[i].invoke(e));
+                }
+
+
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        queryBuilder.append(" ALLOW FILTERING");
+
+        Mapper<E> mapper = manager.mapper(clazz);
+
+        ResultSet results = session.execute(queryBuilder.toString());
+        Result<E> objects = mapper.map(results);
+        List<E> objectsList = new ArrayList<>();
+
+        for (E u : objects) {
+            objectsList.add(u);
+        }
+
+        return objectsList;
     }
 
     @Override
     public void configureClass(Class<E> aClass) {
+        checkValidClassConfiguration(aClass);
         this.clazz = aClass;
+    }
+
+    private void checkValidClassConfiguration(Class<E> aClass){
+        if (!aClass.isAnnotationPresent(Table.class))
+            throw new MissingAnnotationException("@Table annotation missing from class " + aClass.getSimpleName());
+
+        Field[] classFields = aClass.getDeclaredFields();
+        boolean partitionAnnotationFound = false;
+
+        for(Field f : classFields){
+            if (f.isAnnotationPresent(PartitionKey.class))
+                partitionAnnotationFound = true;
+        }
+
+        if (!partitionAnnotationFound)
+            throw new MissingAnnotationException("@PartitionKey annotation missing from class " + aClass.getSimpleName());
+
+        if (aClass.getDeclaredAnnotation(Table.class).keyspace().equals(""))
+            throw new MissingKeySpaceNameException("Missing keyspace value from class " + aClass.getSimpleName());
     }
 }

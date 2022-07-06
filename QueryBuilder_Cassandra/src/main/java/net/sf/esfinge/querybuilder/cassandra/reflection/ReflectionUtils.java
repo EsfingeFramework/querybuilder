@@ -5,14 +5,15 @@ import java.util.Arrays;
 
 public class ReflectionUtils {
 
-    public static <E> Method[] getClassSetters(Class<E> clazz) {
+    public static <E> Method[] getClassGetters(Class<E> clazz) {
         Method[] setters = Arrays.stream(clazz.getMethods())
                 .filter(m -> m.getName()
-                        .startsWith("set"))
+                        .startsWith("get") && !m.getName().equals("getClass"))
                 .toArray(Method[]::new);
 
         return setters;
     }
+
 }
 
 
