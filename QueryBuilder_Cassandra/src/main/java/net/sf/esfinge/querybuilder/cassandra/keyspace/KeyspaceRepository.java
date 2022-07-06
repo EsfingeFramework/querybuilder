@@ -50,7 +50,7 @@ public class KeyspaceRepository {
      * @param keyspaceName the name of the keyspace to delete.
      */
     public void deleteKeyspace(String keyspaceName) {
-        StringBuilder sb = new StringBuilder("DROP KEYSPACE ").append(keyspaceName);
+        StringBuilder sb = new StringBuilder("DROP KEYSPACE IF EXISTS ").append(keyspaceName);
 
         final String query = sb.toString();
 

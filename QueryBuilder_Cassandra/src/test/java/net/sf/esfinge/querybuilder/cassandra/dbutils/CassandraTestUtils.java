@@ -9,32 +9,37 @@ import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 
 public class CassandraTestUtils {
 
-    private String keyspaceName;
+    private String KEYSPACE_NAME = "test";
     private static final String TABLE_NAME = "person";
-
-    private KeyspaceRepository schemaRepository;
-    private Session session;
-
 
     public void initDB() {
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
         client.connect();
+        Session session = client.getSession();
+        KeyspaceRepository schemaRepository = new KeyspaceRepository(session);
 
-        this.session = client.getSession();
-        this.keyspaceName = client.getKeyspaceName();
+        schemaRepository.createKeyspace(KEYSPACE_NAME, ReplicationStrategy.SimpleStrategy, 1);
 
-        schemaRepository = new KeyspaceRepository(session);
-
-        schemaRepository.createKeyspace(keyspaceName, ReplicationStrategy.SimpleStrategy, 1);
+        client.close();
     }
 
     public void clearDB() {
-        schemaRepository.deleteKeyspace(keyspaceName);
+        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
+        client.connect();
+        Session session = client.getSession();
+        KeyspaceRepository schemaRepository = new KeyspaceRepository(session);
+
+        schemaRepository.deleteKeyspace(KEYSPACE_NAME);
+        client.close();
     }
 
     public void createTable() {
+        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
+        client.connect();
+        Session session = client.getSession();
+
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-                .append(TABLE_NAME)
+                .append(KEYSPACE_NAME + "." + TABLE_NAME)
                 .append("(")
                 .append("id int PRIMARY KEY, ")
                 .append("name text,")
@@ -44,11 +49,16 @@ public class CassandraTestUtils {
         final String query = sb.toString();
 
         session.execute(query);
+        client.close();
     }
 
     public void insertPerson(Person person) {
+        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
+        client.connect();
+        Session session = client.getSession();
+
         StringBuilder sb = new StringBuilder("INSERT INTO ")
-                .append(TABLE_NAME)
+                .append(KEYSPACE_NAME + "." + TABLE_NAME)
                 .append("(id, name, lastname, age) ")
                 .append("VALUES (")
                 .append(person.getId())
@@ -60,11 +70,10 @@ public class CassandraTestUtils {
         final String query = sb.toString();
 
         session.execute(query);
+        client.close();
     }
 
     public void populatePerson() {
-        schemaRepository.useKeyspace(keyspaceName);
-
         createTable();
 
         Person person1 = new Person();
