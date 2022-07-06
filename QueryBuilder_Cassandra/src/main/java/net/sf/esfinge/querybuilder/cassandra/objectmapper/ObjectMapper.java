@@ -12,24 +12,32 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingKeySpaceNameExcep
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectMapper {
+public class ObjectMapper<E> {
 
     MappingManager manager;
     private final Session session;
 
-    public ObjectMapper(Session session) {
-        this.session = session;    }
+    private Class<E> clazz;
 
-    public <E> List<E> selectAll(Class<E> clazz) {
-        loadManager();
+    public ObjectMapper(Session session, Class<E> clazz) {
+        this.session = session;
+        this.clazz = clazz;
 
+        checkClassConfiguration();
+    }
+
+    private void checkClassConfiguration() {
         if (!clazz.isAnnotationPresent(Table.class))
             throw new MissingAnnotationException("@Table annotation missing from class " + clazz.getSimpleName());
 
-        String keySpaceName = clazz.getDeclaredAnnotation(Table.class).keyspace();
-
-        if (keySpaceName.equals(""))
+        if (clazz.getDeclaredAnnotation(Table.class).keyspace().equals(""))
             throw new MissingKeySpaceNameException("Missing keyspace value from class " + clazz.getSimpleName());
+    }
+
+    public List<E> selectAll() {
+        loadManager();
+
+        String keySpaceName = clazz.getDeclaredAnnotation(Table.class).keyspace();
 
         Mapper<E> mapper = manager.mapper(clazz);
 
