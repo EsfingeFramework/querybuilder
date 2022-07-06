@@ -36,7 +36,7 @@ public class CassandraTestUtils {
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(TABLE_NAME)
                 .append("(")
-                .append("id uuid PRIMARY KEY, ")
+                .append("id int PRIMARY KEY, ")
                 .append("name text,")
                 .append("lastname text,")
                 .append("age int);");
@@ -68,13 +68,13 @@ public class CassandraTestUtils {
         createTable();
 
         Person person1 = new Person();
-        person1.setId(UUIDs.timeBased());
+        person1.setId(1);
         person1.setName("Homer");
         person1.setLastName("Simpson");
         person1.setAge(48);
 
         Person person2 = new Person();
-        person2.setId(UUIDs.timeBased());
+        person2.setId(2);
         person2.setName("Max");
         person2.setLastName("Power");
         person2.setAge(50);

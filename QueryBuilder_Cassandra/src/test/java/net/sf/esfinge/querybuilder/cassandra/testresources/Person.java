@@ -14,17 +14,17 @@ import java.util.UUID;
 public class Person implements CassandraEntity {
 
     @PartitionKey
-    private UUID id;
+    private Integer id;
     private String name;
     private String lastName;
     private Integer age;
     //private Address address;
 
-    public UUID getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
