@@ -17,15 +17,20 @@ import java.util.List;
 public class CassandraRepository<E> implements Repository<E> {
     protected Class<E> clazz;
     private final Session session;
+    MappingManager manager;
 
     public CassandraRepository() {
         CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
         this.session = client.getSession();
+        this.manager = new MappingManager(session);;
     }
 
     @Override
     public E save(E e) {
-        return null;
+        Mapper<E> mapper = manager.mapper(clazz);
+        mapper.save(e);
+
+        return e;
     }
 
     @Override
@@ -40,8 +45,6 @@ public class CassandraRepository<E> implements Repository<E> {
 
         if (clazz.getDeclaredAnnotation(Table.class).keyspace().equals(""))
             throw new MissingKeySpaceNameException("Missing keyspace value from class " + clazz.getSimpleName());
-
-        MappingManager manager = new MappingManager(session);
 
         System.out.println(clazz);
         Mapper<E> mapper = manager.mapper(clazz);
