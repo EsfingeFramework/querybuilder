@@ -58,7 +58,7 @@ public class ConditionStatement {
         this.nextConnector = nextConnector;
     }
 
-    private String getValueRepresentation(){
+    private String getValueRepresentation() {
         if (value.getClass().getSimpleName().equals("String"))
             return "'" + value + "'";
 

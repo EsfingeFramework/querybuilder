@@ -15,7 +15,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     private final List<ConditionStatement> conditions = new ArrayList<>();
 
-    private List<OrderByClause> orderByClauses = new ArrayList<>();
+    private final List<OrderByClause> orderByClauses = new ArrayList<>();
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
     private String query = "";
@@ -56,9 +56,9 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String parameter, ComparisonType comparisonType, Object o) {
-        visitCondition(parameter,comparisonType);
+        visitCondition(parameter, comparisonType);
 
-        conditions.get(conditions.size()-1).setValue(o);
+        conditions.get(conditions.size() - 1).setValue(o);
 
         lastCalled = QueryElement.CONDITION;
     }
@@ -69,7 +69,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
         // define in the "CLUSTERING ORDER BY" clause of CREATE TABLE.
         // Thus, it is implemented at the application logic
 
-        orderByClauses.add(new OrderByClause(parameter,orderingDirection));
+        orderByClauses.add(new OrderByClause(parameter, orderingDirection));
     }
 
     @Override
@@ -104,8 +104,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public boolean isDynamic() {
-        for(ConditionStatement cond : conditions){
-            if(cond.getNullOption() != NullOption.NONE){
+        for (ConditionStatement cond : conditions) {
+            if (cond.getNullOption() != NullOption.NONE) {
                 return true;
             }
         }
@@ -135,10 +135,10 @@ public class CassandraQueryVisitor implements QueryVisitor {
         throw new UnsupportedOperationException("getFixParameterValue method in CassandraQueryVisitor not supported, use CassandraQueryRepresentation instead...");
     }
 
-    private Map<String, Object> getFixParametersMap(){
+    private Map<String, Object> getFixParametersMap() {
         Map<String, Object> fixParameters = new HashMap<String, Object>();
-        for(ConditionStatement cond : conditions){
-            if(cond.getValue() != null){
+        for (ConditionStatement cond : conditions) {
+            if (cond.getValue() != null) {
                 fixParameters.put(cond.getPropertyName(), cond.getValue());
             }
         }

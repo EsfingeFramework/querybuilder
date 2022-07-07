@@ -4,7 +4,6 @@ import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 import org.apache.thrift.transport.TTransportException;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ public class CassandraConnectionIntegrationTest {
     private Session session;
 
     @Test
-    public void cassandraDBConnectionTest() throws TTransportException, IOException, InterruptedException{
+    public void cassandraDBConnectionTest() throws TTransportException, IOException, InterruptedException {
         // Uncomment next line to use cassandra unit db instead of a local one
         // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
 

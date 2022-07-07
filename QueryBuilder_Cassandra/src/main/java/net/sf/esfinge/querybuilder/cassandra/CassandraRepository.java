@@ -21,17 +21,17 @@ import java.util.List;
 
 public class CassandraRepository<E> implements Repository<E> {
 
-    private CassandraSessionProvider client;
-    private Session session;
     protected Class<E> clazz;
+    private final CassandraSessionProvider client;
+    private Session session;
     private MappingManager manager;
 
     public CassandraRepository() {
         this.client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
     }
 
-    private void loadManager(){
-        if (manager == null){
+    private void loadManager() {
+        if (manager == null) {
             this.session = client.getSession();
             this.manager = new MappingManager(session);
         }

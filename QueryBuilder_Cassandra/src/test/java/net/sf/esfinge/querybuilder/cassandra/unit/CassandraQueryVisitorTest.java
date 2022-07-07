@@ -265,45 +265,45 @@ public class CassandraQueryVisitorTest {
     }*/
 
     @Test
-    public void singleOrderByTest(){
+    public void singleOrderByTest() {
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitEnd();
 
-        OrderByClause expected = new OrderByClause("age",OrderingDirection.ASC);
+        OrderByClause expected = new OrderByClause("age", OrderingDirection.ASC);
 
         QueryRepresentation qr = visitor.getQueryRepresentation();
         String query = qr.getQuery().toString();
 
-        assertEquals(query,"SELECT * FROM Person");
-        assertEquals(expected, ((CassandraQueryRepresentation)qr).getOrderByClause().get(0));
+        assertEquals(query, "SELECT * FROM Person");
+        assertEquals(expected, ((CassandraQueryRepresentation) qr).getOrderByClause().get(0));
     }
 
     @Test
-    public void doubleOrderByTest(){
+    public void doubleOrderByTest() {
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitOrderBy("name", OrderingDirection.DESC);
         visitor.visitEnd();
 
-        OrderByClause expected1 = new OrderByClause("age",OrderingDirection.ASC);
-        OrderByClause expected2 = new OrderByClause("name",OrderingDirection.DESC);
+        OrderByClause expected1 = new OrderByClause("age", OrderingDirection.ASC);
+        OrderByClause expected2 = new OrderByClause("name", OrderingDirection.DESC);
 
         QueryRepresentation qr = visitor.getQueryRepresentation();
         String query = qr.getQuery().toString();
 
-        assertEquals(query,"SELECT * FROM Person");
-        assertEquals(expected1, ((CassandraQueryRepresentation)qr).getOrderByClause().get(0));
-        assertEquals(expected2, ((CassandraQueryRepresentation)qr).getOrderByClause().get(1));
+        assertEquals(query, "SELECT * FROM Person");
+        assertEquals(expected1, ((CassandraQueryRepresentation) qr).getOrderByClause().get(0));
+        assertEquals(expected2, ((CassandraQueryRepresentation) qr).getOrderByClause().get(1));
     }
 
-    @Test(expected=InvalidQuerySequenceException.class)
-    public void wrongOrderByTest(){
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void wrongOrderByTest() {
         visitor.visitOrderBy("age", OrderingDirection.ASC);
     }
 
-   @Test(expected=InvalidQuerySequenceException.class)
-    public void orderByAfterConnectorTest(){
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void orderByAfterConnectorTest() {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitConector("and");
@@ -311,24 +311,24 @@ public class CassandraQueryVisitorTest {
         visitor.visitEnd();
     }
 
-    @Test(expected=InvalidQuerySequenceException.class)
-    public void entityAfterOrderByTest(){
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void entityAfterOrderByTest() {
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitEntity("Person");
         visitor.visitEnd();
     }
 
-    @Test(expected=InvalidQuerySequenceException.class)
-    public void conditionAfterOrderByTest(){
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void conditionAfterOrderByTest() {
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitEnd();
     }
 
-    @Test(expected=InvalidQuerySequenceException.class)
-    public void connectorAfterOrderByTest(){
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void connectorAfterOrderByTest() {
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitConector("and");

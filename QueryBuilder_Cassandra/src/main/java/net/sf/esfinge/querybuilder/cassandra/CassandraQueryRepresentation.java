@@ -1,7 +1,6 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
-import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 
 import java.util.List;
@@ -12,11 +11,11 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
 
     // TODO: WHAT DOES THIS CLASS DO??? IS IT REALLY NEEDED?
 
-    private String query;
-    private boolean dynamic;
-    private Map<String, Object> fixParametersMap;
+    private final String query;
+    private final boolean dynamic;
+    private final Map<String, Object> fixParametersMap;
 
-    private List<OrderByClause> orderByClause;
+    private final List<OrderByClause> orderByClause;
 
     public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<OrderByClause> orderByClause) {
         this.query = query;

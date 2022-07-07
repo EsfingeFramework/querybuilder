@@ -2,7 +2,6 @@ package net.sf.esfinge.querybuilder.cassandra.querybuilding;
 
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
 
-import java.util.List;
 import java.util.Objects;
 
 public class OrderByClause {

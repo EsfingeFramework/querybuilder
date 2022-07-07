@@ -1,17 +1,9 @@
 package net.sf.esfinge.querybuilder.cassandra.integration;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
-import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class CassandraQueryBuilderIntegrationTest {
 
@@ -24,7 +16,7 @@ public class CassandraQueryBuilderIntegrationTest {
         //utils.initDB();
         //utils.populateDB();
         testQuery = QueryBuilder.create(CassandraTestQuery.class);
-       // provider = new TestCassandraSessionProvider();
+        // provider = new TestCassandraSessionProvider();
     }
 
     /*@After
@@ -33,13 +25,13 @@ public class CassandraQueryBuilderIntegrationTest {
     }*/
 
     @Test
-    public void simpleQuery(){
+    public void simpleQuery() {
         //List<Person> list = testQuery.getPerson();
         //assertEquals("The list should have 2 persons", 2, list.size());
     }
 
     @Test
-    public void simpleParameterQuery(){
+    public void simpleParameterQuery() {
         //Person p = testQuery.getPersonById(2);
         //assertEquals("It should get Marcus", "Marcos", p.getName());
     }

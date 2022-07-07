@@ -1,16 +1,6 @@
 package net.sf.esfinge.querybuilder.cassandra.unit;
 
 import net.sf.esfinge.querybuilder.cassandra.CassandraQueryVisitor;
-import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
-import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
-import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
-import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 public class CassandraDynamicQueriesTest {
 

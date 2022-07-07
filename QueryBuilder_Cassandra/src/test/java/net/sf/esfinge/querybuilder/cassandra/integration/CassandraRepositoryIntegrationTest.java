@@ -8,7 +8,6 @@ import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvide
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.apache.thrift.transport.TTransportException;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.junit.*;
 
 import java.io.IOException;
@@ -28,8 +27,13 @@ public class CassandraRepositoryIntegrationTest {
         CassandraTestUtils.initDB();
     }
 
+    @AfterClass
+    public static void dropDB() {
+        CassandraTestUtils.dropDB();
+    }
+
     @Before
-    public void populateTables(){
+    public void populateTables() {
         CassandraTestUtils.populateTables();
 
         testQuery = QueryBuilder.create(CassandraTestQuery.class);
@@ -37,13 +41,8 @@ public class CassandraRepositoryIntegrationTest {
     }
 
     @After
-    public void cleanTables(){
+    public void cleanTables() {
         CassandraTestUtils.cleanTables();
-    }
-
-    @AfterClass
-    public static void dropDB() {
-        CassandraTestUtils.dropDB();
     }
 
     @Test
