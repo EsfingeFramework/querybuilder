@@ -4,11 +4,12 @@ import net.sf.esfinge.querybuilder.cassandra.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class CassandraQueryVisitorTest {
 
@@ -139,40 +140,32 @@ public class CassandraQueryVisitorTest {
     }
 
     /*
-
-     TODO: PROBLEM WITH COMPLEX QUERIES AND CASSANDRA: JOINS DO NOT EXIST, IMPLEMENT THEM AT APPLICATION LEVEL??
-
+    TODO: PROBLEM WITH COMPLEX QUERIES AND CASSANDRA: JOINS DO NOT EXIST, IMPLEMENT THEM AT APPLICATION LEVEL??
     @Test
-    public void compositeCondition() {
-        visitor.visitEntity("Person");
-        visitor.visitCondition("address.city", ComparisonType.EQUALS);
-        visitor.visitEnd();
+	public void compositeCondition(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("address.city", ComparisonType.EQUALS);
+		visitor.visitEnd();
+		QueryRepresentation qr = visitor.getQueryRepresentation();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+		String query = qr.getQuery().toString();
+		assertEquals(query,"SELECT o FROM Person o WHERE o.address.city = :addressCityEquals");
+	}
 
-        assertEquals(
-                query,
-                "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where address.city = 1? and person.address_id = address.id");
-    }
+	@Test
+	public void complexQuery(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("name", ComparisonType.EQUALS);
+		visitor.visitConector("or");
+		visitor.visitCondition("lastName", ComparisonType.EQUALS);
+		visitor.visitConector("and");
+		visitor.visitCondition("address.city", ComparisonType.EQUALS);
+		visitor.visitEnd();
+		QueryRepresentation qr = visitor.getQueryRepresentation();
 
-    @Test
-    public void complexQuery() {
-        visitor.visitEntity("Person");
-        visitor.visitCondition("personname", ComparisonType.EQUALS);
-        visitor.visitConector("or");
-        visitor.visitCondition("lastName", ComparisonType.EQUALS);
-        visitor.visitConector("and");
-        visitor.visitCondition("address.city", ComparisonType.EQUALS);
-        visitor.visitEnd();
-
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        assertEquals(
-                query,
-                "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where (person.personname = 1? or person.lastname = 2?) and address.city = 3? and person.address_id = address.id ");
-    }*/
+		String query = qr.getQuery().toString();
+		assertEquals(query,"SELECT o FROM Person o WHERE o.name = :nameEquals or o.lastName = :lastNameEquals and o.address.city = :addressCityEquals");
+	}*/
 
     /*@Test
     public void differentConditionTypes() {
@@ -214,14 +207,16 @@ public class CassandraQueryVisitorTest {
     @Test
     public void fixParameterQueryWithStringValueTest() {
         visitor.visitEntity("Person");
-        visitor.visitCondition("name", ComparisonType.EQUALS, "maria");
+        visitor.visitCondition("name", ComparisonType.EQUALS, "Maria");
         visitor.visitEnd();
 
         QueryRepresentation qr = visitor.getQueryRepresentation();
         String query = qr.getQuery().toString();
 
-        String comparisonQuery = "SELECT * FROM Person WHERE name = 'maria'";
+        String comparisonQuery = "SELECT * FROM Person WHERE name = 'Maria'";
         assertEquals(comparisonQuery, query);
+        assertEquals("Maria",qr.getFixParameterValue("name"));
+        assertTrue(qr.getFixParameters().contains("name"));
     }
 
     @Test
@@ -235,42 +230,59 @@ public class CassandraQueryVisitorTest {
 
         String comparisonQuery = "SELECT * FROM Person WHERE age = 30";
         assertEquals(comparisonQuery, query);
+        assertEquals(30,qr.getFixParameterValue("age"));
+        assertTrue(qr.getFixParameters().contains("age"));
     }
 
-    /*@Test
-    public void mixedWithfixParameterQuery() {
+    @Test
+    public void fixParameterQueryWithNonFixParameterTest(){
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, "Maria");
         visitor.visitConector("and");
         visitor.visitCondition("age", ComparisonType.GREATER);
         visitor.visitEnd();
-
         QueryRepresentation qr = visitor.getQueryRepresentation();
+
         String query = qr.getQuery().toString();
-        String queryToCheck = "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where person.name = 'maria' and person.age > 2? and person.address_id = address.id";
-        assertEquals(query, queryToCheck);
-        assertEquals(visitor.getFixParameterValue("nameEQUALS"), "Maria");
-        assertTrue(visitor.getFixParameters().contains("nameEQUALS"));
+        assertEquals(query,"SELECT * FROM Person WHERE name = 'Maria' AND age > ?");
+        assertEquals("Maria",qr.getFixParameterValue("name"));
+        assertTrue(qr.getFixParameters().contains("name"));
+        assertFalse(qr.getFixParameters().contains("age"));
     }
 
-    @Test
-    public void oneOrderBy() {
+    /*@Test
+    public void mixedWithfixParameterQueryFromOtherClass(){
+        visitor.visitEntity("Person");
+        visitor.visitCondition("address.state", ComparisonType.EQUALS, "SP");
+        visitor.visitConector("and");
+        visitor.visitCondition("age", ComparisonType.GREATER);
+        visitor.visitEnd();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
 
+        String query = qr.getQuery().toString();
+        assertEquals(query,"SELECT o FROM Person o WHERE o.address.state = :addressStateEquals and o.age > :ageGreater");
+        assertEquals(qr.getFixParameterValue("addressStateEquals"), "SP");
+        assertTrue(qr.getFixParameters().contains("addressStateEquals"));
+    }*/
+
+    /*@Test
+    public void oneOrderBy(){
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitEnd();
-        String query = visitor.getQuery().trim();
-        String queryToCheck = "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where person.address_id = address.id order by age asc";
-        assertEquals(query, queryToCheck);
-    }
+        QueryRepresentation qr = visitor.getQueryRepresentation();
 
-    @Test(expected = InvalidQuerySequenceException.class)
-    public void wrongOrderBy() {
+        String query = qr.getQuery().toString();
+        assertEquals(query,"SELECT o FROM Person o ORDER BY o.age ASC");
+    }*/
+
+    /*@Test(expected=InvalidQuerySequenceException.class)
+    public void wrongOrderBy(){
         visitor.visitOrderBy("age", OrderingDirection.ASC);
     }
 
-    @Test(expected = InvalidQuerySequenceException.class)
-    public void orderByAfterConector() {
+    @Test(expected=InvalidQuerySequenceException.class)
+    public void orderByAfterConector(){
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitConector("and");
@@ -278,24 +290,24 @@ public class CassandraQueryVisitorTest {
         visitor.visitEnd();
     }
 
-    @Test(expected = InvalidQuerySequenceException.class)
-    public void entityAfterOrderBy() {
+    @Test(expected=InvalidQuerySequenceException.class)
+    public void entityAfterOrderBy(){
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitEntity("Person");
         visitor.visitEnd();
     }
 
-    @Test(expected = InvalidQuerySequenceException.class)
-    public void conditionAfterOrderBy() {
+    @Test(expected=InvalidQuerySequenceException.class)
+    public void conditionAfterOrderBy(){
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitEnd();
     }
 
-    @Test(expected = InvalidQuerySequenceException.class)
-    public void conectorAfterOrderBy() {
+    @Test(expected=InvalidQuerySequenceException.class)
+    public void conectorAfterOrderBy(){
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitConector("and");
@@ -303,20 +315,19 @@ public class CassandraQueryVisitorTest {
     }
 
     @Test
-    public void twoOrderBy() {
+    public void twoOrderBy(){
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitOrderBy("name", OrderingDirection.DESC);
         visitor.visitEnd();
         QueryRepresentation qr = visitor.getQueryRepresentation();
+
         String query = qr.getQuery().toString();
-        String queryToCompare = "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where person.address_id = address.id order by age asc , name desc";
-        assertEquals(query, queryToCompare);
+        assertEquals(query,"SELECT o FROM Person o ORDER BY o.age ASC, o.name DESC");
     }
 
     @Test
-    public void orderByWithConditions() {
-
+    public void orderByWithConditions(){
         visitor.visitEntity("Person");
         visitor.visitCondition("address.state", ComparisonType.EQUALS, "SP");
         visitor.visitConector("and");
@@ -325,9 +336,9 @@ public class CassandraQueryVisitorTest {
         visitor.visitOrderBy("name", OrderingDirection.DESC);
         visitor.visitEnd();
         QueryRepresentation qr = visitor.getQueryRepresentation();
+
         String query = qr.getQuery().toString();
-        String queryToCompare = "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where address.state = 'sp' and person.age > 2? and person.address_id = address.id order by age asc , name desc";
-        assertEquals(query, queryToCompare);
+        assertEquals(query,"SELECT o FROM Person o WHERE o.address.state = :addressStateEquals and o.age > :ageGreater ORDER BY o.age ASC, o.name DESC");
     }
 */
 
