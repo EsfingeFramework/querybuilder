@@ -6,12 +6,19 @@ public class ConditionStatement {
 
     private String propertyName;
     private ComparisonType comparisonType;
-    private String nextConnector;
+
+    private Object value = null;
+    private String nextConnector = null;
 
     public ConditionStatement(String propertyName, ComparisonType comparisonType) {
         this.propertyName = propertyName;
         this.comparisonType = comparisonType;
-        this.nextConnector = "";
+    }
+
+    public ConditionStatement(String propertyName, ComparisonType comparisonType, Object value) {
+        this.propertyName = propertyName;
+        this.comparisonType = comparisonType;
+        this.value = value;
     }
 
     public String getPropertyName() {
@@ -30,6 +37,14 @@ public class ConditionStatement {
         this.comparisonType = comparisonType;
     }
 
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
     public String getNextConnector() {
         return nextConnector;
     }
@@ -38,9 +53,20 @@ public class ConditionStatement {
         this.nextConnector = nextConnector;
     }
 
+    private String getValueRepresentation(){
+        if (value.getClass().getSimpleName().equals("String"))
+            return "'" + value + "'";
+
+        return "" + value + "";
+    }
+
     @Override
     public String toString() {
-        return propertyName + " " + comparisonType.getOperator() + " ?";
+
+
+        return propertyName + " " + comparisonType.getOperator() + " " + (value != null ? getValueRepresentation() : "?");
 
     }
+
+
 }

@@ -66,7 +66,17 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String s, ComparisonType comparisonType, Object o) {
+        if (lastCalled == QueryElement.CONDITION)
+            throw new InvalidQuerySequenceException(
+                    "A second condition can only be called after a connector.");
 
+        if (lastCalled == QueryElement.NONE)
+            throw new InvalidQuerySequenceException(
+                    "A condition can not be called as first visit.");
+
+        conditions.add(new ConditionStatement(s, comparisonType, o));
+
+        lastCalled = QueryElement.CONDITION;
     }
 
     @Override

@@ -174,7 +174,7 @@ public class CassandraQueryVisitorTest {
         testCondition(ComparisonType.LESSER_OR_EQUALS, "age",
                 "person.age <= 1?");
         testCondition(ComparisonType.NOT_EQUALS, "age", "person.age <> 1?");
-    }*/
+    }
 
     /*@Test
     public void stringConditionTypes() {
@@ -183,12 +183,12 @@ public class CassandraQueryVisitorTest {
         testCondition(ComparisonType.STARTS, "name", "person.name like 1?");
         testCondition(ComparisonType.ENDS, "name", "person.name like 1?");
 
-    }
+    }*/
 
-    public void testCondition(ComparisonType cp, String property,
+    /*public void testCondition(ComparisonType cp, String property,
                               String comparison) {
 
-        QueryVisitor visitor = new JDBCQueryVisitor();
+        QueryVisitor visitor = new CassandraQueryVisitor();
         visitor.visitEntity("Person");
         visitor.visitCondition(property, cp);
         visitor.visitEnd();
@@ -200,21 +200,29 @@ public class CassandraQueryVisitorTest {
                 + comparison + " and person.address_id = address.id";
 
         assertEquals(query.trim(), comparisonQuery.trim());
-    }
+    }*/
 
     @Test
-    public void fixParameterQuery() {
+    public void fixParameterQueryWithStringValueTest() {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, "maria");
         visitor.visitEnd();
         String query = visitor.getQuery();
-        String comparisonQuery = "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where person.name = 'maria' and person.address_id = address.id";
-        assertEquals(query, comparisonQuery);
-        assertEquals(visitor.getFixParameterValue("nameEQUALS"), "maria");
-        assertTrue(visitor.getFixParameters().contains("nameEQUALS"));
+        String comparisonQuery = "SELECT * FROM Person WHERE name = 'maria'";
+        assertEquals(comparisonQuery, query);
     }
 
     @Test
+    public void fixParameterQueryWithNonStringValueTest() {
+        visitor.visitEntity("Person");
+        visitor.visitCondition("age", ComparisonType.EQUALS, 30);
+        visitor.visitEnd();
+        String query = visitor.getQuery();
+        String comparisonQuery = "SELECT * FROM Person WHERE age = 30";
+        assertEquals(comparisonQuery, query);
+    }
+
+    /*@Test
     public void mixedWithfixParameterQuery() {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, "Maria");
