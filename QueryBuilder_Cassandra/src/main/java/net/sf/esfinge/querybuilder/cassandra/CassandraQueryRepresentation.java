@@ -7,14 +7,26 @@ import java.util.Set;
 
 public class CassandraQueryRepresentation implements QueryRepresentation {
 
+    // TODO: WHAT DOES THIS CLASS DO??? IS IT REALLY NEEDED?
+
+    private String query;
+    private boolean dynamic;
+    private Map<String, Object> fixParametersMap;
+
+    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap) {
+        this.query = query;
+        this.dynamic = dynamic;
+        this.fixParametersMap = fixParametersMap;
+    }
+
     @Override
     public boolean isDynamic() {
-        return false;
+        return dynamic;
     }
 
     @Override
     public Object getQuery() {
-        return null;
+        return query;
     }
 
     @Override
@@ -24,11 +36,11 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
 
     @Override
     public Set<String> getFixParameters() {
-        return null;
+        return fixParametersMap.keySet();
     }
 
     @Override
-    public Object getFixParameterValue(String s) {
-        return null;
+    public Object getFixParameterValue(String paramName) {
+        return fixParametersMap.get(paramName);
     }
 }

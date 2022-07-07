@@ -6,10 +6,7 @@ import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.*;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class CassandraQueryVisitor implements QueryVisitor {
 
@@ -109,7 +106,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     private String addOrderBy() {
         StringBuilder sb = new StringBuilder();
-        // TODO: IMPLEMENT
+        // TODO: ORDER BY IS NOT PROPERLY SUPPORTED BY CASSANDRA, BETTER TO IMPLEMENT ON APPLICATION LOGIC
 
         return sb.toString();
     }
@@ -138,22 +135,36 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     @Override
+    @Deprecated
     public String getQuery(Map<String, Object> map) {
-        return null;
+        throw new UnsupportedOperationException("getQuery method in CassandraQueryVisitor not supported, use CassandraQueryRepresentation instead.");
     }
 
     @Override
+    @Deprecated
     public Set<String> getFixParameters() {
-        return null;
+        throw new UnsupportedOperationException("getFixParameters method in CassandraQueryVisitor not supported, use CassandraQueryRepresentation instead.");
     }
 
     @Override
+    @Deprecated
     public Object getFixParameterValue(String s) {
-        return null;
+        throw new UnsupportedOperationException("getFixParameterValue method in CassandraQueryVisitor not supported, use CassandraQueryRepresentation instead...");
+    }
+
+    private Map<String, Object> getFixParametersMap(){
+        Map<String, Object> fixParameters = new HashMap<String, Object>();
+        for(ConditionStatement cond : conditions){
+            if(cond.getValue() != null){
+                fixParameters.put(cond.getPropertyName(), cond.getValue());
+            }
+        }
+        return fixParameters;
     }
 
     @Override
     public QueryRepresentation getQueryRepresentation() {
-        return null;
+        QueryRepresentation qr = new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap());
+        return qr;
     }
 }

@@ -1,22 +1,26 @@
 package net.sf.esfinge.querybuilder.cassandra.unit;
 
-import net.sf.esfinge.querybuilder.cassandra.CassandraQueryVisitor;
+import net.sf.esfinge.querybuilder.cassandra.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class CassandraQueryVisitorTest {
 
-    private final CassandraQueryVisitor visitor = new CassandraQueryVisitor();
+    private final QueryVisitor visitor = CassandraVisitorFactory.createQueryVisitor();
 
     @Test
     public void singleEntityTest() {
         visitor.visitEntity("Person");
         visitor.visitEnd();
-        String query = visitor.getQuery();
+
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
 
         assertEquals("SELECT * FROM Person", query);
     }
@@ -33,7 +37,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        String query = visitor.getQuery();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM Person WHERE name = ?",
@@ -48,7 +53,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("city", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        String query = visitor.getQuery();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM Person WHERE name = ? AND city = ?",
@@ -65,7 +71,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("age", ComparisonType.GREATER_OR_EQUALS);
         visitor.visitEnd();
 
-        String query = visitor.getQuery();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM Person WHERE name = ? AND city = ? OR age >= ?",
@@ -141,7 +148,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("address.city", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        String query = visitor.getQuery();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
 
         assertEquals(
                 query,
@@ -158,7 +166,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("address.city", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        String query = visitor.getQuery();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
 
         assertEquals(
                 query,
@@ -207,7 +216,10 @@ public class CassandraQueryVisitorTest {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, "maria");
         visitor.visitEnd();
-        String query = visitor.getQuery();
+
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
+
         String comparisonQuery = "SELECT * FROM Person WHERE name = 'maria'";
         assertEquals(comparisonQuery, query);
     }
@@ -217,7 +229,10 @@ public class CassandraQueryVisitorTest {
         visitor.visitEntity("Person");
         visitor.visitCondition("age", ComparisonType.EQUALS, 30);
         visitor.visitEnd();
-        String query = visitor.getQuery();
+
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
+
         String comparisonQuery = "SELECT * FROM Person WHERE age = 30";
         assertEquals(comparisonQuery, query);
     }
@@ -230,7 +245,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("age", ComparisonType.GREATER);
         visitor.visitEnd();
 
-        String query = visitor.getQuery();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
         String queryToCheck = "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where person.name = 'maria' and person.age > 2? and person.address_id = address.id";
         assertEquals(query, queryToCheck);
         assertEquals(visitor.getFixParameterValue("nameEQUALS"), "Maria");
@@ -292,7 +308,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitOrderBy("name", OrderingDirection.DESC);
         visitor.visitEnd();
-        String query = visitor.getQuery();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
         String queryToCompare = "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where person.address_id = address.id order by age asc , name desc";
         assertEquals(query, queryToCompare);
     }
@@ -307,7 +324,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitOrderBy("name", OrderingDirection.DESC);
         visitor.visitEnd();
-        String query = visitor.getQuery();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        String query = qr.getQuery().toString();
         String queryToCompare = "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where address.state = 'sp' and person.age > 2? and person.address_id = address.id order by age asc , name desc";
         assertEquals(query, queryToCompare);
     }
