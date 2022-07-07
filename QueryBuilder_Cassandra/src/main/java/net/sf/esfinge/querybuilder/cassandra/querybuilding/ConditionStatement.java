@@ -1,6 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra.querybuilding;
 
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
 public class ConditionStatement {
 
@@ -8,6 +9,8 @@ public class ConditionStatement {
     private ComparisonType comparisonType;
 
     private Object value = null;
+
+    private NullOption nullOption = NullOption.NONE;
     private String nextConnector = null;
 
     public ConditionStatement(String propertyName, ComparisonType comparisonType) {
@@ -37,6 +40,14 @@ public class ConditionStatement {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    public NullOption getNullOption() {
+        return nullOption;
+    }
+
+    public void setNullOption(NullOption nullOption) {
+        this.nullOption = nullOption;
     }
 
     public String getNextConnector() {

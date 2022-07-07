@@ -3,6 +3,7 @@ package net.sf.esfinge.querybuilder.cassandra;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedComparisonTypeException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.*;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
@@ -13,6 +14,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
 
     private final List<ConditionStatement> conditions = new ArrayList<>();
+
+    private List<OrderByClause> orderByClauses = new ArrayList<>();
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
     private String query = "";
@@ -48,7 +51,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String parameter, ComparisonType comparisonType, NullOption nullOption) {
-
+        // TODO: WHAT IS NullOption??
     }
 
     @Override
@@ -61,8 +64,12 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     @Override
-    public void visitOrderBy(String s, OrderingDirection orderingDirection) {
+    public void visitOrderBy(String parameter, OrderingDirection orderingDirection) {
+        // Cassandra only allows ORDER by in the same direction as we
+        // define in the "CLUSTERING ORDER BY" clause of CREATE TABLE.
+        // Thus, it is implemented at the application logic
 
+        orderByClauses.add(new OrderByClause(parameter,orderingDirection));
     }
 
     @Override
@@ -79,16 +86,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
             sb.append(getConditions());
         }
 
-        sb.append(addOrderBy());
-
         query = sb.toString();
-    }
-
-    private String addOrderBy() {
-        StringBuilder sb = new StringBuilder();
-        // TODO: ORDER BY IS NOT PROPERLY SUPPORTED BY CASSANDRA, BETTER TO IMPLEMENT ON APPLICATION LOGIC
-
-        return sb.toString();
     }
 
     private String getConditions() {
@@ -106,6 +104,11 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public boolean isDynamic() {
+        for(ConditionStatement cond : conditions){
+            if(cond.getNullOption() != NullOption.NONE){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -144,7 +147,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public QueryRepresentation getQueryRepresentation() {
-        QueryRepresentation qr = new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap());
+        QueryRepresentation qr = new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), orderByClauses);
         return qr;
     }
 
