@@ -108,20 +108,32 @@ public class CassandraQueryVisitorTest {
         visitor.visitEnd();
     }
 
-    /*@Test
-    public void twoConditions() {
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void connectorAsLastVisitTest() {
         visitor.visitEntity("Person");
-        visitor.visitCondition("personname", ComparisonType.EQUALS);
+        visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitConector("and");
-        visitor.visitCondition("lastName", ComparisonType.EQUALS);
         visitor.visitEnd();
-
-        String query = visitor.getQuery();
-
-        assertEquals(
-                query,
-                "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where person.personname = 1? and person.lastname = 2? and person.address_id = address.id");
     }
+
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void entityAfterConditionVisitTest() {
+        visitor.visitEntity("Person");
+        visitor.visitCondition("name", ComparisonType.EQUALS);
+        visitor.visitEntity("Person");
+        visitor.visitEnd();
+    }
+
+    @Test(expected = InvalidQuerySequenceException.class)
+    public void twoConsecutiveEntitiesTest() {
+        visitor.visitEntity("Person");
+        visitor.visitEntity("Person");
+        visitor.visitEnd();
+    }
+
+    /*
+
+     TODO: PROBLEM WITH COMPLEX QUERIES AND CASSANDRA: JOINS DO NOT EXIST, IMPLEMENT THEM AT APPLICATION LEVEL??
 
     @Test
     public void compositeCondition() {
@@ -151,32 +163,9 @@ public class CassandraQueryVisitorTest {
         assertEquals(
                 query,
                 "select person.id, person.name, person.lastname, person.age, address.id, address.city, address.state from person, address where (person.personname = 1? or person.lastname = 2?) and address.city = 3? and person.address_id = address.id ");
-    }
+    }*/
 
-    @Test(expected = InvalidQuerySequenceException.class)
-    public void finishWithConector() {
-        visitor.visitEntity("Person");
-        visitor.visitCondition("name", ComparisonType.EQUALS);
-        visitor.visitConector("and");
-        visitor.visitEnd();
-    }
-
-    @Test(expected = InvalidQuerySequenceException.class)
-    public void entityAfterStart() {
-        visitor.visitEntity("Person");
-        visitor.visitCondition("name", ComparisonType.EQUALS);
-        visitor.visitEntity("Person");
-        visitor.visitEnd();
-    }
-
-    @Test(expected = InvalidQuerySequenceException.class)
-    public void twoEntities() {
-        visitor.visitEntity("Person");
-        visitor.visitEntity("Person");
-        visitor.visitEnd();
-    }
-
-    @Test
+    /*@Test
     public void differentConditionTypes() {
         testCondition(ComparisonType.GREATER, "age", "person.age > 1?");
         testCondition(ComparisonType.GREATER_OR_EQUALS, "age",
@@ -185,9 +174,9 @@ public class CassandraQueryVisitorTest {
         testCondition(ComparisonType.LESSER_OR_EQUALS, "age",
                 "person.age <= 1?");
         testCondition(ComparisonType.NOT_EQUALS, "age", "person.age <> 1?");
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void stringConditionTypes() {
 
         testCondition(ComparisonType.CONTAINS, "name", "person.name like 1?");

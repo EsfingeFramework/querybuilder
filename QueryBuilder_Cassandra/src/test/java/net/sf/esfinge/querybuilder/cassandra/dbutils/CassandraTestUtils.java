@@ -15,8 +15,6 @@ public class CassandraTestUtils {
         session.execute(query);
 
         createTables(session);
-
-        client.close();
     }
 
     public static void createTables(Session session) {
