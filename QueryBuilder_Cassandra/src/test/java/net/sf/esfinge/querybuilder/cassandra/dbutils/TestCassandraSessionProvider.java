@@ -12,7 +12,8 @@ public class TestCassandraSessionProvider implements CassandraSessionProvider {
 
     public void connect() {
         String node = "127.0.0.1";
-        Integer port = 9042;
+        Integer port = 9142;
+
 
         Cluster.Builder b = Cluster.builder().addContactPoint(node);
 

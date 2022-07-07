@@ -6,10 +6,13 @@ import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvide
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidNumberOfReplicasException;
 import net.sf.esfinge.querybuilder.cassandra.keyspace.KeyspaceRepository;
 import net.sf.esfinge.querybuilder.cassandra.keyspace.ReplicationStrategy;
+import org.apache.thrift.transport.TTransportException;
+import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +28,10 @@ public class KeyspaceRepositoryIntegrationTest {
     private Session session;
 
     @Before
-    public void init() {
+    public void init() throws TTransportException, IOException, InterruptedException{
+        // Uncomment next line to use cassandra unit db instead of a local one
+        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
+
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
         client.connect();
 
