@@ -2,6 +2,7 @@ package net.sf.esfinge.querybuilder.cassandra.unit;
 
 import net.sf.esfinge.querybuilder.cassandra.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedComparisonTypeException;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
@@ -9,6 +10,7 @@ import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CassandraQueryVisitorTest {
 
@@ -177,14 +179,38 @@ public class CassandraQueryVisitorTest {
         testCondition(ComparisonType.NOT_EQUALS, "age", "person.age <> 1?");
     }*/
 
-    /*@Test
-    public void stringConditionTypes() {
+    @Test
+    public void unsupportedCassandraComparisonTypeNOT_EQUALSTest() {
+        assertThrows(UnsupportedComparisonTypeException.class, () -> {
+            visitor.visitEntity("Person");
+            visitor.visitCondition("name", ComparisonType.NOT_EQUALS);
+        });
+    }
 
-        testCondition(ComparisonType.CONTAINS, "name", "person.name like 1?");
-        testCondition(ComparisonType.STARTS, "name", "person.name like 1?");
-        testCondition(ComparisonType.ENDS, "name", "person.name like 1?");
+    @Test
+    public void unsupportedCassandraComparisonTypeCONTAINSTest() {
+        assertThrows(UnsupportedComparisonTypeException.class, () -> {
+            visitor.visitEntity("Person");
+            visitor.visitCondition("name", ComparisonType.CONTAINS);
+        });
+    }
 
-    }*/
+    @Test
+    public void unsupportedCassandraComparisonTypeSTARTSTest() {
+        assertThrows(UnsupportedComparisonTypeException.class, () -> {
+            visitor.visitEntity("Person");
+            visitor.visitCondition("name", ComparisonType.STARTS);
+        });
+    }
+
+    @Test
+    public void unsupportedCassandraComparisonTypeENDSTest() {
+        assertThrows(UnsupportedComparisonTypeException.class, () -> {
+            visitor.visitEntity("Person");
+            visitor.visitCondition("name", ComparisonType.ENDS);
+        });
+    }
+
 
     /*public void testCondition(ComparisonType cp, String property,
                               String comparison) {
@@ -214,7 +240,7 @@ public class CassandraQueryVisitorTest {
 
         String comparisonQuery = "SELECT * FROM Person WHERE name = 'Maria'";
         assertEquals(comparisonQuery, query);
-        assertEquals("Maria",qr.getFixParameterValue("name"));
+        assertEquals("Maria", qr.getFixParameterValue("name"));
         assertTrue(qr.getFixParameters().contains("name"));
     }
 
@@ -229,12 +255,12 @@ public class CassandraQueryVisitorTest {
 
         String comparisonQuery = "SELECT * FROM Person WHERE age = 30";
         assertEquals(comparisonQuery, query);
-        assertEquals(30,qr.getFixParameterValue("age"));
+        assertEquals(30, qr.getFixParameterValue("age"));
         assertTrue(qr.getFixParameters().contains("age"));
     }
 
     @Test
-    public void fixParameterQueryWithNonFixParameterTest(){
+    public void fixParameterQueryWithNonFixParameterTest() {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, "Maria");
         visitor.visitConector("and");
@@ -243,8 +269,8 @@ public class CassandraQueryVisitorTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
         String query = qr.getQuery().toString();
-        assertEquals(query,"SELECT * FROM Person WHERE name = 'Maria' AND age > ?");
-        assertEquals("Maria",qr.getFixParameterValue("name"));
+        assertEquals(query, "SELECT * FROM Person WHERE name = 'Maria' AND age > ?");
+        assertEquals("Maria", qr.getFixParameterValue("name"));
         assertTrue(qr.getFixParameters().contains("name"));
         assertFalse(qr.getFixParameters().contains("age"));
     }

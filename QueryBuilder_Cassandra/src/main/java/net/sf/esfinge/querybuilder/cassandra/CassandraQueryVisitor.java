@@ -38,7 +38,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
     public void visitCondition(String parameter, ComparisonType comparisonType) {
         // Cassandra supports only these conditional operators in the WHERE clause:
         // CONTAINS, CONTAINS KEY, IN, =, >, >=, <, or <=, but not all in certain situations.
-        if (comparisonType == ComparisonType.NOT_EQUALS || comparisonType == ComparisonType.STARTS || comparisonType == ComparisonType.ENDS)
+        if (comparisonType == ComparisonType.NOT_EQUALS || comparisonType == ComparisonType.STARTS || comparisonType == ComparisonType.ENDS || comparisonType == ComparisonType.CONTAINS)
             throw new UnsupportedComparisonTypeException(comparisonType + " not supported in Cassandra");
 
         conditions.add(new ConditionStatement(parameter, comparisonType));
@@ -147,4 +147,5 @@ public class CassandraQueryVisitor implements QueryVisitor {
         QueryRepresentation qr = new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap());
         return qr;
     }
+
 }
