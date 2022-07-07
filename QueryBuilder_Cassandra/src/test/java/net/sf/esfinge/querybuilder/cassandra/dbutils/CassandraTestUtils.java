@@ -9,9 +9,9 @@ import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 public class CassandraTestUtils {
 
     private static final String TABLE_NAME = "person";
-    private final String KEYSPACE_NAME = "test";
+    private static final String KEYSPACE_NAME = "test";
 
-    public void initDB() {
+    public static void initDB() {
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
         client.connect();
         Session session = client.getSession();
@@ -19,20 +19,12 @@ public class CassandraTestUtils {
 
         schemaRepository.createKeyspace(KEYSPACE_NAME, ReplicationStrategy.SimpleStrategy, 1);
 
+        createTables(session);
+
         client.close();
     }
 
-    public void clearDB() {
-        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
-        client.connect();
-        Session session = client.getSession();
-        KeyspaceRepository schemaRepository = new KeyspaceRepository(session);
-
-        schemaRepository.deleteKeyspace(KEYSPACE_NAME);
-        client.close();
-    }
-
-    public void createTables(Session session) {
+    public static void createTables(Session session) {
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(KEYSPACE_NAME + "." + TABLE_NAME)
                 .append("(")
@@ -46,7 +38,7 @@ public class CassandraTestUtils {
         session.execute(query);
     }
 
-    public void insertPerson(Person person, Session session) {
+    public static void insertPerson(Person person, Session session) {
         StringBuilder sb = new StringBuilder("INSERT INTO ")
                 .append(KEYSPACE_NAME + "." + TABLE_NAME)
                 .append("(id, name, lastname, age) ")
@@ -62,12 +54,10 @@ public class CassandraTestUtils {
         session.execute(query);
     }
 
-    public void populateDB() {
+    public static void populateTables() {
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
         client.connect();
         Session session = client.getSession();
-
-        createTables(session);
 
         Person person1 = new Person();
         person1.setId(1);
@@ -84,6 +74,30 @@ public class CassandraTestUtils {
         insertPerson(person1, session);
         insertPerson(person2, session);
 
+        client.close();
+    }
+
+    public static void cleanTables() {
+        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
+        client.connect();
+        Session session = client.getSession();
+
+        StringBuilder sb = new StringBuilder("TRUNCATE ")
+                        .append(KEYSPACE_NAME + "." + TABLE_NAME);
+
+        final String query = sb.toString();
+
+        session.execute(query);
+    }
+
+
+    public static void dropDB() {
+        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
+        client.connect();
+        Session session = client.getSession();
+        KeyspaceRepository schemaRepository = new KeyspaceRepository(session);
+
+        schemaRepository.deleteKeyspace(KEYSPACE_NAME);
         client.close();
     }
 }

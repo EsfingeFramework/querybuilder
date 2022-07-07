@@ -7,9 +7,7 @@ import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 
@@ -17,21 +15,30 @@ import static org.junit.Assert.assertEquals;
 
 public class CassandraRepositoryIntegrationTest {
 
-    CassandraTestUtils utils = new CassandraTestUtils();
     CassandraTestQuery testQuery;
     TestCassandraSessionProvider provider;
 
+    @BeforeClass
+    public static void initDB() {
+        CassandraTestUtils.initDB();
+    }
+
     @Before
-    public void init() {
-        utils.initDB();
-        utils.populateDB();
+    public void populateTables(){
+        CassandraTestUtils.populateTables();
+
         testQuery = QueryBuilder.create(CassandraTestQuery.class);
         provider = new TestCassandraSessionProvider();
     }
 
     @After
-    public void clear() {
-        utils.clearDB();
+    public void cleanTables(){
+        CassandraTestUtils.cleanTables();
+    }
+
+    @AfterClass
+    public static void dropDB() {
+        CassandraTestUtils.dropDB();
     }
 
     @Test
