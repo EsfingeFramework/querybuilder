@@ -32,7 +32,7 @@ public class CassandraTestUtils {
         client.close();
     }
 
-    public void createTable(Session session) {
+    public void createTables(Session session) {
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
                 .append(KEYSPACE_NAME + "." + TABLE_NAME)
                 .append("(")
@@ -67,7 +67,7 @@ public class CassandraTestUtils {
         client.connect();
         Session session = client.getSession();
 
-        createTable(session);
+        createTables(session);
 
         Person person1 = new Person();
         person1.setId(1);

@@ -1,5 +1,6 @@
-package net.sf.esfinge.querybuilder.cassandra;
+package net.sf.esfinge.querybuilder.cassandra.unit;
 
+import net.sf.esfinge.querybuilder.cassandra.CassandraQueryVisitor;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;

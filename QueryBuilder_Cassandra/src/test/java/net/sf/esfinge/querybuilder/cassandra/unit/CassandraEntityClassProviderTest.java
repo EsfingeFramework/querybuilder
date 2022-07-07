@@ -1,5 +1,6 @@
-package net.sf.esfinge.querybuilder.cassandra;
+package net.sf.esfinge.querybuilder.cassandra.unit;
 
+import net.sf.esfinge.querybuilder.cassandra.CassandraEntityClassProvider;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Address;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;

@@ -18,6 +18,7 @@ public class Person implements CassandraEntity {
     private String name;
     private String lastName;
     private Integer age;
+
     //private Address address;
 
     public Integer getId() {
