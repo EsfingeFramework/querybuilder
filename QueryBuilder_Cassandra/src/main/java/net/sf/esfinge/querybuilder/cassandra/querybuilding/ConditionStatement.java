@@ -15,12 +15,6 @@ public class ConditionStatement {
         this.comparisonType = comparisonType;
     }
 
-    public ConditionStatement(String propertyName, ComparisonType comparisonType, Object value) {
-        this.propertyName = propertyName;
-        this.comparisonType = comparisonType;
-        this.value = value;
-    }
-
     public String getPropertyName() {
         return propertyName;
     }

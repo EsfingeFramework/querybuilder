@@ -1,6 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedComparisonTypeException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.*;
@@ -18,10 +19,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitEntity(String s) {
-        if (lastCalled != QueryElement.NONE)
-            throw new InvalidQuerySequenceException(
-                    "Entity should only be called in the beginning.");
-
         lastCalled = QueryElement.ENTITY;
 
         this.entity = s;
@@ -29,10 +26,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitConector(String s) {
-        if (lastCalled != QueryElement.CONDITION)
-            throw new InvalidQuerySequenceException(
-                    "A connector should only be called after a condition.");
-
         if (!s.equalsIgnoreCase("AND") && !s.equalsIgnoreCase("OR"))
             throw new InvalidConnectorException("Invalid connector \"" + s + "\", valid values are: AND, OR");
 
@@ -42,36 +35,27 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     @Override
-    public void visitCondition(String s, ComparisonType comparisonType) {
-        if (lastCalled == QueryElement.CONDITION)
-            throw new InvalidQuerySequenceException(
-                    "A second condition can only be called after a connector.");
+    public void visitCondition(String parameter, ComparisonType comparisonType) {
+        // Cassandra supports only these conditional operators in the WHERE clause:
+        // CONTAINS, CONTAINS KEY, IN, =, >, >=, <, or <=, but not all in certain situations.
+        if (comparisonType == ComparisonType.NOT_EQUALS || comparisonType == ComparisonType.STARTS || comparisonType == ComparisonType.ENDS)
+            throw new UnsupportedComparisonTypeException(comparisonType + " not supported in Cassandra");
 
-        if (lastCalled == QueryElement.NONE)
-            throw new InvalidQuerySequenceException(
-                    "A condition can not be called as first visit.");
-
-        conditions.add(new ConditionStatement(s, comparisonType));
+        conditions.add(new ConditionStatement(parameter, comparisonType));
 
         lastCalled = QueryElement.CONDITION;
     }
 
     @Override
-    public void visitCondition(String s, ComparisonType comparisonType, NullOption nullOption) {
+    public void visitCondition(String parameter, ComparisonType comparisonType, NullOption nullOption) {
 
     }
 
     @Override
-    public void visitCondition(String s, ComparisonType comparisonType, Object o) {
-        if (lastCalled == QueryElement.CONDITION)
-            throw new InvalidQuerySequenceException(
-                    "A second condition can only be called after a connector.");
+    public void visitCondition(String parameter, ComparisonType comparisonType, Object o) {
+        visitCondition(parameter,comparisonType);
 
-        if (lastCalled == QueryElement.NONE)
-            throw new InvalidQuerySequenceException(
-                    "A condition can not be called as first visit.");
-
-        conditions.add(new ConditionStatement(s, comparisonType, o));
+        conditions.get(conditions.size()-1).setValue(o);
 
         lastCalled = QueryElement.CONDITION;
     }
@@ -83,10 +67,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitEnd() {
-        if (lastCalled == QueryElement.CONECTOR)
-            throw new InvalidQuerySequenceException(
-                    "A connector should not be called right before the end.");
-
         if (lastCalled == QueryElement.NONE)
             throw new InvalidQuerySequenceException(
                     "Cannot end an empty query sequence.");

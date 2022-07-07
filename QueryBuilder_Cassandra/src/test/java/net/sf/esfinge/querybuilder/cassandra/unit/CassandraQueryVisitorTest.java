@@ -4,7 +4,6 @@ import net.sf.esfinge.querybuilder.cassandra.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
-import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import org.junit.Test;
@@ -27,7 +26,7 @@ public class CassandraQueryVisitorTest {
     }
 
     @Test(expected = InvalidQuerySequenceException.class)
-    public void singleEntityWithInvalidSequenceTest() {
+    public void visitEndBeforeEntityTest() {
         visitor.visitEnd();
         visitor.visitEntity("Person");
     }
@@ -176,7 +175,7 @@ public class CassandraQueryVisitorTest {
         testCondition(ComparisonType.LESSER_OR_EQUALS, "age",
                 "person.age <= 1?");
         testCondition(ComparisonType.NOT_EQUALS, "age", "person.age <> 1?");
-    }
+    }*/
 
     /*@Test
     public void stringConditionTypes() {
