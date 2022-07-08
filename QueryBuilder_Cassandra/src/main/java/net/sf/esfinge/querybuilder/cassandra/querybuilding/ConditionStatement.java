@@ -7,9 +7,7 @@ public class ConditionStatement {
 
     private String propertyName;
     private ComparisonType comparisonType;
-
     private Object value = null;
-
     private NullOption nullOption = NullOption.NONE;
     private String nextConnector = null;
 

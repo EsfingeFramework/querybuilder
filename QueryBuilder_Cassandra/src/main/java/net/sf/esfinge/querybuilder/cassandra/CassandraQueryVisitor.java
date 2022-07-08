@@ -51,7 +51,9 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String parameter, ComparisonType comparisonType, NullOption nullOption) {
-        // TODO: WHAT IS NullOption??
+        visitCondition(parameter, comparisonType);
+
+        conditions.get(conditions.size() - 1).setNullOption(nullOption);
     }
 
     @Override
@@ -59,8 +61,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
         visitCondition(parameter, comparisonType);
 
         conditions.get(conditions.size() - 1).setValue(o);
-
-        lastCalled = QueryElement.CONDITION;
     }
 
     @Override
