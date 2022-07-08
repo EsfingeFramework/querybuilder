@@ -8,8 +8,10 @@ import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 public class CassandraDynamicQueriesTest {
 
@@ -28,28 +30,28 @@ public class CassandraDynamicQueriesTest {
 		assertEquals(query,"SELECT * FROM Person WHERE name = ?");
 	}
 
-	/*@Test
+	@Test
 	public void ignoreWhenNullQuery(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
 		visitor.visitEnd();
-		QueryRepresentation qr = visitor.getQueryRepresentation();
 
+		QueryRepresentation qr = visitor.getQueryRepresentation();
 		assertTrue("Query should be dynamic", qr.isDynamic());
 
 		Map<String,Object> params = new HashMap<String, Object>();
-		params.put("nameEquals", null);
+		params.put("name", null);
 
 		String query1 = qr.getQuery(params).toString();
-		assertEquals(query1,"SELECT o FROM Person o");
+		assertEquals("SELECT * FROM Person", query1);
 
-		params.put("nameEquals", "James");
+		params.put("name", "James");
 
 		String query2 = qr.getQuery(params).toString();
-		assertEquals(query2,"SELECT o FROM Person o WHERE o.name = :nameEquals");
+		assertEquals("SELECT * FROM Person WHERE name = 'James'", query2);
 	}
 
-	@Test
+	/*@Test
 	public void compareToNullQuery(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);

@@ -56,19 +56,32 @@ public class ConditionStatement {
         this.nextConnector = nextConnector;
     }
 
-    private String getValueRepresentation() {
+    public String getConditionRepresentation(){
+        StringBuilder sb = new StringBuilder();
+
+        // Only append if NullOption is equal to NONE, otherwise
+        // ignore condition
+        if(nullOption == NullOption.NONE){
+            sb.append(propertyName + " " + comparisonType.getOperator() + " " + getValueRepresentation());
+        }
+
+        return sb.toString();
+    }
+
+    private String getValueRepresentationByType() {
         if (value.getClass().getSimpleName().equals("String"))
             return "'" + value + "'";
 
         return "" + value + "";
     }
 
+    private String getValueRepresentation(){
+        return value != null ? getValueRepresentationByType() : "?";
+    }
+
     @Override
     public String toString() {
-
-
-        return propertyName + " " + comparisonType.getOperator() + " " + (value != null ? getValueRepresentation() : "?");
-
+        return getConditionRepresentation();
     }
 
 
