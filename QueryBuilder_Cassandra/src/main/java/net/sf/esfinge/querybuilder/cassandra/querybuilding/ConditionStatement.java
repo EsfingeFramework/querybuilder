@@ -80,14 +80,6 @@ public class ConditionStatement {
         return "" + value + "";
     }
 
-    public static boolean hasAConditionNotToBeIgnoredNext(int currentConditionIndex, List<ConditionStatement> conditions){
-        for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
-            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL)
-                return true;
-        }
-
-        return false;
-    }
     public boolean isIgnoredCondition() {
         return nullOption == NullOption.IGNORE_WHEN_NULL && value == null;
     }

@@ -58,13 +58,23 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
 
                     builder.append(statement);
 
-                    if (ConditionStatement.hasAConditionNotToBeIgnoredNext(conditions.indexOf(statement),conditions)){
+                    if (hasAConditionNotToBeIgnoredNext(conditions.indexOf(statement))){
                         builder.append(" " + statement.getNextConnector() + " ");
                     }
                 }
             }
         }
         return builder.toString();
+    }
+
+
+    public boolean hasAConditionNotToBeIgnoredNext(int currentConditionIndex){
+        for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
+            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL)
+                return true;
+        }
+
+        return false;
     }
 
     @Override
