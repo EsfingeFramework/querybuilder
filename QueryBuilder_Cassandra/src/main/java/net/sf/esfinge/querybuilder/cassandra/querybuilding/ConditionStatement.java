@@ -77,6 +77,9 @@ public class ConditionStatement {
 
         return "" + value + "";
     }
+    public boolean isIgnoredCondition() {
+        return nullOption == NullOption.IGNORE_WHEN_NULL && value == null;
+    }
 
     private String getValueRepresentation(){
         return value != null ? getValueRepresentationByType() : "?";

@@ -83,7 +83,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
         if (!conditions.isEmpty()) {
             if (hasOneNoIgnorableProperty()) {
                 sb.append(" WHERE ");
-                sb.append(getConditions());
+                sb.append(getConditionsQuery());
             }
         }
 
@@ -99,14 +99,14 @@ public class CassandraQueryVisitor implements QueryVisitor {
         return false;
     }
 
-    private String getConditions() {
+    private String getConditionsQuery() {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < conditions.size(); i++) {
             sb.append(conditions.get(i).toString());
 
             if (i < conditions.size() - 1) {
-                if (!(isIgnoredCondition(conditions.get(i)))){
+                if (!(conditions.get(i).isIgnoredCondition())){
                     if (hasAConditionNotToBeIgnoredNext(i))
                         sb.append(" " + conditions.get(i).getNextConnector() + " ");
                 }
@@ -114,10 +114,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
         }
 
         return sb.toString();
-    }
-
-    private boolean isIgnoredCondition(ConditionStatement statement) {
-        return statement.getNullOption() == NullOption.IGNORE_WHEN_NULL && statement.getValue() == null;
     }
 
     private boolean hasAConditionNotToBeIgnoredNext(int currentConditionIndex){
@@ -174,7 +170,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public QueryRepresentation getQueryRepresentation() {
-        QueryRepresentation qr = new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), conditions, orderByClauses);
+        QueryRepresentation qr = new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), conditions, orderByClauses, entity);
         return qr;
     }
 

@@ -21,12 +21,15 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
 
     private final List<OrderByClause> orderByClause;
 
-    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClause) {
+    String entity;
+
+    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClause, String entity) {
         this.query = query;
         this.dynamic = dynamic;
         this.fixParametersMap = fixParametersMap;
         this.conditions = conditions;
         this.orderByClause = orderByClause;
+        this.entity = entity;
     }
 
     @Override

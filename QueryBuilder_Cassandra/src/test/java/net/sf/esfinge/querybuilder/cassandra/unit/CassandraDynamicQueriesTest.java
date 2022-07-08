@@ -1,6 +1,5 @@
 package net.sf.esfinge.querybuilder.cassandra.unit;
 
-import net.sf.esfinge.querybuilder.cassandra.CassandraQueryVisitor;
 import net.sf.esfinge.querybuilder.cassandra.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
@@ -124,7 +123,7 @@ public class CassandraDynamicQueriesTest {
 		assertEquals("SELECT * FROM Person WHERE name = 'James'", query2);
 	}
 
-	/*@Test
+	@Test
 	public void ignoreWhenNullWithTwoConditionsTest(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
@@ -144,7 +143,7 @@ public class CassandraDynamicQueriesTest {
 		params.put("name", "James");
 		String query2 = qr.getQuery(params).toString();
 		assertEquals("SELECT * FROM Person WHERE name = 'James'", query2);
-	}*/
+	}
 
 	/*@Test
 	public void compareToNullQuery(){
