@@ -44,6 +44,46 @@ public class CassandraDynamicQueriesTest {
 	}
 
 	@Test
+	public void ignoreWhenNullFromVisitorTest(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitEnd();
+
+		QueryRepresentation qr = visitor.getQueryRepresentation();
+		String query = qr.getQuery().toString();
+
+		assertEquals(query,"SELECT * FROM Person");
+	}
+
+	@Test
+	public void ignoreWhenNullFromVisitorWithTwoConditionsTest(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitConector("AND");
+		visitor.visitCondition("age", ComparisonType.EQUALS, NullOption.NONE);
+		visitor.visitEnd();
+
+		QueryRepresentation qr = visitor.getQueryRepresentation();
+		String query = qr.getQuery().toString();
+
+		assertEquals(query,"SELECT * FROM Person WHERE age = ?");
+	}
+
+	@Test
+	public void ignoreWhenNullFromVisitorWithTwoConditionsAndLastToBeIgnoredTest(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("age", ComparisonType.EQUALS, NullOption.NONE);
+		visitor.visitConector("AND");
+		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitEnd();
+
+		QueryRepresentation qr = visitor.getQueryRepresentation();
+		String query = qr.getQuery().toString();
+
+		assertEquals(query,"SELECT * FROM Person WHERE age = ?");
+	}
+
+	@Test
 	public void ignoreWhenNullQueryTest(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
@@ -60,6 +100,28 @@ public class CassandraDynamicQueriesTest {
 
 		params.put("name", "James");
 
+		String query2 = qr.getQuery(params).toString();
+		assertEquals("SELECT * FROM Person WHERE name = 'James'", query2);
+	}
+
+	@Test
+	public void ignoreWhenNullWithTwoConditionsTest(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitConector("AND");
+		visitor.visitCondition("age", ComparisonType.EQUALS, NullOption.NONE);
+		visitor.visitEnd();
+
+		QueryRepresentation qr = visitor.getQueryRepresentation();
+		assertTrue("Query should be dynamic", qr.isDynamic());
+
+		Map<String,Object> params = new HashMap<String, Object>();
+
+		params.put("name", null);
+		String query1 = qr.getQuery(params).toString();
+		assertEquals("SELECT * FROM Person WHERE age = ?", query1);
+
+		params.put("name", "James");
 		String query2 = qr.getQuery(params).toString();
 		assertEquals("SELECT * FROM Person WHERE name = 'James'", query2);
 	}

@@ -82,7 +82,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
         sb.append("SELECT * FROM " + entity);
 
         if (!conditions.isEmpty()) {
-            if (hasOneNoIgnorableProperty()){
+            if (hasOneNoIgnorableProperty()) {
                 sb.append(" WHERE ");
                 sb.append(getConditions());
             }
@@ -91,9 +91,9 @@ public class CassandraQueryVisitor implements QueryVisitor {
         query = sb.toString();
     }
 
-    private boolean hasOneNoIgnorableProperty(){
-        for(ConditionStatement cond : conditions){
-            if(cond.getNullOption() != NullOption.IGNORE_WHEN_NULL){
+    private boolean hasOneNoIgnorableProperty() {
+        for (ConditionStatement cond : conditions) {
+            if (cond.getNullOption() != NullOption.IGNORE_WHEN_NULL) {
                 return true;
             }
         }
@@ -106,11 +106,17 @@ public class CassandraQueryVisitor implements QueryVisitor {
         for (int i = 0; i < conditions.size(); i++) {
             sb.append(conditions.get(i).toString());
 
-            if (i < conditions.size() - 1)
-                sb.append(" " + conditions.get(i).getNextConnector() + " ");
+            if (i < conditions.size() - 1) {
+                if (!(isIgnoredCondition(conditions.get(i))) && !(isIgnoredCondition(conditions.get(i + 1))))
+                    sb.append(" " + conditions.get(i).getNextConnector() + " ");
+            }
         }
 
         return sb.toString();
+    }
+
+    private boolean isIgnoredCondition(ConditionStatement statement) {
+        return statement.getNullOption() == NullOption.IGNORE_WHEN_NULL && statement.getValue() == null;
     }
 
     @Override
