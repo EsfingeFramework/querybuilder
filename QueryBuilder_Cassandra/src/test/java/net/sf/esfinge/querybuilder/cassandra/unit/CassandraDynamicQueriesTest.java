@@ -18,7 +18,7 @@ public class CassandraDynamicQueriesTest {
     private final QueryVisitor visitor = CassandraVisitorFactory.createQueryVisitor();
 
     @Test
-	public void notDynamicQuery(){
+	public void notDynamicQueryTest(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.NONE);
 		visitor.visitEnd();
@@ -31,7 +31,20 @@ public class CassandraDynamicQueriesTest {
 	}
 
 	@Test
-	public void ignoreWhenNullQuery(){
+	public void ignoreWhenNullTest(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitEnd();
+
+		QueryRepresentation qr = visitor.getQueryRepresentation();
+		assertTrue("Query should be dynamic", qr.isDynamic());
+
+		String query = qr.getQuery().toString();
+		assertEquals(query,"SELECT * FROM Person");
+	}
+
+	@Test
+	public void ignoreWhenNullQueryTest(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
 		visitor.visitEnd();

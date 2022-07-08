@@ -63,6 +63,9 @@ public class ConditionStatement {
         // ignore condition
         if(nullOption == NullOption.NONE){
             sb.append(propertyName + " " + comparisonType.getOperator() + " " + getValueRepresentation());
+        } else if (nullOption == NullOption.IGNORE_WHEN_NULL){
+            if (value != null)
+                sb.append(propertyName + " " + comparisonType.getOperator() + " " + getValueRepresentation());
         }
 
         return sb.toString();
