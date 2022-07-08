@@ -234,19 +234,16 @@ public class CassandraDynamicQueriesTest {
         String query1 = qr.getQuery(params).toString();
         assertEquals("SELECT * FROM Person", query1);
 
-        System.out.println("*** After insertion of lastName ***");
         params.put("lastName", "McLoud");
 
         String query2 = qr.getQuery(params).toString();
         assertEquals("SELECT * FROM Person WHERE lastName = 'McLoud'", query2);
 
-        System.out.println("*** After insertion of age ***");
         params.put("age", 18);
 
         String query3 = qr.getQuery(params).toString();
         assertEquals("SELECT * FROM Person WHERE age >= 18 AND lastName = 'McLoud'", query3);
 
-        System.out.println("*** After insertion of name ***");
         params.put("name", "James");
 
         String query4 = qr.getQuery(params).toString();
