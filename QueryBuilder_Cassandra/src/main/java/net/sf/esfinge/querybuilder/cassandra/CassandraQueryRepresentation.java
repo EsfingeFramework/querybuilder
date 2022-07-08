@@ -5,7 +5,6 @@ import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
-import java.sql.BatchUpdateException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,10 +16,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     private final String query;
     private final boolean dynamic;
     private final Map<String, Object> fixParametersMap;
-    private List<ConditionStatement> conditions;
-
+    private final List<ConditionStatement> conditions;
     private final List<OrderByClause> orderByClause;
-
     String entity;
 
     public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClause, String entity) {
@@ -43,14 +40,16 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     }
 
     @Override
-    public Object getQuery(Map<String, Object> map) {
+    public Object getQuery(Map<String, Object> parameters) {
+        updateConditions(parameters);
+
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT * FROM " + entity);
+        builder.append("SELECT * FROM ").append(entity);
 
         for(ConditionStatement statement : conditions){
-            if (map.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL){
+            if (parameters.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL){
 
-                statement.setValue(map.get(statement.getPropertyName()));
+                statement.setValue(parameters.get(statement.getPropertyName()));
 
                 if (!(statement.getValue() == null && statement.getNullOption() == NullOption.IGNORE_WHEN_NULL)){
                     if (!builder.toString().contains("WHERE"))
@@ -58,8 +57,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
 
                     builder.append(statement);
 
-                    if (hasAConditionNotToBeIgnoredNext(conditions.indexOf(statement))){
-                        builder.append(" " + statement.getNextConnector() + " ");
+                    if (hasConditionNotToBeIgnoredNext(conditions.indexOf(statement))){
+                        builder.append(" ").append(statement.getNextConnector()).append(" ");
                     }
                 }
             }
@@ -67,10 +66,18 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         return builder.toString();
     }
 
+    public void updateConditions(Map<String, Object> parameters){
+        for(ConditionStatement statement : conditions) {
+            if (parameters.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL) {
 
-    public boolean hasAConditionNotToBeIgnoredNext(int currentConditionIndex){
+                statement.setValue(parameters.get(statement.getPropertyName()));
+            }
+        }
+    }
+
+    private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex){
         for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
-            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL)
+            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL || conditions.get(i).getValue() != null)
                 return true;
         }
 

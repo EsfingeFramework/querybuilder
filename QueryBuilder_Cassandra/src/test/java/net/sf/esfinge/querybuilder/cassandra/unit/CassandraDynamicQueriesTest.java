@@ -179,69 +179,6 @@ public class CassandraDynamicQueriesTest {
         visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);
     }
 
-	/*@Test
-	public void twoCompareToNullQuery(){
-		visitor.visitEntity("Person");
-		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);
-		visitor.visitConector("and");
-		visitor.visitCondition("lastName", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);
-		visitor.visitEnd();
-		QueryRepresentation qr = visitor.getQueryRepresentation();
-
-		Map<String,Object> params = new HashMap<String, Object>();
-		params.put("nameEquals", null);
-		params.put("lastNameEquals", null);
-
-		String query1 = qr.getQuery(params).toString();
-		assertEquals(query1,"SELECT o FROM Person o WHERE o.name IS NULL and o.lastName IS NULL");
-
-		params.put("nameEquals", "James");
-
-		String query2 = qr.getQuery(params).toString();
-		assertEquals(query2,"SELECT o FROM Person o WHERE o.name = :nameEquals and o.lastName IS NULL");
-
-		params.put("lastNameEquals", "McLoud");
-
-		String query3 = qr.getQuery(params).toString();
-		assertEquals(query3,"SELECT o FROM Person o WHERE o.name = :nameEquals and o.lastName = :lastNameEquals");
-
-		params.put("nameEquals", null);
-
-		String query4 = qr.getQuery(params).toString();
-		assertEquals(query4,"SELECT o FROM Person o WHERE o.name IS NULL and o.lastName = :lastNameEquals");
-	}
-
-	@Test
-	public void twoIgnoreWhenNullQuery(){
-		visitor.visitEntity("Person");
-		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
-		visitor.visitConector("and");
-		visitor.visitCondition("lastName", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
-		visitor.visitEnd();
-		QueryRepresentation qr = visitor.getQueryRepresentation();
-
-		Map<String,Object> params = new HashMap<String, Object>();
-		params.put("nameEquals", null);
-		params.put("lastNameEquals", null);
-
-		String query1 = qr.getQuery(params).toString();
-		assertEquals(query1,"SELECT o FROM Person o");
-
-		params.put("nameEquals", "James");
-
-		String query2 = qr.getQuery(params).toString();
-		assertEquals(query2,"SELECT o FROM Person o WHERE o.name = :nameEquals");
-
-		params.put("lastNameEquals", "McLoud");
-
-		String query3 = qr.getQuery(params).toString();
-		assertEquals(query3,"SELECT o FROM Person o WHERE o.name = :nameEquals and o.lastName = :lastNameEquals");
-
-		params.put("nameEquals", null);
-
-		String query4 = qr.getQuery(params).toString();
-		assertEquals(query4,"SELECT o FROM Person o WHERE o.lastName = :lastNameEquals");
-	}
 
 	@Test
 	public void twoIgnoreWhenNullQueryPlusOther(){
@@ -249,34 +186,34 @@ public class CassandraDynamicQueriesTest {
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
 		visitor.visitConector("and");
 		visitor.visitCondition("age", ComparisonType.GREATER_OR_EQUALS);
-		visitor.visitConector("and");
-		visitor.visitCondition("lastName", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitConector("OR");
+		visitor.visitCondition("lastname", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
 		visitor.visitEnd();
 		QueryRepresentation qr = visitor.getQueryRepresentation();
 
 		Map<String,Object> params = new HashMap<String, Object>();
-		params.put("nameEquals", null);
-		params.put("ageGreaterOrEquals", 18);
-		params.put("lastNameEquals", null);
+		params.put("name", null);
+		params.put("age", 18);
+		params.put("lastname", null);
 
 		String query1 = qr.getQuery(params).toString();
-		assertEquals(query1,"SELECT o FROM Person o WHERE o.age >= :ageGreaterOrEquals");
+		assertEquals(query1,"SELECT * FROM Person WHERE age >= 18");
 
-		params.put("nameEquals", "James");
+		params.put("name", "James");
 
 		String query2 = qr.getQuery(params).toString();
-		assertEquals(query2,"SELECT o FROM Person o WHERE o.name = :nameEquals and o.age >= :ageGreaterOrEquals");
+		assertEquals(query2,"SELECT * FROM Person WHERE name = 'James' AND age >= 18");
 
-		params.put("lastNameEquals", "McLoud");
+		params.put("lastname", "McLoud");
 
 		String query3 = qr.getQuery(params).toString();
-		assertEquals(query3,"SELECT o FROM Person o WHERE o.name = :nameEquals and o.age >= :ageGreaterOrEquals and o.lastName = :lastNameEquals");
+		assertEquals(query3,"SELECT * FROM Person WHERE name = 'James' AND age >= 18 OR lastname = 'McLoud'");
 
-		params.put("nameEquals", null);
+		params.put("name", null);
 
 		String query4 = qr.getQuery(params).toString();
-		assertEquals(query4,"SELECT o FROM Person o WHERE o.age >= :ageGreaterOrEquals and o.lastName = :lastNameEquals");
-	}*/
+		assertEquals(query4,"SELECT * FROM Person WHERE age >= 18 OR lastname = 'McLoud'");
+	}
 
     @Test
     public void threeIgnoreWhenNullQueryTest() {
@@ -297,16 +234,19 @@ public class CassandraDynamicQueriesTest {
         String query1 = qr.getQuery(params).toString();
         assertEquals("SELECT * FROM Person", query1);
 
+        System.out.println("*** After insertion of lastName ***");
         params.put("lastName", "McLoud");
 
         String query2 = qr.getQuery(params).toString();
         assertEquals("SELECT * FROM Person WHERE lastName = 'McLoud'", query2);
 
+        System.out.println("*** After insertion of age ***");
         params.put("age", 18);
 
-        //String query3 = qr.getQuery(params).toString();
-        //assertEquals("SELECT * FROM Person WHERE age >= 18 AND lastName = 'McLoud'", query3);
+        String query3 = qr.getQuery(params).toString();
+        assertEquals("SELECT * FROM Person WHERE age >= 18 AND lastName = 'McLoud'", query3);
 
+        System.out.println("*** After insertion of name ***");
         params.put("name", "James");
 
         String query4 = qr.getQuery(params).toString();

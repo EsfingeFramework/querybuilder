@@ -83,7 +83,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
                     "Cannot end an empty query sequence.");
 
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM " + entity);
+        sb.append("SELECT * FROM ").append(entity);
 
         if (!conditions.isEmpty()) {
             if (hasOneNoIgnorableProperty()) {
@@ -112,8 +112,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
             if (i < conditions.size() - 1) {
                 if (!(conditions.get(i).isIgnoredCondition())){
-                    if (hasAConditionNotToBeIgnoredNext(i))
-                        sb.append(" " + conditions.get(i).getNextConnector() + " ");
+                    if (hasConditionNotToBeIgnoredNext(i))
+                        sb.append(" ").append(conditions.get(i).getNextConnector()).append(" ");
                 }
             }
         }
@@ -121,9 +121,9 @@ public class CassandraQueryVisitor implements QueryVisitor {
         return sb.toString();
     }
 
-    public boolean hasAConditionNotToBeIgnoredNext(int currentConditionIndex){
+    private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex){
         for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
-            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL)
+            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL || conditions.get(i).getValue() != null)
                 return true;
         }
 
@@ -164,7 +164,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     private Map<String, Object> getFixParametersMap() {
-        Map<String, Object> fixParameters = new HashMap<String, Object>();
+        Map<String, Object> fixParameters = new HashMap<>();
         for (ConditionStatement cond : conditions) {
             if (cond.getValue() != null) {
                 fixParameters.put(cond.getPropertyName(), cond.getValue());
@@ -175,8 +175,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public QueryRepresentation getQueryRepresentation() {
-        QueryRepresentation qr = new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), conditions, orderByClauses, entity);
-        return qr;
+        return new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), conditions, orderByClauses, entity);
     }
 
 }
