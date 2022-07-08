@@ -56,7 +56,7 @@ public class ConditionStatement {
         this.nextConnector = nextConnector;
     }
 
-    public String getConditionRepresentation(){
+    private String getConditionRepresentation(){
         StringBuilder sb = new StringBuilder();
 
         // Only append if NullOption is equal to NONE, otherwise

@@ -45,18 +45,34 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     @Override
     public Object getQuery(Map<String, Object> map) {
         StringBuilder builder = new StringBuilder();
-        builder.append(query);
+        builder.append("SELECT * FROM " + entity);
 
         for(ConditionStatement statement : conditions){
-            if (map.get(statement.getPropertyName()) != null){
-                if (!builder.toString().contains("WHERE"))
-                    builder.append(" WHERE ");
+            if (map.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL){
 
                 statement.setValue(map.get(statement.getPropertyName()));
-                builder.append(statement.getConditionRepresentation());
+
+                if (!(statement.getValue() == null && statement.getNullOption() == NullOption.IGNORE_WHEN_NULL)){
+                    if (!builder.toString().contains("WHERE"))
+                        builder.append(" WHERE ");
+
+                    builder.append(statement);
+
+                    if (hasAConditionNotToBeIgnoredNext(conditions.indexOf(statement)))
+                        builder.append(" " + statement.getNextConnector() + " ");
+                }
             }
         }
         return builder.toString();
+    }
+
+    private boolean hasAConditionNotToBeIgnoredNext(int currentConditionIndex){
+        for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
+            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL)
+                return true;
+        }
+
+        return false;
     }
 
     @Override

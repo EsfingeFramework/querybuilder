@@ -142,7 +142,7 @@ public class CassandraDynamicQueriesTest {
 
 		params.put("name", "James");
 		String query2 = qr.getQuery(params).toString();
-		assertEquals("SELECT * FROM Person WHERE name = 'James'", query2);
+		assertEquals("SELECT * FROM Person WHERE name = 'James' AND age = ?", query2);
 	}
 
 	/*@Test
