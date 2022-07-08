@@ -145,6 +145,35 @@ public class CassandraDynamicQueriesTest {
 		assertEquals("SELECT * FROM Person WHERE name = 'James' AND age = ?", query2);
 	}
 
+	@Test
+	public void ignoreWhenNullWithComplexConditionsTest(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitConector("AND");
+		visitor.visitCondition("age", ComparisonType.EQUALS, NullOption.NONE);
+		visitor.visitConector("OR");
+		visitor.visitCondition("city", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitConector("AND");
+		visitor.visitCondition("city", ComparisonType.EQUALS, NullOption.NONE);
+		visitor.visitEnd();
+
+		QueryRepresentation qr = visitor.getQueryRepresentation();
+		assertTrue("Query should be dynamic", qr.isDynamic());
+
+		Map<String,Object> params = new HashMap<String, Object>();
+
+		params.put("name", null);
+		String query1 = qr.getQuery(params).toString();
+		assertEquals("SELECT * FROM Person WHERE age = ? OR city = ?", query1);
+
+		params.put("name", "James");
+		params.put("age", 30);
+		String query2 = qr.getQuery(params).toString();
+		assertEquals("SELECT * FROM Person WHERE name = 'James' AND age = 30 OR city = ?", query2);
+	}
+
+	// TODO: ADD TESTS FOR INVALID NullOption
+
 	/*@Test
 	public void compareToNullQuery(){
 		visitor.visitEntity("Person");

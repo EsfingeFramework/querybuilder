@@ -50,6 +50,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String parameter, ComparisonType comparisonType, NullOption nullOption) {
+        // TODO: ADD TESTS FOR INVALID NullOption AND THROW EXCEPTION
+
         visitCondition(parameter, comparisonType);
 
         conditions.get(conditions.size() - 1).setNullOption(nullOption);
