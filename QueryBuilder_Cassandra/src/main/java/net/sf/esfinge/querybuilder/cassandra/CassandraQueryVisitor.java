@@ -82,11 +82,22 @@ public class CassandraQueryVisitor implements QueryVisitor {
         sb.append("SELECT * FROM " + entity);
 
         if (!conditions.isEmpty()) {
-            sb.append(" WHERE ");
-            sb.append(getConditions());
+            if (hasOneNoIgnorableProperty()){
+                sb.append(" WHERE ");
+                sb.append(getConditions());
+            }
         }
 
         query = sb.toString();
+    }
+
+    private boolean hasOneNoIgnorableProperty(){
+        for(ConditionStatement cond : conditions){
+            if(cond.getNullOption() != NullOption.IGNORE_WHEN_NULL){
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getConditions() {
