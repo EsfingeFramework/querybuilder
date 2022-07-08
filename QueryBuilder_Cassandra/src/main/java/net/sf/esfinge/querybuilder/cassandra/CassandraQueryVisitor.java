@@ -107,22 +107,13 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
             if (i < conditions.size() - 1) {
                 if (!(conditions.get(i).isIgnoredCondition())){
-                    if (hasAConditionNotToBeIgnoredNext(i))
+                    if (ConditionStatement.hasAConditionNotToBeIgnoredNext(i,conditions))
                         sb.append(" " + conditions.get(i).getNextConnector() + " ");
                 }
             }
         }
 
         return sb.toString();
-    }
-
-    private boolean hasAConditionNotToBeIgnoredNext(int currentConditionIndex){
-        for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
-            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL)
-                return true;
-        }
-
-        return false;
     }
 
     @Override
