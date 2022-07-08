@@ -14,7 +14,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
 
     private final List<ConditionStatement> conditions = new ArrayList<>();
-
     private final List<OrderByClause> orderByClauses = new ArrayList<>();
     private String entity;
     private QueryElement lastCalled = QueryElement.NONE;
@@ -107,8 +106,10 @@ public class CassandraQueryVisitor implements QueryVisitor {
             sb.append(conditions.get(i).toString());
 
             if (i < conditions.size() - 1) {
-                if (!(isIgnoredCondition(conditions.get(i))) && !(isIgnoredCondition(conditions.get(i + 1))))
-                    sb.append(" " + conditions.get(i).getNextConnector() + " ");
+                if (!(isIgnoredCondition(conditions.get(i)))){
+                    if (hasAConditionNotToBeIgnoredNext(i))
+                        sb.append(" " + conditions.get(i).getNextConnector() + " ");
+                }
             }
         }
 
@@ -117,6 +118,15 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     private boolean isIgnoredCondition(ConditionStatement statement) {
         return statement.getNullOption() == NullOption.IGNORE_WHEN_NULL && statement.getValue() == null;
+    }
+
+    private boolean hasAConditionNotToBeIgnoredNext(int currentConditionIndex){
+        for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
+            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL)
+                return true;
+        }
+
+        return false;
     }
 
     @Override

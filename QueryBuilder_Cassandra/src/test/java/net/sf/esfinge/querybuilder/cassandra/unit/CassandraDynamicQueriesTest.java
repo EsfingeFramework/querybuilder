@@ -50,6 +50,7 @@ public class CassandraDynamicQueriesTest {
 		visitor.visitEnd();
 
 		QueryRepresentation qr = visitor.getQueryRepresentation();
+		assertTrue("Query should be dynamic", qr.isDynamic());
 		String query = qr.getQuery().toString();
 
 		assertEquals(query,"SELECT * FROM Person");
@@ -64,6 +65,7 @@ public class CassandraDynamicQueriesTest {
 		visitor.visitEnd();
 
 		QueryRepresentation qr = visitor.getQueryRepresentation();
+		assertTrue("Query should be dynamic", qr.isDynamic());
 		String query = qr.getQuery().toString();
 
 		assertEquals(query,"SELECT * FROM Person WHERE age = ?");
@@ -78,9 +80,27 @@ public class CassandraDynamicQueriesTest {
 		visitor.visitEnd();
 
 		QueryRepresentation qr = visitor.getQueryRepresentation();
+		assertTrue("Query should be dynamic", qr.isDynamic());
 		String query = qr.getQuery().toString();
 
-		assertEquals(query,"SELECT * FROM Person WHERE age = ?");
+		assertEquals("SELECT * FROM Person WHERE age = ?", query);
+	}
+
+	@Test
+	public void ignoreWhenNullFromVisitorWithComplexConditionsToBeIgnoredTest(){
+		visitor.visitEntity("Person");
+		visitor.visitCondition("age", ComparisonType.EQUALS, NullOption.NONE);
+		visitor.visitConector("AND");
+		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+		visitor.visitConector("AND");
+		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.NONE);
+		visitor.visitEnd();
+
+		QueryRepresentation qr = visitor.getQueryRepresentation();
+		assertTrue("Query should be dynamic", qr.isDynamic());
+		String query = qr.getQuery().toString();
+
+		assertEquals(query,"SELECT * FROM Person WHERE age = ? AND name = ?");
 	}
 
 	@Test
@@ -104,7 +124,7 @@ public class CassandraDynamicQueriesTest {
 		assertEquals("SELECT * FROM Person WHERE name = 'James'", query2);
 	}
 
-	@Test
+	/*@Test
 	public void ignoreWhenNullWithTwoConditionsTest(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
@@ -124,7 +144,7 @@ public class CassandraDynamicQueriesTest {
 		params.put("name", "James");
 		String query2 = qr.getQuery(params).toString();
 		assertEquals("SELECT * FROM Person WHERE name = 'James'", query2);
-	}
+	}*/
 
 	/*@Test
 	public void compareToNullQuery(){
