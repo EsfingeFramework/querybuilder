@@ -1,7 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
-import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedComparisonTypeException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
@@ -41,7 +41,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
         // Cassandra supports only these conditional operators in the WHERE clause:
         // CONTAINS, CONTAINS KEY, IN, =, >, >=, <, or <=, but not all in certain situations.
         if (comparisonType == ComparisonType.NOT_EQUALS || comparisonType == ComparisonType.STARTS || comparisonType == ComparisonType.ENDS || comparisonType == ComparisonType.CONTAINS)
-            throw new UnsupportedComparisonTypeException(comparisonType + " not supported in Cassandra");
+            throw new UnsupportedCassandraOperationException("Comparison type " + comparisonType + " not supported in Cassandra");
 
         conditions.add(new ConditionStatement(parameter, comparisonType));
 
@@ -50,7 +50,10 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String parameter, ComparisonType comparisonType, NullOption nullOption) {
-        // TODO: ADD TESTS FOR INVALID NullOption AND THROW EXCEPTION
+        // Cassandra doesn't support querying based on null values, even for secondary indexes
+        // (like you can in a relational database)
+        if (nullOption == NullOption.COMPARE_TO_NULL)
+            throw new UnsupportedCassandraOperationException("Cassandra doesn't support querying based on null values");
 
         visitCondition(parameter, comparisonType);
 

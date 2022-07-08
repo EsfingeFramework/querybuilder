@@ -3,7 +3,7 @@ package net.sf.esfinge.querybuilder.cassandra.unit;
 import net.sf.esfinge.querybuilder.cassandra.CassandraQueryRepresentation;
 import net.sf.esfinge.querybuilder.cassandra.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
-import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedComparisonTypeException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
@@ -173,7 +173,7 @@ public class CassandraQueryVisitorTest {
 
     @Test
     public void unsupportedCassandraComparisonTypeNotEqualsTest() {
-        assertThrows(UnsupportedComparisonTypeException.class, () -> {
+        assertThrows(UnsupportedCassandraOperationException.class, () -> {
             visitor.visitEntity("Person");
             visitor.visitCondition("name", ComparisonType.NOT_EQUALS);
         });
@@ -181,7 +181,7 @@ public class CassandraQueryVisitorTest {
 
     @Test
     public void unsupportedCassandraComparisonTypeContainsTest() {
-        assertThrows(UnsupportedComparisonTypeException.class, () -> {
+        assertThrows(UnsupportedCassandraOperationException.class, () -> {
             visitor.visitEntity("Person");
             visitor.visitCondition("name", ComparisonType.CONTAINS);
         });
@@ -189,7 +189,7 @@ public class CassandraQueryVisitorTest {
 
     @Test
     public void unsupportedCassandraComparisonTypeStartsTest() {
-        assertThrows(UnsupportedComparisonTypeException.class, () -> {
+        assertThrows(UnsupportedCassandraOperationException.class, () -> {
             visitor.visitEntity("Person");
             visitor.visitCondition("name", ComparisonType.STARTS);
         });
@@ -197,7 +197,7 @@ public class CassandraQueryVisitorTest {
 
     @Test
     public void unsupportedCassandraComparisonTypeEndsTest() {
-        assertThrows(UnsupportedComparisonTypeException.class, () -> {
+        assertThrows(UnsupportedCassandraOperationException.class, () -> {
             visitor.visitEntity("Person");
             visitor.visitCondition("name", ComparisonType.ENDS);
         });

@@ -1,11 +1,13 @@
 package net.sf.esfinge.querybuilder.cassandra.unit;
 
 import net.sf.esfinge.querybuilder.cassandra.CassandraVisitorFactory;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
+import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -172,30 +174,13 @@ public class CassandraDynamicQueriesTest {
 		assertEquals("SELECT * FROM Person WHERE name = 'James' AND age = 30 OR city = ?", query2);
 	}
 
-	// TODO: ADD TESTS FOR INVALID NullOption
-
-	/*@Test
-	public void compareToNullQuery(){
+	@Test(expected = UnsupportedCassandraOperationException.class)
+	public void invalidCompareToNullQueryTest(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);
-		visitor.visitEnd();
-		QueryRepresentation qr = visitor.getQueryRepresentation();
-
-		assertTrue("Query should be dynamic", qr.isDynamic());
-
-		Map<String,Object> params = new HashMap<String, Object>();
-		params.put("nameEquals", null);
-
-		String query1 = qr.getQuery(params).toString();
-		assertEquals(query1,"SELECT o FROM Person o WHERE o.name IS NULL");
-
-		params.put("nameEquals", "James");
-
-		String query2 = qr.getQuery(params).toString();
-		assertEquals(query2,"SELECT o FROM Person o WHERE o.name = :nameEquals");
 	}
 
-	@Test
+	/*@Test
 	public void twoCompareToNullQuery(){
 		visitor.visitEntity("Person");
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);
