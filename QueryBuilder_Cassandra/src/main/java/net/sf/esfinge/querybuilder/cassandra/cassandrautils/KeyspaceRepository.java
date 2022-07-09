@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.keyspace;
+package net.sf.esfinge.querybuilder.cassandra.cassandrautils;
 
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidNumberOfReplicasException;

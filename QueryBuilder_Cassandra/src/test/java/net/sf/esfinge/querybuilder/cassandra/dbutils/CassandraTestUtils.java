@@ -2,7 +2,7 @@ package net.sf.esfinge.querybuilder.cassandra.dbutils;
 
 
 import com.datastax.driver.core.Session;
-import net.sf.esfinge.querybuilder.cassandra.keyspace.KeyspaceRepository;
+import net.sf.esfinge.querybuilder.cassandra.cassandrautils.KeyspaceRepository;
 
 public class CassandraTestUtils {
 

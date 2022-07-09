@@ -1,5 +1,9 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.mapping.Mapper;
+import com.datastax.driver.mapping.Result;
+import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
@@ -8,9 +12,12 @@ import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryType;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CassandraQueryExecutor implements QueryExecutor {
+
+
 
     @Override
     public Object executeQuery(QueryInfo queryInfo, Object[] args) {
@@ -43,8 +50,32 @@ public class CassandraQueryExecutor implements QueryExecutor {
 
         return null;
     }
+/*
+    public List<E> list() {
+        loadManager();
+
+        Mapper<E> mapper = manager.mapper(clazz);
+
+        ResultSet results = session.execute("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName());
+        Result<E> objects = mapper.map(results);
+        List<E> objectsList = new ArrayList<>();
+
+        for (E u : objects) {
+            objectsList.add(u);
+        }
+
+        return objectsList;
+    }
 
 
+    public E getById(Object id) {
+        loadManager();
+
+        Mapper<E> mapper = manager.mapper(clazz);
+
+        return mapper.get(id);
+    }
+*/
     private void printQueryInfo(QueryInfo info) {
         System.out.println("entityName: " + info.getEntityName());
         System.out.println("entityType: " + info.getEntityType().getSimpleName());
