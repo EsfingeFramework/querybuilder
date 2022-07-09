@@ -12,8 +12,16 @@ public class CassandraQueryExecutor implements QueryExecutor {
         QueryVisitor visitor = CassandraVisitorFactory.createQueryVisitor();
         queryInfo.visit(visitor);
         QueryRepresentation qr = visitor.getQueryRepresentation();
-        System.out.println(qr.getQuery().toString());
 
+        String query = qr.getQuery().toString();
+
+        System.out.println(query);
+
+        if (args != null) {
+            for (int i = 0; i < args.length; i++) {
+
+            }
+        }
 
         //System.out.println("Executing query...");
 
@@ -31,7 +39,7 @@ public class CassandraQueryExecutor implements QueryExecutor {
     }
 
 
-    private void printQueryInfo(QueryInfo info){
+    private void printQueryInfo(QueryInfo info) {
         System.out.println("entityName: " + info.getEntityName());
         System.out.println("entityType: " + info.getEntityType().getSimpleName());
         System.out.println("queryType: " + info.getQueryType().name());
