@@ -11,6 +11,8 @@ import org.junit.*;
 import java.io.IOException;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 public class CassandraQueryBuilderIntegrationTest {
 
     CassandraTestQuery testQuery;
@@ -41,23 +43,21 @@ public class CassandraQueryBuilderIntegrationTest {
         CassandraTestUtils.cleanTables();
     }*/
 
-    @Test
-    public void simpleQuery() {
+    /* METHODS THAT CAN BE TESTED
         List<Person> list = testQuery.getPerson();
         Person p = testQuery.getPersonById(2);
         p = testQuery.getPersonByNameAndLastName("Max","Power");
         list = testQuery.getPersonByLastName("Ciccio");
         list = testQuery.getPersonByAge(30);
         list = testQuery.getPersonByAgeLesser(30);
-        //list = testQuery.getPersonByLastNameNotEquals("Ciccio");
-        //list = testQuery.getPersonByName("Cic");
-        //list = testQuery.getPersonByNameEnds("cio");
-        //list = testQuery.getPersonByNameContains("ic");
-        //list = testQuery.getPersonByNameStartsAndAgeGreater("ci",30);
         list = testQuery.getPersonOrderByName();
         list = testQuery.getPersonByAgeOrderByNameDesc(30);
         list = testQuery.getPersonByAgeAndLastNameOrderByNameDesc(30,"Max");
+     */
 
+    @Test
+    public void simpleQuery() {
+        List<Person> list = testQuery.getPerson();
         //assertEquals("The list should have 2 persons", 2, list.size());
     }
 

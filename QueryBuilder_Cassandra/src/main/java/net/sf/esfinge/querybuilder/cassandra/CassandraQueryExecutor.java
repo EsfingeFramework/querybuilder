@@ -4,6 +4,8 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.Result;
 import com.datastax.driver.mapping.annotations.Table;
+import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
+import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
@@ -15,12 +17,21 @@ import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CassandraQueryExecutor implements QueryExecutor {
+public class CassandraQueryExecutor<E> implements QueryExecutor {
 
+    MappingManagerProvider provider;
+    protected Class<E> clazz;
 
+    public CassandraQueryExecutor() {
+        provider = new MappingManagerProvider();
+    }
 
     @Override
     public Object executeQuery(QueryInfo queryInfo, Object[] args) {
+        CassandraEntityClassProvider provider = new CassandraEntityClassProvider();
+        this.clazz = (Class<E>) provider.getEntityClass(queryInfo.getEntityName());
+        CassandraUtils.checkValidClassConfiguration(clazz);
+
         QueryVisitor visitor = CassandraVisitorFactory.createQueryVisitor();
         queryInfo.visit(visitor);
         QueryRepresentation qr = visitor.getQueryRepresentation();
@@ -50,13 +61,15 @@ public class CassandraQueryExecutor implements QueryExecutor {
 
         return null;
     }
-/*
-    public List<E> list() {
-        loadManager();
 
-        Mapper<E> mapper = manager.mapper(clazz);
+    public List<E> list(String query, Class<E> clazz) {
+        Mapper<E> mapper = provider.getManager().mapper(clazz);
 
-        ResultSet results = session.execute("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName());
+        String keySpace = clazz.getDeclaredAnnotation(Table.class).keyspace();
+        String queryWithKeyspace = query;
+
+
+        ResultSet results = provider.getSession().execute(queryWithKeyspace);
         Result<E> objects = mapper.map(results);
         List<E> objectsList = new ArrayList<>();
 
@@ -68,7 +81,7 @@ public class CassandraQueryExecutor implements QueryExecutor {
     }
 
 
-    public E getById(Object id) {
+   /* public E getById(Object id) {
         loadManager();
 
         Mapper<E> mapper = manager.mapper(clazz);
