@@ -8,6 +8,7 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOper
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
+import net.sf.esfinge.querybuilder.exception.WrongParamNumberException;
 import org.apache.thrift.transport.TTransportException;
 import org.junit.*;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class CassandraQueryBuilderIntegrationTest {
 
@@ -78,7 +80,7 @@ public class CassandraQueryBuilderIntegrationTest {
     @Test
     public void queryWithSingleParameterWithNoExpectedResultTest() {
         Person p = testQuery.getPersonById(5);
-        assertEquals("It should not retrieve any person", null, p);
+        assertNull("It should not retrieve any person", p);
     }
 
     @Test
@@ -136,6 +138,23 @@ public class CassandraQueryBuilderIntegrationTest {
     @Test(expected = UnsupportedCassandraOperationException.class)
     public void queryWithStringStarted(){
         List<Person> list = testQuery.getPersonByName("M");
+    }
+
+    @Test
+    public void queryWithAllParametersTest(){
+        List<Person> list = testQuery.getPersonByIdAndNameAndLastNameAndAge(1,"Homer","Simpson",48);
+        assertEquals("The list should have 1 person", 1, list.size());
+        assertEquals("The person should be Homer", "Homer", list.get(0).getName());
+    }
+
+    @Test(expected = WrongParamNumberException.class)
+    public void queryWithLessParametersThanInNamingTest(){
+        List<Person> list = testQuery.getPersonByIdAndNameAndLastName(1,"Homer");
+    }
+
+    @Test(expected = WrongParamNumberException.class)
+    public void queryWithMoreParametersThanInNamingTest(){
+        List<Person> list = testQuery.getPersonByIdAndName(1,"Homer",48);
     }
 
     /*@Test
