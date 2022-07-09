@@ -73,19 +73,12 @@ public class ConditionStatement {
         return sb.toString();
     }
 
-    private String getValueRepresentationByType() {
-        if (value.getClass().getSimpleName().equals("String"))
-            return "'" + value + "'";
-
-        return "" + value + "";
-    }
-
     public boolean isIgnoredCondition() {
         return nullOption == NullOption.IGNORE_WHEN_NULL && value == null;
     }
 
     private String getValueRepresentation(){
-        return value != null ? getValueRepresentationByType() : "?";
+        return value != null ? QueryBuildingUtilities.getValueRepresentationByType(value) : "?";
     }
 
     @Override
