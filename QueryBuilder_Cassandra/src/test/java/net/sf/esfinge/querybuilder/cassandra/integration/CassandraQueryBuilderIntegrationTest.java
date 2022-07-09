@@ -47,7 +47,6 @@ public class CassandraQueryBuilderIntegrationTest {
         Person p = testQuery.getPersonById(2);
         p = testQuery.getPersonByNameAndLastName("Max","Power");
         list = testQuery.getPersonByLastName("Ciccio");
-        list = testQuery.getPersonByNameOrLastName("Ciccio","bombo");
         list = testQuery.getPersonByAge(30);
         list = testQuery.getPersonByAgeLesser(30);
         //list = testQuery.getPersonByLastNameNotEquals("Ciccio");
@@ -57,7 +56,7 @@ public class CassandraQueryBuilderIntegrationTest {
         //list = testQuery.getPersonByNameStartsAndAgeGreater("ci",30);
         list = testQuery.getPersonOrderByName();
         list = testQuery.getPersonByAgeOrderByNameDesc(30);
-        list = testQuery.getPersonByAgeOrLastNameOrderByNameDesc(30,"Max");
+        list = testQuery.getPersonByAgeAndLastNameOrderByNameDesc(30,"Max");
 
         //assertEquals("The list should have 2 persons", 2, list.size());
     }

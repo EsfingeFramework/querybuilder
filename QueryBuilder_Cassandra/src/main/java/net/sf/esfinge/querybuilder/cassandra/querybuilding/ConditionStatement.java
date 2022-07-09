@@ -55,7 +55,7 @@ public class ConditionStatement {
     }
 
     public void setNextConnector(String nextConnector) {
-        this.nextConnector = nextConnector;
+        this.nextConnector = nextConnector.toUpperCase();
     }
 
     private String getConditionRepresentation(){

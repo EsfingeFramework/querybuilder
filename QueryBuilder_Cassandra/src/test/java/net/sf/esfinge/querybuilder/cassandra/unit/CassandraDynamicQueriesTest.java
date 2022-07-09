@@ -152,7 +152,7 @@ public class CassandraDynamicQueriesTest {
         visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
         visitor.visitConector("AND");
         visitor.visitCondition("age", ComparisonType.EQUALS, NullOption.NONE);
-        visitor.visitConector("OR");
+        visitor.visitConector("AND");
         visitor.visitCondition("city", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
         visitor.visitConector("AND");
         visitor.visitCondition("city", ComparisonType.EQUALS, NullOption.NONE);
@@ -165,12 +165,12 @@ public class CassandraDynamicQueriesTest {
 
         params.put("name", null);
         String query1 = qr.getQuery(params).toString();
-        assertEquals("SELECT * FROM Person WHERE age = ? OR city = ? ALLOW FILTERING", query1);
+        assertEquals("SELECT * FROM Person WHERE age = ? AND city = ? ALLOW FILTERING", query1);
 
         params.put("name", "James");
         params.put("age", 30);
         String query2 = qr.getQuery(params).toString();
-        assertEquals("SELECT * FROM Person WHERE name = 'James' AND age = 30 OR city = ? ALLOW FILTERING", query2);
+        assertEquals("SELECT * FROM Person WHERE name = 'James' AND age = 30 AND city = ? ALLOW FILTERING", query2);
     }
 
     @Test(expected = UnsupportedCassandraOperationException.class)
@@ -186,7 +186,7 @@ public class CassandraDynamicQueriesTest {
 		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
 		visitor.visitConector("and");
 		visitor.visitCondition("age", ComparisonType.GREATER_OR_EQUALS);
-		visitor.visitConector("OR");
+		visitor.visitConector("and");
 		visitor.visitCondition("lastname", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
 		visitor.visitEnd();
 		QueryRepresentation qr = visitor.getQueryRepresentation();
@@ -207,12 +207,12 @@ public class CassandraDynamicQueriesTest {
 		params.put("lastname", "McLoud");
 
 		String query3 = qr.getQuery(params).toString();
-		assertEquals(query3,"SELECT * FROM Person WHERE name = 'James' AND age >= 18 OR lastname = 'McLoud' ALLOW FILTERING");
+		assertEquals(query3,"SELECT * FROM Person WHERE name = 'James' AND age >= 18 AND lastname = 'McLoud' ALLOW FILTERING");
 
 		params.put("name", null);
 
 		String query4 = qr.getQuery(params).toString();
-		assertEquals(query4,"SELECT * FROM Person WHERE age >= 18 OR lastname = 'McLoud' ALLOW FILTERING");
+		assertEquals(query4,"SELECT * FROM Person WHERE age >= 18 AND lastname = 'McLoud' ALLOW FILTERING");
 	}
 
     @Test

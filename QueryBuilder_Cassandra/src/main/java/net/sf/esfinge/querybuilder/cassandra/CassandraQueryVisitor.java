@@ -27,8 +27,10 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitConector(String s) {
-        if (!s.equalsIgnoreCase("AND") && !s.equalsIgnoreCase("OR"))
-            throw new InvalidConnectorException("Invalid connector \"" + s + "\", valid values are: AND, OR");
+        // Attention! In Cassandra OR statements are not supported as in relational
+        // Databases
+        if (!s.equalsIgnoreCase("AND"))
+            throw new InvalidConnectorException("Invalid connector \"" + s + "\", valid values are: {'AND','and'}");
 
         conditions.get(conditions.size() - 1).setNextConnector(s.toUpperCase());
 

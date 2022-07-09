@@ -72,7 +72,7 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitConector("AND");
         visitor.visitCondition("city", ComparisonType.EQUALS);
-        visitor.visitConector("OR");
+        visitor.visitConector("AND");
         visitor.visitCondition("age", ComparisonType.GREATER_OR_EQUALS);
         visitor.visitEnd();
 
@@ -80,7 +80,7 @@ public class CassandraQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(
-                "SELECT * FROM Person WHERE name = ? AND city = ? OR age >= ? ALLOW FILTERING",
+                "SELECT * FROM Person WHERE name = ? AND city = ? AND age >= ? ALLOW FILTERING",
                 query);
     }
 
