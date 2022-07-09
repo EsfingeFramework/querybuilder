@@ -45,6 +45,7 @@ public class CassandraQueryBuilderIntegrationTest {
     public void simpleQuery() {
         List<Person> list = testQuery.getPerson();
         Person p = testQuery.getPersonById(2);
+        p = testQuery.getPersonByNameAndLastName("Max","Power");
         //assertEquals("The list should have 2 persons", 2, list.size());
     }
 

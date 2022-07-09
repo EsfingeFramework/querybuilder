@@ -11,12 +11,13 @@ public class CassandraQueryExecutor implements QueryExecutor {
 
         printQueryInfo(queryInfo);
 
-        System.out.println(queryInfo);
-
+        System.out.print("Args: ");
         if (args != null) {
             for (Object o : args)
-                System.out.println(o);
+                System.out.print(o + " ");
         }
+        System.out.println();
+        System.out.println("END OF QUERY");
 
         return null;
     }
@@ -40,6 +41,12 @@ public class CassandraQueryExecutor implements QueryExecutor {
         System.out.print("ParameterFormatters: ");
         info.getCondition().getParameterFormatters().forEach(n -> System.out.print(n + " "));
         System.out.println();
+
+        System.out.print("MethodParameterProps: ");
+        info.getCondition().getMethodParameterProps().forEach(n -> System.out.print(n + " "));
+        System.out.println();
+
+        System.out.println("***************************************************************");
 
         System.out.println("QueryStyle: " + info.getQueryStyle().name());
     }

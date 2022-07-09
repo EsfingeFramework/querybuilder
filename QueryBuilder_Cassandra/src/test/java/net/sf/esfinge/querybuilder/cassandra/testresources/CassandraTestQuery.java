@@ -7,9 +7,10 @@ import net.sf.esfinge.querybuilder.annotation.Starts;
 import java.util.List;
 
 public interface CassandraTestQuery extends Repository<Person> {
+
     List<Person> getPerson();
 
-    Person getPersonById(Integer id);
+    Person getPersonById(@Greater Integer id);
 
     List<Person> getPersonByLastName(String lastname);
 
