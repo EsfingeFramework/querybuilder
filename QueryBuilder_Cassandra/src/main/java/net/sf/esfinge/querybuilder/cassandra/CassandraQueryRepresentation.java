@@ -42,7 +42,7 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         updateConditions(parameters);
 
         StringBuilder builder = new StringBuilder();
-        builder.append("SELECT * FROM ").append(entity);
+        builder.append("SELECT * FROM <#keyspace-name#>.").append(entity);
 
         for(ConditionStatement statement : conditions){
             if (parameters.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL){

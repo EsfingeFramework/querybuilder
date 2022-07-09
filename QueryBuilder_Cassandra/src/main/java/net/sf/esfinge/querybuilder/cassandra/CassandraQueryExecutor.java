@@ -20,7 +20,7 @@ import java.util.List;
 public class CassandraQueryExecutor<E> implements QueryExecutor {
 
     MappingManagerProvider provider;
-    protected Class<E> clazz;
+    private Class<E> clazz;
 
     public CassandraQueryExecutor() {
         provider = new MappingManagerProvider();
