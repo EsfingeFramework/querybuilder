@@ -11,8 +11,6 @@ import java.util.Set;
 
 public class CassandraQueryRepresentation implements QueryRepresentation {
 
-    // TODO: WHAT DOES THIS CLASS DO??? IS IT REALLY NEEDED?
-
     private final String query;
     private final boolean dynamic;
     private final Map<String, Object> fixParametersMap;

@@ -12,7 +12,6 @@ import java.util.*;
 
 public class CassandraQueryVisitor implements QueryVisitor {
 
-
     private final List<ConditionStatement> conditions = new ArrayList<>();
     private final List<OrderByClause> orderByClauses = new ArrayList<>();
     private String entity;

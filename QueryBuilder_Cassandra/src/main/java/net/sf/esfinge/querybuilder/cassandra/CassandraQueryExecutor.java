@@ -2,14 +2,22 @@ package net.sf.esfinge.querybuilder.cassandra;
 
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
 public class CassandraQueryExecutor implements QueryExecutor {
 
     @Override
     public Object executeQuery(QueryInfo queryInfo, Object[] args) {
-        System.out.println("Executing query...");
+        QueryVisitor visitor = CassandraVisitorFactory.createQueryVisitor();
+        queryInfo.visit(visitor);
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        System.out.println(qr.getQuery().toString());
 
-        printQueryInfo(queryInfo);
+
+        //System.out.println("Executing query...");
+
+        //printQueryInfo(queryInfo);
 
         System.out.print("Args: ");
         if (args != null) {
@@ -17,7 +25,7 @@ public class CassandraQueryExecutor implements QueryExecutor {
                 System.out.print(o + " ");
         }
         System.out.println();
-        System.out.println("END OF QUERY");
+        //System.out.println("END OF QUERY");
 
         return null;
     }
