@@ -1,5 +1,6 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
@@ -15,13 +16,11 @@ public class CassandraQueryExecutor implements QueryExecutor {
 
         String query = qr.getQuery().toString();
 
-        System.out.println(query);
-
         if (args != null) {
-            for (int i = 0; i < args.length; i++) {
-
-            }
+            query = QueryBuildingUtilities.replaceQueryArgs(query,args);
         }
+
+        System.out.println(query);
 
         //System.out.println("Executing query...");
 
