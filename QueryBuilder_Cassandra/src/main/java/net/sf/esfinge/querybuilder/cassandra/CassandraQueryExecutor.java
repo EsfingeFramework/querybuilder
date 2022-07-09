@@ -6,6 +6,7 @@ import com.datastax.driver.mapping.Result;
 import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
@@ -38,38 +39,33 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
 
         String query = qr.getQuery().toString();
 
-        if (args != null) {
+        if (args != null)
             query = QueryBuildingUtilities.replaceQueryArgs(query,args);
-        }
 
         System.out.println(query);
 
-        System.out.print("Args: ");
-        if (args != null) {
-            for (Object o : args)
-                System.out.print(o + " ");
-        }
-        System.out.println();
+        List<E> results = getQueryResults(query);
 
-        if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE){
-            // return single object
-        } else {
-            // return list of objects
-        }
+        if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE && results.size() > 1)
+            throw new WrongTypeOfExpectedResultException("The query " + query + " resulted in " + results.size() + "results");
 
         List<OrderByClause> orderByClause = ((CassandraQueryRepresentation)qr).getOrderByClause();
+        // TODO: IMPLEMENT ORDER BY AT APPLICATION LEVEL
 
-        return null;
+        if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE){
+            if (results.size() > 0)
+                return results.get(0);
+            else
+                return null;
+        }
+
+        return results;
     }
 
-    public List<E> list(String query, Class<E> clazz) {
+    public List<E> getQueryResults(String query) {
         Mapper<E> mapper = provider.getManager().mapper(clazz);
 
-        String keySpace = clazz.getDeclaredAnnotation(Table.class).keyspace();
-        String queryWithKeyspace = query;
-
-
-        ResultSet results = provider.getSession().execute(queryWithKeyspace);
+        ResultSet results = provider.getSession().execute(getQueryStringWithKeySpaceName(query));
         Result<E> objects = mapper.map(results);
         List<E> objectsList = new ArrayList<>();
 
@@ -80,40 +76,8 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         return objectsList;
     }
 
-
-   /* public E getById(Object id) {
-        loadManager();
-
-        Mapper<E> mapper = manager.mapper(clazz);
-
-        return mapper.get(id);
+    private String getQueryStringWithKeySpaceName(String query){
+        return query.replace("<#keyspace-name#>",clazz.getDeclaredAnnotation(Table.class).keyspace());
     }
-*/
-    private void printQueryInfo(QueryInfo info) {
-        System.out.println("entityName: " + info.getEntityName());
-        System.out.println("entityType: " + info.getEntityType().getSimpleName());
-        System.out.println("queryType: " + info.getQueryType().name());
-        System.out.println("*** QueryCondition ***");
-        System.out.println("ParameterSize: " + info.getCondition().getParameterSize());
 
-        System.out.print("ParameterNames: ");
-        info.getCondition().getParameterNames().forEach(n -> System.out.print(n + " "));
-        System.out.println();
-
-        System.out.print("MethodParameterNames: ");
-        info.getCondition().getMethodParameterNames().forEach(n -> System.out.print(n + " "));
-        System.out.println();
-
-        System.out.print("ParameterFormatters: ");
-        info.getCondition().getParameterFormatters().forEach(n -> System.out.print(n + " "));
-        System.out.println();
-
-        System.out.print("MethodParameterProps: ");
-        info.getCondition().getMethodParameterProps().forEach(n -> System.out.print(n + " "));
-        System.out.println();
-
-        System.out.println("***************************************************************");
-
-        System.out.println("QueryStyle: " + info.getQueryStyle().name());
-    }
 }

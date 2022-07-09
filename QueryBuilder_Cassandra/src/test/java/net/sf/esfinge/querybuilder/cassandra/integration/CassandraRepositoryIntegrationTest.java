@@ -48,7 +48,7 @@ public class CassandraRepositoryIntegrationTest {
     @Test
     public void saveTest() {
         Person expected = new Person();
-        expected.setId(3);
+        expected.setId(4);
         expected.setName("testname");
         expected.setLastName("testlastname");
         expected.setAge(30);
@@ -58,7 +58,7 @@ public class CassandraRepositoryIntegrationTest {
         MappingManager manager = new MappingManager(provider.getSession());
         Mapper<Person> mapper = manager.mapper(Person.class);
 
-        Person actual = mapper.get(3);
+        Person actual = mapper.get(4);
 
         assertEquals("New Person should be added to the persons", expected, actual);
     }
@@ -78,18 +78,18 @@ public class CassandraRepositoryIntegrationTest {
     @Test
     public void listTest() {
         List<Person> list = testQuery.list();
-        assertEquals("The list should have 2 persons", 2, list.size());
+        assertEquals("The list should have 3 persons", 3, list.size());
     }
 
     @Test
     public void getByIdTest() {
         Person expected = new Person();
-        expected.setId(2);
+        expected.setId(3);
         expected.setName("Max");
         expected.setLastName("Power");
-        expected.setAge(50);
+        expected.setAge(48);
 
-        Person actual = testQuery.getById(2);
+        Person actual = testQuery.getById(3);
 
         assertEquals("Should retrieve person Max Power", expected, actual);
     }
@@ -108,7 +108,7 @@ public class CassandraRepositoryIntegrationTest {
     public void queryByTwoExamplesTest() {
         Person example = new Person();
         example.setName("Max");
-        example.setAge(50);
+        example.setAge(48);
 
         List<Person> list = testQuery.queryByExample(example);
 

@@ -9,7 +9,8 @@ import java.util.List;
 public interface CassandraTestQuery extends Repository<Person> {
 
     List<Person> getPerson();
-    Person getPersonById(@Greater Integer id);
+    Person getPersonById(Integer id);
+    Person getPersonByIdGreater(Integer id);
     List<Person> getPersonByLastName(String lastname);
     Person getPersonByNameAndLastName(String name, String lastname);
     List<Person> getPersonByAge(@Greater Integer age);

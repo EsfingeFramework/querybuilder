@@ -3,6 +3,7 @@ package net.sf.esfinge.querybuilder.cassandra.integration;
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.apache.thrift.transport.TTransportException;
@@ -25,10 +26,10 @@ public class CassandraQueryBuilderIntegrationTest {
         CassandraTestUtils.initDB();
     }
 
-    /*@AfterClass
+    @AfterClass
     public static void dropDB() {
         CassandraTestUtils.dropDB();
-    }*/
+    }
 
     @Before
     public void populateTables() {
@@ -38,14 +39,12 @@ public class CassandraQueryBuilderIntegrationTest {
         provider = new TestCassandraSessionProvider();
     }
 
-    /*@After
+    @After
     public void cleanTables() {
         CassandraTestUtils.cleanTables();
-    }*/
+    }
 
     /* METHODS THAT CAN BE TESTED
-        List<Person> list = testQuery.getPerson();
-        Person p = testQuery.getPersonById(2);
         p = testQuery.getPersonByNameAndLastName("Max","Power");
         list = testQuery.getPersonByLastName("Ciccio");
         list = testQuery.getPersonByAge(30);
@@ -56,26 +55,43 @@ public class CassandraQueryBuilderIntegrationTest {
      */
 
     @Test
-    public void simpleQuery() {
+    public void selectAllQueryTest() {
         List<Person> list = testQuery.getPerson();
-        //assertEquals("The list should have 2 persons", 2, list.size());
-    }
-
-    /*@Test
-    public void simpleParameterQuery() {
-        //Person p = testQuery.getPersonById(2);
-        //assertEquals("It should get Marcus", "Marcos", p.getName());
-    }
-
-    /*@Test
-    public void listParameterQuery(){
-        List<Person> list = tq.getPersonByLastName("Silva");
-        assertEquals("The list should have 2 persons", 2, list.size());
-        assertEquals("The first should be Pedro", "Pedro", list.get(0).getName());
-        assertEquals("The second should be Marcos", "Marcos", list.get(1).getName());
+        assertEquals("The list should have 3 persons", 3, list.size());
     }
 
     @Test
+    public void queryWithSingleParameterTest() {
+        Person p = testQuery.getPersonById(1);
+        assertEquals("It should get Homer", "Homer", p.getName());
+    }
+
+    @Test
+    public void queryWithSingleParameterGreaterThanTest() {
+        Person p = testQuery.getPersonByIdGreater(2);
+        assertEquals("It should get Max", "Max", p.getName());
+    }
+
+    @Test(expected = WrongTypeOfExpectedResultException.class)
+    public void queryWithWrongTypeOfExpectedResultTest() {
+        Person p = testQuery.getPersonByIdGreater(0);
+    }
+
+    @Test
+    public void queryWithSingleParameterWithNoExpectedResultTest() {
+        Person p = testQuery.getPersonById(5);
+        assertEquals("It should not retrieve any person", null, p);
+    }
+
+    @Test
+    public void listParameterQuery(){
+        List<Person> list = testQuery.getPersonByLastName("Simpson");
+        assertEquals("The list should have 2 persons", 2, list.size());
+        assertEquals("The first should be Max", "Homer", list.get(0).getName());
+        assertEquals("The second should be Homer", "Bart", list.get(1).getName());
+    }
+
+    /*@Test
     public void queryWithTwoAndParameters(){
         Person p = tq.getPersonByNameAndLastName("Pedro","Silva");
         assertEquals("It should get Pedro with id=1", new Integer(1), p.getId());
