@@ -16,24 +16,24 @@ public class CassandraQueryBuilderIntegrationTest {
     CassandraTestQuery testQuery;
     TestCassandraSessionProvider provider;
 
-    /*@BeforeClass
+    @BeforeClass
     public static void initDB() throws TTransportException, IOException, InterruptedException {
         // Uncomment next line to use cassandra unit db instead of a local one
         // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
         CassandraTestUtils.initDB();
     }
 
-    @AfterClass
+    /*@AfterClass
     public static void dropDB() {
         CassandraTestUtils.dropDB();
     }*/
 
     @Before
     public void populateTables() {
-        //CassandraTestUtils.populateTables();
+        CassandraTestUtils.populateTables();
 
         testQuery = QueryBuilder.create(CassandraTestQuery.class);
-        //provider = new TestCassandraSessionProvider();
+        provider = new TestCassandraSessionProvider();
     }
 
     /*@After

@@ -81,17 +81,17 @@ public class CassandraQueryVisitor implements QueryVisitor {
             throw new InvalidQuerySequenceException(
                     "Cannot end an empty query sequence.");
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM ").append(entity);
+        StringBuilder builder = new StringBuilder();
+        builder.append("SELECT * FROM ").append(entity);
 
         if (!conditions.isEmpty()) {
             if (hasOneNoIgnorableProperty()) {
-                sb.append(" WHERE ");
-                sb.append(getConditionsQuery());
+                builder.append(" WHERE ");
+                builder.append(getConditionsQuery());
             }
         }
 
-        query = sb.toString();
+        query = builder + (builder.toString().contains("WHERE") ? " ALLOW FILTERING" : "");
     }
 
     private boolean hasOneNoIgnorableProperty() {

@@ -61,7 +61,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
                 }
             }
         }
-        return builder.toString();
+
+        return builder + (builder.toString().contains("WHERE") ? " ALLOW FILTERING" : "");
     }
 
     public void updateConditions(Map<String, Object> parameters){

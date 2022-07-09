@@ -46,7 +46,7 @@ public class CassandraQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(
-                "SELECT * FROM Person WHERE name = ?",
+                "SELECT * FROM Person WHERE name = ? ALLOW FILTERING",
                 query);
     }
 
@@ -62,7 +62,7 @@ public class CassandraQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(
-                "SELECT * FROM Person WHERE name = ? AND city = ?",
+                "SELECT * FROM Person WHERE name = ? AND city = ? ALLOW FILTERING",
                 query);
     }
 
@@ -80,7 +80,7 @@ public class CassandraQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(
-                "SELECT * FROM Person WHERE name = ? AND city = ? OR age >= ?",
+                "SELECT * FROM Person WHERE name = ? AND city = ? OR age >= ? ALLOW FILTERING",
                 query);
     }
 
@@ -212,7 +212,7 @@ public class CassandraQueryVisitorTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
         String query = qr.getQuery().toString();
 
-        String comparisonQuery = "SELECT * FROM Person WHERE name = 'Maria'";
+        String comparisonQuery = "SELECT * FROM Person WHERE name = 'Maria' ALLOW FILTERING";
         assertEquals(comparisonQuery, query);
         assertEquals("Maria", qr.getFixParameterValue("name"));
         assertTrue(qr.getFixParameters().contains("name"));
@@ -227,7 +227,7 @@ public class CassandraQueryVisitorTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
         String query = qr.getQuery().toString();
 
-        String comparisonQuery = "SELECT * FROM Person WHERE age = 30";
+        String comparisonQuery = "SELECT * FROM Person WHERE age = 30 ALLOW FILTERING";
         assertEquals(comparisonQuery, query);
         assertEquals(30, qr.getFixParameterValue("age"));
         assertTrue(qr.getFixParameters().contains("age"));
@@ -243,7 +243,7 @@ public class CassandraQueryVisitorTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
         String query = qr.getQuery().toString();
-        assertEquals(query, "SELECT * FROM Person WHERE name = 'Maria' AND age > ?");
+        assertEquals(query, "SELECT * FROM Person WHERE name = 'Maria' AND age > ? ALLOW FILTERING");
         assertEquals("Maria", qr.getFixParameterValue("name"));
         assertTrue(qr.getFixParameters().contains("name"));
         assertFalse(qr.getFixParameters().contains("age"));

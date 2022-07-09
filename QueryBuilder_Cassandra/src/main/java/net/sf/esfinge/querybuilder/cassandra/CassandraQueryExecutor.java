@@ -1,10 +1,14 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryType;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+
+import java.util.List;
 
 public class CassandraQueryExecutor implements QueryExecutor {
 
@@ -22,17 +26,20 @@ public class CassandraQueryExecutor implements QueryExecutor {
 
         System.out.println(query);
 
-        //System.out.println("Executing query...");
-
-        //printQueryInfo(queryInfo);
-
         System.out.print("Args: ");
         if (args != null) {
             for (Object o : args)
                 System.out.print(o + " ");
         }
         System.out.println();
-        //System.out.println("END OF QUERY");
+
+        if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE){
+            // return single object
+        } else {
+            // return list of objects
+        }
+
+        List<OrderByClause> orderByClause = ((CassandraQueryRepresentation)qr).getOrderByClause();
 
         return null;
     }
@@ -65,13 +72,4 @@ public class CassandraQueryExecutor implements QueryExecutor {
 
         System.out.println("QueryStyle: " + info.getQueryStyle().name());
     }
-
-    /*
-    private String entityName;
-	private Class entityType;
-	private QueryType queryType;
-	private QueryCondition condition = new NullCondition();
-	private List<QueryOrder> order = new ArrayList<QueryOrder>();
-	private QueryStyle queryStyle;
-     */
 }
