@@ -1,36 +1,54 @@
 package net.sf.esfinge.querybuilder.cassandra.integration;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
+import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
+import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
-import org.junit.Before;
-import org.junit.Test;
+import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
+import org.apache.thrift.transport.TTransportException;
+import org.junit.*;
+
+import java.io.IOException;
+import java.util.List;
 
 public class CassandraQueryBuilderIntegrationTest {
 
-    //CassandraTestUtils utils = new CassandraTestUtils();
     CassandraTestQuery testQuery;
-    //TestCassandraSessionProvider provider;
+    TestCassandraSessionProvider provider;
+
+    /*@BeforeClass
+    public static void initDB() throws TTransportException, IOException, InterruptedException {
+        // Uncomment next line to use cassandra unit db instead of a local one
+        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
+        CassandraTestUtils.initDB();
+    }
+
+    @AfterClass
+    public static void dropDB() {
+        CassandraTestUtils.dropDB();
+    }*/
 
     @Before
-    public void init() {
-        //utils.initDB();
-        //utils.populateDB();
+    public void populateTables() {
+        //CassandraTestUtils.populateTables();
+
         testQuery = QueryBuilder.create(CassandraTestQuery.class);
-        // provider = new TestCassandraSessionProvider();
+        //provider = new TestCassandraSessionProvider();
     }
 
     /*@After
-    public void clear() {
-        utils.clearDB();
+    public void cleanTables() {
+        CassandraTestUtils.cleanTables();
     }*/
 
     @Test
     public void simpleQuery() {
-        //List<Person> list = testQuery.getPerson();
+        List<Person> list = testQuery.getPerson();
+        Person p = testQuery.getPersonById(2);
         //assertEquals("The list should have 2 persons", 2, list.size());
     }
 
-    @Test
+    /*@Test
     public void simpleParameterQuery() {
         //Person p = testQuery.getPersonById(2);
         //assertEquals("It should get Marcus", "Marcos", p.getName());

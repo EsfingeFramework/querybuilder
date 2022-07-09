@@ -6,16 +6,50 @@ import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
 public class CassandraQueryExecutor implements QueryExecutor {
 
     @Override
-    public Object executeQuery(QueryInfo queryInfo, Object[] objects) {
+    public Object executeQuery(QueryInfo queryInfo, Object[] args) {
         System.out.println("Executing query...");
 
-        System.out.println("Query info");
-        System.out.println(queryInfo.getEntityName());
-        System.out.println(queryInfo.getQueryType().name());
+        printQueryInfo(queryInfo);
 
-        for (Object o : objects)
-            System.out.println(o);
+        System.out.println(queryInfo);
+
+        if (args != null) {
+            for (Object o : args)
+                System.out.println(o);
+        }
 
         return null;
     }
+
+
+    private void printQueryInfo(QueryInfo info){
+        System.out.println("entityName: " + info.getEntityName());
+        System.out.println("entityType: " + info.getEntityType().getSimpleName());
+        System.out.println("queryType: " + info.getQueryType().name());
+        System.out.println("*** QueryCondition ***");
+        System.out.println("ParameterSize: " + info.getCondition().getParameterSize());
+
+        System.out.print("ParameterNames: ");
+        info.getCondition().getParameterNames().forEach(n -> System.out.print(n + " "));
+        System.out.println();
+
+        System.out.print("MethodParameterNames: ");
+        info.getCondition().getMethodParameterNames().forEach(n -> System.out.print(n + " "));
+        System.out.println();
+
+        System.out.print("ParameterFormatters: ");
+        info.getCondition().getParameterFormatters().forEach(n -> System.out.print(n + " "));
+        System.out.println();
+
+        System.out.println("QueryStyle: " + info.getQueryStyle().name());
+    }
+
+    /*
+    private String entityName;
+	private Class entityType;
+	private QueryType queryType;
+	private QueryCondition condition = new NullCondition();
+	private List<QueryOrder> order = new ArrayList<QueryOrder>();
+	private QueryStyle queryStyle;
+     */
 }
