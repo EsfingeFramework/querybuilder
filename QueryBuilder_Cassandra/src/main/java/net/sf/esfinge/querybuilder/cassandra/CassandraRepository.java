@@ -1,21 +1,15 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
 import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
-import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.Repository;
-import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraMappingManagerProvider;
-import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingAnnotationException;
-import net.sf.esfinge.querybuilder.cassandra.exceptions.MissingKeySpaceNameException;
+import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
+import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.NotEnoughExamplesException;
 import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
-import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +17,10 @@ import java.util.List;
 public class CassandraRepository<E> implements Repository<E> {
 
     protected Class<E> clazz;
-    CassandraMappingManagerProvider provider;
+    MappingManagerProvider provider;
 
     public CassandraRepository() {
-        provider = new CassandraMappingManagerProvider();
+        provider = new MappingManagerProvider();
     }
 
     @Override
@@ -113,28 +107,8 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public void configureClass(Class<E> aClass) {
-        checkValidClassConfiguration(aClass);
+        CassandraUtils.checkValidClassConfiguration(aClass);
         this.clazz = aClass;
     }
 
-    private void checkValidClassConfiguration(Class<E> aClass) {
-        if (!aClass.isAnnotationPresent(Table.class))
-            throw new MissingAnnotationException("@Table annotation missing from class " + aClass.getSimpleName());
-
-        Field[] classFields = aClass.getDeclaredFields();
-        boolean partitionAnnotationFound = false;
-
-        for (Field f : classFields) {
-            if (f.isAnnotationPresent(PartitionKey.class)) {
-                partitionAnnotationFound = true;
-                break;
-            }
-        }
-
-        if (!partitionAnnotationFound)
-            throw new MissingAnnotationException("The @PartitionKey annotation needs to be assigned to a field " + aClass.getSimpleName());
-
-        if (aClass.getDeclaredAnnotation(Table.class).keyspace().equals(""))
-            throw new MissingKeySpaceNameException("Missing keyspace value from class " + aClass.getSimpleName());
-    }
 }

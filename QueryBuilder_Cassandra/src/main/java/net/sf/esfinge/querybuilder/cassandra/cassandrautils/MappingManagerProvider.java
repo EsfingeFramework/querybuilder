@@ -5,13 +5,13 @@ import com.datastax.driver.mapping.MappingManager;
 import net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 
-public class CassandraMappingManagerProvider {
+public class MappingManagerProvider {
 
     private final CassandraSessionProvider client;
     private Session session;
     private MappingManager manager;
 
-    public CassandraMappingManagerProvider() {
+    public MappingManagerProvider() {
         this.client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
     }
 
