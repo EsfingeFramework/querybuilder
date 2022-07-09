@@ -3,6 +3,8 @@ package net.sf.esfinge.querybuilder.cassandra.integration;
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
@@ -45,10 +47,6 @@ public class CassandraQueryBuilderIntegrationTest {
     }
 
     /* METHODS THAT CAN BE TESTED
-        p = testQuery.getPersonByNameAndLastName("Max","Power");
-        list = testQuery.getPersonByLastName("Ciccio");
-        list = testQuery.getPersonByAge(30);
-        list = testQuery.getPersonByAgeLesser(30);
         list = testQuery.getPersonOrderByName();
         list = testQuery.getPersonByAgeOrderByNameDesc(30);
         list = testQuery.getPersonByAgeAndLastNameOrderByNameDesc(30,"Max");
@@ -84,26 +82,25 @@ public class CassandraQueryBuilderIntegrationTest {
     }
 
     @Test
-    public void listParameterQuery(){
+    public void listParameterQueryTest(){
         List<Person> list = testQuery.getPersonByLastName("Simpson");
         assertEquals("The list should have 2 persons", 2, list.size());
         assertEquals("The first should be Max", "Homer", list.get(0).getName());
         assertEquals("The second should be Homer", "Bart", list.get(1).getName());
     }
 
+    @Test
+    public void queryWithTwoAndParametersTest(){
+        Person p = testQuery.getPersonByNameAndLastName("Homer","Simpson");
+        assertEquals("It should get Homer Simpson", new Integer(1), p.getId());
+    }
+
+    @Test(expected = InvalidConnectorException.class)
+    public void queryWithTwoOrParametersTest(){
+        List<Person> list = testQuery.getPersonByNameOrLastName("Homer","Simpson");
+    }
+
     /*@Test
-    public void queryWithTwoAndParameters(){
-        Person p = tq.getPersonByNameAndLastName("Pedro","Silva");
-        assertEquals("It should get Pedro with id=1", new Integer(1), p.getId());
-    }
-
-    @Test
-    public void queryWithTwoOrParameters(){
-        List<Person> list = tq.getPersonByNameOrLastName("Maria","Silva");
-        assertEquals("The list should have 3 persons", 3, list.size());
-    }
-
-    @Test
     public void queryWithOtherTable(){
         List<Person> list = tq.getPersonByAddressCity("Juiz de Fora");
         assertEquals("The list should have 2 persons", 2, list.size());
@@ -117,33 +114,31 @@ public class CassandraQueryBuilderIntegrationTest {
         assertEquals("The list should have 2 persons", 2, list.size());
         assertEquals("The first should be Pedro", "Pedro", list.get(0).getName());
         assertEquals("Marcos", list.get(1).getName());
-    }
+    }*/
 
     @Test
-    public void queryWithGreaterThan(){
-        List<Person> list = tq.getPersonByAge(40);
+    public void queryWithGreaterThanTest(){
+        List<Person> list = testQuery.getPersonByAge(40);
         assertEquals("The list should have 2 persons", 2, list.size());
     }
 
     @Test
     public void queryWithLesserThan(){
-        List<Person> list = tq.getPersonByAgeLesser(40);
-        assertEquals("The list should have 3 persons", 3, list.size());
+        List<Person> list = testQuery.getPersonByAgeLesser(40);
+        assertEquals("The list should have 1 person", 1, list.size());
     }
 
-    @Test
+    @Test(expected = UnsupportedCassandraOperationException.class)
     public void queryWithNotEquals(){
-        List<Person> list = tq.getPersonByLastNameNotEquals("Silva");
-        assertEquals("The list should have 3 persons", 3, list.size());
+        List<Person> list = testQuery.getPersonByLastNameNotEquals("Whatever");
     }
 
-    @Test
+    @Test(expected = UnsupportedCassandraOperationException.class)
     public void queryWithStringStarted(){
-        List<Person> list = tq.getPersonByName("M");
-        assertEquals("The list should have 2 persons", 2, list.size());
+        List<Person> list = testQuery.getPersonByName("M");
     }
 
-    @Test
+    /*@Test
     public void queryWithTwoParametersWithComparisonTypes(){
         List<Person> list = tq. getPersonByNameStartsAndAgeGreater("M",30);
         assertEquals("The list should have 1 persons", 1, list.size());
