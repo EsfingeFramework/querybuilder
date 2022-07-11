@@ -51,6 +51,10 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
 
         List<OrderByClause> orderByClause = ((CassandraQueryRepresentation)qr).getOrderByClause();
         // TODO: IMPLEMENT ORDER BY AT APPLICATION LEVEL
+        if (!orderByClause.isEmpty()){
+            orderByClause.forEach(o -> System.out.println(o));
+
+        }
 
         if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE){
             if (results.size() > 0)
