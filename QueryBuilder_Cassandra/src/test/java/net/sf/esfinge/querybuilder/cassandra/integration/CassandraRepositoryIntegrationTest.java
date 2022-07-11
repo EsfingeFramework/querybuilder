@@ -78,26 +78,26 @@ public class CassandraRepositoryIntegrationTest {
     @Test
     public void listTest() {
         List<Person> list = testQuery.list();
-        assertEquals("The list should have 3 persons", 3, list.size());
+        assertEquals("The list should have 5 persons", 5, list.size());
     }
 
     @Test
     public void getByIdTest() {
         Person expected = new Person();
         expected.setId(3);
-        expected.setName("Max");
-        expected.setLastName("Power");
-        expected.setAge(48);
+        expected.setName("Bart");
+        expected.setLastName("Simpson");
+        expected.setAge(10);
 
         Person actual = testQuery.getById(3);
 
-        assertEquals("Should retrieve person Max Power", expected, actual);
+        assertEquals("Should retrieve person Bart Simspon", expected, actual);
     }
 
     @Test
     public void queryByExampleTest() {
         Person example = new Person();
-        example.setName("Max");
+        example.setName("Bart");
 
         List<Person> list = testQuery.queryByExample(example);
 
@@ -107,8 +107,8 @@ public class CassandraRepositoryIntegrationTest {
     @Test
     public void queryByTwoExamplesTest() {
         Person example = new Person();
-        example.setName("Max");
-        example.setAge(48);
+        example.setName("Bart");
+        example.setAge(10);
 
         List<Person> list = testQuery.queryByExample(example);
 

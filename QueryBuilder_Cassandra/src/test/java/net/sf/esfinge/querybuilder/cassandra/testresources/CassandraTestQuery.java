@@ -25,7 +25,7 @@ public interface CassandraTestQuery extends Repository<Person> {
     List<Person> getPersonByAgeOrderByNameDesc(@Greater Integer age);
     List<Person> getPersonOrderByNameAndLastName();
     List<Person> getPersonOrderByNameDescAndLastNameAsc();
-    List<Person> getPersonByAgeAndLastNameOrderByAgeAndLastNameDesc(@Greater Integer age, String lastname);
+    List<Person> getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(@Greater Integer age, String lastname);
 
     // QUERIES WITH WRONG NAMING CONVENTION
     List<Person> getPersonByIdAndNameAndLastName(Integer id, String name);

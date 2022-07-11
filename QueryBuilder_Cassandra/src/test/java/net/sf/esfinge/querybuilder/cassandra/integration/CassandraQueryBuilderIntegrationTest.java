@@ -51,7 +51,7 @@ public class CassandraQueryBuilderIntegrationTest {
     @Test
     public void selectAllQueryTest() {
         List<Person> list = testQuery.getPerson();
-        assertEquals("The list should have 3 persons", 3, list.size());
+        assertEquals("The list should have 5 persons", 5, list.size());
     }
 
     @Test
@@ -62,8 +62,8 @@ public class CassandraQueryBuilderIntegrationTest {
 
     @Test
     public void queryWithSingleParameterGreaterThanTest() {
-        Person p = testQuery.getPersonByIdGreater(2);
-        assertEquals("It should get Max", "Max", p.getName());
+        Person p = testQuery.getPersonByIdGreater(4);
+        assertEquals("It should get Max", "Nelson", p.getName());
     }
 
     @Test(expected = WrongTypeOfExpectedResultException.class)
@@ -73,16 +73,17 @@ public class CassandraQueryBuilderIntegrationTest {
 
     @Test
     public void queryWithSingleParameterWithNoExpectedResultTest() {
-        Person p = testQuery.getPersonById(5);
+        Person p = testQuery.getPersonById(6);
         assertNull("It should not retrieve any person", p);
     }
 
     @Test
     public void listParameterQueryTest(){
         List<Person> list = testQuery.getPersonByLastName("Simpson");
-        assertEquals("The list should have 2 persons", 2, list.size());
-        assertEquals("The first should be Max", "Homer", list.get(0).getName());
-        assertEquals("The second should be Homer", "Bart", list.get(1).getName());
+        assertEquals("The list should have 3 persons", 3, list.size());
+        assertEquals("The first should be Homer", "Homer", list.get(0).getName());
+        assertEquals("The second should be Marge", "Marge", list.get(1).getName());
+        assertEquals("The third should be Bart", "Bart", list.get(2).getName());
     }
 
     @Test
@@ -116,13 +117,13 @@ public class CassandraQueryBuilderIntegrationTest {
     @Test
     public void queryWithGreaterThanTest(){
         List<Person> list = testQuery.getPersonByAge(40);
-        assertEquals("The list should have 2 persons", 2, list.size());
+        assertEquals("The list should have 3 persons", 3, list.size());
     }
 
     @Test
     public void queryWithLesserThan(){
         List<Person> list = testQuery.getPersonByAgeLesser(40);
-        assertEquals("The list should have 1 person", 1, list.size());
+        assertEquals("The list should have 2 persons", 2, list.size());
     }
 
     @Test(expected = UnsupportedCassandraOperationException.class)
@@ -153,7 +154,7 @@ public class CassandraQueryBuilderIntegrationTest {
     }
 
     @Test
-    public void orderByQueryWithOneParameterTest(){
+    public void orderByQueryWithOneFieldTest(){
         List<Person> list = testQuery.getPersonOrderByName();
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
@@ -163,7 +164,7 @@ public class CassandraQueryBuilderIntegrationTest {
     }
 
     @Test
-    public void orderByQueryWithOneParameterDescendentTest(){
+    public void orderByQueryWithOneFieldAndParameterDescendentTest(){
         List<Person> list = testQuery.getPersonByAgeOrderByNameDesc(1);
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
@@ -174,7 +175,7 @@ public class CassandraQueryBuilderIntegrationTest {
     }
 
     @Test
-    public void orderByQueryWithTwoParametersTest(){
+    public void orderByQueryWithTwoFieldsTest(){
         List<Person> list = testQuery.getPersonOrderByNameAndLastName();
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
@@ -185,7 +186,7 @@ public class CassandraQueryBuilderIntegrationTest {
     }
 
     @Test
-    public void orderByQueryWithTwoParametersWithOrderingTest(){
+    public void orderByQueryWithTwoFieldsWithOrderingTest(){
         List<Person> list = testQuery.getPersonOrderByNameDescAndLastNameAsc();
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
@@ -195,11 +196,15 @@ public class CassandraQueryBuilderIntegrationTest {
         //assertArrayEquals(expectedNames, actualNames);
     }
 
-    /*@Test
-    public void orderByWithParameter(){
-        List<Person> list = testQuery. getPersonByAgeOrderByNameDesc(20);
-        assertListOrder(list,"Silvia", "Maria", "Marcos", "Antonio");
-    }*/
+    @Test
+    public void complexOrderByQueryTest(){
+        List<Person> list = testQuery.getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(1,"Simpson");
 
+        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
+        String[] expectedNames = {"Bart","Homer","Max"};
+
+
+        //assertArrayEquals(expectedNames, actualNames);
+    }
 
 }

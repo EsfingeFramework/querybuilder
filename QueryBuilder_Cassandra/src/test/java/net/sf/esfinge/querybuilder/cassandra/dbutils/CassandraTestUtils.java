@@ -30,8 +30,10 @@ public class CassandraTestUtils {
 
         String query = "BEGIN BATCH\n" +
                 "        INSERT INTO test.person(id, name, lastname, age) VALUES (1, 'Homer', 'Simpson', 48);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (2, 'Bart', 'Simpson', 10);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (3, 'Max', 'Power', 48);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (2, 'Marge', 'Simpson', 45);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (3, 'Bart', 'Simpson', 10);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (4, 'Ned', 'Flanders', 50);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (5, 'Nelson', 'Muntz', 11);\n" +
                 "        APPLY BATCH";
 
         session.execute(query);
