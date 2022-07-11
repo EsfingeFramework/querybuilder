@@ -3,8 +3,6 @@ package net.sf.esfinge.querybuilder.cassandra.querybuilding;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
-import java.util.List;
-
 public class ConditionStatement {
 
     private String propertyName;
@@ -78,7 +76,7 @@ public class ConditionStatement {
     }
 
     private String getValueRepresentation(){
-        return value != null ? QueryBuildingUtilities.getValueRepresentationByType(value) : "?";
+        return value != null ? QueryBuildingUtils.getValueRepresentationByType(value) : "?";
     }
 
     @Override

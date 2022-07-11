@@ -8,7 +8,7 @@ import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.*;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtils;
 import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.*;
@@ -41,7 +41,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         String query = qr.getQuery().toString();
 
         if (args != null)
-            query = QueryBuildingUtilities.replaceQueryArgs(query,args);
+            query = QueryBuildingUtils.replaceQueryArgs(query,args);
 
         List<E> results = getQueryResults(query);
 

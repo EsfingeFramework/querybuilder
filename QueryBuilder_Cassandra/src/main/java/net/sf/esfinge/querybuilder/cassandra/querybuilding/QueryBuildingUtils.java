@@ -2,7 +2,7 @@ package net.sf.esfinge.querybuilder.cassandra.querybuilding;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.QueryParametersMismatchException;
 
-public class QueryBuildingUtilities {
+public class QueryBuildingUtils {
 
     public static String replaceQueryArgs(String query, Object[] args) {
         int paramOccurrence = countOccurrenceOfCharacterInString(query, '?');

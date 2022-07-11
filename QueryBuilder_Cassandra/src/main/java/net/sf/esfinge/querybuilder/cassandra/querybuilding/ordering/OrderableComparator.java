@@ -17,7 +17,6 @@ public class OrderableComparator implements Comparator<Object> {
 
     @Override
     public int compare(Object o1, Object o2) {
-        System.out.println("Sorting by " + compareMethod.getName());
         int result = 0;
 
         try {
@@ -31,8 +30,9 @@ public class OrderableComparator implements Comparator<Object> {
 
     @Override
     public String toString() {
-        return "NormalComparator{" +
+        return "OrderableComparator{" +
                 "compareMethod=" + compareMethod.getName() +
+                ", direction=" + direction.name() +
                 '}';
     }
 }

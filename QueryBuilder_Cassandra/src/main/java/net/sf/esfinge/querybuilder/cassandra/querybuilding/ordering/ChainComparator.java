@@ -8,8 +8,6 @@ public class ChainComparator implements Comparator<Object> {
 
     public ChainComparator(List<Comparator> comparatorList) {
         this.comparatorList = comparatorList;
-
-        System.out.println("Chain length: " + comparatorList.size());
     }
 
     @Override

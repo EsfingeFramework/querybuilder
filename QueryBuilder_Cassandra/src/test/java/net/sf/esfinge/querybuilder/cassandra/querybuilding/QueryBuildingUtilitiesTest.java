@@ -13,7 +13,7 @@ public class QueryBuildingUtilitiesTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id > ?";
         Object[] args = {1};
 
-        String newQuery = QueryBuildingUtilities.replaceQueryArgs(query, args);
+        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
 
         assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE id > 1", newQuery);
     }
@@ -23,7 +23,7 @@ public class QueryBuildingUtilitiesTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ?";
         Object[] args = {1, "Max"};
 
-        String newQuery = QueryBuildingUtilities.replaceQueryArgs(query, args);
+        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
 
         assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE id = 1 AND lastName = 'Max'", newQuery);
     }
@@ -33,7 +33,7 @@ public class QueryBuildingUtilitiesTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE name = ? AND lastName = ?";
         Object[] args = {"Max", "Power"};
 
-        String newQuery = QueryBuildingUtilities.replaceQueryArgs(query, args);
+        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
 
         assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE name = 'Max' AND lastName = 'Power'", newQuery);
     }
@@ -43,7 +43,7 @@ public class QueryBuildingUtilitiesTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ?";
         Object[] args = {1, "Max", "Additional"};
 
-        String newQuery = QueryBuildingUtilities.replaceQueryArgs(query, args);
+        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
     }
 
     @Test(expected = QueryParametersMismatchException.class)
@@ -51,19 +51,19 @@ public class QueryBuildingUtilitiesTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ? OR city = ?";
         Object[] args = {1, "Max"};
 
-        String newQuery = QueryBuildingUtilities.replaceQueryArgs(query, args);
+        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
     }
 
 
     @Test
     public void getValueRepresentationByTypeWithNumbersTest() {
-        assertEquals("1", QueryBuildingUtilities.getValueRepresentationByType(1));
-        assertEquals("1.1", QueryBuildingUtilities.getValueRepresentationByType(1.1));
+        assertEquals("1", QueryBuildingUtils.getValueRepresentationByType(1));
+        assertEquals("1.1", QueryBuildingUtils.getValueRepresentationByType(1.1));
     }
 
     @Test
     public void getValueRepresentationByTypeWithTextTest() {
-        assertEquals("'Max'", QueryBuildingUtilities.getValueRepresentationByType("Max"));
-        assertEquals("'A'", QueryBuildingUtilities.getValueRepresentationByType('A'));
+        assertEquals("'Max'", QueryBuildingUtils.getValueRepresentationByType("Max"));
+        assertEquals("'A'", QueryBuildingUtils.getValueRepresentationByType('A'));
     }
 }

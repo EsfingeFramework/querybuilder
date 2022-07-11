@@ -6,6 +6,7 @@ public class TestClass {
     private String name;
     private String lastName;
 
+
     public TestClass(int id, String name, String lastName) {
         this.id = id;
         this.name = name;
@@ -34,5 +35,14 @@ public class TestClass {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "TestClass{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

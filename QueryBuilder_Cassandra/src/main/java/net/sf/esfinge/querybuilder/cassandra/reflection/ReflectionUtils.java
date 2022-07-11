@@ -25,11 +25,11 @@ public class ReflectionUtils {
         // otherwise on runtime the chain ordering for multiple fields might change,
         // see ChainComparator class
         return fieldNames.stream()
-                .map(name -> getGetterForField(getters,name,clazz))
+                .map(name -> getGetterForField(clazz,getters,name))
                 .toArray(Method[]::new);
     }
 
-    private static <E> Method getGetterForField(Method[] methods, String fieldName, Class<E> clazz){
+    public static <E> Method getGetterForField(Class<E> clazz, Method[] methods, String fieldName){
         String getterName = "get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
 
         Method getter = null;
