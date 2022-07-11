@@ -51,54 +51,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         List<OrderByClause> orderByClause = ((CassandraQueryRepresentation)qr).getOrderByClause();
         // TODO: IMPLEMENT ORDER BY AT APPLICATION LEVEL
         if (!orderByClause.isEmpty()){
-            orderByClause.forEach(o -> System.out.println(o));
-
-            List<String> fieldNames = orderByClause
-                    .stream()
-                    .map(o -> o.getPropertyName())
-                    .collect(Collectors.toList());
-
-            System.out.println("*** Fields ***");
-            fieldNames.forEach(n-> System.out.println(n));
-
-            List<String> fields = orderByClause.stream().map(o -> o.getPropertyName()).collect(Collectors.toList());
-
-
-            Method[] gettersForFields = ReflectionUtils.getClassGettersForFields(clazz,fields);
-
-            System.out.println("*** Getters ***");
-            for (Method m : gettersForFields){
-                System.out.println(m.getName());
-            }
-
-            Comparator firstComparator = new OrderableComparator(gettersForFields[0], OrderingDirection.ASC);
-            System.out.println(firstComparator);
-
-            System.out.println("Before sorting");
-            results.forEach(r -> System.out.println(r));
-            //List<E> resultsSorted = results.stream().sorted(firstComparator).collect(Collectors.toList());
-
-            /*System.out.println("After sorting");
-            resultsSorted.forEach(r -> System.out.println(r));*/
-
-            Comparator secondComparator = new OrderableComparator(gettersForFields[1], OrderingDirection.ASC);
-            System.out.println(secondComparator);
-
-            /*resultsSorted = results.stream().sorted(secondComparator).collect(Collectors.toList());
-
-            System.out.println("After sorting");
-            resultsSorted.forEach(r -> System.out.println(r));*/
-
-            List<Comparator> comparators = new ArrayList<>();
-            comparators.add(firstComparator);
-            comparators.add(secondComparator);
-
-            List<E> resultsSorted = results.stream().sorted(new ChainComparator(comparators)).collect(Collectors.toList());
-
-            System.out.println("After sorting");
-            resultsSorted.forEach(r -> System.out.println(r));
-
-
+            results = OrderingUtils.sortListByOrderingClause(results,orderByClause,clazz);
         }
 
         if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE){

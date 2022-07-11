@@ -153,56 +153,51 @@ public class CassandraQueryBuilderIntegrationTest {
 
     @Test
     public void orderByQueryWithOneFieldTest(){
-        List<Person> list = testQuery.getPersonOrderByLastNameAndAgeDesc();
+        List<Person> list = testQuery.getPersonOrderByName();
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Pedro","Maria","Marcos","Antonio","Silvia"};
+        String[] expectedNames = {"Antonio","Marcos","Maria","Pedro","Silvia"};
 
-        //assertArrayEquals(expectedNames, actualNames);
+        assertArrayEquals(expectedNames, actualNames);
     }
 
-    /*@Test
+    @Test
     public void orderByQueryWithOneFieldAndParameterDescendentTest(){
-        List<Person> list = testQuery.getPersonByAgeOrderByNameDesc(1);
+        List<Person> list = testQuery.getPersonByAgeOrderByNameDesc(21);
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Bart","Homer","Max"};
+        String[] expectedNames = {"Maria","Marcos","Antonio"};
 
-
-        //assertArrayEquals(expectedNames, actualNames);
+        assertArrayEquals(expectedNames, actualNames);
     }
 
     @Test
     public void orderByQueryWithTwoFieldsTest(){
-        List<Person> list = testQuery.getPersonOrderByNameAndLastName();
+        List<Person> list = testQuery.getPersonOrderByLastNameAndName();
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Bart","Homer","Max"};
-
-
-        //assertArrayEquals(expectedNames, actualNames);
+        String[] expectedNames = {"Silvia","Maria","Antonio","Marcos","Pedro"};
+        list.forEach(p -> System.out.println(p));
     }
 
     @Test
     public void orderByQueryWithTwoFieldsWithOrderingTest(){
-        List<Person> list = testQuery.getPersonOrderByNameDescAndLastNameAsc();
+        List<Person> list = testQuery.getPersonOrderByLastNameDescAndNameAsc();
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Bart","Homer","Max"};
+        String[] expectedNames = {"Marcos","Pedro","Antonio","Maria","Silvia"};
 
-
-        //assertArrayEquals(expectedNames, actualNames);
+        assertArrayEquals(expectedNames, actualNames);
     }
 
     @Test
     public void complexOrderByQueryTest(){
-        List<Person> list = testQuery.getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(1,"Simpson");
+        List<Person> list = testQuery.getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(51,"Silva");
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Bart","Homer","Max"};
+        String[] expectedNames = {"Pedro","Marcos"};
 
-
-        //assertArrayEquals(expectedNames, actualNames);
-    }*/
+        assertArrayEquals(expectedNames, actualNames);
+    }
 
 }
