@@ -9,14 +9,21 @@ import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvid
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
+import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryType;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CassandraQueryExecutor<E> implements QueryExecutor {
 
@@ -42,8 +49,6 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         if (args != null)
             query = QueryBuildingUtilities.replaceQueryArgs(query,args);
 
-        System.out.println(query);
-
         List<E> results = getQueryResults(query);
 
         if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE && results.size() > 1)
@@ -53,6 +58,22 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         // TODO: IMPLEMENT ORDER BY AT APPLICATION LEVEL
         if (!orderByClause.isEmpty()){
             orderByClause.forEach(o -> System.out.println(o));
+
+            List<String> fieldNames = orderByClause
+                    .stream()
+                    .map(o -> o.getPropertyName())
+                    .collect(Collectors.toList());
+
+            fieldNames.forEach(n-> System.out.println(n));
+
+
+            Method[] methods = ReflectionUtils.getClassGetters(clazz);
+
+            for (Method m : methods){
+                System.out.println(m.getName());
+            }
+
+
 
         }
 
