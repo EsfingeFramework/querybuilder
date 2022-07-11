@@ -62,7 +62,7 @@ public class ConditionStatement {
         // Only append if NullOption is equal to NONE, otherwise
         // ignore condition
         if (nullOption == NullOption.NONE) {
-            sb.append(propertyName).append(" ").append(comparisonType.getOperator()).append(" ").append(getValueRepresentation());
+            sb.append(propertyName + " " + comparisonType.getOperator() + " " + getValueRepresentation());
         } else if (nullOption == NullOption.IGNORE_WHEN_NULL) {
             if (value != null)
                 sb.append(propertyName + " " + comparisonType.getOperator() + " " + getValueRepresentation());

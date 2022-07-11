@@ -9,11 +9,12 @@ import java.util.List;
 public class ReflectionUtils {
 
     public static <E> Method[] getClassGetters(Class<E> clazz) {
-
-        return Arrays.stream(clazz.getMethods())
+        Method[] setters = Arrays.stream(clazz.getMethods())
                 .filter(m -> m.getName()
                         .startsWith("get") && !m.getName().equals("getClass"))
                 .toArray(Method[]::new);
+
+        return setters;
     }
 
     public static <E> Method[] getClassGettersForFields(Class<E> clazz, List<String> fieldNames) {

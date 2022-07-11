@@ -3,19 +3,47 @@ package net.sf.esfinge.querybuilder.cassandra.integration;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.BasicCassandraDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
+import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
-import org.junit.Test;
+import org.apache.thrift.transport.TTransportException;
+import org.junit.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
-public class CassandraRepositoryIntegrationTest extends BasicCassandraDatabaseTest {
+public class CassandraRepositoryIntegrationTest {
 
-    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
+    CassandraTestQuery testQuery;
+    TestCassandraSessionProvider provider;
+
+    @BeforeClass
+    public static void initDB() throws TTransportException, IOException, InterruptedException {
+        // Uncomment next line to use cassandra unit db instead of a local one
+        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
+        CassandraTestUtils.initDB();
+    }
+
+    @AfterClass
+    public static void dropDB() {
+        CassandraTestUtils.dropDB();
+    }
+
+    @Before
+    public void populateTables() {
+        CassandraTestUtils.populateTables();
+
+        testQuery = QueryBuilder.create(CassandraTestQuery.class);
+        provider = new TestCassandraSessionProvider();
+    }
+
+    @After
+    public void cleanTables() {
+        CassandraTestUtils.cleanTables();
+    }
 
     @Test
     public void saveTest() {
@@ -44,7 +72,7 @@ public class CassandraRepositoryIntegrationTest extends BasicCassandraDatabaseTe
 
         Person actual = mapper.get(2);
 
-        assertNull("Should not retrieve any person", actual);
+        assertEquals("Should not retrieve any person", null, actual);
     }
 
     @Test

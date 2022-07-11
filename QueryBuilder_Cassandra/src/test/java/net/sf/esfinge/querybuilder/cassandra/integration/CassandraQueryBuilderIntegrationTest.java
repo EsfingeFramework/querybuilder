@@ -1,22 +1,51 @@
 package net.sf.esfinge.querybuilder.cassandra.integration;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.BasicCassandraDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
+import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import net.sf.esfinge.querybuilder.exception.WrongParamNumberException;
-import org.junit.Test;
+import org.apache.thrift.transport.TTransportException;
+import org.junit.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class CassandraQueryBuilderIntegrationTest extends BasicCassandraDatabaseTest {
+public class CassandraQueryBuilderIntegrationTest {
 
-    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
+    CassandraTestQuery testQuery;
+    TestCassandraSessionProvider provider;
+
+    @BeforeClass
+    public static void initDB() throws TTransportException, IOException, InterruptedException {
+        // Uncomment next line to use cassandra unit db instead of a local one
+        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
+        CassandraTestUtils.initDB();
+    }
+
+    @AfterClass
+    public static void dropDB() {
+        CassandraTestUtils.dropDB();
+    }
+
+    @Before
+    public void populateTables() {
+        CassandraTestUtils.populateTables();
+
+        testQuery = QueryBuilder.create(CassandraTestQuery.class);
+        provider = new TestCassandraSessionProvider();
+    }
+
+    @After
+    public void cleanTables() {
+        CassandraTestUtils.cleanTables();
+    }
 
     @Test
     public void selectAllQueryTest() {
@@ -38,7 +67,7 @@ public class CassandraQueryBuilderIntegrationTest extends BasicCassandraDatabase
 
     @Test(expected = WrongTypeOfExpectedResultException.class)
     public void queryWithWrongTypeOfExpectedResultTest() {
-        testQuery.getPersonByIdGreater(0);
+        Person p = testQuery.getPersonByIdGreater(0);
     }
 
     @Test
@@ -126,7 +155,7 @@ public class CassandraQueryBuilderIntegrationTest extends BasicCassandraDatabase
     public void orderByQueryWithOneFieldTest() {
         List<Person> list = testQuery.getPersonOrderByName();
 
-        String[] actualNames = list.stream().map(Person::getName).toArray(String[]::new);
+        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
         String[] expectedNames = {"Antonio", "Marcos", "Maria", "Pedro", "Silvia"};
 
         assertArrayEquals(expectedNames, actualNames);
@@ -136,7 +165,7 @@ public class CassandraQueryBuilderIntegrationTest extends BasicCassandraDatabase
     public void orderByQueryWithOneFieldAndParameterDescendentTest() {
         List<Person> list = testQuery.getPersonByAgeOrderByNameDesc(21);
 
-        String[] actualNames = list.stream().map(Person::getName).toArray(String[]::new);
+        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
         String[] expectedNames = {"Maria", "Marcos", "Antonio"};
 
         assertArrayEquals(expectedNames, actualNames);
@@ -146,17 +175,16 @@ public class CassandraQueryBuilderIntegrationTest extends BasicCassandraDatabase
     public void orderByQueryWithTwoFieldsTest() {
         List<Person> list = testQuery.getPersonOrderByLastNameAndName();
 
-        String[] actualNames = list.stream().map(Person::getName).toArray(String[]::new);
+        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
         String[] expectedNames = {"Silvia", "Maria", "Antonio", "Marcos", "Pedro"};
-
-        assertArrayEquals(expectedNames, actualNames);
+        list.forEach(p -> System.out.println(p));
     }
 
     @Test
     public void orderByQueryWithTwoFieldsWithOrderingTest() {
         List<Person> list = testQuery.getPersonOrderByLastNameDescAndNameAsc();
 
-        String[] actualNames = list.stream().map(Person::getName).toArray(String[]::new);
+        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
         String[] expectedNames = {"Marcos", "Pedro", "Antonio", "Maria", "Silvia"};
 
         assertArrayEquals(expectedNames, actualNames);
@@ -166,7 +194,7 @@ public class CassandraQueryBuilderIntegrationTest extends BasicCassandraDatabase
     public void complexOrderByQueryTest() {
         List<Person> list = testQuery.getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(51, "Silva");
 
-        String[] actualNames = list.stream().map(Person::getName).toArray(String[]::new);
+        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
         String[] expectedNames = {"Pedro", "Marcos"};
 
         assertArrayEquals(expectedNames, actualNames);

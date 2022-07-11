@@ -6,7 +6,6 @@ import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class CassandraEntityClassProviderTest {
 
@@ -20,7 +19,7 @@ public class CassandraEntityClassProviderTest {
     @Test
     public void entityClassNotFound() {
         CassandraEntityClassProvider provider = new CassandraEntityClassProvider();
-        assertNull("Should retrieve null", provider.getEntityClass("Other"));
+        assertEquals("Should retrieve null", null, provider.getEntityClass("Other"));
     }
 
 }

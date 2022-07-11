@@ -25,6 +25,9 @@ public class ReflectionUtilsTest {
         expected.add("getLastName");
         expected.add("getId");
 
+        actual.forEach(l -> System.out.println(l));
+        expected.forEach(l -> System.out.println(l));
+
         assertEquals(3, getters.length);
         assertTrue(actual.containsAll(expected));
     }
@@ -56,6 +59,6 @@ public class ReflectionUtilsTest {
         fields.add("lastName");
         fields.add("notPresent");
 
-        ReflectionUtils.getClassGettersForFields(TestClass.class, fields);
+        Method[] gettersForFields = ReflectionUtils.getClassGettersForFields(TestClass.class, fields);
     }
 }

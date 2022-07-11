@@ -5,7 +5,7 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.QueryParametersMismatchE
 public class QueryBuildingUtils {
 
     public static String replaceQueryArgs(String query, Object[] args) {
-        int paramOccurrence = countOccurrenceOfParametersInQuery(query);
+        int paramOccurrence = countOccurrenceOfCharacterInString(query, '?');
 
         if (paramOccurrence != args.length)
             throw new QueryParametersMismatchException("Number of parameters in the query different from the number of arguments");
@@ -22,9 +22,9 @@ public class QueryBuildingUtils {
         return newQuery;
     }
 
-    private static int countOccurrenceOfParametersInQuery(String string) {
+    private static int countOccurrenceOfCharacterInString(String string, Character character) {
         return string.chars()
-                .filter(c -> c == '?')
+                .filter(c -> c == character)
                 .toArray()
                 .length;
     }

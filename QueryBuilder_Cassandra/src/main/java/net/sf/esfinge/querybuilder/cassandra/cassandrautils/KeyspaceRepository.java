@@ -26,15 +26,17 @@ public class KeyspaceRepository {
         if (numberOfReplicas < 1)
             throw new InvalidNumberOfReplicasException("Invalid number of replicas: " + numberOfReplicas);
 
-        String sb = "CREATE KEYSPACE IF NOT EXISTS " +
-                keyspaceName +
-                " WITH replication = {" +
-                "'class':'" +
-                replicationStrategy.name() +
-                "','replication_factor':" +
-                numberOfReplicas + "};";
+        StringBuilder sb = new StringBuilder("CREATE KEYSPACE IF NOT EXISTS ")
+                .append(keyspaceName)
+                .append(" WITH replication = {")
+                .append("'class':'")
+                .append(replicationStrategy.name())
+                .append("','replication_factor':")
+                .append(numberOfReplicas).append("};");
 
-        session.execute(sb);
+        final String query = sb.toString();
+
+        session.execute(query);
     }
 
     public void useKeyspace(String keyspace) {
@@ -48,7 +50,9 @@ public class KeyspaceRepository {
      * @param keyspaceName the name of the keyspace to delete.
      */
     public void deleteKeyspace(String keyspaceName) {
-        final String query = "DROP KEYSPACE IF EXISTS " + keyspaceName;
+        StringBuilder sb = new StringBuilder("DROP KEYSPACE IF EXISTS ").append(keyspaceName);
+
+        final String query = sb.toString();
 
         session.execute(query);
     }

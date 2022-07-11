@@ -8,9 +8,11 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CassandraConnectionIntegrationTest {
+    private Session session;
 
     @Test
     public void cassandraDBConnectionTest() throws TTransportException, IOException, InterruptedException {
@@ -18,9 +20,9 @@ public class CassandraConnectionIntegrationTest {
         // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
 
         CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
-        Session session = client.getSession();
+        this.session = client.getSession();
 
-        assertEquals("TestCassandraSessionProvider", client.getClass().getSimpleName());
+        assertTrue(client.getClass().getSimpleName().equals("TestCassandraSessionProvider"));
         assertNotNull(session.getCluster());
     }
 
