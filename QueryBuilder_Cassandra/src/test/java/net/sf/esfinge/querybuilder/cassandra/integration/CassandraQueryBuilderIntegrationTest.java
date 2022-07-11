@@ -14,7 +14,6 @@ import org.junit.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -57,13 +56,13 @@ public class CassandraQueryBuilderIntegrationTest {
     @Test
     public void queryWithSingleParameterTest() {
         Person p = testQuery.getPersonById(1);
-        assertEquals("It should get Homer", "Homer", p.getName());
+        assertEquals("It should get Pedro", "Pedro", p.getName());
     }
 
     @Test
     public void queryWithSingleParameterGreaterThanTest() {
         Person p = testQuery.getPersonByIdGreater(4);
-        assertEquals("It should get Max", "Nelson", p.getName());
+        assertEquals("It should get Silvia", "Silvia", p.getName());
     }
 
     @Test(expected = WrongTypeOfExpectedResultException.class)
@@ -79,22 +78,21 @@ public class CassandraQueryBuilderIntegrationTest {
 
     @Test
     public void listParameterQueryTest(){
-        List<Person> list = testQuery.getPersonByLastName("Simpson");
-        assertEquals("The list should have 3 persons", 3, list.size());
-        assertEquals("The first should be Homer", "Homer", list.get(0).getName());
-        assertEquals("The second should be Marge", "Marge", list.get(1).getName());
-        assertEquals("The third should be Bart", "Bart", list.get(2).getName());
+        List<Person> list = testQuery.getPersonByLastName("Silva");
+        assertEquals("The list should have 2 persons", 2, list.size());
+        assertEquals("The first should be Pedro", "Pedro", list.get(0).getName());
+        assertEquals("The second should be Marcos", "Marcos", list.get(1).getName());
     }
 
     @Test
     public void queryWithTwoAndParametersTest(){
-        Person p = testQuery.getPersonByNameAndLastName("Homer","Simpson");
-        assertEquals("It should get Homer Simpson", new Integer(1), p.getId());
+        Person p = testQuery.getPersonByNameAndLastName("Pedro","Silva");
+        assertEquals("It should get Pedro Silva", new Integer(1), p.getId());
     }
 
     @Test(expected = InvalidConnectorException.class)
     public void queryWithTwoOrParametersTest(){
-        List<Person> list = testQuery.getPersonByNameOrLastName("Homer","Simpson");
+        List<Person> list = testQuery.getPersonByNameOrLastName("Pedro","Silva");
     }
 
     /*@Test
@@ -117,13 +115,13 @@ public class CassandraQueryBuilderIntegrationTest {
     @Test
     public void queryWithGreaterThanTest(){
         List<Person> list = testQuery.getPersonByAge(40);
-        assertEquals("The list should have 3 persons", 3, list.size());
+        assertEquals("The list should have 1 person", 1, list.size());
     }
 
     @Test
     public void queryWithLesserThan(){
         List<Person> list = testQuery.getPersonByAgeLesser(40);
-        assertEquals("The list should have 2 persons", 2, list.size());
+        assertEquals("The list should have 4 persons", 4, list.size());
     }
 
     @Test(expected = UnsupportedCassandraOperationException.class)
@@ -138,9 +136,9 @@ public class CassandraQueryBuilderIntegrationTest {
 
     @Test
     public void queryWithAllParametersTest(){
-        List<Person> list = testQuery.getPersonByIdAndNameAndLastNameAndAge(1,"Homer","Simpson",48);
+        List<Person> list = testQuery.getPersonByIdAndNameAndLastNameAndAge(1,"Pedro","Silva",20);
         assertEquals("The list should have 1 person", 1, list.size());
-        assertEquals("The person should be Homer", "Homer", list.get(0).getName());
+        assertEquals("The person should be Pedro", "Pedro", list.get(0).getName());
     }
 
     @Test(expected = WrongParamNumberException.class)

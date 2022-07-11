@@ -29,11 +29,11 @@ public class CassandraTestUtils {
         Session session = client.getSession();
 
         String query = "BEGIN BATCH\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (1, 'Homer', 'Simpson', 48);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (2, 'Marge', 'Simpson', 45);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (3, 'Bart', 'Simpson', 10);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (4, 'Ned', 'Flanders', 50);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (5, 'Nelson', 'Muntz', 11);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (1, 'Pedro', 'Silva', 20);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (2, 'Maria', 'Ferreira', 23);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (3, 'Marcos', 'Silva', 50);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (4, 'Antonio', 'Marques', 33);\n" +
+                "        INSERT INTO test.person(id, name, lastname, age) VALUES (5, 'Silvia', 'Bressan', 11);\n" +
                 "        APPLY BATCH";
 
         session.execute(query);
