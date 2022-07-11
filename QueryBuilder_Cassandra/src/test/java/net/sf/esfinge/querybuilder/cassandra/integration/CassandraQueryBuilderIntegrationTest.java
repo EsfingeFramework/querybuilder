@@ -1,8 +1,8 @@
 package net.sf.esfinge.querybuilder.cassandra.integration;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
@@ -24,8 +24,6 @@ public class CassandraQueryBuilderIntegrationTest {
 
     @BeforeClass
     public static void initDB() throws TTransportException, IOException, InterruptedException {
-        // Uncomment next line to use cassandra unit db instead of a local one
-        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
         CassandraTestUtils.initDB();
     }
 

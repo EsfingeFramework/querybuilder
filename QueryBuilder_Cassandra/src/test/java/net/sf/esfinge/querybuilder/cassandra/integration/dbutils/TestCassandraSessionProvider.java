@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.dbutils;
+package net.sf.esfinge.querybuilder.cassandra.integration.dbutils;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;

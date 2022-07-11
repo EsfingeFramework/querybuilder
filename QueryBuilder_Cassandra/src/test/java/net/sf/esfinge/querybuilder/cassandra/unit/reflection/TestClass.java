@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.reflection;
+package net.sf.esfinge.querybuilder.cassandra.unit.reflection;
 
 public class TestClass {
 

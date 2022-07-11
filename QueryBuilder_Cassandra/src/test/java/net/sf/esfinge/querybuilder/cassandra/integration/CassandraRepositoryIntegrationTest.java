@@ -3,8 +3,8 @@ package net.sf.esfinge.querybuilder.cassandra.integration;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.apache.thrift.transport.TTransportException;
@@ -22,8 +22,6 @@ public class CassandraRepositoryIntegrationTest {
 
     @BeforeClass
     public static void initDB() throws TTransportException, IOException, InterruptedException {
-        // Uncomment next line to use cassandra unit db instead of a local one
-        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
         CassandraTestUtils.initDB();
     }
 

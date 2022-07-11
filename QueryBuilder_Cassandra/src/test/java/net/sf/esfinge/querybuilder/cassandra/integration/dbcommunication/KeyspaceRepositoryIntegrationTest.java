@@ -4,7 +4,8 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.KeyspaceRepository;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.ReplicationStrategy;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidNumberOfReplicasException;
 import org.apache.thrift.transport.TTransportException;
 import org.junit.Before;
@@ -28,8 +29,7 @@ public class KeyspaceRepositoryIntegrationTest {
 
     @Before
     public void init() throws TTransportException, IOException, InterruptedException {
-        // Uncomment next line to use cassandra unit db instead of a local one
-        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
+        CassandraTestUtils.initCassandaUnit();
 
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
         client.connect();

@@ -1,6 +1,7 @@
-package net.sf.esfinge.querybuilder.cassandra.querybuilding;
+package net.sf.esfinge.querybuilder.cassandra.unit.querybuilding;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.QueryParametersMismatchException;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtils;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

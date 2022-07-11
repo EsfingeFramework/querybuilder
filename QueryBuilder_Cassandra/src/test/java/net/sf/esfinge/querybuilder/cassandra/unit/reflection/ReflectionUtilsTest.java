@@ -1,6 +1,7 @@
-package net.sf.esfinge.querybuilder.cassandra.reflection;
+package net.sf.esfinge.querybuilder.cassandra.unit.reflection;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassException;
+import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
