@@ -3,45 +3,18 @@ package net.sf.esfinge.querybuilder.cassandra.integration;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.TestCassandraSessionProvider;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
-import org.apache.thrift.transport.TTransportException;
 import org.junit.*;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CassandraRepositoryIntegrationTest {
+public class CassandraRepositoryIntegrationTest extends CassandraBasicDatabaseTest {
 
-    CassandraTestQuery testQuery;
-    TestCassandraSessionProvider provider;
-
-    @BeforeClass
-    public static void initDB() throws TTransportException, IOException, InterruptedException {
-        CassandraTestUtils.initDB();
-    }
-
-    @AfterClass
-    public static void dropDB() {
-        CassandraTestUtils.dropDB();
-    }
-
-    @Before
-    public void populateTables() {
-        CassandraTestUtils.populateTables();
-
-        testQuery = QueryBuilder.create(CassandraTestQuery.class);
-        provider = new TestCassandraSessionProvider();
-    }
-
-    @After
-    public void cleanTables() {
-        CassandraTestUtils.cleanTables();
-    }
+    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);;
 
     @Test
     public void saveTest() {
