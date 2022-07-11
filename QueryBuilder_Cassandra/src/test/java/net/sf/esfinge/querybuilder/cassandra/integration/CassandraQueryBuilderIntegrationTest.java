@@ -9,8 +9,10 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResul
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import net.sf.esfinge.querybuilder.exception.WrongParamNumberException;
+import org.apache.thrift.transport.TTransportException;
 import org.junit.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -21,7 +23,9 @@ public class CassandraQueryBuilderIntegrationTest {
     TestCassandraSessionProvider provider;
 
     @BeforeClass
-    public static void initDB() {
+    public static void initDB() throws TTransportException, IOException, InterruptedException {
+        // Uncomment next line to use cassandra unit db instead of a local one
+        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
         CassandraTestUtils.initDB();
     }
 

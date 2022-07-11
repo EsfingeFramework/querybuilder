@@ -6,14 +6,7 @@ import net.sf.esfinge.querybuilder.cassandra.cassandrautils.KeyspaceRepository;
 
 public class CassandraTestUtils {
 
-    public static void startCassandraUnitServer(){
-        // Uncomment next line to use cassandra unit db instead of a local one
-        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
-    }
-
     public static void initDB() {
-        startCassandraUnitServer();
-
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
         client.connect();
         Session session = client.getSession();
