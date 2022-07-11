@@ -1,51 +1,22 @@
 package net.sf.esfinge.querybuilder.cassandra.integration;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
+import net.sf.esfinge.querybuilder.cassandra.dbutils.BasicCassandraDatabaseTest;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import net.sf.esfinge.querybuilder.exception.WrongParamNumberException;
-import org.apache.thrift.transport.TTransportException;
-import org.junit.*;
+import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class CassandraQueryBuilderIntegrationTest {
+public class CassandraQueryBuilderIntegrationTest extends BasicCassandraDatabaseTest {
 
-    CassandraTestQuery testQuery;
-    TestCassandraSessionProvider provider;
-
-    @BeforeClass
-    public static void initDB() throws TTransportException, IOException, InterruptedException {
-        // Uncomment next line to use cassandra unit db instead of a local one
-        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
-        CassandraTestUtils.initDB();
-    }
-
-    @AfterClass
-    public static void dropDB() {
-        CassandraTestUtils.dropDB();
-    }
-
-    @Before
-    public void populateTables() {
-        CassandraTestUtils.populateTables();
-
-        testQuery = QueryBuilder.create(CassandraTestQuery.class);
-        provider = new TestCassandraSessionProvider();
-    }
-
-    @After
-    public void cleanTables() {
-        CassandraTestUtils.cleanTables();
-    }
+    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
 
     @Test
     public void selectAllQueryTest() {

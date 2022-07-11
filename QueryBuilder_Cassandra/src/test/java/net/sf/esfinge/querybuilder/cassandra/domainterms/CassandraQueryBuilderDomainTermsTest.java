@@ -1,47 +1,18 @@
 package net.sf.esfinge.querybuilder.cassandra.domainterms;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.dbutils.TestCassandraSessionProvider;
+import net.sf.esfinge.querybuilder.cassandra.dbutils.BasicCassandraDatabaseTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
-import org.apache.thrift.transport.TTransportException;
-import org.junit.*;
+import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CassandraQueryBuilderDomainTermsTest{
+public class CassandraQueryBuilderDomainTermsTest extends BasicCassandraDatabaseTest {
 
-	CassandraTestDomainQuery testQuery;
-	TestCassandraSessionProvider provider;
+	CassandraTestDomainQuery testQuery = QueryBuilder.create(CassandraTestDomainQuery.class);
 
-	@BeforeClass
-	public static void initDB() throws TTransportException, IOException, InterruptedException {
-		// Uncomment next line to use cassandra unit db instead of a local one
-		// EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
-		CassandraTestUtils.initDB();
-	}
-
-	@AfterClass
-	public static void dropDB() {
-		CassandraTestUtils.dropDB();
-	}
-
-	@Before
-	public void populateTables() {
-		CassandraTestUtils.populateTables();
-
-		testQuery = QueryBuilder.create(CassandraTestDomainQuery.class);
-		provider = new TestCassandraSessionProvider();
-	}
-
-	@After
-	public void cleanTables() {
-		CassandraTestUtils.cleanTables();
-	}
-	
 	@Test
 	public void domainQueryTest(){
 		List<Person> list = testQuery.getPersonTeenager();
