@@ -4,9 +4,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ChainComparator implements Comparator<Object> {
-    private List<BasicComparator> comparatorList;
+    private List<Comparator> comparatorList;
 
-    public ChainComparator(List<BasicComparator> comparatorList) {
+    public ChainComparator(List<Comparator> comparatorList) {
         this.comparatorList = comparatorList;
 
         System.out.println("Chain length: " + comparatorList.size());

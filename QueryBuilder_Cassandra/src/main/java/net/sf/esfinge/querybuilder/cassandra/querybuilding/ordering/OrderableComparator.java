@@ -1,11 +1,18 @@
 package net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering;
 
+import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
+
 import java.lang.reflect.Method;
+import java.util.Comparator;
 
-public class NormalComparator extends BasicComparator {
+public class OrderableComparator implements Comparator<Object> {
 
-    public NormalComparator(Method compareMethod) {
-        super(compareMethod);
+    Method compareMethod;
+    OrderingDirection direction;
+
+    public OrderableComparator(Method compareMethod, OrderingDirection direction) {
+        this.compareMethod = compareMethod;
+        this.direction = direction;
     }
 
     @Override
@@ -19,7 +26,7 @@ public class NormalComparator extends BasicComparator {
             throw new RuntimeException(e);
         }
 
-        return result;
+        return direction == OrderingDirection.ASC ? result : (-1 * result);
     }
 
     @Override

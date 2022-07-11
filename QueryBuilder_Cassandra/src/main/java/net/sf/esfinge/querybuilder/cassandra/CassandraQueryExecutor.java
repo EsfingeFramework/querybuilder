@@ -11,13 +11,11 @@ import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.*;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
 import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
-import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
-import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
-import net.sf.esfinge.querybuilder.methodparser.QueryType;
-import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+import net.sf.esfinge.querybuilder.methodparser.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,7 +71,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
                 System.out.println(m.getName());
             }
 
-            BasicComparator firstComparator = new NormalComparator(gettersForFields[0]);
+            Comparator firstComparator = new OrderableComparator(gettersForFields[0], OrderingDirection.ASC);
             System.out.println(firstComparator);
 
             System.out.println("Before sorting");
@@ -83,7 +81,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
             /*System.out.println("After sorting");
             resultsSorted.forEach(r -> System.out.println(r));*/
 
-            BasicComparator secondComparator = new ReversedComparator(gettersForFields[1]);
+            Comparator secondComparator = new OrderableComparator(gettersForFields[1], OrderingDirection.ASC);
             System.out.println(secondComparator);
 
             /*resultsSorted = results.stream().sorted(secondComparator).collect(Collectors.toList());
@@ -91,7 +89,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
             System.out.println("After sorting");
             resultsSorted.forEach(r -> System.out.println(r));*/
 
-            List<BasicComparator> comparators = new ArrayList<>();
+            List<Comparator> comparators = new ArrayList<>();
             comparators.add(firstComparator);
             comparators.add(secondComparator);
 
