@@ -4,7 +4,7 @@ import net.sf.esfinge.querybuilder.cassandra.CassandraQueryRepresentation;
 import net.sf.esfinge.querybuilder.cassandra.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.sorting.OrderByClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderByClause;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;

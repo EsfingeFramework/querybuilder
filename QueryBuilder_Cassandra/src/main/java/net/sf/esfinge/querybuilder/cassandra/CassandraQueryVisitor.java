@@ -3,7 +3,7 @@ package net.sf.esfinge.querybuilder.cassandra;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.sorting.OrderByClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderByClause;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.*;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;

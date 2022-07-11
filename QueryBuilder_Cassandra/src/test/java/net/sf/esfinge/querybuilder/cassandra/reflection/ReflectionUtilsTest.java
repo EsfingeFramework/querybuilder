@@ -1,6 +1,6 @@
 package net.sf.esfinge.querybuilder.cassandra.reflection;
 
-import net.sf.esfinge.querybuilder.cassandra.exceptions.FieldNotFoundInClassException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassException;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -37,6 +37,7 @@ public class ReflectionUtilsTest {
         List<String> fields = new ArrayList<>();
         fields.add("name");
         fields.add("lastName");
+        fields.add("id");
 
         Method[] gettersForFields = ReflectionUtils.getClassGettersForFields(TestClass.class, fields);
 
@@ -45,12 +46,13 @@ public class ReflectionUtilsTest {
         List<String> expected = new ArrayList<>();
         expected.add("getName");
         expected.add("getLastName");
+        expected.add("getId");
 
-        assertEquals(2, gettersForFields.length);
-        assertTrue(actual.containsAll(expected));
+        assertEquals(3, gettersForFields.length);
+        assertEquals(expected,actual);
     }
 
-    @Test(expected = FieldNotFoundInClassException.class)
+    @Test(expected = GetterNotFoundInClassException.class)
     public void getClassGettersForFieldsWithFieldNotPresentTest() {
         List<String> fields = new ArrayList<>();
         fields.add("name");

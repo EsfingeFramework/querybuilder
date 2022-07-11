@@ -1,10 +1,10 @@
 package net.sf.esfinge.querybuilder.cassandra.reflection;
 
-import net.sf.esfinge.querybuilder.cassandra.exceptions.FieldNotFoundInClassException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassException;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class ReflectionUtils {
@@ -21,14 +21,28 @@ public class ReflectionUtils {
     public static <E> Method[] getClassGettersForFields(Class<E> clazz, List<String> fieldNames){
         Method[] getters = getClassGetters(clazz);
 
-        Method[] gettersForFields = Arrays.stream(getters)
-                .filter(g -> fieldNames.contains(g.getName().substring(3,4).toLowerCase() + g.getName().substring(4)))
+        // Need to order the methods with the same ordering as the fieldNames,
+        // otherwise on runtime the chain ordering for multiple fields might change,
+        // see ChainComparator class
+        return fieldNames.stream()
+                .map(name -> getGetterForField(getters,name,clazz))
                 .toArray(Method[]::new);
+    }
 
-        if (gettersForFields.length != fieldNames.size())
-            throw new FieldNotFoundInClassException("One of these fields is not present in the class " + clazz.getSimpleName() + ": " + Arrays.toString(fieldNames.toArray()));
+    private static <E> Method getGetterForField(Method[] methods, String fieldName, Class<E> clazz){
+        String getterName = "get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
 
-        return gettersForFields;
+        Method getter = null;
+
+        for (Method m : methods){
+            if (m.getName().equals(getterName))
+                getter = m;
+        }
+
+        if (getter == null)
+            throw new GetterNotFoundInClassException("Getter for field " + fieldName + " not found in class " + clazz.getSimpleName());
+
+        return getter;
     }
 
 }

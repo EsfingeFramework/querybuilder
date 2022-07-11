@@ -1,11 +1,10 @@
-package net.sf.esfinge.querybuilder.cassandra.querybuilding.sorting;
+package net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class NormalComparator extends BasicComparator {
+public class ReversedComparator extends BasicComparator{
 
-    public NormalComparator(Method compareMethod) {
+    public ReversedComparator(Method compareMethod) {
         super(compareMethod);
     }
 
@@ -20,12 +19,12 @@ public class NormalComparator extends BasicComparator {
             throw new RuntimeException(e);
         }
 
-        return result;
+        return -1 * result;
     }
 
     @Override
     public String toString() {
-        return "NormalComparator{" +
+        return "ReversedComparator{" +
                 "compareMethod=" + compareMethod.getName() +
                 '}';
     }

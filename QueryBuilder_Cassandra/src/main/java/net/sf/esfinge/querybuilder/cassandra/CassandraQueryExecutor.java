@@ -7,7 +7,7 @@ import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.sorting.*;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.*;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
 import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
@@ -18,7 +18,6 @@ import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
