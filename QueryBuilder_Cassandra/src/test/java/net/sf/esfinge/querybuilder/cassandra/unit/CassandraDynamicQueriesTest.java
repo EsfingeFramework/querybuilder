@@ -112,7 +112,7 @@ public class CassandraDynamicQueriesTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
         assertTrue("Query should be dynamic", qr.isDynamic());
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("name", null);
 
         String query1 = qr.getQuery(params).toString();
@@ -135,7 +135,7 @@ public class CassandraDynamicQueriesTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
         assertTrue("Query should be dynamic", qr.isDynamic());
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
 
         params.put("name", null);
         String query1 = qr.getQuery(params).toString();
@@ -161,7 +161,7 @@ public class CassandraDynamicQueriesTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
         assertTrue("Query should be dynamic", qr.isDynamic());
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
 
         params.put("name", null);
         String query1 = qr.getQuery(params).toString();
@@ -191,7 +191,7 @@ public class CassandraDynamicQueriesTest {
         visitor.visitEnd();
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("name", null);
         params.put("age", 18);
         params.put("lastname", null);
@@ -226,7 +226,7 @@ public class CassandraDynamicQueriesTest {
         visitor.visitEnd();
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("name", null);
         params.put("age", null);
         params.put("lastName", null);

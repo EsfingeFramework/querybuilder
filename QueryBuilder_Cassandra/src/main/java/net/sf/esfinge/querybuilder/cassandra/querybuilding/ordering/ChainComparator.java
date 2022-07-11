@@ -13,7 +13,7 @@ public class ChainComparator implements Comparator<Object> {
     @Override
     public int compare(Object obj1, Object obj2) {
         int result;
-        for (Comparator<Object> comparator : comparatorList) {
+        for (Comparator comparator : comparatorList) {
             if ((result = comparator.compare(obj1, obj2)) != 0) {
                 return result;
             }

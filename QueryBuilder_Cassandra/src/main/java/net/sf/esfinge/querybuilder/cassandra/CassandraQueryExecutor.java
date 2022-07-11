@@ -49,7 +49,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
             throw new WrongTypeOfExpectedResultException("The query " + query + " resulted in " + results.size() + "results");
 
         List<OrderByClause> orderByClause = ((CassandraQueryRepresentation) qr).getOrderByClause();
-        // TODO: IMPLEMENT ORDER BY AT APPLICATION LEVEL
+
         if (!orderByClause.isEmpty()) {
             results = OrderingUtils.sortListByOrderingClause(results, orderByClause, clazz);
         }

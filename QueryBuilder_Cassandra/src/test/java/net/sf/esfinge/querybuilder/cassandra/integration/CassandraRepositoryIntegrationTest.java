@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class CassandraRepositoryIntegrationTest {
 
@@ -72,7 +73,7 @@ public class CassandraRepositoryIntegrationTest {
 
         Person actual = mapper.get(2);
 
-        assertEquals("Should not retrieve any person", null, actual);
+        assertNull("Should not retrieve any person", actual);
     }
 
     @Test

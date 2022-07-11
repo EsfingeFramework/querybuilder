@@ -43,7 +43,7 @@ public class QueryBuildingUtilitiesTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ?";
         Object[] args = {1, "Max", "Additional"};
 
-        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
+        QueryBuildingUtils.replaceQueryArgs(query, args);
     }
 
     @Test(expected = QueryParametersMismatchException.class)
@@ -51,7 +51,7 @@ public class QueryBuildingUtilitiesTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ? OR city = ?";
         Object[] args = {1, "Max"};
 
-        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
+        QueryBuildingUtils.replaceQueryArgs(query, args);
     }
 
 
