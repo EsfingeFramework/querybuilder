@@ -49,7 +49,7 @@ public class ReflectionUtilsTest {
         expected.add("getId");
 
         assertEquals(3, gettersForFields.length);
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
     }
 
     @Test(expected = GetterNotFoundInClassException.class)

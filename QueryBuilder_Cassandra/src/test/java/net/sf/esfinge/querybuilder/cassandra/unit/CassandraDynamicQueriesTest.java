@@ -180,40 +180,40 @@ public class CassandraDynamicQueriesTest {
     }
 
 
-	@Test
-	public void twoIgnoreWhenNullQueryPlusOther(){
-		visitor.visitEntity("Person");
-		visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
-		visitor.visitConector("and");
-		visitor.visitCondition("age", ComparisonType.GREATER_OR_EQUALS);
-		visitor.visitConector("and");
-		visitor.visitCondition("lastname", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
-		visitor.visitEnd();
-		QueryRepresentation qr = visitor.getQueryRepresentation();
+    @Test
+    public void twoIgnoreWhenNullQueryPlusOther() {
+        visitor.visitEntity("Person");
+        visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+        visitor.visitConector("and");
+        visitor.visitCondition("age", ComparisonType.GREATER_OR_EQUALS);
+        visitor.visitConector("and");
+        visitor.visitCondition("lastname", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+        visitor.visitEnd();
+        QueryRepresentation qr = visitor.getQueryRepresentation();
 
-		Map<String,Object> params = new HashMap<String, Object>();
-		params.put("name", null);
-		params.put("age", 18);
-		params.put("lastname", null);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("name", null);
+        params.put("age", 18);
+        params.put("lastname", null);
 
-		String query1 = qr.getQuery(params).toString();
-		assertEquals(query1,"SELECT * FROM <#keyspace-name#>.Person WHERE age >= 18 ALLOW FILTERING");
+        String query1 = qr.getQuery(params).toString();
+        assertEquals(query1, "SELECT * FROM <#keyspace-name#>.Person WHERE age >= 18 ALLOW FILTERING");
 
-		params.put("name", "James");
+        params.put("name", "James");
 
-		String query2 = qr.getQuery(params).toString();
-		assertEquals(query2,"SELECT * FROM <#keyspace-name#>.Person WHERE name = 'James' AND age >= 18 ALLOW FILTERING");
+        String query2 = qr.getQuery(params).toString();
+        assertEquals(query2, "SELECT * FROM <#keyspace-name#>.Person WHERE name = 'James' AND age >= 18 ALLOW FILTERING");
 
-		params.put("lastname", "McLoud");
+        params.put("lastname", "McLoud");
 
-		String query3 = qr.getQuery(params).toString();
-		assertEquals(query3,"SELECT * FROM <#keyspace-name#>.Person WHERE name = 'James' AND age >= 18 AND lastname = 'McLoud' ALLOW FILTERING");
+        String query3 = qr.getQuery(params).toString();
+        assertEquals(query3, "SELECT * FROM <#keyspace-name#>.Person WHERE name = 'James' AND age >= 18 AND lastname = 'McLoud' ALLOW FILTERING");
 
-		params.put("name", null);
+        params.put("name", null);
 
-		String query4 = qr.getQuery(params).toString();
-		assertEquals(query4,"SELECT * FROM <#keyspace-name#>.Person WHERE age >= 18 AND lastname = 'McLoud' ALLOW FILTERING");
-	}
+        String query4 = qr.getQuery(params).toString();
+        assertEquals(query4, "SELECT * FROM <#keyspace-name#>.Person WHERE age >= 18 AND lastname = 'McLoud' ALLOW FILTERING");
+    }
 
     @Test
     public void threeIgnoreWhenNullQueryTest() {

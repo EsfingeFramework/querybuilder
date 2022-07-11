@@ -112,7 +112,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
             sb.append(conditions.get(i).toString());
 
             if (i < conditions.size() - 1) {
-                if (!(conditions.get(i).isIgnoredCondition())){
+                if (!(conditions.get(i).isIgnoredCondition())) {
                     if (hasConditionNotToBeIgnoredNext(i))
                         sb.append(" ").append(conditions.get(i).getNextConnector()).append(" ");
                 }
@@ -122,8 +122,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
         return sb.toString();
     }
 
-    private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex){
-        for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
+    private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex) {
+        for (int i = currentConditionIndex + 1; i < conditions.size(); i++) {
             if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL || conditions.get(i).getValue() != null)
                 return true;
         }

@@ -1,6 +1,5 @@
 package net.sf.esfinge.querybuilder.cassandra.testresources;
 
-import jnr.ffi.annotations.In;
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.Greater;
 import net.sf.esfinge.querybuilder.annotation.Lesser;
@@ -12,25 +11,35 @@ public interface CassandraTestQuery extends Repository<Person> {
 
     // SIMPLE QUERIES
     List<Person> getPerson();
+
     Person getPersonById(Integer id);
+
     Person getPersonByIdGreater(Integer id);
+
     List<Person> getPersonByLastName(String lastname);
+
     Person getPersonByNameAndLastName(String name, String lastname);
+
     List<Person> getPersonByAge(@Greater Integer age);
+
     List<Person> getPersonByAgeLesser(Integer age);
 
     List<Person> getPersonByIdAndNameAndLastNameAndAge(Integer id, String name, String lastname, Integer age);
 
     // QUERIES WITH ORDERING
     List<Person> getPersonOrderByName();
+
     List<Person> getPersonByAgeOrderByNameDesc(@Greater Integer age);
+
     List<Person> getPersonOrderByLastNameAndName();
 
     List<Person> getPersonOrderByLastNameDescAndNameAsc();
+
     List<Person> getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(@Lesser Integer age, String lastname);
 
     // QUERIES WITH WRONG NAMING CONVENTION
     List<Person> getPersonByIdAndNameAndLastName(Integer id, String name);
+
     List<Person> getPersonByIdAndName(Integer id, String name, Integer age);
 
 
@@ -45,6 +54,7 @@ public interface CassandraTestQuery extends Repository<Person> {
 
     // TODO: SEARCH QUERIES WITH 'LIKE' ARE NOT SUPPORTED BY CASSANDRA, IMPLEMENT AT APPLICATION LOGIC OR LEAVE IT FORBIDDEN?
     List<Person> getPersonByLastNameNotEquals(String name);
+
     List<Person> getPersonByName(@Starts String name);
 
     // List<Person> getPersonByNameEnds(String name);

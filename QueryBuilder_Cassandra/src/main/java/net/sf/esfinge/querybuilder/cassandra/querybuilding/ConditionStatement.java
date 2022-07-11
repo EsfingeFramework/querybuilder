@@ -56,14 +56,14 @@ public class ConditionStatement {
         this.nextConnector = nextConnector.toUpperCase();
     }
 
-    private String getConditionRepresentation(){
+    private String getConditionRepresentation() {
         StringBuilder sb = new StringBuilder();
 
         // Only append if NullOption is equal to NONE, otherwise
         // ignore condition
-        if(nullOption == NullOption.NONE){
+        if (nullOption == NullOption.NONE) {
             sb.append(propertyName + " " + comparisonType.getOperator() + " " + getValueRepresentation());
-        } else if (nullOption == NullOption.IGNORE_WHEN_NULL){
+        } else if (nullOption == NullOption.IGNORE_WHEN_NULL) {
             if (value != null)
                 sb.append(propertyName + " " + comparisonType.getOperator() + " " + getValueRepresentation());
         }
@@ -75,7 +75,7 @@ public class ConditionStatement {
         return nullOption == NullOption.IGNORE_WHEN_NULL && value == null;
     }
 
-    private String getValueRepresentation(){
+    private String getValueRepresentation() {
         return value != null ? QueryBuildingUtils.getValueRepresentationByType(value) : "?";
     }
 

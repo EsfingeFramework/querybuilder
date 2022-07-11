@@ -7,17 +7,17 @@ import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.*;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtils;
-import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderByClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderingUtils;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
-import net.sf.esfinge.querybuilder.methodparser.*;
+import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryType;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CassandraQueryExecutor<E> implements QueryExecutor {
 
@@ -41,20 +41,20 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         String query = qr.getQuery().toString();
 
         if (args != null)
-            query = QueryBuildingUtils.replaceQueryArgs(query,args);
+            query = QueryBuildingUtils.replaceQueryArgs(query, args);
 
         List<E> results = getQueryResults(query);
 
         if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE && results.size() > 1)
             throw new WrongTypeOfExpectedResultException("The query " + query + " resulted in " + results.size() + "results");
 
-        List<OrderByClause> orderByClause = ((CassandraQueryRepresentation)qr).getOrderByClause();
+        List<OrderByClause> orderByClause = ((CassandraQueryRepresentation) qr).getOrderByClause();
         // TODO: IMPLEMENT ORDER BY AT APPLICATION LEVEL
-        if (!orderByClause.isEmpty()){
-            results = OrderingUtils.sortListByOrderingClause(results,orderByClause,clazz);
+        if (!orderByClause.isEmpty()) {
+            results = OrderingUtils.sortListByOrderingClause(results, orderByClause, clazz);
         }
 
-        if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE){
+        if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE) {
             if (results.size() > 0)
                 return results.get(0);
             else
@@ -78,8 +78,8 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         return objectsList;
     }
 
-    private String getQueryStringWithKeySpaceName(String query){
-        return query.replace("<#keyspace-name#>",clazz.getDeclaredAnnotation(Table.class).keyspace());
+    private String getQueryStringWithKeySpaceName(String query) {
+        return query.replace("<#keyspace-name#>", clazz.getDeclaredAnnotation(Table.class).keyspace());
     }
 
 }

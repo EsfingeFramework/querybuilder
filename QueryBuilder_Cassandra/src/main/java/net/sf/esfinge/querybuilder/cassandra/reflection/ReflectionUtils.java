@@ -4,7 +4,6 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassExc
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class ReflectionUtils {
@@ -18,23 +17,23 @@ public class ReflectionUtils {
         return setters;
     }
 
-    public static <E> Method[] getClassGettersForFields(Class<E> clazz, List<String> fieldNames){
+    public static <E> Method[] getClassGettersForFields(Class<E> clazz, List<String> fieldNames) {
         Method[] getters = getClassGetters(clazz);
 
         // Need to order the methods with the same ordering as the fieldNames,
         // otherwise on runtime the chain ordering for multiple fields might change,
         // see ChainComparator class
         return fieldNames.stream()
-                .map(name -> getGetterForField(clazz,getters,name))
+                .map(name -> getGetterForField(clazz, getters, name))
                 .toArray(Method[]::new);
     }
 
-    public static <E> Method getGetterForField(Class<E> clazz, Method[] methods, String fieldName){
-        String getterName = "get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
+    public static <E> Method getGetterForField(Class<E> clazz, Method[] methods, String fieldName) {
+        String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
         Method getter = null;
 
-        for (Method m : methods){
+        for (Method m : methods) {
             if (m.getName().equals(getterName))
                 getter = m;
         }

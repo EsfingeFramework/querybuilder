@@ -44,18 +44,18 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT * FROM <#keyspace-name#>.").append(entity);
 
-        for(ConditionStatement statement : conditions){
-            if (parameters.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL){
+        for (ConditionStatement statement : conditions) {
+            if (parameters.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL) {
 
                 statement.setValue(parameters.get(statement.getPropertyName()));
 
-                if (!(statement.getValue() == null && statement.getNullOption() == NullOption.IGNORE_WHEN_NULL)){
+                if (!(statement.getValue() == null && statement.getNullOption() == NullOption.IGNORE_WHEN_NULL)) {
                     if (!builder.toString().contains("WHERE"))
                         builder.append(" WHERE ");
 
                     builder.append(statement);
 
-                    if (hasConditionNotToBeIgnoredNext(conditions.indexOf(statement))){
+                    if (hasConditionNotToBeIgnoredNext(conditions.indexOf(statement))) {
                         builder.append(" ").append(statement.getNextConnector()).append(" ");
                     }
                 }
@@ -65,8 +65,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         return builder + (builder.toString().contains("WHERE") ? " ALLOW FILTERING" : "");
     }
 
-    public void updateConditions(Map<String, Object> parameters){
-        for(ConditionStatement statement : conditions) {
+    public void updateConditions(Map<String, Object> parameters) {
+        for (ConditionStatement statement : conditions) {
             if (parameters.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL) {
 
                 statement.setValue(parameters.get(statement.getPropertyName()));
@@ -74,8 +74,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         }
     }
 
-    private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex){
-        for (int i = currentConditionIndex + 1; i < conditions.size(); i++){
+    private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex) {
+        for (int i = currentConditionIndex + 1; i < conditions.size(); i++) {
             if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL || conditions.get(i).getValue() != null)
                 return true;
         }
