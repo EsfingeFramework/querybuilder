@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.querybuilding;
+package net.sf.esfinge.querybuilder.cassandra.querybuilding.sorting;
 
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
 

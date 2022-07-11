@@ -7,7 +7,7 @@ import com.datastax.driver.mapping.annotations.Table;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.OrderByClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.sorting.*;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtilities;
 import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
@@ -16,11 +16,8 @@ import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryType;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,15 +61,45 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
                     .map(o -> o.getPropertyName())
                     .collect(Collectors.toList());
 
+            System.out.println("*** Fields ***");
             fieldNames.forEach(n-> System.out.println(n));
 
+            List<String> fields = orderByClause.stream().map(o -> o.getPropertyName()).collect(Collectors.toList());
 
-            Method[] methods = ReflectionUtils.getClassGetters(clazz);
 
-            for (Method m : methods){
+            Method[] gettersForFields = ReflectionUtils.getClassGettersForFields(clazz,fields);
+
+            System.out.println("*** Getters ***");
+            for (Method m : gettersForFields){
                 System.out.println(m.getName());
             }
 
+            BasicComparator firstComparator = new NormalComparator(gettersForFields[0]);
+            System.out.println(firstComparator);
+
+            System.out.println("Before sorting");
+            results.forEach(r -> System.out.println(r));
+            //List<E> resultsSorted = results.stream().sorted(firstComparator).collect(Collectors.toList());
+
+            /*System.out.println("After sorting");
+            resultsSorted.forEach(r -> System.out.println(r));*/
+
+            BasicComparator secondComparator = new ReversedComparator(gettersForFields[1]);
+            System.out.println(secondComparator);
+
+            /*resultsSorted = results.stream().sorted(secondComparator).collect(Collectors.toList());
+
+            System.out.println("After sorting");
+            resultsSorted.forEach(r -> System.out.println(r));*/
+
+            List<BasicComparator> comparators = new ArrayList<>();
+            comparators.add(firstComparator);
+            comparators.add(secondComparator);
+
+            List<E> resultsSorted = results.stream().sorted(new ChainComparator(comparators)).collect(Collectors.toList());
+
+            System.out.println("After sorting");
+            resultsSorted.forEach(r -> System.out.println(r));
 
 
         }

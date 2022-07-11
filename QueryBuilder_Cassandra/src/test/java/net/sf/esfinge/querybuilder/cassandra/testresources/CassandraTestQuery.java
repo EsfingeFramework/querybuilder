@@ -44,7 +44,17 @@ public interface CassandraTestQuery extends Repository<Person> {
     // TODO: SEARCH QUERIES WITH 'LIKE' ARE NOT SUPPORTED BY CASSANDRA, IMPLEMENT AT APPLICATION LOGIC OR LEAVE IT FORBIDDEN?
     List<Person> getPersonByLastNameNotEquals(String name);
     List<Person> getPersonByName(@Starts String name);
+
+
     // List<Person> getPersonByNameEnds(String name);
     // List<Person> getPersonByNameContains(String name);
     // List<Person> getPersonByNameStartsAndAgeGreater(String name, Integer age);
+
+
+    // test methods
+    List<Person> getPersonOrderById();
+
+    List<Person> getPersonOrderByLastName();
+
+    List<Person> getPersonOrderByLastNameAndAgeDesc();
 }
