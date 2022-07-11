@@ -21,9 +21,7 @@ public class CassandraRepositoryIntegrationTest {
     TestCassandraSessionProvider provider;
 
     @BeforeClass
-    public static void initDB() throws TTransportException, IOException, InterruptedException {
-        // Uncomment next line to use cassandra unit db instead of a local one
-        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
+    public static void initDB() {
         CassandraTestUtils.initDB();
     }
 
