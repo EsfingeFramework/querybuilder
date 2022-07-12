@@ -37,9 +37,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         queryInfo.visit(visitor);
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
-        String query = getQuery(queryInfo,args,qr);
-
-        System.out.println(query);
+        String query = getQuery(queryInfo, args, qr);
 
         List<E> results = getQueryResults(query);
 
@@ -85,9 +83,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
 
             return query;
         } else {
-            System.out.println("Is dynamic...");
-
-            Map<String, Object> params = new HashMap<String, Object>();
+            Map<String, Object> params = new HashMap<>();
             List<String> namedParameters = queryInfo.getNamedParemeters();
             if (queryInfo.getQueryStyle() == QueryStyle.METHOD_SIGNATURE) {
                 for (int i = 0; i < args.length; i++) {
@@ -96,14 +92,8 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
                 }
             }
 
-            for (String keys : params.keySet()) {
-                System.out.println(keys + " " + params.get(keys));
-            }
-
             return qr.getQuery(params).toString();
-
         }
-
     }
 
     private String getQueryStringWithKeySpaceName(String query) {

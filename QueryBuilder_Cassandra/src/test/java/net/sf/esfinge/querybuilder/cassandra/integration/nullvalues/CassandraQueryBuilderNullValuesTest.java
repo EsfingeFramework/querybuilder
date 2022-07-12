@@ -35,21 +35,20 @@ public class CassandraQueryBuilderNullValuesTest extends CassandraBasicDatabaseT
 		assertEquals("The list should have 4 persons", 4, list.size());
 	}
 	
-	/*@Test
+	@Test
 	public void ignoreWhenNullWithTwoParams(){
-		List<Person> list = testQuery.getPersonByNameAndLastName("M", null);
-		assertEquals("The list should have 2 persons", 2, list.size());
-		assertEquals("The list should have id = 2", new Integer(2), list.get(0).getId());
-		assertEquals("The list should have id = 3", new Integer(3), list.get(1).getId());
-		
-		list = testQuery.getPersonByNameAndLastName(null, "S");
-		assertEquals("The list should have 2 persons", 2, list.size());
-		assertEquals("The list should have id = 1", new Integer(1), list.get(0).getId());
-		assertEquals("The list should have id = 3", new Integer(3), list.get(1).getId());
-		
-		list = testQuery.getPersonByNameAndLastName("M", "S");
+		List<Person> list = testQuery.getPersonByNameAndLastName("Marcos", null);
 		assertEquals("The list should have 1 person", 1, list.size());
-		assertEquals("The list should have id = 3", new Integer(3), list.get(0).getId());
-	}*/
+		assertEquals("The person should be Marcos", "Marcos", list.get(0).getName());
+
+		list = testQuery.getPersonByNameAndLastName(null, "Silva");
+		assertEquals("The list should have 2 persons", 2, list.size());
+		assertEquals("The first person should be Pedro", "Pedro", list.get(0).getName());
+		assertEquals("The first person should be Marcos", "Marcos", list.get(1).getName());
+
+		list = testQuery.getPersonByNameAndLastName("Marcos", "Silva");
+		assertEquals("The list should have 1 person", 1, list.size());
+		assertEquals("The first person should be Marcos", "Marcos", list.get(0).getName());
+	}
 
 }
