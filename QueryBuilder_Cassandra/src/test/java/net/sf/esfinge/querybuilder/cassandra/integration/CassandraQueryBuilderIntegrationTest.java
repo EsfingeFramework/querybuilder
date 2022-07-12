@@ -149,7 +149,8 @@ public class CassandraQueryBuilderIntegrationTest extends CassandraBasicDatabase
 
         String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
         String[] expectedNames = {"Silvia", "Maria", "Antonio", "Marcos", "Pedro"};
-        list.forEach(p -> System.out.println(p));
+
+        assertArrayEquals(expectedNames, actualNames);
     }
 
     @Test

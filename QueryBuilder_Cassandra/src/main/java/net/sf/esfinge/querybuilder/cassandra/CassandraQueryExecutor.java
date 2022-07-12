@@ -11,13 +11,10 @@ import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtils;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderingUtils;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
-import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
-import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
-import net.sf.esfinge.querybuilder.methodparser.QueryType;
-import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
-import net.sf.esfinge.querybuilder.utils.ReflectionUtils;
+import net.sf.esfinge.querybuilder.methodparser.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,16 +37,9 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         queryInfo.visit(visitor);
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
-        String query = qr.getQuery().toString();
+        String query = getQuery(queryInfo,args,qr);
 
-        // Handle dynamic queries
-        if (queryInfo.isDynamic()){
-            System.out.println("Is dynamic...");
-
-        }
-
-        if (args != null)
-            query = QueryBuildingUtils.replaceQueryArgs(query, args);
+        System.out.println(query);
 
         List<E> results = getQueryResults(query);
 
@@ -57,7 +47,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
             throw new WrongTypeOfExpectedResultException("The query " + query + " resulted in " + results.size() + "results");
 
         List<OrderByClause> orderByClause = ((CassandraQueryRepresentation) qr).getOrderByClause();
-        // TODO: IMPLEMENT ORDER BY AT APPLICATION LEVEL
+
         if (!orderByClause.isEmpty()) {
             results = OrderingUtils.sortListByOrderingClause(results, orderByClause, clazz);
         }
@@ -72,7 +62,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         return results;
     }
 
-    public List<E> getQueryResults(String query) {
+    private List<E> getQueryResults(String query) {
         Mapper<E> mapper = provider.getManager().mapper(clazz);
 
         ResultSet results = provider.getSession().execute(getQueryStringWithKeySpaceName(query));
@@ -84,6 +74,36 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         }
 
         return objectsList;
+    }
+
+    private String getQuery(QueryInfo queryInfo, Object[] args, QueryRepresentation qr) {
+        if (!queryInfo.isDynamic()) {
+            String query = qr.getQuery().toString();
+
+            if (args != null)
+                query = QueryBuildingUtils.replaceQueryArgs(query, args);
+
+            return query;
+        } else {
+            System.out.println("Is dynamic...");
+
+            Map<String, Object> params = new HashMap<String, Object>();
+            List<String> namedParameters = queryInfo.getNamedParemeters();
+            if (queryInfo.getQueryStyle() == QueryStyle.METHOD_SIGNATURE) {
+                for (int i = 0; i < args.length; i++) {
+                    ComparisonType cp = ComparisonType.getComparisonType(namedParameters.get(i));
+                    params.put(namedParameters.get(i).replace(cp.getOpName(), ""), args[i]);
+                }
+            }
+
+            for (String keys : params.keySet()) {
+                System.out.println(keys + " " + params.get(keys));
+            }
+
+            return qr.getQuery(params).toString();
+
+        }
+
     }
 
     private String getQueryStringWithKeySpaceName(String query) {

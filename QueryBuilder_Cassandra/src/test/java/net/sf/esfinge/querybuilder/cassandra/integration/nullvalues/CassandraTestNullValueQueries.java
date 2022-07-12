@@ -10,8 +10,8 @@ import java.util.List;
 public interface CassandraTestNullValueQueries {
 
 	public List<Person> getPersonByName(@CompareToNull String name);
-	public List<Person> getPersonByAgeGreater(Integer age);
-	//public List<Person> getPersonByAgeGreater(@IgnoreWhenNull Integer age);
+	//public List<Person> getPersonByAgeGreater(Integer age);
+	public List<Person> getPersonByAgeGreater(@IgnoreWhenNull Integer age);
 	public List<Person> getPersonByNameAndLastName(@IgnoreWhenNull String name, @IgnoreWhenNull String lastname);
 
 }
