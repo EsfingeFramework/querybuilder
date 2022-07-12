@@ -15,9 +15,11 @@ import net.sf.esfinge.querybuilder.methodparser.QueryInfo;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryType;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
+import net.sf.esfinge.querybuilder.utils.ReflectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CassandraQueryExecutor<E> implements QueryExecutor {
 
@@ -39,6 +41,12 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
         String query = qr.getQuery().toString();
+
+        // Handle dynamic queries
+        if (queryInfo.isDynamic()){
+            System.out.println("Is dynamic...");
+
+        }
 
         if (args != null)
             query = QueryBuildingUtils.replaceQueryArgs(query, args);
