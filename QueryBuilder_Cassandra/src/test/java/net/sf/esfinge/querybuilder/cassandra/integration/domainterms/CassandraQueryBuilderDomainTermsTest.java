@@ -13,9 +13,7 @@ public class CassandraQueryBuilderDomainTermsTest extends CassandraBasicDatabase
 
 	CassandraTestDomainQuery testQuery = QueryBuilder.create(CassandraTestDomainQuery.class);
 
-	// TODO: Running these tests with all the other integration tests make some tests fail, To be investigated...
-
-	/*@Test
+	@Test
 	public void domainQueryTest(){
 		List<Person> list = testQuery.getPersonTeenager();
 		assertEquals("The list should have 2 persons", 2, list.size());
@@ -43,7 +41,7 @@ public class CassandraQueryBuilderDomainTermsTest extends CassandraBasicDatabase
 		List<Person> list = testQuery.getPersonSilvaFamilyByAge(25);
 		assertEquals("The list should have 1 person", 1, list.size());
 		assertEquals("The list should have Marcos", "Marcos", list.get(0).getName());
-	}*/
+	}
 
 
 }
