@@ -22,17 +22,17 @@ public class CassandraQueryBuilderNullValuesTest extends CassandraBasicDatabaseT
 	private CassandraTestNullValueQueries testQuery = QueryBuilder.create(CassandraTestNullValueQueries.class);;
 
 	@Test(expected = UnsupportedCassandraOperationException.class)
-	public void compareToNullQuery(){
+	public void compareToNullQueryTest(){
 		List<Person> list = testQuery.getPersonByName(null);
 	}
 
 	@Test
-	public void ignoreWhenNull(){
+	public void ignoreWhenNullQueryTest(){
 		List<Person> list = testQuery.getPersonByAgeGreater(null);
 		assertEquals("The list should have 5 persons", 5, list.size());
-		
+
 		list = testQuery.getPersonByAgeGreater(18);
-		assertEquals("The list should have 2 persons", 2, list.size());
+		assertEquals("The list should have 4 persons", 4, list.size());
 	}
 	
 	/*@Test
