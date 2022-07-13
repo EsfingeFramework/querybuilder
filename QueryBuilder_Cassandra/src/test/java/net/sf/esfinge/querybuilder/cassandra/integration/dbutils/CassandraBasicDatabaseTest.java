@@ -10,18 +10,15 @@ import java.io.IOException;
 
 public class CassandraBasicDatabaseTest {
 
-    protected TestCassandraSessionProvider provider;
-
     @BeforeClass
     public static void initDB() throws TTransportException, IOException, InterruptedException {
         CassandraTestUtils.initDB();
+        CassandraTestUtils.createTables();
     }
 
     @Before
     public void populateTables() {
         CassandraTestUtils.populateTables();
-
-        provider = new TestCassandraSessionProvider();
     }
 
     @After

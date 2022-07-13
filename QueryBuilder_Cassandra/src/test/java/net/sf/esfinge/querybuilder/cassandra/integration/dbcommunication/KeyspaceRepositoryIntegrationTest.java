@@ -31,10 +31,7 @@ public class KeyspaceRepositoryIntegrationTest {
     public void init() throws TTransportException, IOException, InterruptedException {
         CassandraTestUtils.initCassandaUnit();
 
-        TestCassandraSessionProvider client = new TestCassandraSessionProvider();
-        client.connect();
-
-        this.session = client.getSession();
+        this.session = CassandraTestUtils.getSession();
 
         schemaRepository = new KeyspaceRepository(session);
     }
@@ -82,6 +79,8 @@ public class KeyspaceRepositoryIntegrationTest {
     @AfterAll
     public void clean() {
         schemaRepository.deleteKeyspace(KEYSPACE_NAME);
+
+        session.close();
     }
 
 }

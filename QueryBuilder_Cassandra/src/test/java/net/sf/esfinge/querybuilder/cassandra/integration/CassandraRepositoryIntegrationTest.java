@@ -4,6 +4,7 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.*;
@@ -26,7 +27,7 @@ public class CassandraRepositoryIntegrationTest extends CassandraBasicDatabaseTe
 
         testQuery.save(expected);
 
-        MappingManager manager = new MappingManager(provider.getSession());
+        MappingManager manager = new MappingManager(CassandraTestUtils.getSession());
         Mapper<Person> mapper = manager.mapper(Person.class);
 
         Person actual = mapper.get(6);
@@ -38,7 +39,7 @@ public class CassandraRepositoryIntegrationTest extends CassandraBasicDatabaseTe
     public void deleteTest() {
         testQuery.delete(2);
 
-        MappingManager manager = new MappingManager(provider.getSession());
+        MappingManager manager = new MappingManager(CassandraTestUtils.getSession());
         Mapper<Person> mapper = manager.mapper(Person.class);
 
         Person actual = mapper.get(2);
