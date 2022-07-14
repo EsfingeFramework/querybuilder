@@ -8,7 +8,7 @@ import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.NotEnoughExamplesException;
-import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
+import net.sf.esfinge.querybuilder.cassandra.reflection.CassandraReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public List<E> queryByExample(E e) {
-        Method[] getters = ReflectionUtils.getClassGetters(e.getClass());
+        Method[] getters = CassandraReflectionUtils.getClassGetters(e.getClass());
 
         if (getters.length == 0)
             throw new NotEnoughExamplesException("At least one attribute needed for class " + e.getClass());

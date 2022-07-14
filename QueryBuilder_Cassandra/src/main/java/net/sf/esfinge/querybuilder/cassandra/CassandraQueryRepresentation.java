@@ -44,20 +44,30 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT * FROM <#keyspace-name#>.").append(entity);
 
+        // Set the statement value based on the parameters
         for (ConditionStatement statement : conditions) {
-            if (parameters.get(statement.getPropertyName()) != null || statement.getNullOption() != NullOption.IGNORE_WHEN_NULL) {
+            String propertyName = statement.getPropertyName();
 
-                statement.setValue(parameters.get(statement.getPropertyName()));
+            // Check if the property name in the parameter map is named after the param name + comparison convention
+            // if so, update the name of the property for the search this is used for the Query objects with comparison
+            if (parameters.get(statement.getPropertyName()) == null) {
+                if (parameters.get(propertyName + statement.getComparisonType().getOpName()) != null)
+                    propertyName += statement.getComparisonType().getOpName();
+            }
 
-                if (!(statement.getValue() == null && statement.getNullOption() == NullOption.IGNORE_WHEN_NULL)) {
-                    if (!builder.toString().contains("WHERE"))
-                        builder.append(" WHERE ");
+            statement.setValue(parameters.get(propertyName));
 
-                    builder.append(statement);
+        }
 
-                    if (hasConditionNotToBeIgnoredNext(conditions.indexOf(statement))) {
-                        builder.append(" ").append(statement.getNextConnector()).append(" ");
-                    }
+        // Append the statement value according to the rules
+        for (ConditionStatement statement : conditions) {
+            if (!(statement.getValue() == null && statement.getNullOption() == NullOption.IGNORE_WHEN_NULL)) {
+                if (!builder.toString().contains("WHERE"))
+                    builder.append(" WHERE ");
+
+                builder.append(statement);
+                if (hasConditionNotToBeIgnoredNext(conditions.indexOf(statement))) {
+                    builder.append(" ").append(statement.getNextConnector()).append(" ");
                 }
             }
         }
@@ -76,8 +86,11 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
 
     private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex) {
         for (int i = currentConditionIndex + 1; i < conditions.size(); i++) {
-            if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL || conditions.get(i).getValue() != null)
+            ConditionStatement c = conditions.get(i);
+
+            if (c.getNullOption() != NullOption.IGNORE_WHEN_NULL || c.getValue() != null) {
                 return true;
+            }
         }
 
         return false;

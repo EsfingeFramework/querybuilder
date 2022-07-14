@@ -2,11 +2,12 @@ package net.sf.esfinge.querybuilder.cassandra.unit.querybuilding;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.QueryParametersMismatchException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtils;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class QueryBuildingUtilitiesTest {
+public class QueryBuildingUtilsTest {
 
 
     @Test
@@ -86,5 +87,26 @@ public class QueryBuildingUtilitiesTest {
     public void getValueRepresentationByTypeWithTextTest() {
         assertEquals("'Max'", QueryBuildingUtils.getValueRepresentationByType("Max"));
         assertEquals("'A'", QueryBuildingUtils.getValueRepresentationByType('A'));
+    }
+
+    @Test
+    public void getParameterNameFromParameterWithComparisonTest() {
+        assertEquals("name", QueryBuildingUtils.extractParameterNameFromParameterWithComparison("nameEquals"));
+        assertEquals("age", QueryBuildingUtils.extractParameterNameFromParameterWithComparison("ageLesser"));
+        assertEquals("lastName", QueryBuildingUtils.extractParameterNameFromParameterWithComparison("lastNameLesserOrEquals"));
+    }
+
+    @Test
+    public void getComparisonTypeTest() {
+        assertEquals(ComparisonType.EQUALS, QueryBuildingUtils.getComparisonType("lastNameEquals"));
+        assertEquals(ComparisonType.GREATER, QueryBuildingUtils.getComparisonType("lastNameGreater"));
+        assertEquals(ComparisonType.LESSER_OR_EQUALS, QueryBuildingUtils.getComparisonType("lastNameLesserOrEquals"));
+    }
+
+    @Test
+    public void getComparisonTypeWithComparisonTypeNotFoundTest() {
+        assertEquals(null, QueryBuildingUtils.getComparisonType("lastNameEqualsWhatever"));
+        assertEquals(null, QueryBuildingUtils.getComparisonType("lastName"));
+        assertEquals(null, QueryBuildingUtils.getComparisonType("lastNameEqualseee"));
     }
 }

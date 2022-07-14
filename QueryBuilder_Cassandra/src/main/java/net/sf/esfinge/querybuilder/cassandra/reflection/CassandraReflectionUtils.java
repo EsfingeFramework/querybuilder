@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-public class ReflectionUtils {
+public class CassandraReflectionUtils {
 
     public static <E> Method[] getClassGetters(Class<E> clazz) {
         Method[] setters = Arrays.stream(clazz.getMethods())

@@ -1,7 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra.unit.reflection;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassException;
-import net.sf.esfinge.querybuilder.cassandra.reflection.ReflectionUtils;
+import net.sf.esfinge.querybuilder.cassandra.reflection.CassandraReflectionUtils;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ReflectionUtilsTest {
+public class CassandraReflectionUtilsTest {
 
     @Test
     public void getClassGettersTest() {
-        Method[] getters = ReflectionUtils.getClassGetters(TestClass.class);
+        Method[] getters = CassandraReflectionUtils.getClassGetters(TestClass.class);
 
         List<String> actual = Arrays.stream(getters).map(g -> g.getName()).collect(Collectors.toList());
 
@@ -37,7 +37,7 @@ public class ReflectionUtilsTest {
         fields.add("lastName");
         fields.add("id");
 
-        Method[] gettersForFields = ReflectionUtils.getClassGettersForFields(TestClass.class, fields);
+        Method[] gettersForFields = CassandraReflectionUtils.getClassGettersForFields(TestClass.class, fields);
 
         List<String> actual = Arrays.stream(gettersForFields).map(g -> g.getName()).collect(Collectors.toList());
 
@@ -57,6 +57,6 @@ public class ReflectionUtilsTest {
         fields.add("lastName");
         fields.add("notPresent");
 
-        ReflectionUtils.getClassGettersForFields(TestClass.class, fields);
+        CassandraReflectionUtils.getClassGettersForFields(TestClass.class, fields);
     }
 }

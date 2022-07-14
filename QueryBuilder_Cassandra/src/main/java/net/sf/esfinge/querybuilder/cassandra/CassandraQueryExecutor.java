@@ -12,6 +12,7 @@ import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderByClaus
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderingUtils;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.*;
+import net.sf.esfinge.querybuilder.utils.ReflectionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
     }
 
     private String getQuery(QueryInfo queryInfo, Object[] args, QueryRepresentation qr) {
-        if (!queryInfo.isDynamic()) {
+        if (!queryInfo.isDynamic() && queryInfo.getQueryStyle() != QueryStyle.QUERY_OBJECT) {
             String query = qr.getQuery().toString();
 
             if (args != null)
@@ -87,11 +88,15 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
             List<String> namedParameters = queryInfo.getNamedParemeters();
             if (queryInfo.getQueryStyle() == QueryStyle.METHOD_SIGNATURE) {
                 for (int i = 0; i < args.length; i++) {
-                    ComparisonType cp = ComparisonType.getComparisonType(namedParameters.get(i));
-                    params.put(namedParameters.get(i).replace(cp.getOpName(), ""), args[i]);
+                    params.put(namedParameters.get(i), args[i]);
+                }
+            } else { // Query style is: QueryStyle.QUERY_OBJECT
+                Map<String, Object> paramMap = ReflectionUtils.toParameterMap(args[0]);
+                for (String key : paramMap.keySet()) {
+                    params.put(key, paramMap.get(key));
                 }
             }
-
+            
             return qr.getQuery(params).toString();
         }
     }

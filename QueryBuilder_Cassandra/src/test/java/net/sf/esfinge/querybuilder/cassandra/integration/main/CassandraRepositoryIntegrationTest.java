@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.integration;
+package net.sf.esfinge.querybuilder.cassandra.integration.main;
 
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
@@ -7,7 +7,7 @@ import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicD
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 
 public class CassandraRepositoryIntegrationTest extends CassandraBasicDatabaseTest {
 
-    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);;
+    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
 
     @Test
     public void saveTest() {

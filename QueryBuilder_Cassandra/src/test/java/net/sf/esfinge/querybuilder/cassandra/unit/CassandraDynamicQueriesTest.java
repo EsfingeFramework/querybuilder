@@ -173,6 +173,33 @@ public class CassandraDynamicQueriesTest {
         assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE name = 'James' AND age = 30 AND city = ? ALLOW FILTERING", query2);
     }
 
+    @Test
+    public void ignoreWhenNullWithComparisonTypeNamingOfParametersTest() {
+        visitor.visitEntity("Person");
+        visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+        visitor.visitConector("AND");
+        visitor.visitCondition("age", ComparisonType.LESSER_OR_EQUALS, NullOption.NONE);
+        visitor.visitConector("AND");
+        visitor.visitCondition("city", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
+        visitor.visitConector("AND");
+        visitor.visitCondition("city", ComparisonType.EQUALS, NullOption.NONE);
+        visitor.visitEnd();
+
+        QueryRepresentation qr = visitor.getQueryRepresentation();
+        assertTrue("Query should be dynamic", qr.isDynamic());
+
+        Map<String, Object> params = new HashMap<String, Object>();
+
+        params.put("nameEquals", null);
+        String query1 = qr.getQuery(params).toString();
+        assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE age <= ? AND city = ? ALLOW FILTERING", query1);
+
+        params.put("nameEquals", "James");
+        params.put("ageLesserOrEquals", 30);
+        String query2 = qr.getQuery(params).toString();
+        assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE name = 'James' AND age <= 30 AND city = ? ALLOW FILTERING", query2);
+    }
+
     @Test(expected = UnsupportedCassandraOperationException.class)
     public void invalidCompareToNullQueryTest() {
         visitor.visitEntity("Person");
@@ -212,7 +239,7 @@ public class CassandraDynamicQueriesTest {
         params.put("name", null);
 
         String query4 = qr.getQuery(params).toString();
-        assertEquals(query4, "SELECT * FROM <#keyspace-name#>.Person WHERE age >= 18 AND lastname = 'McLoud' ALLOW FILTERING");
+        assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE age >= 18 AND lastname = 'McLoud' ALLOW FILTERING", query4);
     }
 
     @Test

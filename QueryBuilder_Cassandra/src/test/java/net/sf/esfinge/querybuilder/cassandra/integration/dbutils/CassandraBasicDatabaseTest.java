@@ -16,6 +16,11 @@ public class CassandraBasicDatabaseTest {
         CassandraTestUtils.createTables();
     }
 
+    @AfterClass
+    public static void dropDB() {
+        CassandraTestUtils.dropDB();
+    }
+
     @Before
     public void populateTables() {
         CassandraTestUtils.populateTables();
@@ -24,10 +29,5 @@ public class CassandraBasicDatabaseTest {
     @After
     public void cleanTables() {
         CassandraTestUtils.cleanTables();
-    }
-
-    @AfterClass
-    public static void dropDB() {
-        CassandraTestUtils.dropDB();
     }
 }

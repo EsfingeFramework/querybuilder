@@ -3,7 +3,6 @@ package net.sf.esfinge.querybuilder.cassandra.integration.dbcommunication;
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.TestCassandraSessionProvider;
 import net.sf.esfinge.querybuilder.utils.ServiceLocator;
 import org.apache.thrift.transport.TTransportException;
 import org.junit.Test;

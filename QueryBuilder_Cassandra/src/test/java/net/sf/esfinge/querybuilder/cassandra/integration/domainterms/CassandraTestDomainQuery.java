@@ -10,16 +10,19 @@ import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 import java.util.List;
 
-@DomainTerm(term="teenager",
-		conditions={@Condition(property="age",comparison=ComparisonType.GREATER_OR_EQUALS,value="13"),
-		            @Condition(property="age",comparison=ComparisonType.LESSER_OR_EQUALS,value="30")})
+@DomainTerm(term = "teenager",
+        conditions = {@Condition(property = "age", comparison = ComparisonType.GREATER_OR_EQUALS, value = "13"),
+                @Condition(property = "age", comparison = ComparisonType.LESSER_OR_EQUALS, value = "30")})
 @DomainTerms({
-	@DomainTerm(term="adult guys", conditions=@Condition(property="age",comparison=ComparisonType.GREATER_OR_EQUALS,value="25")),
-	@DomainTerm(term="silva family", conditions=@Condition(property="lastName",value="Silva"))
-})		            
+        @DomainTerm(term = "adult guys", conditions = @Condition(property = "age", comparison = ComparisonType.GREATER_OR_EQUALS, value = "25")),
+        @DomainTerm(term = "silva family", conditions = @Condition(property = "lastName", value = "Silva"))
+})
 public interface CassandraTestDomainQuery extends Repository<Person> {
-	public List<Person> getPersonTeenager();
-	public List<Person> getPersonSilvaFamilyAdultGuys();
-	public List<Person> getPersonAdultGuys();
-	public List<Person> getPersonSilvaFamilyByAge(@Greater Integer age);
+    List<Person> getPersonTeenager();
+
+    List<Person> getPersonSilvaFamilyAdultGuys();
+
+    List<Person> getPersonAdultGuys();
+
+    List<Person> getPersonSilvaFamilyByAge(@Greater Integer age);
 }
