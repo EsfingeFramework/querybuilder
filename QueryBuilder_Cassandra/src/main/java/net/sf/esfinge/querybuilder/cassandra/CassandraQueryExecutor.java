@@ -96,7 +96,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
                     params.put(key, paramMap.get(key));
                 }
             }
-            
+
             return qr.getQuery(params).toString();
         }
     }

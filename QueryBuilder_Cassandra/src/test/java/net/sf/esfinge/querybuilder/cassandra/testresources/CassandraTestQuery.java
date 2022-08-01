@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface CassandraTestQuery extends Repository<Person> {
 
-    // SIMPLE QUERIES
+    /**
+     * SIMPLE QUERIES
+     **/
     List<Person> getPerson();
 
     Person getPersonById(Integer id);
@@ -26,7 +28,10 @@ public interface CassandraTestQuery extends Repository<Person> {
 
     List<Person> getPersonByIdAndNameAndLastNameAndAge(Integer id, String name, String lastname, Integer age);
 
-    // QUERIES WITH ORDERING
+    /**
+     * QUERIES WITH ORDERING
+     **/
+
     List<Person> getPersonOrderByName();
 
     List<Person> getPersonByAgeOrderByNameDesc(@Greater Integer age);
@@ -37,20 +42,30 @@ public interface CassandraTestQuery extends Repository<Person> {
 
     List<Person> getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(@Lesser Integer age, String lastname);
 
-    // QUERIES WITH WRONG NAMING CONVENTION
+    /**
+     * QUERIES WITH WRONG NAMING CONVENTION
+     **/
     List<Person> getPersonByIdAndNameAndLastName(Integer id, String name);
 
     List<Person> getPersonByIdAndName(Integer id, String name, Integer age);
 
+    /**
+     * QUERIES WITH OR CONNECTOR
+     **/
 
     // TODO: METHODS WITH OR CONNECTORS DON'T WORK IN CASSANDRA, IMPLEMENT AT APPLICATION LOGIC OR LEAVE IT FORBIDDEN?
     List<Person> getPersonByNameOrLastName(String name, String lastname);
     // List<Person> getPersonByAgeOrLastNameOrderByNameDesc(@Greater Integer age, String lastname);
 
+    /** QUERIES WITH JOINS, (CLASSES MADE OF OTHER CLASSES) **/
 
     // TODO: METHODS WITH CUSTOM CLASS ATTRIBUTE DON'T WORK IN CASSANDRA, BECAUSE THERE IS NO SUCH THIS AS JOINS, IMPLEMENT AT APPLICATION LOGIC OR LEAVE IT FORBIDDEN?
     // List<Person> getPersonByAddressCity(String city);
     // List<Person> getPersonByLastNameAndAddressState(String lastname, String state);
+
+    /**
+     * QUERIES WITH LIKE, ENDS, CONTAINS, STARTS OPERATORS
+     **/
 
     // TODO: SEARCH QUERIES WITH 'LIKE' ARE NOT SUPPORTED BY CASSANDRA, IMPLEMENT AT APPLICATION LOGIC OR LEAVE IT FORBIDDEN?
     List<Person> getPersonByLastNameNotEquals(String name);

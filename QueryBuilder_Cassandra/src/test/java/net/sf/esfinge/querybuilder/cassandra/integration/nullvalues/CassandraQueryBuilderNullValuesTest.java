@@ -16,7 +16,7 @@ public class CassandraQueryBuilderNullValuesTest extends CassandraBasicDatabaseT
 
     @Test(expected = UnsupportedCassandraOperationException.class)
     public void compareToNullQueryTest() {
-        List<Person> list = testQuery.getPersonByName(null);
+        testQuery.getPersonByName(null);
     }
 
     @Test

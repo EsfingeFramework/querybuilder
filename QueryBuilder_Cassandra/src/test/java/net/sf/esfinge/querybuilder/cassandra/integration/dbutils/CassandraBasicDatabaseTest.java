@@ -16,10 +16,12 @@ public class CassandraBasicDatabaseTest {
         CassandraTestUtils.createTables();
     }
 
-    @AfterClass
+
+    // TODO: DROPPING THE DB IN THE INTEGRATION TESTS CAN LEAD TO UNEXPECTED ERRORS
+    /*@AfterClass
     public static void dropDB() {
         CassandraTestUtils.dropDB();
-    }
+    }*/
 
     @Before
     public void populateTables() {

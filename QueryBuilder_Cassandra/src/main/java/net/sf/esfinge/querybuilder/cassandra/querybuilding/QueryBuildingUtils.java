@@ -4,7 +4,7 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.QueryParametersMismatchE
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.Objects;
 
 public class QueryBuildingUtils {
 
@@ -26,7 +26,7 @@ public class QueryBuildingUtils {
     }
 
     private static int countNotNullArguments(Object[] args) {
-        return Arrays.stream(args).filter(arg -> arg != null).toArray(Object[]::new).length;
+        return Arrays.stream(args).filter(Objects::nonNull).toArray(Object[]::new).length;
     }
 
     private static int countOccurrenceOfCharacterInString(String string, Character character) {
@@ -79,11 +79,6 @@ public class QueryBuildingUtils {
         }
 
         return out;
-    }
-
-    public void printMap(Map<String, Object> map) {
-        for (String key : map.keySet())
-            System.out.println(key + ": " + map.get(key));
     }
 
 }

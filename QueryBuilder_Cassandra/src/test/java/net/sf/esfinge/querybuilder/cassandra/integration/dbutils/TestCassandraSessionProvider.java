@@ -12,14 +12,12 @@ public class TestCassandraSessionProvider implements CassandraSessionProvider {
 
     public void connect() {
         String node = "127.0.0.1";
-        Integer port = 9142;
+        int port = 9142;
 
 
         Cluster.Builder b = Cluster.builder().addContactPoint(node);
 
-        if (port != null) {
-            b.withPort(port);
-        }
+        b.withPort(port);
         cluster = b.build();
 
         session = cluster.connect();

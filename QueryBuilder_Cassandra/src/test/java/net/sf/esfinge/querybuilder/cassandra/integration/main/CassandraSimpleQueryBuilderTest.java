@@ -12,9 +12,10 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-public class CassandraQueryBuilderIntegrationTest extends CassandraBasicDatabaseTest {
+public class CassandraSimpleQueryBuilderTest extends CassandraBasicDatabaseTest {
 
     CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
 
@@ -39,7 +40,7 @@ public class CassandraQueryBuilderIntegrationTest extends CassandraBasicDatabase
 
     @Test(expected = WrongTypeOfExpectedResultException.class)
     public void queryWithWrongTypeOfExpectedResultTest() {
-        Person p = testQuery.getPersonByIdGreater(0);
+        testQuery.getPersonByIdGreater(0);
     }
 
     @Test
@@ -64,25 +65,8 @@ public class CassandraQueryBuilderIntegrationTest extends CassandraBasicDatabase
 
     @Test(expected = InvalidConnectorException.class)
     public void queryWithTwoOrParametersTest() {
-        List<Person> list = testQuery.getPersonByNameOrLastName("Pedro", "Silva");
+        testQuery.getPersonByNameOrLastName("Pedro", "Silva");
     }
-
-    /*@Test
-     TODO: IMPLEMENT JOINS WITH OTHER TABLES
-    public void queryWithOtherTable(){
-        List<Person> list = tq.getPersonByAddressCity("Juiz de Fora");
-        assertEquals("The list should have 2 persons", 2, list.size());
-        assertEquals("The first should be Antonio", "Antonio", list.get(0).getName());
-        assertEquals("The second should be Silvia", "Silvia", list.get(1).getName());
-    }
-
-    @Test
-    public void compositeQueryWithOtherTable(){
-        List<Person> list = tq.getPersonByLastNameAndAddressState("Silva","SP");
-        assertEquals("The list should have 2 persons", 2, list.size());
-        assertEquals("The first should be Pedro", "Pedro", list.get(0).getName());
-        assertEquals("Marcos", list.get(1).getName());
-    }*/
 
     @Test
     public void queryWithGreaterThanTest() {
@@ -98,12 +82,12 @@ public class CassandraQueryBuilderIntegrationTest extends CassandraBasicDatabase
 
     @Test(expected = UnsupportedCassandraOperationException.class)
     public void queryWithNotEquals() {
-        List<Person> list = testQuery.getPersonByLastNameNotEquals("Whatever");
+        testQuery.getPersonByLastNameNotEquals("Whatever");
     }
 
     @Test(expected = UnsupportedCassandraOperationException.class)
     public void queryWithStringStarted() {
-        List<Person> list = testQuery.getPersonByName("M");
+        testQuery.getPersonByName("M");
     }
 
     @Test
@@ -115,62 +99,13 @@ public class CassandraQueryBuilderIntegrationTest extends CassandraBasicDatabase
 
     @Test(expected = WrongParamNumberException.class)
     public void queryWithLessParametersThanInNamingTest() {
-        List<Person> list = testQuery.getPersonByIdAndNameAndLastName(1, "Homer");
+        testQuery.getPersonByIdAndNameAndLastName(1, "Homer");
     }
 
     @Test(expected = WrongParamNumberException.class)
     public void queryWithMoreParametersThanInNamingTest() {
-        List<Person> list = testQuery.getPersonByIdAndName(1, "Homer", 48);
+        testQuery.getPersonByIdAndName(1, "Homer", 48);
     }
 
-    @Test
-    public void orderByQueryWithOneFieldTest() {
-        List<Person> list = testQuery.getPersonOrderByName();
-
-        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Antonio", "Marcos", "Maria", "Pedro", "Silvia"};
-
-        assertArrayEquals(expectedNames, actualNames);
-    }
-
-    @Test
-    public void orderByQueryWithOneFieldAndParameterDescendentTest() {
-        List<Person> list = testQuery.getPersonByAgeOrderByNameDesc(21);
-
-        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Maria", "Marcos", "Antonio"};
-
-        assertArrayEquals(expectedNames, actualNames);
-    }
-
-    @Test
-    public void orderByQueryWithTwoFieldsTest() {
-        List<Person> list = testQuery.getPersonOrderByLastNameAndName();
-
-        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Silvia", "Maria", "Antonio", "Marcos", "Pedro"};
-
-        assertArrayEquals(expectedNames, actualNames);
-    }
-
-    @Test
-    public void orderByQueryWithTwoFieldsWithOrderingTest() {
-        List<Person> list = testQuery.getPersonOrderByLastNameDescAndNameAsc();
-
-        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Marcos", "Pedro", "Antonio", "Maria", "Silvia"};
-
-        assertArrayEquals(expectedNames, actualNames);
-    }
-
-    @Test
-    public void complexOrderByQueryTest() {
-        List<Person> list = testQuery.getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(51, "Silva");
-
-        String[] actualNames = list.stream().map(p -> p.getName()).toArray(String[]::new);
-        String[] expectedNames = {"Pedro", "Marcos"};
-
-        assertArrayEquals(expectedNames, actualNames);
-    }
 
 }

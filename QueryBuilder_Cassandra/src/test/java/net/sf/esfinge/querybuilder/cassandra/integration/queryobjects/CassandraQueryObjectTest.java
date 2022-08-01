@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class QueryBuilderJPAQueryObjectTest extends CassandraBasicDatabaseTest {
+public class CassandraQueryObjectTest extends CassandraBasicDatabaseTest {
 
     private final TestQueryObject testQuery = QueryBuilder.create(TestQueryObject.class);
 
@@ -41,7 +41,7 @@ public class QueryBuilderJPAQueryObjectTest extends CassandraBasicDatabaseTest {
     public void queryObjectWithNullComparisonTest() {
         CompareNullQueryObject qo = new CompareNullQueryObject();
         qo.setLastName("Test");
-        List<Person> list = testQuery.getPerson(qo);
+        testQuery.getPerson(qo);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class QueryBuilderJPAQueryObjectTest extends CassandraBasicDatabaseTest {
     }
 
     @Test
-    public void queryObjectWithOrderBy() {
+    public void queryObjectWithOrderByAscendantTest() {
         ComparisonTypeQueryObject qo = new ComparisonTypeQueryObject();
         qo.setAgeGreater(1);
         qo.setAgeLesser(100);
@@ -71,8 +71,15 @@ public class QueryBuilderJPAQueryObjectTest extends CassandraBasicDatabaseTest {
         List<Person> list = testQuery.getPersonOrderByNameAsc(qo);
         assertEquals("Antonio", list.get(0).getName());
         assertEquals("Silvia", list.get(list.size() - 1).getName());
+    }
 
-        list = testQuery.getPersonOrderByNameDesc(qo);
+    @Test
+    public void queryObjectWithOrderByDescendantTest() {
+        ComparisonTypeQueryObject qo = new ComparisonTypeQueryObject();
+        qo.setAgeGreater(1);
+        qo.setAgeLesser(100);
+
+        List<Person> list = testQuery.getPersonOrderByNameDesc(qo);
         assertEquals("Silvia", list.get(0).getName());
         assertEquals("Antonio", list.get(list.size() - 1).getName());
     }

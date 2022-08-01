@@ -68,8 +68,7 @@ public class CassandraTestUtils {
     public static Session getSession() {
         TestCassandraSessionProvider client = new TestCassandraSessionProvider();
         client.connect();
-        Session session = client.getSession();
 
-        return session;
+        return client.getSession();
     }
 }

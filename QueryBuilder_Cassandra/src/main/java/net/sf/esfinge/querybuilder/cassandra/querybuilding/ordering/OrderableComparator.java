@@ -17,7 +17,7 @@ public class OrderableComparator implements Comparator<Object> {
 
     @Override
     public int compare(Object o1, Object o2) {
-        int result = 0;
+        int result;
 
         try {
             result = compareMethod.invoke(o1).toString().compareTo(compareMethod.invoke(o2).toString());

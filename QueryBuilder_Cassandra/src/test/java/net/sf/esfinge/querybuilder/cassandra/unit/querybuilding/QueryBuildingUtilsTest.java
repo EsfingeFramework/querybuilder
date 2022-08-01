@@ -6,6 +6,7 @@ import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class QueryBuildingUtilsTest {
 
@@ -65,7 +66,7 @@ public class QueryBuildingUtilsTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ?";
         Object[] args = {1, "Max", "Additional"};
 
-        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
+        QueryBuildingUtils.replaceQueryArgs(query, args);
     }
 
     @Test(expected = QueryParametersMismatchException.class)
@@ -73,7 +74,7 @@ public class QueryBuildingUtilsTest {
         String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ? OR city = ?";
         Object[] args = {1, "Max"};
 
-        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
+        QueryBuildingUtils.replaceQueryArgs(query, args);
     }
 
 
@@ -105,8 +106,8 @@ public class QueryBuildingUtilsTest {
 
     @Test
     public void getComparisonTypeWithComparisonTypeNotFoundTest() {
-        assertEquals(null, QueryBuildingUtils.getComparisonType("lastNameEqualsWhatever"));
-        assertEquals(null, QueryBuildingUtils.getComparisonType("lastName"));
-        assertEquals(null, QueryBuildingUtils.getComparisonType("lastNameEqualseee"));
+        assertNull(QueryBuildingUtils.getComparisonType("lastNameEqualsWhatever"));
+        assertNull(QueryBuildingUtils.getComparisonType("lastName"));
+        assertNull(QueryBuildingUtils.getComparisonType("lastNameEqualseee"));
     }
 }

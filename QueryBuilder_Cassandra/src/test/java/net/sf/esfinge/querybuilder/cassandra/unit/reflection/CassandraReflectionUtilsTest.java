@@ -19,7 +19,7 @@ public class CassandraReflectionUtilsTest {
     public void getClassGettersTest() {
         Method[] getters = CassandraReflectionUtils.getClassGetters(TestClass.class);
 
-        List<String> actual = Arrays.stream(getters).map(g -> g.getName()).collect(Collectors.toList());
+        List<String> actual = Arrays.stream(getters).map(Method::getName).collect(Collectors.toList());
 
         List<String> expected = new ArrayList<>();
         expected.add("getName");
@@ -39,7 +39,7 @@ public class CassandraReflectionUtilsTest {
 
         Method[] gettersForFields = CassandraReflectionUtils.getClassGettersForFields(TestClass.class, fields);
 
-        List<String> actual = Arrays.stream(gettersForFields).map(g -> g.getName()).collect(Collectors.toList());
+        List<String> actual = Arrays.stream(gettersForFields).map(Method::getName).collect(Collectors.toList());
 
         List<String> expected = new ArrayList<>();
         expected.add("getName");
