@@ -2,12 +2,11 @@ package net.sf.esfinge.querybuilder.cassandra.testresources;
 
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.Greater;
-import net.sf.esfinge.querybuilder.annotation.Lesser;
 import net.sf.esfinge.querybuilder.annotation.Starts;
 
 import java.util.List;
 
-public interface CassandraTestQuery extends Repository<Person> {
+public interface CassandraSimpleTestQuery extends Repository<Person> {
 
     /**
      * SIMPLE QUERIES
@@ -29,20 +28,6 @@ public interface CassandraTestQuery extends Repository<Person> {
     List<Person> getPersonByIdAndNameAndLastNameAndAge(Integer id, String name, String lastname, Integer age);
 
     /**
-     * QUERIES WITH ORDERING
-     **/
-
-    List<Person> getPersonOrderByName();
-
-    List<Person> getPersonByAgeOrderByNameDesc(@Greater Integer age);
-
-    List<Person> getPersonOrderByLastNameAndName();
-
-    List<Person> getPersonOrderByLastNameDescAndNameAsc();
-
-    List<Person> getPersonByAgeAndLastNameOrderByAgeAndLastNameDescAndName(@Lesser Integer age, String lastname);
-
-    /**
      * QUERIES WITH WRONG NAMING CONVENTION
      **/
     List<Person> getPersonByIdAndNameAndLastName(Integer id, String name);
@@ -62,18 +47,5 @@ public interface CassandraTestQuery extends Repository<Person> {
     // TODO: METHODS WITH CUSTOM CLASS ATTRIBUTE DON'T WORK IN CASSANDRA, BECAUSE THERE IS NO SUCH THIS AS JOINS, IMPLEMENT AT APPLICATION LOGIC OR LEAVE IT FORBIDDEN?
     // List<Person> getPersonByAddressCity(String city);
     // List<Person> getPersonByLastNameAndAddressState(String lastname, String state);
-
-    /**
-     * QUERIES WITH LIKE, ENDS, CONTAINS, STARTS OPERATORS
-     **/
-
-    // TODO: SEARCH QUERIES WITH 'LIKE' ARE NOT SUPPORTED BY CASSANDRA, IMPLEMENT AT APPLICATION LOGIC OR LEAVE IT FORBIDDEN?
-    List<Person> getPersonByLastNameNotEquals(String name);
-
-    List<Person> getPersonByName(@Starts String name);
-
-    // List<Person> getPersonByNameEnds(String name);
-    // List<Person> getPersonByNameContains(String name);
-    // List<Person> getPersonByNameStartsAndAgeGreater(String name, Integer age);
 
 }

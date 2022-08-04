@@ -8,16 +8,18 @@ import net.sf.esfinge.querybuilder.cassandra.cassandrautils.CassandraUtils;
 import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvider;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtils;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderByClause;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderingUtils;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.OrderingProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.SpecialComparisonProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonUtils;
+import net.sf.esfinge.querybuilder.cassandra.validation.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.*;
 import net.sf.esfinge.querybuilder.utils.ReflectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CassandraQueryExecutor<E> implements QueryExecutor {
 
@@ -38,27 +40,31 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         queryInfo.visit(visitor);
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
-        String query = getQuery(queryInfo, args, qr);
+        // Remove useless arguments for query substitution
+        List<SpecialComparisonClause> spc = ((CassandraQueryRepresentation) qr).getSpecialComparisonClauses();
+        Object[] newArgs = SpecialComparisonUtils.getArgumentsNotHavingSpecialClause(args,spc);
+        List<SpecialComparisonClause> newSpc = SpecialComparisonUtils.getSpecialComparisonClauseWithArguments(args,spc);
+
+        String query = getQuery(queryInfo, newArgs, qr);
 
         List<E> results = getQueryResults(query);
 
-        if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE && results.size() > 1)
-            throw new WrongTypeOfExpectedResultException("The query " + query + " resulted in " + results.size() + "results");
-
-        List<OrderByClause> orderByClause = ((CassandraQueryRepresentation) qr).getOrderByClause();
-
-        if (!orderByClause.isEmpty()) {
-            results = OrderingUtils.sortListByOrderingClause(results, orderByClause, clazz);
-        }
-
         if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE) {
+            if (results.size() > 1)
+                throw new WrongTypeOfExpectedResultException("The query " + query + " resulted in " + results.size() + " results instead of one or zero results");
+
             if (results.size() > 0)
                 return results.get(0);
             else
                 return null;
         }
 
-        return results;
+        List<OrderByClause> orderByClauses = ((CassandraQueryRepresentation) qr).getOrderByClause();
+
+        ResultsProcessor processor = new OrderingProcessor(orderByClauses,
+                new SpecialComparisonProcessor(newSpc));
+
+        return processor.postProcess(results);
     }
 
     private List<E> getQueryResults(String query) {
@@ -104,5 +110,6 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
     private String getQueryStringWithKeySpaceName(String query) {
         return query.replace("<#keyspace-name#>", clazz.getDeclaredAnnotation(Table.class).keyspace());
     }
+
 
 }

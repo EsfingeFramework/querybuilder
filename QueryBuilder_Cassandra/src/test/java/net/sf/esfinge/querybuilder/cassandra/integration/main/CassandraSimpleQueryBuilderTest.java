@@ -5,7 +5,7 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorExceptio
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
-import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
+import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraSimpleTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import net.sf.esfinge.querybuilder.exception.WrongParamNumberException;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertNull;
 
 public class CassandraSimpleQueryBuilderTest extends CassandraBasicDatabaseTest {
 
-    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
+    CassandraSimpleTestQuery testQuery = QueryBuilder.create(CassandraSimpleTestQuery.class);
 
 
     @Test
@@ -78,16 +78,6 @@ public class CassandraSimpleQueryBuilderTest extends CassandraBasicDatabaseTest 
     public void queryWithLesserThan() {
         List<Person> list = testQuery.getPersonByAgeLesser(40);
         assertEquals("The list should have 4 persons", 4, list.size());
-    }
-
-    @Test(expected = UnsupportedCassandraOperationException.class)
-    public void queryWithNotEquals() {
-        testQuery.getPersonByLastNameNotEquals("Whatever");
-    }
-
-    @Test(expected = UnsupportedCassandraOperationException.class)
-    public void queryWithStringStarted() {
-        testQuery.getPersonByName("M");
     }
 
     @Test

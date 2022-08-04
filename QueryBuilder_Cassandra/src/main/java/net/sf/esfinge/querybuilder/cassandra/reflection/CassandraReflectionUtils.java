@@ -23,11 +23,11 @@ public class CassandraReflectionUtils {
         // otherwise on runtime the chain ordering for multiple fields might change,
         // see ChainComparator class
         return fieldNames.stream()
-                .map(name -> getGetterForField(clazz, getters, name))
+                .map(name -> getClassGetterForField(clazz, getters, name))
                 .toArray(Method[]::new);
     }
 
-    public static <E> Method getGetterForField(Class<E> clazz, Method[] methods, String fieldName) {
+    public static <E> Method getClassGetterForField(Class<E> clazz, Method[] methods, String fieldName) {
         String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
         Method getter = null;

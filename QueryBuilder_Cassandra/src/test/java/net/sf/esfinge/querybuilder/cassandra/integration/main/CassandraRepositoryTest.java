@@ -5,7 +5,7 @@ import com.datastax.driver.mapping.MappingManager;
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
-import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
+import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraSimpleTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertNull;
 
 public class CassandraRepositoryTest extends CassandraBasicDatabaseTest {
 
-    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
+    CassandraSimpleTestQuery testQuery = QueryBuilder.create(CassandraSimpleTestQuery.class);
 
     @Test
     public void saveTest() {

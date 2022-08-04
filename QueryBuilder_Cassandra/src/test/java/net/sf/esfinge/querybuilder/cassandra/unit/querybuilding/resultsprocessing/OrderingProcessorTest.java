@@ -1,8 +1,9 @@
-package net.sf.esfinge.querybuilder.cassandra.unit.querybuilding.ordering;
+package net.sf.esfinge.querybuilder.cassandra.unit.querybuilding.resultsprocessing;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassException;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderByClause;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering.OrderingUtils;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.OrderingProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
 import net.sf.esfinge.querybuilder.cassandra.unit.reflection.TestClass;
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
 import org.junit.Before;
@@ -13,8 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-
-public class OrderingUtilsTest {
+public class OrderingProcessorTest {
 
     private List<TestClass> objectList;
 
@@ -40,7 +40,8 @@ public class OrderingUtilsTest {
         List<OrderByClause> orderByClauseList = new ArrayList<>();
         orderByClauseList.add(new OrderByClause("name", OrderingDirection.ASC));
 
-        List<TestClass> sorted = OrderingUtils.sortListByOrderingClause(objectList, orderByClauseList, TestClass.class);
+        ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
+        List<TestClass> sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{3, 2, 4, 1, 5}, sorted));
     }
@@ -50,7 +51,8 @@ public class OrderingUtilsTest {
         List<OrderByClause> orderByClauseList = new ArrayList<>();
         orderByClauseList.add(new OrderByClause("name", OrderingDirection.DESC));
 
-        List<TestClass> sorted = OrderingUtils.sortListByOrderingClause(objectList, orderByClauseList, TestClass.class);
+        ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
+        List<TestClass> sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{5, 1, 2, 4, 3}, sorted));
     }
@@ -61,7 +63,8 @@ public class OrderingUtilsTest {
         orderByClauseList.add(new OrderByClause("name", OrderingDirection.ASC));
         orderByClauseList.add(new OrderByClause("lastName", OrderingDirection.ASC));
 
-        List<TestClass> sorted = OrderingUtils.sortListByOrderingClause(objectList, orderByClauseList, TestClass.class);
+        ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
+        List<TestClass> sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{3, 2, 4, 1, 5}, sorted));
     }
@@ -72,7 +75,8 @@ public class OrderingUtilsTest {
         orderByClauseList.add(new OrderByClause("name", OrderingDirection.ASC));
         orderByClauseList.add(new OrderByClause("lastName", OrderingDirection.DESC));
 
-        List<TestClass> sorted = OrderingUtils.sortListByOrderingClause(objectList, orderByClauseList, TestClass.class);
+        ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
+        List<TestClass> sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{3, 4, 2, 1, 5}, sorted));
     }
@@ -83,7 +87,8 @@ public class OrderingUtilsTest {
         orderByClauseList.add(new OrderByClause("name", OrderingDirection.DESC));
         orderByClauseList.add(new OrderByClause("lastName", OrderingDirection.DESC));
 
-        List<TestClass> sorted = OrderingUtils.sortListByOrderingClause(objectList, orderByClauseList, TestClass.class);
+        ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
+        List<TestClass> sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{5, 1, 4, 2, 3}, sorted));
     }
@@ -97,7 +102,8 @@ public class OrderingUtilsTest {
 
         objectList.add(new TestClass(1, "AAAAA", "AAAA"));
 
-        List<TestClass> sorted = OrderingUtils.sortListByOrderingClause(objectList, orderByClauseList, TestClass.class);
+        ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
+        List<TestClass> sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{5, 4, 3, 2, 1, 1}, sorted));
     }
@@ -107,7 +113,8 @@ public class OrderingUtilsTest {
         List<OrderByClause> orderByClauseList = new ArrayList<>();
         orderByClauseList.add(new OrderByClause("notFoundField", OrderingDirection.ASC));
 
-        OrderingUtils.sortListByOrderingClause(objectList, orderByClauseList, TestClass.class);
+        ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
+        List<TestClass> sorted = processor.postProcess(objectList);
     }
 
     private boolean assertOrdering(int[] ids, List<TestClass> sorted) {

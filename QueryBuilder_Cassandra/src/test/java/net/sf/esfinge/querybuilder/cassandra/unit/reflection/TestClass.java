@@ -1,5 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra.unit.reflection;
 
+import java.util.Objects;
+
 public class TestClass {
 
     private int id;
@@ -44,5 +46,18 @@ public class TestClass {
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestClass testClass = (TestClass) o;
+        return id == testClass.id && Objects.equals(name, testClass.name) && Objects.equals(lastName, testClass.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, lastName);
     }
 }

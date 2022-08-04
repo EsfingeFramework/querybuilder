@@ -2,17 +2,17 @@ package net.sf.esfinge.querybuilder.cassandra.integration.main;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
-import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraTestQuery;
+import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraOrderByTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.*;
 
 public class CassandraOrderByQueryBuilderTest extends CassandraBasicDatabaseTest {
 
-    CassandraTestQuery testQuery = QueryBuilder.create(CassandraTestQuery.class);
+    CassandraOrderByTestQuery testQuery = QueryBuilder.create(CassandraOrderByTestQuery.class);
 
     @Test
     public void orderByQueryWithOneFieldTest() {
@@ -62,5 +62,12 @@ public class CassandraOrderByQueryBuilderTest extends CassandraBasicDatabaseTest
         String[] expectedNames = {"Pedro", "Marcos"};
 
         assertArrayEquals(expectedNames, actualNames);
+    }
+
+    @Test
+    public void orderByQueryWithNoResultsTest() {
+        List<Person> list = testQuery.getPersonByNameOrderByNameDesc("non existent");
+
+        assertTrue(list.isEmpty());
     }
 }

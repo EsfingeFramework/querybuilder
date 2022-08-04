@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering;
+package net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering;
 
 import java.util.Comparator;
 import java.util.List;

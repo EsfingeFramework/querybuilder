@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.querybuilding.ordering;
+package net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering;
 
 import net.sf.esfinge.querybuilder.cassandra.reflection.CassandraReflectionUtils;
 
@@ -15,7 +15,7 @@ public class ChainComparatorFactory {
         List<Comparator> comparatorsList = new ArrayList<>();
 
         for (OrderByClause o : orderByClauses) {
-            Method fieldGetter = CassandraReflectionUtils.getGetterForField(clazz, getters, o.propertyName);
+            Method fieldGetter = CassandraReflectionUtils.getClassGetterForField(clazz, getters, o.propertyName);
             comparatorsList.add(new OrderableComparator(fieldGetter, o.getDirection()));
         }
 
