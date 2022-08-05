@@ -109,10 +109,10 @@ basic `CRUD` operations, for example `save` and `delete` are available by defaul
 
 * Here is how to create the instance of the class that actually implements this interface:
 ```Java
-CassandraSimpleTestQuery c = QueryBuilder.create(CassandraSimpleTestQuery.class);
+CassandraSimpleTestQuery cassandra = QueryBuilder.create(CassandraSimpleTestQuery.class);
 ```
 * Now you are ready to go and the framework should already work. For example you could call the
-  method `CassandraSimpleTestQuery.getPersonById(1)` and the framework will manage connecting to the database,
+  method `cassandra.getPersonById(1)` and the framework will manage connecting to the database,
   translating the method into a query and retrieving the results as a `Person` class.
 * Please keep in mind that the database does not automatically create the `Keyspace` and the `Tables` for storing the
   data, this is left to the user, which can also use the `KeyspaceRepository` class of the framework, which provides
