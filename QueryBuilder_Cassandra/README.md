@@ -107,6 +107,10 @@ public interface CassandraSimpleTestQuery extends Repository<Person> {
 Please keep in mind that you are not forced to implement new custom methods like in the previous example, the
 basic `CRUD` operations, for example `save` and `delete` are available by default.
 
+* Here is how to create the instance of the class that actually implements this interface:
+```Java
+CassandraSimpleTestQuery c = QueryBuilder.create(CassandraSimpleTestQuery.class);
+```
 * Now you are ready to go and the framework should already work. For example you could call the
   method `CassandraSimpleTestQuery.getPersonById(1)` and the framework will manage connecting to the database,
   translating the method into a query and retrieving the results as a `Person` class.
