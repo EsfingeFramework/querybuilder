@@ -22,7 +22,7 @@ public class CassandraTestUtils {
     public static void initCassandaUnit() throws TTransportException, IOException, InterruptedException {
         // Uncomment next line to use cassandra unit db instead of a local one
         // Need to use Java 1.8, this particular version of Cassandra Unit might not work with newer releases
-        EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
+        // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
     }
 
     public static void createTables() {
