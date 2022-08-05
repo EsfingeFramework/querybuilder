@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SpecialComparisonProcessor extends BasicResultsProcessor {
 
-    private List<SpecialComparisonClause> specialComparisonClauses;
+    private final List<SpecialComparisonClause> specialComparisonClauses;
 
     public SpecialComparisonProcessor(List<SpecialComparisonClause> specialComparisonClauses) {
         super();
@@ -24,8 +24,8 @@ public class SpecialComparisonProcessor extends BasicResultsProcessor {
         if (specialComparisonClauses.isEmpty() || list.isEmpty())
             return list;
 
-        for (SpecialComparisonClause c : specialComparisonClauses){
-            list = SpecialComparisonUtils.filterListBySpecialComparisonClause(list,c);
+        for (SpecialComparisonClause c : specialComparisonClauses) {
+            list = SpecialComparisonUtils.filterListBySpecialComparisonClause(list, c);
         }
 
         return list;

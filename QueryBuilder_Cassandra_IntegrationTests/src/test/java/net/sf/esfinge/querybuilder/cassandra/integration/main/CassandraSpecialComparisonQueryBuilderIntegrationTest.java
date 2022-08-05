@@ -1,16 +1,16 @@
 package net.sf.esfinge.querybuilder.cassandra.integration.main;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraSpecialComparisonTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class CassandraSpecialComparisonQueryBuilderTest extends CassandraBasicDatabaseTest {
+public class CassandraSpecialComparisonQueryBuilderIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
     CassandraSpecialComparisonTestQuery testQuery = QueryBuilder.create(CassandraSpecialComparisonTestQuery.class);
 
@@ -59,16 +59,16 @@ public class CassandraSpecialComparisonQueryBuilderTest extends CassandraBasicDa
 
     @Test
     public void queryWithStartsAndSimpleComparisonTest() {
-        List<Person> list = testQuery.getPersonByNameStartsAndAgeGreater("Ma",30);
+        List<Person> list = testQuery.getPersonByNameStartsAndAgeGreater("Ma", 30);
 
-        assertEquals("Marcos",list.get(0).getName());
+        assertEquals("Marcos", list.get(0).getName());
     }
 
     @Test
     public void complexSpecialComparisonTest() {
-        List<Person> list = testQuery.getPersonByNameStartsAndAgeGreaterAndLastNameNotEquals("Ma",30,"Whatever");
+        List<Person> list = testQuery.getPersonByNameStartsAndAgeGreaterAndLastNameNotEquals("Ma", 30, "Whatever");
 
-        assertEquals("Marcos",list.get(0).getName());
+        assertEquals("Marcos", list.get(0).getName());
     }
 
 }

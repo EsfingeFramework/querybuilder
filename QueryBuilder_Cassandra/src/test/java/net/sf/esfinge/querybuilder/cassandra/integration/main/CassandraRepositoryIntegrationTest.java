@@ -3,18 +3,22 @@ package net.sf.esfinge.querybuilder.cassandra.integration.main;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.NotEnoughExamplesException;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraSimpleTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
+import net.sf.esfinge.querybuilder.cassandra.testresources.wrongconfiguration.ClassWithNoGetters;
+import net.sf.esfinge.querybuilder.cassandra.testresources.wrongconfiguration.ClassWithNoGettersTestQuery;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CassandraRepositoryTest extends CassandraBasicDatabaseTest {
+public class CassandraRepositoryIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
     CassandraSimpleTestQuery testQuery = QueryBuilder.create(CassandraSimpleTestQuery.class);
 
@@ -75,6 +79,16 @@ public class CassandraRepositoryTest extends CassandraBasicDatabaseTest {
         List<Person> list = testQuery.queryByExample(example);
 
         assertEquals("The list should have 1 person", 1, list.size());
+    }
+
+    @Test
+    public void queryByExampleWithNoGettersTest() {
+        ClassWithNoGettersTestQuery noGettersTestQuery = QueryBuilder.create(ClassWithNoGettersTestQuery.class);
+
+        ClassWithNoGetters example = new ClassWithNoGetters();
+        example.setName("Pedro");
+
+        assertThrows(NotEnoughExamplesException.class, () -> noGettersTestQuery.queryByExample(example));
     }
 
     @Test

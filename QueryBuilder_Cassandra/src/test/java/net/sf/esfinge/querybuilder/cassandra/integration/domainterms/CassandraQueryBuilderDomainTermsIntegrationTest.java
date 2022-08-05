@@ -1,7 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra.integration.domainterms;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CassandraQueryBuilderDomainTermsTest extends CassandraBasicDatabaseTest {
+public class CassandraQueryBuilderDomainTermsIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
     CassandraTestDomainQuery testQuery = QueryBuilder.create(CassandraTestDomainQuery.class);
 

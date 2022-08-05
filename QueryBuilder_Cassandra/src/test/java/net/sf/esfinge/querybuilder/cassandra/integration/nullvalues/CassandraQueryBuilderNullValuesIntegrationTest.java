@@ -2,7 +2,7 @@ package net.sf.esfinge.querybuilder.cassandra.integration.nullvalues;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CassandraQueryBuilderNullValuesTest extends CassandraBasicDatabaseTest {
+public class CassandraQueryBuilderNullValuesIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
     private final CassandraTestNullValueQueries testQuery = QueryBuilder.create(CassandraTestNullValueQueries.class);
 

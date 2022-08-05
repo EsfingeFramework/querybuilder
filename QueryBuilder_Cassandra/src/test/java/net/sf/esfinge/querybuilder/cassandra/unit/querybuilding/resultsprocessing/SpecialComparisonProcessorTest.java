@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SpecialComparisonProcessorTest {
 
@@ -35,7 +35,7 @@ public class SpecialComparisonProcessorTest {
     }
 
     @Test
-    public void filterListNotEqualWithOneParameterNotEqualTest(){
+    public void filterListNotEqualWithOneParameterNotEqualTest() {
         List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
         specialComparisonClauses.add(new SpecialComparisonClause("lastName", SpecialComparisonType.NOT_EQUALS));
         specialComparisonClauses.get(0).setValue("Silva");
@@ -50,11 +50,11 @@ public class SpecialComparisonProcessorTest {
         expected.add(exp2);
         expected.add(exp3);
 
-        assertEquals(expected,processor.postProcess(objectList));
+        assertEquals(expected, processor.postProcess(objectList));
     }
 
     @Test
-    public void filterListNotEqualWithTwoParametersNotEqualTest(){
+    public void filterListNotEqualWithTwoParametersNotEqualTest() {
         List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
         specialComparisonClauses.add(new SpecialComparisonClause("lastName", SpecialComparisonType.NOT_EQUALS));
         specialComparisonClauses.get(0).setValue("Silva");
@@ -70,11 +70,11 @@ public class SpecialComparisonProcessorTest {
         expected.add(exp1);
         expected.add(exp2);
 
-        assertEquals(expected,processor.postProcess(objectList));
+        assertEquals(expected, processor.postProcess(objectList));
     }
 
     @Test
-    public void filterListNotEqualWithOneParameterStartingTest(){
+    public void filterListNotEqualWithOneParameterStartingTest() {
         List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
         specialComparisonClauses.add(new SpecialComparisonClause("lastName", SpecialComparisonType.STARTS));
         specialComparisonClauses.get(0).setValue("Si");
@@ -87,11 +87,11 @@ public class SpecialComparisonProcessorTest {
         expected.add(exp1);
         expected.add(exp2);
 
-        assertEquals(expected,processor.postProcess(objectList));
+        assertEquals(expected, processor.postProcess(objectList));
     }
 
     @Test
-    public void filterListNotEqualWithTwoParametersStartingTest(){
+    public void filterListNotEqualWithTwoParametersStartingTest() {
         List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
         specialComparisonClauses.add(new SpecialComparisonClause("lastName", SpecialComparisonType.STARTS));
         specialComparisonClauses.get(0).setValue("Si");
@@ -104,11 +104,11 @@ public class SpecialComparisonProcessorTest {
         TestClass exp1 = new TestClass(1, "Pedro", "Silva");
         expected.add(exp1);
 
-        assertEquals(expected,processor.postProcess(objectList));
+        assertEquals(expected, processor.postProcess(objectList));
     }
 
     @Test
-    public void filterListNotEqualWithOneParameterEndingTest(){
+    public void filterListNotEqualWithOneParameterEndingTest() {
         List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
         specialComparisonClauses.add(new SpecialComparisonClause("lastName", SpecialComparisonType.ENDS));
         specialComparisonClauses.get(0).setValue("va");
@@ -121,11 +121,11 @@ public class SpecialComparisonProcessorTest {
         expected.add(exp1);
         expected.add(exp2);
 
-        assertEquals(expected,processor.postProcess(objectList));
+        assertEquals(expected, processor.postProcess(objectList));
     }
 
     @Test
-    public void filterListNotEqualWithTwoParametersEndingTest(){
+    public void filterListNotEqualWithTwoParametersEndingTest() {
         List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
         specialComparisonClauses.add(new SpecialComparisonClause("lastName", SpecialComparisonType.ENDS));
         specialComparisonClauses.get(0).setValue("va");
@@ -138,11 +138,11 @@ public class SpecialComparisonProcessorTest {
         TestClass exp1 = new TestClass(1, "Pedro", "Silva");
         expected.add(exp1);
 
-        assertEquals(expected,processor.postProcess(objectList));
+        assertEquals(expected, processor.postProcess(objectList));
     }
 
     @Test
-    public void filterListNotEqualWithOneParameterContainingTest(){
+    public void filterListNotEqualWithOneParameterContainingTest() {
         List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
         specialComparisonClauses.add(new SpecialComparisonClause("lastName", SpecialComparisonType.CONTAINS));
         specialComparisonClauses.get(0).setValue("ilv");
@@ -155,11 +155,11 @@ public class SpecialComparisonProcessorTest {
         expected.add(exp1);
         expected.add(exp2);
 
-        assertEquals(expected,processor.postProcess(objectList));
+        assertEquals(expected, processor.postProcess(objectList));
     }
 
     @Test
-    public void filterListNotEqualWithTwoParametersContainingTest(){
+    public void filterListNotEqualWithTwoParametersContainingTest() {
         List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
         specialComparisonClauses.add(new SpecialComparisonClause("lastName", SpecialComparisonType.CONTAINS));
         specialComparisonClauses.get(0).setValue("ilv");
@@ -172,7 +172,7 @@ public class SpecialComparisonProcessorTest {
         TestClass exp1 = new TestClass(1, "Pedro", "Silva");
         expected.add(exp1);
 
-        assertEquals(expected,processor.postProcess(objectList));
+        assertEquals(expected, processor.postProcess(objectList));
     }
 
 

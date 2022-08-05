@@ -38,7 +38,7 @@ public class CassandraReflectionUtils {
         }
 
         if (getter == null)
-            throw new GetterNotFoundInClassException("Getter for field " + fieldName + " not found in class " + clazz.getSimpleName());
+            throw new GetterNotFoundInClassException("Getter for field \"" + fieldName + "\" not found in class " + clazz.getSimpleName());
 
         return getter;
     }

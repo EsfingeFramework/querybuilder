@@ -2,13 +2,12 @@ package net.sf.esfinge.querybuilder.cassandra.integration.dbutils;
 
 import org.apache.thrift.transport.TTransportException;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
 import java.io.IOException;
 
-public class CassandraBasicDatabaseTest {
+public class CassandraBasicDatabaseIntegrationTest {
 
     @BeforeClass
     public static void initDB() throws TTransportException, IOException, InterruptedException {

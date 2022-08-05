@@ -1,7 +1,10 @@
 package net.sf.esfinge.querybuilder.cassandra.validation;
 
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
-import net.sf.esfinge.querybuilder.methodparser.*;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
 import java.util.Map;

@@ -2,7 +2,7 @@ package net.sf.esfinge.querybuilder.cassandra.integration.queryobjects;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CassandraQueryObjectTest extends CassandraBasicDatabaseTest {
+public class CassandraQueryObjectIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
     private final TestQueryObject testQuery = QueryBuilder.create(TestQueryObject.class);
 

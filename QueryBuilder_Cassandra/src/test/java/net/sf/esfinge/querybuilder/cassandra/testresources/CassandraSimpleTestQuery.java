@@ -2,20 +2,18 @@ package net.sf.esfinge.querybuilder.cassandra.testresources;
 
 import net.sf.esfinge.querybuilder.Repository;
 import net.sf.esfinge.querybuilder.annotation.Greater;
-import net.sf.esfinge.querybuilder.annotation.Starts;
 
 import java.util.List;
 
 public interface CassandraSimpleTestQuery extends Repository<Person> {
 
-    /**
-     * SIMPLE QUERIES
-     **/
     List<Person> getPerson();
 
     Person getPersonById(Integer id);
 
-    Person getPersonByIdGreater(Integer id);
+    List<Person> getPersonByAgeGreater(Integer age);
+
+    Person getPersonByAgeLesserOrEquals(Integer age);
 
     List<Person> getPersonByLastName(String lastname);
 

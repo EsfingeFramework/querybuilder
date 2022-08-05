@@ -6,7 +6,10 @@ import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonType;
-import net.sf.esfinge.querybuilder.methodparser.*;
+import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
+import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
+import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
+import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
 import java.util.*;
@@ -44,14 +47,13 @@ public class CassandraQueryVisitor implements QueryVisitor {
         // IN, =, >, >=, <, or <=, but not all in certain situations.
         // The other comparison types are implemented at the application logic, namely:
         // <> (NOT EQUALS), STARTS, ENDS AND CONTAINS
-        if (comparisonType == ComparisonType.NOT_EQUALS || comparisonType == ComparisonType.STARTS || comparisonType == ComparisonType.ENDS || comparisonType == ComparisonType.CONTAINS){
+        if (comparisonType == ComparisonType.NOT_EQUALS || comparisonType == ComparisonType.STARTS || comparisonType == ComparisonType.ENDS || comparisonType == ComparisonType.CONTAINS) {
             //throw new UnsupportedCassandraOperationException("Comparison type " + comparisonType + " not supported in Cassandra");
             specialComparisonClauses.add(new SpecialComparisonClause(parameter, SpecialComparisonType.fromComparisonType(comparisonType)));
 
             // Need to set the position of the argument, otherwise cannot keep track of which argument is associated with this condition
             specialComparisonClauses.get(specialComparisonClauses.size() - 1).setArgPosition(conditions.size() + specialComparisonClauses.size() - 1);
-        }
-        else {
+        } else {
             conditions.add(new ConditionStatement(parameter, comparisonType));
 
         }

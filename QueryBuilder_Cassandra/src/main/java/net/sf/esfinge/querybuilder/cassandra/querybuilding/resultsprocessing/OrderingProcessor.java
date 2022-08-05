@@ -7,9 +7,9 @@ import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ord
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OrderingProcessor extends BasicResultsProcessor{
+public class OrderingProcessor extends BasicResultsProcessor {
 
-    private List<OrderByClause> orderByClauses;
+    private final List<OrderByClause> orderByClauses;
 
     public OrderingProcessor(List<OrderByClause> orderByClauses) {
         super();

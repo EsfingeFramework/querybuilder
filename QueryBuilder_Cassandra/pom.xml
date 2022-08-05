@@ -11,7 +11,9 @@
 
     <name>Esfinge QueryBuilder Cassandra</name>
     <url>http://esfinge.sourceforge.net/</url>
-    <description>The Esfinge QueryBuilder JPA1 is the persistence framework for Esfinge QueryBuilder using Cassandra.</description>
+    <description>The Esfinge QueryBuilder Cassandra is the persistence framework for Esfinge QueryBuilder using
+        Cassandra.
+    </description>
 
     <organization>
         <name>Esfinge Framework</name>
@@ -49,6 +51,7 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -57,6 +60,47 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <argLine>${surefire.jacoco.args}</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <id>before-unit-test-execution</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</destFile>
+                            <propertyName>surefire.jacoco.args</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>after-unit-test-execution</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-unit-test-coverage-report
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -81,7 +125,6 @@
             <artifactId>cassandra-driver-mapping</artifactId>
             <version>3.1.0</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/org.cassandraunit/cassandra-unit -->
         <dependency>

@@ -1,16 +1,17 @@
 package net.sf.esfinge.querybuilder.cassandra.integration.main;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraOrderByTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
-public class CassandraOrderByQueryBuilderTest extends CassandraBasicDatabaseTest {
+public class CassandraOrderByQueryBuilderIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
     CassandraOrderByTestQuery testQuery = QueryBuilder.create(CassandraOrderByTestQuery.class);
 

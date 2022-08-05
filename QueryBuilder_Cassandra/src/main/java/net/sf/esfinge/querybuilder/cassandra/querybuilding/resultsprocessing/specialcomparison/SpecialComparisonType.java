@@ -6,7 +6,7 @@ import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 public enum SpecialComparisonType {
     NOT_EQUALS, CONTAINS, STARTS, ENDS;
 
-    public static SpecialComparisonType fromComparisonType(ComparisonType comparisonType){
+    public static SpecialComparisonType fromComparisonType(ComparisonType comparisonType) {
         switch (comparisonType) {
             case NOT_EQUALS:
                 return SpecialComparisonType.NOT_EQUALS;

@@ -15,7 +15,7 @@ public abstract class BasicResultsProcessor implements ResultsProcessor {
     }
 
     @Override
-    public <E> List<E> postProcess(List<E> list){
+    public <E> List<E> postProcess(List<E> list) {
         list = resultsProcessing(list);
 
         if (nextResultsProcessor != null)

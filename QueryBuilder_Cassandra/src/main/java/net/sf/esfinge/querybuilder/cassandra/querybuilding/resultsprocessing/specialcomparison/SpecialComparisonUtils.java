@@ -1,5 +1,6 @@
 package net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison;
 
+import net.sf.esfinge.querybuilder.cassandra.exceptions.MethodInvocationException;
 import net.sf.esfinge.querybuilder.cassandra.reflection.CassandraReflectionUtils;
 
 import java.lang.reflect.Method;
@@ -20,30 +21,33 @@ public class SpecialComparisonUtils {
             case CONTAINS:
                 return parameterValue.toString().contains(valueToCompare.toString());
             default:
-                return false;
+                return true;
         }
     }
 
     public static boolean filterBySpecialComparisonClause(Object parameterValue, SpecialComparisonClause clause) {
         return filterBySpecialComparison(parameterValue, clause.getValue(), clause.getSpecialComparisonType());
     }
-    public static <E> List filterListBySpecialComparisonClause(List<E> list, SpecialComparisonClause clause){
+
+    public static <E> List filterListBySpecialComparisonClause(List<E> list, SpecialComparisonClause clause) {
         Class clazz = list.get(0).getClass();
 
         Method[] getters = CassandraReflectionUtils.getClassGetters(clazz);
 
-        Method getter = CassandraReflectionUtils.getClassGetterForField(clazz,getters,clause.getPropertyName());
+        Method getter = CassandraReflectionUtils.getClassGetterForField(clazz, getters, clause.getPropertyName());
+
+        //List<E> results = list.stream().filter(obj -> filterBySpecialComparisonClause(getter.invoke(obj),clause)).collect(Collectors.toList());
 
         return list.stream().filter(obj -> {
             try {
-                return filterBySpecialComparisonClause(getter.invoke(obj),clause);
+                return filterBySpecialComparisonClause(getter.invoke(obj), clause);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new MethodInvocationException("Could not invoke method \"" + getter.getName() + "\" on object \"" + obj + "\", this is caused by: " + e.getMessage());
             }
         }).collect(Collectors.toList());
     }
 
-    public static Object[] getArgumentsNotHavingSpecialClause(Object[] args, List<SpecialComparisonClause> spc){
+    public static Object[] getArgumentsNotHavingSpecialClause(Object[] args, List<SpecialComparisonClause> spc) {
         if (spc.isEmpty())
             return args;
 
@@ -53,8 +57,8 @@ public class SpecialComparisonUtils {
         int currentNewArgs = 0;
         int currentSpecialArgs = 0;
 
-        for (int i = 0; i < args.length; i++){
-            if (i != specialArgsPositions[currentSpecialArgs]){
+        for (int i = 0; i < args.length; i++) {
+            if (i != specialArgsPositions[currentSpecialArgs]) {
                 newArgs[currentNewArgs] = args[i];
                 currentNewArgs++;
                 currentSpecialArgs++;
@@ -64,10 +68,10 @@ public class SpecialComparisonUtils {
         return newArgs;
     }
 
-    public static List<SpecialComparisonClause> getSpecialComparisonClauseWithArguments(Object[] args, List<SpecialComparisonClause> spc){
+    public static List<SpecialComparisonClause> getSpecialComparisonClauseWithArguments(Object[] args, List<SpecialComparisonClause> spc) {
         List<SpecialComparisonClause> newSpc = new ArrayList<>();
 
-        for (SpecialComparisonClause c : spc){
+        for (SpecialComparisonClause c : spc) {
             c.setValue(args[c.getArgPosition()]);
             newSpc.add(c);
         }
