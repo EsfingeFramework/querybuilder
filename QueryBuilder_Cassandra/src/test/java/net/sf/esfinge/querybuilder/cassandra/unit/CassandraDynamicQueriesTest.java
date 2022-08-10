@@ -203,7 +203,7 @@ public class CassandraDynamicQueriesTest {
     @Test(expected = UnsupportedCassandraOperationException.class)
     public void invalidCompareToNullQueryTest() {
         visitor.visitEntity("Person");
-        visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);
+        visitor.visitCondition("name", ComparisonType.GREATER_OR_EQUALS, NullOption.COMPARE_TO_NULL);
     }
 
 

@@ -2,7 +2,6 @@ package net.sf.esfinge.querybuilder.cassandra.integration.dbutils;
 
 import com.datastax.driver.core.Session;
 import org.apache.thrift.transport.TTransportException;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 
 import java.io.IOException;
 

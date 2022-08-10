@@ -11,7 +11,7 @@ partitioner: RandomPartitioner
 data_file_directories:
   - target/embeddedCassandra/data
 commitlog_directory: target/embeddedCassandra/commitlog
-cdc_raw_directory: target/embeddedCassandra/cdc
+#cdc_raw_directory: target/embeddedCassandra/cdc
 disk_failure_policy: stop
 key_cache_size_in_mb:
 key_cache_save_period: 14400

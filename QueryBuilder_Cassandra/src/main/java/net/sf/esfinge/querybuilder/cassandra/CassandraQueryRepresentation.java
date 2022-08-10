@@ -1,6 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
@@ -20,7 +21,10 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     private final List<SpecialComparisonClause> specialComparisonClauses;
     private final String entity;
 
-    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClauses, List<SpecialComparisonClause> specialComparisonClauses, String entity) {
+    private final ResultsProcessor processor;
+
+
+    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClauses, List<SpecialComparisonClause> specialComparisonClauses, String entity, ResultsProcessor processor) {
         this.query = query;
         this.dynamic = dynamic;
         this.fixParametersMap = fixParametersMap;
@@ -28,6 +32,7 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         this.orderByClauses = orderByClauses;
         this.specialComparisonClauses = specialComparisonClauses;
         this.entity = entity;
+        this.processor = processor;
     }
 
     @Override
@@ -115,5 +120,9 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
 
     public List<SpecialComparisonClause> getSpecialComparisonClauses() {
         return specialComparisonClauses;
+    }
+
+    public ResultsProcessor getProcessor() {
+        return processor;
     }
 }

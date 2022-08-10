@@ -4,7 +4,7 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.ComparisonTypeNotFoundEx
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 public enum SpecialComparisonType {
-    NOT_EQUALS, CONTAINS, STARTS, ENDS;
+    NOT_EQUALS, CONTAINS, STARTS, ENDS, COMPARE_TO_NULL;
 
     public static SpecialComparisonType fromComparisonType(ComparisonType comparisonType) {
         switch (comparisonType) {

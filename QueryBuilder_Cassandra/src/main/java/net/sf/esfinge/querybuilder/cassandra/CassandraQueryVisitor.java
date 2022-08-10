@@ -3,6 +3,8 @@ package net.sf.esfinge.querybuilder.cassandra;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.OrderingProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonType;
@@ -22,6 +24,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
     private String entity;
     private String query = "";
 
+    private ResultsProcessor processor;
+
     @Override
     public void visitEntity(String entity) {
         this.entity = entity;
@@ -31,6 +35,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
     public void visitConector(String connector) {
         // Attention! In Cassandra OR statements are not supported as in relational
         // Databases
+        // TODO: IMPLEMENT OR CONNECTOR AT THE APPLICATION LOGIC
         if (!connector.equalsIgnoreCase("AND"))
             throw new InvalidConnectorException("Invalid connector \"" + connector + "\", valid values are: {'AND','and'}");
 
@@ -63,19 +68,25 @@ public class CassandraQueryVisitor implements QueryVisitor {
     public void visitCondition(String parameter, ComparisonType comparisonType, NullOption nullOption) {
         // Cassandra doesn't support querying based on null values, even for secondary indexes
         // (like you can in a relational database)
-        // TODO: IMPLEMENT COMPARE TO NULL AT THE APPLICATION LOGIC?
-        if (nullOption == NullOption.COMPARE_TO_NULL)
-            throw new UnsupportedCassandraOperationException("Cassandra doesn't support querying based on null values");
+        if (nullOption == NullOption.COMPARE_TO_NULL) {
+            if (comparisonType == ComparisonType.NOT_EQUALS)
+                specialComparisonClauses.add(new SpecialComparisonClause(parameter, SpecialComparisonType.fromComparisonType(comparisonType)));
+            else if (comparisonType == ComparisonType.EQUALS)
+                specialComparisonClauses.add(new SpecialComparisonClause(parameter, SpecialComparisonType.COMPARE_TO_NULL));
+            else
+                throw new UnsupportedCassandraOperationException("Cannot apply comparison type \"" + comparisonType.name() + "\" to null value");
 
-        visitCondition(parameter, comparisonType);
+            // Need to set the position of the argument, otherwise cannot keep track of which argument is associated with this condition
+            specialComparisonClauses.get(specialComparisonClauses.size() - 1).setArgPosition(conditions.size() + specialComparisonClauses.size() - 1);
+        } else {
+            visitCondition(parameter, comparisonType);
 
-        conditions.get(conditions.size() - 1).setNullOption(nullOption);
+            conditions.get(conditions.size() - 1).setNullOption(nullOption);
+        }
     }
 
     @Override
     public void visitCondition(String parameter, ComparisonType comparisonType, Object o) {
-        // TODO TAKE INTO ACCOUNT SPECIAL COMPARISON?
-
         visitCondition(parameter, comparisonType);
 
         conditions.get(conditions.size() - 1).setValue(o);
@@ -185,7 +196,9 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public QueryRepresentation getQueryRepresentation() {
-        return new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), conditions, orderByClauses, specialComparisonClauses, entity);
+        processor = new OrderingProcessor(orderByClauses);
+
+        return new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), conditions, orderByClauses, specialComparisonClauses, entity, processor);
     }
 
 }

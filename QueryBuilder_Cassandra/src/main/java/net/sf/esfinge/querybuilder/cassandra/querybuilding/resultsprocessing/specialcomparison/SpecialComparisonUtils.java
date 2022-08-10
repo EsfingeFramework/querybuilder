@@ -20,6 +20,8 @@ public class SpecialComparisonUtils {
                 return parameterValue.toString().endsWith(valueToCompare.toString());
             case CONTAINS:
                 return parameterValue.toString().contains(valueToCompare.toString());
+            case COMPARE_TO_NULL:
+                return parameterValue == null;
             default:
                 return true;
         }
@@ -35,8 +37,6 @@ public class SpecialComparisonUtils {
         Method[] getters = CassandraReflectionUtils.getClassGetters(clazz);
 
         Method getter = CassandraReflectionUtils.getClassGetterForField(clazz, getters, clause.getPropertyName());
-
-        //List<E> results = list.stream().filter(obj -> filterBySpecialComparisonClause(getter.invoke(obj),clause)).collect(Collectors.toList());
 
         return list.stream().filter(obj -> {
             try {
@@ -57,7 +57,7 @@ public class SpecialComparisonUtils {
         int currentNewArgs = 0;
         int currentSpecialArgs = 0;
 
-        for (int i = 0; i < args.length; i++) {
+        for (int i = 0; i < args.length && currentNewArgs < newArgs.length; i++) {
             if (i != specialArgsPositions[currentSpecialArgs]) {
                 newArgs[currentNewArgs] = args[i];
                 currentNewArgs++;

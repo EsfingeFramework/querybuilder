@@ -1,6 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra.integration.main;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.MethodInvocationException;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraSpecialComparisonTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CassandraSpecialComparisonQueryBuilderIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
@@ -22,10 +24,22 @@ public class CassandraSpecialComparisonQueryBuilderIntegrationTest extends Cassa
     }
 
     @Test
+    public void queryWithNotEqualsAndNullValueTest() {
+        List<Person> list = testQuery.getPersonByLastNameNotEquals(null);
+
+        assertEquals(5, list.size());
+    }
+
+    @Test
     public void queryWithStartsAnnotationTest() {
         List<Person> list = testQuery.getPersonByName("Ma");
 
         assertEquals(2, list.size());
+    }
+
+    @Test
+    public void queryWithStartsAndNullValueTest() {
+        assertThrows(MethodInvocationException.class, () -> testQuery.getPersonByName(null));
     }
 
     @Test
@@ -43,10 +57,20 @@ public class CassandraSpecialComparisonQueryBuilderIntegrationTest extends Cassa
     }
 
     @Test
+    public void queryWithEndsAndNullValueTest() {
+        assertThrows(MethodInvocationException.class, () -> testQuery.getPersonByNameEnds(null));
+    }
+
+    @Test
     public void queryWithContainsTest() {
         List<Person> list = testQuery.getPersonByNameContains("ar");
 
         assertEquals(2, list.size());
+    }
+
+    @Test
+    public void queryWithContainsAndNullValueTest() {
+        assertThrows(MethodInvocationException.class, () -> testQuery.getPersonByNameContains(null));
     }
 
     @Test

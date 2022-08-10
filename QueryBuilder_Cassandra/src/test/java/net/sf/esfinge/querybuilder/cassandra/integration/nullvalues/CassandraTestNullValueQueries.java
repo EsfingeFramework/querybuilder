@@ -10,6 +10,10 @@ public interface CassandraTestNullValueQueries {
 
     List<Person> getPersonByName(@CompareToNull String name);
 
+    List<Person> getPersonByLastNameAndName(@CompareToNull String lastName, @CompareToNull String name);
+
+    List<Person> getPersonByLastNameAndAge(@CompareToNull String lastName, Integer age);
+
     List<Person> getPersonByAgeGreater(@IgnoreWhenNull Integer age);
 
     List<Person> getPersonByNameAndLastName(@IgnoreWhenNull String name, @IgnoreWhenNull String lastname);

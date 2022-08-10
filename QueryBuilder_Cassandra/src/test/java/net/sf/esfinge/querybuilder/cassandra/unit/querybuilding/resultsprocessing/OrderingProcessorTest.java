@@ -1,6 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra.unit.querybuilding.resultsprocessing;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassException;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.OrderingLimitExceededException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.OrderingProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OrderingProcessorTest {
 
@@ -124,5 +126,18 @@ public class OrderingProcessorTest {
         }
 
         return true;
+    }
+
+    @Test
+    public void sortListWithOrderingLimitExceededTest() {
+        List<OrderByClause> orderByClauseList = new ArrayList<>();
+        orderByClauseList.add(new OrderByClause("name", OrderingDirection.ASC));
+
+        ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
+
+        for (int i = 0; i < 6; i++)
+            objectList.add(new TestClass(1, "test", "test"));
+
+        assertThrows(OrderingLimitExceededException.class, () -> processor.postProcess(objectList));
     }
 }
