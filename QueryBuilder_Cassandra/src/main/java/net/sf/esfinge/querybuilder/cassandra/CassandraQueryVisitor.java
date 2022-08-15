@@ -3,11 +3,8 @@ package net.sf.esfinge.querybuilder.cassandra;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderingProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
@@ -50,7 +47,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
     @Override
     public void visitConector(String connector) {
         // Attention! In Cassandra OR statements are not supported as in relational
-        // Databases
+        // Databases, here they are implemented at the application logic
         if (connector.equalsIgnoreCase("AND")) {
             // If there are no conditions clauses or if the last nextConnector in the previous condition
             // is already set, then the last condition was a SpecialComparison and there is no need to store
@@ -75,7 +72,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
             specialComparisonClauses.get(specialComparisonClauses.size() - 1).setArgPosition(conditions.size() + specialComparisonClauses.size() - 1 - numberOfFixedValues + argumentPositionOffset);
         } else {
             conditions.add(new ConditionStatement(parameter, comparisonType));
-            //conditions.get(conditions.size() - 1).setConditionIndex(conditions.size() + specialComparisonClauses.size() - 1 - numberOfFixedValues);
             conditions.get(conditions.size() - 1).setConditionIndex(conditions.size() + specialComparisonClauses.size() - 1 - numberOfFixedValues + argumentPositionOffset);
         }
     }
