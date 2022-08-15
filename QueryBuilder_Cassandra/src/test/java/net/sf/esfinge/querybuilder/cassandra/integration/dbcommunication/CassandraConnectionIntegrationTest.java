@@ -16,7 +16,7 @@ public class CassandraConnectionIntegrationTest {
 
     @Test
     public void cassandraDBConnectionTest() throws TTransportException, IOException, InterruptedException {
-        CassandraTestUtils.initCassandaUnit();
+        CassandraTestUtils.initCassandraUnit();
 
         CassandraSessionProvider client = ServiceLocator.getServiceImplementation(CassandraSessionProvider.class);
         Session session = client.getSession();
