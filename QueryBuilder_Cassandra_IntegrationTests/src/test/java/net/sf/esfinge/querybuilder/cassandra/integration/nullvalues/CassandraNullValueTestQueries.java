@@ -6,7 +6,7 @@ import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 
 import java.util.List;
 
-public interface CassandraTestNullValueQueries {
+public interface CassandraNullValueTestQueries {
 
     List<Person> getPersonByName(@CompareToNull String name);
 

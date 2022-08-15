@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 public class CassandraQueryBuilderNullValuesIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
-    private final CassandraTestNullValueQueries testQuery = QueryBuilder.create(CassandraTestNullValueQueries.class);
+    private final CassandraNullValueTestQueries testQuery = QueryBuilder.create(CassandraNullValueTestQueries.class);
 
     @Test
     public void compareToNullWithOneNullQueryTest() {
@@ -30,6 +30,20 @@ public class CassandraQueryBuilderNullValuesIntegrationTest extends CassandraBas
     }
 
     @Test
+    public void compareToNullWithOneNullAndNonNullParameterQueryTest() {
+        Session session = CassandraTestUtils.getSession();
+
+        String query = "INSERT INTO test.person(id, name, lastname, age) VALUES (6, null, 'NullPerson', 20)";
+
+        session.execute(query);
+        session.close();
+
+        List<Person> list = testQuery.getPersonByName("Silvia");
+
+        assertEquals("Silvia", list.get(0).getName());
+    }
+
+    @Test
     public void compareToNullWithTwoNullsQueryTest() {
         Session session = CassandraTestUtils.getSession();
 
@@ -39,6 +53,34 @@ public class CassandraQueryBuilderNullValuesIntegrationTest extends CassandraBas
         session.close();
 
         List<Person> list = testQuery.getPersonByLastNameAndName(null, null);
+
+        assertEquals(new Integer(20), list.get(0).getAge());
+    }
+
+    @Test
+    public void compareToNullWithFirstNullAnSecondNonNullQueryTest() {
+        Session session = CassandraTestUtils.getSession();
+
+        String query = "INSERT INTO test.person(id, name, lastname, age) VALUES (6, 'NonNullName', null, 20)";
+
+        session.execute(query);
+        session.close();
+
+        List<Person> list = testQuery.getPersonByLastNameAndName(null, "NonNullName");
+
+        assertEquals(new Integer(20), list.get(0).getAge());
+    }
+
+    @Test
+    public void compareToNullWithSecondNullAnFirstNonNullQueryTest() {
+        Session session = CassandraTestUtils.getSession();
+
+        String query = "INSERT INTO test.person(id, name, lastname, age) VALUES (6, null, 'NonNullLastName', 20)";
+
+        session.execute(query);
+        session.close();
+
+        List<Person> list = testQuery.getPersonByLastNameAndName("NonNullLastName", null);
 
         assertEquals(new Integer(20), list.get(0).getAge());
     }

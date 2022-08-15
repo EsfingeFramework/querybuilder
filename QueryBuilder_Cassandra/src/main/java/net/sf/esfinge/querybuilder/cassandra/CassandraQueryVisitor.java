@@ -3,10 +3,11 @@ package net.sf.esfinge.querybuilder.cassandra;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.OrderingProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderingProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
@@ -21,10 +22,25 @@ public class CassandraQueryVisitor implements QueryVisitor {
     private final List<ConditionStatement> conditions = new ArrayList<>();
     private final List<OrderByClause> orderByClauses = new ArrayList<>();
     private final List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
+    private final int argumentPositionOffset;
     private String entity;
     private String query = "";
+    private int numberOfFixedValues = 0;
 
-    private ResultsProcessor processor;
+    public CassandraQueryVisitor() {
+        argumentPositionOffset = 0;
+    }
+
+    public CassandraQueryVisitor(CassandraQueryVisitor previousVisitor) {
+        // When call this constructor when we have a secondary query, in that case
+        // we need to pass the previous visitor in order to update the offset for
+        // the position of the arguments of the secondary queries
+
+        this.argumentPositionOffset = previousVisitor.getConditions().size() +
+                previousVisitor.getSpecialComparisonClauses().size() -
+                previousVisitor.getNumberOfFixedValues() +
+                previousVisitor.getArgumentPositionOffset();
+    }
 
     @Override
     public void visitEntity(String entity) {
@@ -35,15 +51,14 @@ public class CassandraQueryVisitor implements QueryVisitor {
     public void visitConector(String connector) {
         // Attention! In Cassandra OR statements are not supported as in relational
         // Databases
-        // TODO: IMPLEMENT OR CONNECTOR AT THE APPLICATION LOGIC
-        if (!connector.equalsIgnoreCase("AND"))
-            throw new InvalidConnectorException("Invalid connector \"" + connector + "\", valid values are: {'AND','and'}");
-
-        // If there are no conditions clauses or if the last nextConnector in the previous condition
-        // is already set, then the last condition was a SpecialComparison and there is no need to store
-        // the nextConnector (OR statements are computed at the application logic)
-        if (!conditions.isEmpty() && conditions.get(conditions.size() - 1).getNextConnector() == null)
-            conditions.get(conditions.size() - 1).setNextConnector(connector.toUpperCase());
+        if (connector.equalsIgnoreCase("AND")) {
+            // If there are no conditions clauses or if the last nextConnector in the previous condition
+            // is already set, then the last condition was a SpecialComparison and there is no need to store
+            // the nextConnector (OR statements are computed at the application logic)
+            if (!conditions.isEmpty() && conditions.get(conditions.size() - 1).getNextConnector() == null)
+                conditions.get(conditions.size() - 1).setNextConnector(connector.toUpperCase());
+        } else
+            throw new InvalidConnectorException("Invalid connector for primary visitor \"" + connector + "\", valid values are: {'AND','and'}");
     }
 
     @Override
@@ -57,10 +72,11 @@ public class CassandraQueryVisitor implements QueryVisitor {
             specialComparisonClauses.add(new SpecialComparisonClause(parameter, SpecialComparisonType.fromComparisonType(comparisonType)));
 
             // Need to set the position of the argument, otherwise cannot keep track of which argument is associated with this condition
-            specialComparisonClauses.get(specialComparisonClauses.size() - 1).setArgPosition(conditions.size() + specialComparisonClauses.size() - 1);
+            specialComparisonClauses.get(specialComparisonClauses.size() - 1).setArgPosition(conditions.size() + specialComparisonClauses.size() - 1 - numberOfFixedValues + argumentPositionOffset);
         } else {
             conditions.add(new ConditionStatement(parameter, comparisonType));
-
+            //conditions.get(conditions.size() - 1).setConditionIndex(conditions.size() + specialComparisonClauses.size() - 1 - numberOfFixedValues);
+            conditions.get(conditions.size() - 1).setConditionIndex(conditions.size() + specialComparisonClauses.size() - 1 - numberOfFixedValues + argumentPositionOffset);
         }
     }
 
@@ -77,7 +93,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
                 throw new UnsupportedCassandraOperationException("Cannot apply comparison type \"" + comparisonType.name() + "\" to null value");
 
             // Need to set the position of the argument, otherwise cannot keep track of which argument is associated with this condition
-            specialComparisonClauses.get(specialComparisonClauses.size() - 1).setArgPosition(conditions.size() + specialComparisonClauses.size() - 1);
+            specialComparisonClauses.get(specialComparisonClauses.size() - 1).setArgPosition(conditions.size() + specialComparisonClauses.size() - 1 - numberOfFixedValues + argumentPositionOffset);
         } else {
             visitCondition(parameter, comparisonType);
 
@@ -86,10 +102,11 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     @Override
-    public void visitCondition(String parameter, ComparisonType comparisonType, Object o) {
+    public void visitCondition(String parameter, ComparisonType comparisonType, Object value) {
         visitCondition(parameter, comparisonType);
 
-        conditions.get(conditions.size() - 1).setValue(o);
+        conditions.get(conditions.size() - 1).setValue(value);
+        numberOfFixedValues++;
     }
 
     @Override
@@ -97,7 +114,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
         // Cassandra only allows ORDER by in the same direction as we
         // define in the "CLUSTERING ORDER BY" clause of CREATE TABLE.
         // Thus, it is implemented at the application logic
-
         orderByClauses.add(new OrderByClause(parameter, orderingDirection));
     }
 
@@ -158,6 +174,12 @@ public class CassandraQueryVisitor implements QueryVisitor {
                 return true;
             }
         }
+
+        for (SpecialComparisonClause c : specialComparisonClauses) {
+            if (c.getSpecialComparisonType() == SpecialComparisonType.COMPARE_TO_NULL)
+                return true;
+        }
+
         return false;
     }
 
@@ -196,9 +218,27 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public QueryRepresentation getQueryRepresentation() {
-        processor = new OrderingProcessor(orderByClauses);
-
-        return new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), conditions, orderByClauses, specialComparisonClauses, entity, processor);
+        return new CassandraQueryRepresentation(getQuery(), isDynamic(), getFixParametersMap(), conditions, orderByClauses, specialComparisonClauses, entity);
     }
 
+    public String getEntity() {
+        return this.entity;
+    }
+
+
+    public List<ConditionStatement> getConditions() {
+        return conditions;
+    }
+
+    public List<SpecialComparisonClause> getSpecialComparisonClauses() {
+        return specialComparisonClauses;
+    }
+
+    public int getNumberOfFixedValues() {
+        return numberOfFixedValues;
+    }
+
+    public int getArgumentPositionOffset() {
+        return argumentPositionOffset;
+    }
 }

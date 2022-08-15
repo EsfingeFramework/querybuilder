@@ -13,7 +13,7 @@ public class QueryBuildingUtilsTest {
 
     @Test
     public void replaceQueryArgsWithOneArgTest() {
-        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id > ?";
+        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id > 0?";
         Object[] args = {1};
 
         String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
@@ -23,7 +23,7 @@ public class QueryBuildingUtilsTest {
 
     @Test
     public void replaceQueryArgsWithTwoArgsTest() {
-        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ?";
+        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = 0? AND lastName = 1?";
         Object[] args = {1, "Max"};
 
         String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
@@ -33,8 +33,18 @@ public class QueryBuildingUtilsTest {
 
     @Test
     public void replaceQueryArgsWithTwoStringArgsTest() {
-        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE name = ? AND lastName = ?";
+        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND lastName = 1?";
         Object[] args = {"Max", "Power"};
+
+        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
+
+        assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE name = 'Max' AND lastName = 'Power'", newQuery);
+    }
+
+    @Test
+    public void replaceQueryArgsWithSkippedArgsTest() {
+        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND lastName = 2?";
+        Object[] args = {"Max", null, "Power"};
 
         String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
 
@@ -53,7 +63,7 @@ public class QueryBuildingUtilsTest {
 
     @Test
     public void replaceQueryArgsWithNullAndNonNullValueArgsTest() {
-        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE name = ?";
+        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE name = 1?";
         Object[] args = {null, "Max"};
 
         String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
@@ -61,17 +71,19 @@ public class QueryBuildingUtilsTest {
         assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE name = 'Max'", newQuery);
     }
 
-    @Test(expected = QueryParametersMismatchException.class)
+    @Test
     public void replaceQueryArgsWithMoreArgsInArrayTest() {
-        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ?";
+        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = 0? AND name = 1?";
         Object[] args = {1, "Max", "Additional"};
 
-        QueryBuildingUtils.replaceQueryArgs(query, args);
+        String newQuery = QueryBuildingUtils.replaceQueryArgs(query, args);
+
+        assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE id = 1 AND name = 'Max'", newQuery);
     }
 
     @Test(expected = QueryParametersMismatchException.class)
     public void replaceQueryArgsWithMoreArgsInQueryTest() {
-        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = ? AND lastName = ? OR city = ?";
+        String query = "SELECT * FROM <#keyspace-name#>.Person WHERE id = 0? AND lastName = 1? OR city = 2?";
         Object[] args = {1, "Max"};
 
         QueryBuildingUtils.replaceQueryArgs(query, args);

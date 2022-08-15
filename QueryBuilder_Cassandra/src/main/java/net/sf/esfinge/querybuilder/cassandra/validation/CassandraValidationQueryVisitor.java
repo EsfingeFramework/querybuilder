@@ -1,5 +1,8 @@
 package net.sf.esfinge.querybuilder.cassandra.validation;
 
+import net.sf.esfinge.querybuilder.cassandra.CassandraQueryRepresentation;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
 import net.sf.esfinge.querybuilder.exception.InvalidQuerySequenceException;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
@@ -7,14 +10,16 @@ import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
 import net.sf.esfinge.querybuilder.methodparser.QueryVisitor;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class CassandraValidationQueryVisitor implements QueryVisitor {
-    private final QueryVisitor visitor;
+    private final CassandraChainQueryVisitor visitor;
     private CassandraQueryElement lastCalled;
 
-    public CassandraValidationQueryVisitor(QueryVisitor visitor) {
+    public CassandraValidationQueryVisitor(CassandraChainQueryVisitor visitor) {
         this.lastCalled = CassandraQueryElement.NONE;
         this.visitor = visitor;
     }
@@ -108,5 +113,35 @@ public class CassandraValidationQueryVisitor implements QueryVisitor {
 
     public QueryRepresentation getQueryRepresentation() {
         return this.visitor.getQueryRepresentation();
+    }
+
+    public CassandraChainQueryVisitor getSecondaryVisitor() {
+        return this.visitor.getSecondaryVisitor();
+    }
+
+    public List<CassandraChainQueryVisitor> getSecondaryVisitorsList() {
+        List<CassandraChainQueryVisitor> visitors = new ArrayList<>();
+
+        CassandraChainQueryVisitor current = this.visitor;
+
+        if (current != null)
+            visitors.add(current);
+
+        while (current.getSecondaryVisitor() != null) {
+            current = current.getSecondaryVisitor();
+            visitors.add(current);
+        }
+
+        return visitors;
+    }
+
+    public List<OrderByClause> getOrderByClauses() {
+        CassandraChainQueryVisitor current = this.visitor;
+
+        while (current.getSecondaryVisitor() != null){
+            current =  current.getSecondaryVisitor();
+        }
+
+        return ((CassandraQueryRepresentation)current.getQueryRepresentation()).getOrderByClauses();
     }
 }

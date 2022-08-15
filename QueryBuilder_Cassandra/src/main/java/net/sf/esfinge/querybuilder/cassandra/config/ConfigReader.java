@@ -47,6 +47,7 @@ public class ConfigReader {
 
         CassandraConfig defaultConfig = new CassandraConfig();
         defaultConfig.setOrderingLimit(1000);
+        defaultConfig.setSecondaryQueryLimit(3);
 
         return defaultConfig;
     }

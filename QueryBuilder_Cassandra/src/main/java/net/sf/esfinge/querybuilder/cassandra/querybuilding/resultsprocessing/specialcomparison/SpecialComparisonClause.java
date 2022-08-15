@@ -1,5 +1,9 @@
 package net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison;
 
+import net.sf.esfinge.querybuilder.cassandra.exceptions.MethodInvocationException;
+import net.sf.esfinge.querybuilder.cassandra.reflection.CassandraReflectionUtils;
+
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 public class SpecialComparisonClause {
@@ -35,7 +39,18 @@ public class SpecialComparisonClause {
     }
 
     public Object getValue() {
-        return value;
+        if (SpecialComparisonUtils.hasCompareToNullAnnotationOnFields(this.value)) {
+            Method[] getters = CassandraReflectionUtils.getClassGetters(this.value.getClass());
+            Method getter = CassandraReflectionUtils.getClassGetterForField(this.value.getClass(), getters, propertyName);
+
+            try {
+                return getter.invoke(this.value);
+            } catch (Exception e) {
+                throw new MethodInvocationException("Could not invoke method \"" + getter.getName() + "\" on object \"" + this.value + "\", this is caused by: " + e.getMessage());
+            }
+        }
+
+        return this.value;
     }
 
     public void setValue(Object value) {

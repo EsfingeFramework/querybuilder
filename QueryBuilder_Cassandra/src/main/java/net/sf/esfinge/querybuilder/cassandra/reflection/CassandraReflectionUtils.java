@@ -5,14 +5,18 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassExc
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CassandraReflectionUtils {
 
     public static <E> Method[] getClassGetters(Class<E> clazz) {
+        List<String> fieldNames = Arrays.stream(clazz.getDeclaredFields())
+                .map(field -> field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1))
+                .collect(Collectors.toList());
 
         return Arrays.stream(clazz.getMethods())
                 .filter(m -> m.getName()
-                        .startsWith("get") && !m.getName().equals("getClass"))
+                        .startsWith("get") && !m.getName().equals("getClass") && fieldNames.contains(m.getName().substring(3)))
                 .toArray(Method[]::new);
     }
 

@@ -126,6 +126,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/net.sf.esfinge/querybuilder-core -->
         <dependency>
             <groupId>net.sf.esfinge</groupId>
@@ -133,7 +140,10 @@
             <version>1.7.0</version>
         </dependency>
 
-        <!-- need the update local jar of Cassandra Qeurybuilder -->
+        <!-- This is a local dependency, if a new version of Cassandra Querybuilder is
+        released, you need to replace the jar file in the resources/ folder in the root of
+        the project
+         -->
         <dependency>
             <groupId>net.sf.esfinge</groupId>
             <artifactId>querybuilder-cassandra</artifactId>

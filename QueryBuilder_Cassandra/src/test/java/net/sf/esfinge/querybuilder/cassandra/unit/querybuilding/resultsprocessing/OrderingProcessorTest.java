@@ -2,12 +2,11 @@ package net.sf.esfinge.querybuilder.cassandra.unit.querybuilding.resultsprocessi
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.OrderingLimitExceededException;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.OrderingProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderingProcessor;
 import net.sf.esfinge.querybuilder.cassandra.unit.reflection.TestClass;
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -16,26 +15,7 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class OrderingProcessorTest {
-
-    private List<TestClass> objectList;
-
-    @Before
-    public void init() {
-        objectList = new ArrayList<>();
-
-        TestClass obj1 = new TestClass(1, "Pedro", "Silva");
-        TestClass obj2 = new TestClass(2, "Marcos", "Ferreira");
-        TestClass obj3 = new TestClass(3, "Antonio", "Marques");
-        TestClass obj4 = new TestClass(4, "Marcos", "Silva");
-        TestClass obj5 = new TestClass(5, "Silvia", "Bressan");
-
-        objectList.add(obj1);
-        objectList.add(obj2);
-        objectList.add(obj3);
-        objectList.add(obj4);
-        objectList.add(obj5);
-    }
+public class OrderingProcessorTest extends BasicProcessorTest {
 
     @Test
     public void sortListByOrderingClauseWithOneFieldAscendingTest() {

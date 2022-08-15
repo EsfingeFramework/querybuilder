@@ -68,7 +68,7 @@ public class CassandraSpecialComparisonQueryVisitorTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
         String query = qr.getQuery().toString();
 
-        assertEquals(query, "SELECT * FROM <#keyspace-name#>.Person WHERE lastName = ? ALLOW FILTERING");
+        assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE lastName = 1? ALLOW FILTERING", query);
         assertEquals(expected1, ((CassandraQueryRepresentation) qr).getSpecialComparisonClauses().get(0));
         assertEquals(expected2, ((CassandraQueryRepresentation) qr).getSpecialComparisonClauses().get(1));
     }

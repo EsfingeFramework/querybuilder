@@ -2,21 +2,17 @@ package net.sf.esfinge.querybuilder.cassandra.unit.reflection;
 
 import java.util.Objects;
 
-public class TestClass {
+public class TestClass1 {
 
     private int id;
     private String name;
     private String lastName;
 
 
-    public TestClass(int id, String name, String lastName) {
+    public TestClass1(int id, String name, String lastName) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
-    }
-
-    public void getWhatever() {
-
     }
 
     public int getId() {
@@ -56,7 +52,7 @@ public class TestClass {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TestClass testClass = (TestClass) o;
+        TestClass1 testClass = (TestClass1) o;
         return id == testClass.id && Objects.equals(name, testClass.name) && Objects.equals(lastName, testClass.lastName);
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class KeyspaceRepositoryIntegrationTest {
@@ -72,6 +73,18 @@ public class KeyspaceRepositoryIntegrationTest {
                 .collect(Collectors.toList());
 
         assertEquals(matchedKeyspaces.size(), 0);
+    }
+
+    @Test
+    public void useKeyspaceTest() throws InvalidNumberOfReplicasException {
+        schemaRepository.createKeyspace(KEYSPACE_NAME, ReplicationStrategy.SimpleStrategy, 1);
+
+        schemaRepository.useKeyspace(KEYSPACE_NAME);
+
+        // Query with no keyspace specified
+        String query = "CREATE TABLE IF NOT EXISTS person(id int PRIMARY KEY, name text);";
+
+        assertDoesNotThrow(() -> session.execute(query));
     }
 
     @After

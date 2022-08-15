@@ -28,7 +28,7 @@ public class CassandraOrderByQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(query, "SELECT * FROM <#keyspace-name#>.Person");
-        assertEquals(expected, ((CassandraQueryRepresentation) qr).getOrderByClause().get(0));
+        assertEquals(expected, ((CassandraQueryRepresentation) qr).getOrderByClauses().get(0));
     }
 
     @Test
@@ -45,8 +45,8 @@ public class CassandraOrderByQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(query, "SELECT * FROM <#keyspace-name#>.Person");
-        assertEquals(expected1, ((CassandraQueryRepresentation) qr).getOrderByClause().get(0));
-        assertEquals(expected2, ((CassandraQueryRepresentation) qr).getOrderByClause().get(1));
+        assertEquals(expected1, ((CassandraQueryRepresentation) qr).getOrderByClauses().get(0));
+        assertEquals(expected2, ((CassandraQueryRepresentation) qr).getOrderByClauses().get(1));
     }
 
     @Test(expected = InvalidQuerySequenceException.class)

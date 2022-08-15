@@ -1,8 +1,9 @@
 package net.sf.esfinge.querybuilder.cassandra.integration.queryobjects;
 
+import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.exceptions.UnsupportedCassandraOperationException;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 
@@ -37,11 +38,20 @@ public class CassandraQueryObjectIntegrationTest extends CassandraBasicDatabaseI
         assertEquals("Antonio", p.getName());
     }
 
-    @Test(expected = UnsupportedCassandraOperationException.class)
+    @Test
     public void queryObjectWithNullComparisonTest() {
+        Session session = CassandraTestUtils.getSession();
+
+        String query = "INSERT INTO test.person(id, name, lastname, age) VALUES (6, 'NullPerson', null, 20)";
+
+        session.execute(query);
+        session.close();
+
         CompareNullQueryObject qo = new CompareNullQueryObject();
-        qo.setLastName("Test");
-        testQuery.getPerson(qo);
+        qo.setLastName(null);
+        List<Person> list = testQuery.getPerson(qo);
+
+        assertEquals("NullPerson", list.get(0).getName());
     }
 
     @Test

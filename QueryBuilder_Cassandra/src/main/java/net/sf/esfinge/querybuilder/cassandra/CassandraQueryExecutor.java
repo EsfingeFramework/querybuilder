@@ -9,9 +9,13 @@ import net.sf.esfinge.querybuilder.cassandra.cassandrautils.MappingManagerProvid
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.QueryBuildingUtils;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.SpecialComparisonProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderingProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.secondaryquery.SecondaryQueryProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonProcessor;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonUtils;
+import net.sf.esfinge.querybuilder.cassandra.validation.CassandraChainQueryVisitor;
+import net.sf.esfinge.querybuilder.cassandra.validation.CassandraValidationQueryVisitor;
 import net.sf.esfinge.querybuilder.cassandra.validation.CassandraVisitorFactory;
 import net.sf.esfinge.querybuilder.executor.QueryExecutor;
 import net.sf.esfinge.querybuilder.methodparser.*;
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CassandraQueryExecutor<E> implements QueryExecutor {
 
@@ -39,26 +44,28 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
 
         QueryVisitor visitor = CassandraVisitorFactory.createQueryVisitor();
         queryInfo.visit(visitor);
-        QueryRepresentation qr = visitor.getQueryRepresentation();
 
-        // Remove useless arguments for query substitution
-        List<SpecialComparisonClause> spc = ((CassandraQueryRepresentation) qr).getSpecialComparisonClauses();
-        List<SpecialComparisonClause> newSpc = SpecialComparisonUtils.getSpecialComparisonClauseWithArguments(args, spc);
+        List<CassandraChainQueryVisitor> visitors = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitorsList();
+        List<QueryRepresentation> qrList = visitors.stream().map(CassandraChainQueryVisitor::getQueryRepresentation)
+                .collect(Collectors.toList());
 
-        Object[] newArgs;
+        List<E> results = new ArrayList<>();
 
-        if (queryInfo.getQueryStyle() == QueryStyle.QUERY_OBJECT)
-            newArgs = args;
-        else
-            newArgs = SpecialComparisonUtils.getArgumentsNotHavingSpecialClause(args, spc);
+        for (QueryRepresentation representation : qrList) {
+            String query = getQuery(queryInfo, args, representation);
+            List<SpecialComparisonClause> spc = ((CassandraQueryRepresentation) representation).getSpecialComparisonClauses();
+            List<SpecialComparisonClause> newSpc = SpecialComparisonUtils.getSpecialComparisonClausesWithValues(args, spc);
 
-        String query = getQuery(queryInfo, newArgs, args, qr);
+            ResultsProcessor specialComparisonProcessor = new SpecialComparisonProcessor(newSpc);
 
-        List<E> results = getQueryResults(query);
+            List<E> queryResults = specialComparisonProcessor.postProcess(getQueryResults(query));
+
+            results.addAll(queryResults);
+        }
 
         if (queryInfo.getQueryType() == QueryType.RETRIEVE_SINGLE) {
             if (results.size() > 1)
-                throw new WrongTypeOfExpectedResultException("The query " + query + " resulted in " + results.size() + " results instead of one or zero results");
+                throw new WrongTypeOfExpectedResultException("The query " + getQuery(queryInfo, args, qrList.get(0)) + " resulted in " + results.size() + " results instead of one or zero results");
 
             if (results.size() > 0)
                 return results.get(0);
@@ -66,7 +73,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
                 return null;
         }
 
-        ResultsProcessor processor = new SpecialComparisonProcessor(newSpc, ((CassandraQueryRepresentation) qr).getProcessor());
+        ResultsProcessor processor = new SecondaryQueryProcessor(new OrderingProcessor(((CassandraValidationQueryVisitor) visitor).getOrderByClauses()));
 
         return processor.postProcess(results);
     }
@@ -85,7 +92,7 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
         return objectsList;
     }
 
-    private String getQuery(QueryInfo queryInfo, Object[] args, Object[] oldArgs, QueryRepresentation qr) {
+    private String getQuery(QueryInfo queryInfo, Object[] args, QueryRepresentation qr) {
         if (!queryInfo.isDynamic() && queryInfo.getQueryStyle() != QueryStyle.QUERY_OBJECT) {
             String query = qr.getQuery().toString();
 
@@ -100,9 +107,9 @@ public class CassandraQueryExecutor<E> implements QueryExecutor {
             if (queryInfo.getQueryStyle() == QueryStyle.METHOD_SIGNATURE) {
                 int argIndex = 0;
 
-                for (int i = 0; i < oldArgs.length && argIndex < args.length; i++) {
-                    if (args[argIndex] == oldArgs[i]) {
-                        params.put(namedParameters.get(i), oldArgs[i]);
+                for (int i = 0; i < args.length && argIndex < args.length; i++) {
+                    if (args[argIndex] == args[i]) {
+                        params.put(namedParameters.get(i), args[i]);
                         argIndex++;
                     }
                 }

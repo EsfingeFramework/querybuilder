@@ -38,11 +38,11 @@ any other method to manage dependencies.
 
 ```markdown
 └───src
-    └───main
-        ├───java
-        └───resources
-            └───META-INF
-            └───services
+└───main
+├───java
+└───resources
+└───META-INF
+└───services
 ```
 
 * In the `META-INF` folder you need to create the following three files:
@@ -91,7 +91,8 @@ framework to do the object mapping.
   specific interface, for example in the `net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider`, supposing you
   named the implementation as `MySessionProvider` in the package `org.example` you will include the
   path `org.example.MySessionProvider`.
-* Create an interface that extends the `net.sf.esfinge.querybuilder.Repository` interface, by parametrizing it with an entity class, which should implement
+* Create an interface that extends the `net.sf.esfinge.querybuilder.Repository` interface, by parametrizing it with an
+  entity class, which should implement
   the `CassandraEntity` interface, for example:
 
 ```Java
@@ -108,9 +109,11 @@ Please keep in mind that you are not forced to implement new custom methods like
 basic `CRUD` operations, for example `save` and `delete` are available by default.
 
 * Here is how to create the instance of the class that actually implements this interface:
+
 ```Java
-CassandraSimpleTestQuery cassandra = QueryBuilder.create(CassandraSimpleTestQuery.class);
+CassandraSimpleTestQuery cassandra=QueryBuilder.create(CassandraSimpleTestQuery.class);
 ```
+
 * Now you are ready to go and the framework should already work. For example you could call the
   method `cassandra.getPersonById(1)` and the framework will manage connecting to the database,
   translating the method into a query and retrieving the results as a `Person` class.
@@ -161,6 +164,13 @@ CassandraSimpleTestQuery cassandra = QueryBuilder.create(CassandraSimpleTestQuer
         <artifactId>slf4j-simple</artifactId>
         <version>1.6.4</version>
         <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.13.3</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/net.sf.esfinge/querybuilder-core -->

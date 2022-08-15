@@ -8,6 +8,8 @@ public class ConditionStatement {
     private String propertyName;
     private ComparisonType comparisonType;
     private Object value = null;
+
+    private int conditionIndex = -1;
     private NullOption nullOption = NullOption.NONE;
     private String nextConnector = null;
 
@@ -38,6 +40,14 @@ public class ConditionStatement {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    public int getConditionIndex() {
+        return conditionIndex;
+    }
+
+    public void setConditionIndex(int conditionIndex) {
+        this.conditionIndex = conditionIndex;
     }
 
     public NullOption getNullOption() {
@@ -76,7 +86,7 @@ public class ConditionStatement {
     }
 
     private String getValueRepresentation() {
-        return value != null ? QueryBuildingUtils.getValueRepresentationByType(value) : "?";
+        return value != null ? QueryBuildingUtils.getValueRepresentationByType(value) : conditionIndex + "?";
     }
 
     @Override

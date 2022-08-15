@@ -21,10 +21,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     private final List<SpecialComparisonClause> specialComparisonClauses;
     private final String entity;
 
-    private final ResultsProcessor processor;
 
-
-    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClauses, List<SpecialComparisonClause> specialComparisonClauses, String entity, ResultsProcessor processor) {
+    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClauses, List<SpecialComparisonClause> specialComparisonClauses, String entity) {
         this.query = query;
         this.dynamic = dynamic;
         this.fixParametersMap = fixParametersMap;
@@ -32,7 +30,6 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         this.orderByClauses = orderByClauses;
         this.specialComparisonClauses = specialComparisonClauses;
         this.entity = entity;
-        this.processor = processor;
     }
 
     @Override
@@ -114,7 +111,7 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         return fixParametersMap.get(paramName);
     }
 
-    public List<OrderByClause> getOrderByClause() {
+    public List<OrderByClause> getOrderByClauses() {
         return orderByClauses;
     }
 
@@ -122,7 +119,4 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         return specialComparisonClauses;
     }
 
-    public ResultsProcessor getProcessor() {
-        return processor;
-    }
 }

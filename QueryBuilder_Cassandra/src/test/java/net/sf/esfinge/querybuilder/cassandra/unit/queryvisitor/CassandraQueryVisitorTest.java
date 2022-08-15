@@ -41,7 +41,7 @@ public class CassandraQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Person WHERE name = ? ALLOW FILTERING",
+                "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? ALLOW FILTERING",
                 query);
     }
 
@@ -57,7 +57,7 @@ public class CassandraQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Person WHERE name = ? AND city = ? ALLOW FILTERING",
+                "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND city = 1? ALLOW FILTERING",
                 query);
     }
 
@@ -75,7 +75,7 @@ public class CassandraQueryVisitorTest {
         String query = qr.getQuery().toString();
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Person WHERE name = ? AND city = ? AND age >= ? ALLOW FILTERING",
+                "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND city = 1? AND age >= 2? ALLOW FILTERING",
                 query);
     }
 
@@ -178,12 +178,14 @@ public class CassandraQueryVisitorTest {
         QueryRepresentation qr = visitor.getQueryRepresentation();
 
         String query = qr.getQuery().toString();
-        assertEquals(query, "SELECT * FROM <#keyspace-name#>.Person WHERE name = 'Maria' AND age > ? ALLOW FILTERING");
+        assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE name = 'Maria' AND age > 0? ALLOW FILTERING", query);
         assertEquals("Maria", qr.getFixParameterValue("name"));
         assertTrue(qr.getFixParameters().contains("name"));
         assertFalse(qr.getFixParameters().contains("age"));
     }
 
+
+    // TODO: PROBLEM WITH COMPLEX QUERIES AND CASSANDRA: JOINS DO NOT EXIST, IMPLEMENT THEM AT APPLICATION LEVEL??
     /*@Test
     public void mixedWithfixParameterQueryFromOtherClass(){
         visitor.visitEntity("Person");
@@ -216,7 +218,6 @@ public class CassandraQueryVisitorTest {
     }*/
 
     /*
-    TODO: PROBLEM WITH COMPLEX QUERIES AND CASSANDRA: JOINS DO NOT EXIST, IMPLEMENT THEM AT APPLICATION LEVEL??
     @Test
 	public void compositeCondition(){
 		visitor.visitEntity("Person");

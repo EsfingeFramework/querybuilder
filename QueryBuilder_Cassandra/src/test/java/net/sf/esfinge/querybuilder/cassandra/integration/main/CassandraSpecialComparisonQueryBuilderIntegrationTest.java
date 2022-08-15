@@ -31,6 +31,13 @@ public class CassandraSpecialComparisonQueryBuilderIntegrationTest extends Cassa
     }
 
     @Test
+    public void queryWithStartsTest() {
+        List<Person> list = testQuery.getPersonByNameStarts("Ma");
+
+        assertEquals(2, list.size());
+    }
+
+    @Test
     public void queryWithStartsAnnotationTest() {
         List<Person> list = testQuery.getPersonByName("Ma");
 

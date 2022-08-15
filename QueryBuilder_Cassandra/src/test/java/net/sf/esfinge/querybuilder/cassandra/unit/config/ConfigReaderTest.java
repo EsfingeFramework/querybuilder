@@ -15,6 +15,7 @@ public class ConfigReaderTest {
         CassandraConfig config = ConfigReader.getConfiguration("config.json");
 
         assertEquals(10, config.getOrderingLimit());
+        assertEquals(2, config.getSecondaryQueryLimit());
     }
 
     @Test
@@ -22,6 +23,7 @@ public class ConfigReaderTest {
         CassandraConfig config = ConfigReader.getConfiguration("nonexistent.json");
 
         assertEquals(1000, config.getOrderingLimit());
+        assertEquals(3, config.getSecondaryQueryLimit());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package net.sf.esfinge.querybuilder.cassandra.integration.main;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.exceptions.InvalidConnectorException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.WrongTypeOfExpectedResultException;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraSimpleTestQuery;
@@ -14,7 +13,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class CassandraSimpleQueryBuilderIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
+public class CassandraBasicQueryBuilderIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
 
     CassandraSimpleTestQuery testQuery = QueryBuilder.create(CassandraSimpleTestQuery.class);
 
@@ -60,11 +59,6 @@ public class CassandraSimpleQueryBuilderIntegrationTest extends CassandraBasicDa
     public void queryWithTwoAndParametersTest() {
         Person p = testQuery.getPersonByNameAndLastName("Pedro", "Silva");
         assertEquals("It should get Pedro Silva", new Integer(1), p.getId());
-    }
-
-    @Test(expected = InvalidConnectorException.class)
-    public void queryWithTwoOrParametersTest() {
-        testQuery.getPersonByNameOrLastName("Pedro", "Silva");
     }
 
     @Test
