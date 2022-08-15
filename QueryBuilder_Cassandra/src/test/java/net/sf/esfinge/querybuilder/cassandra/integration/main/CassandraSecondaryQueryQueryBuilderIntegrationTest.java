@@ -18,16 +18,6 @@ public class CassandraSecondaryQueryQueryBuilderIntegrationTest extends Cassandr
 
     CassandraSecondaryQueryTestQuery testQuery = QueryBuilder.create(CassandraSecondaryQueryTestQuery.class);
 
-    /*
-    String query = "BEGIN BATCH\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (1, 'Pedro', 'Silva', 20);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (2, 'Maria', 'Ferreira', 23);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (3, 'Marcos', 'Silva', 50);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (4, 'Antonio', 'Marques', 33);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (5, 'Silvia', 'Bressan', 11);\n" +
-                "        APPLY BATCH";
-     */
-
     @Test
     public void queryWithOneOrConnectorTest() {
         List<Person> list = testQuery.getPersonByNameOrLastName("Pedro", "Ferreira");
@@ -120,12 +110,4 @@ public class CassandraSecondaryQueryQueryBuilderIntegrationTest extends Cassandr
         assertEquals(new Integer(5), list.get(3).getId());
     }
 
-    /*@Test
-    public void queryWithComplexOrConnectorTest() {
-        List<Person> list = testQuery.getPersonByNameStartsOrAgeAndLastNameNotEqualsOrIdOrderById("Ma", 25, "Whatever", 3);
-
-        assertEquals(4, list.size());
-        assertEquals(new Integer(2), list.get(0).getId());
-        assertEquals(new Integer(5), list.get(3).getId());
-    }*/
 }
