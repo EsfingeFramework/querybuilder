@@ -4,7 +4,25 @@ import net.sf.esfinge.querybuilder.cassandra.exceptions.ComparisonTypeNotFoundEx
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 public enum JoinComparisonType {
-    EQUALS, GREATER_OR_EQUALS, LESSER_OR_EQUALS, GREATER, LESSER, NOT_EQUALS, CONTAINS, STARTS, ENDS, COMPARE_TO_NULL;
+    EQUALS("Equals"),
+    GREATER_OR_EQUALS("GreaterOrEquals"),
+    LESSER_OR_EQUALS("LesserOrEquals"),
+    GREATER("Greater"),
+    LESSER("Lesser"),
+    NOT_EQUALS("NotEquals"),
+    CONTAINS("Contains"),
+    STARTS("Starts"),
+    ENDS("Ends"),
+    COMPARE_TO_NULL("Equals");
+
+    private String opName;
+    public String getOpName() {
+        return this.opName;
+    }
+
+    private JoinComparisonType(String name) {
+        this.opName = name;
+    }
 
     public static JoinComparisonType fromComparisonType(ComparisonType comparisonType) {
         switch (comparisonType) {
@@ -30,5 +48,6 @@ public enum JoinComparisonType {
                 throw new ComparisonTypeNotFoundException("Comparison type \"" + comparisonType.name() + "\" cannot be converted to JoinComparisonType");
         }
     }
+
 
 }

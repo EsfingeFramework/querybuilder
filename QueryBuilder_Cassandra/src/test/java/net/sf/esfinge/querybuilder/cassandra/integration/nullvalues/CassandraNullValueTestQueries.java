@@ -18,4 +18,6 @@ public interface CassandraNullValueTestQueries {
 
     List<Person> getPersonByNameAndLastName(@IgnoreWhenNull String name, @IgnoreWhenNull String lastname);
 
+    List<Person> getPersonByNameOrLastName(@IgnoreWhenNull String name, @IgnoreWhenNull String lastname);
+
 }

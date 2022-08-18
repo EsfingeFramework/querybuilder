@@ -94,5 +94,42 @@ public class CassandraQueryObjectIntegrationTest extends CassandraBasicDatabaseP
         assertEquals("Antonio", list.get(list.size() - 1).getName());
     }
 
+    @Test
+    public void queryObjectWithSpecialComparisonTest() {
+        SpecialComparisonQueryObject qo = new SpecialComparisonQueryObject();
+        qo.setAge(20);
+        qo.setLastNameStarts("Si");
+
+        List<Person> list = testQuery.getPersonOrderByAge(qo);
+
+        assertEquals("Pedro", list.get(0).getName());
+    }
+
+    @Test
+    public void queryObjectWithJoinTest() {
+        JoinQueryObject qo = new JoinQueryObject();
+        qo.setLastName("Silva");
+        qo.setAddressState("MG");
+        qo.setAddressCity("Juiz de Fora");
+
+        List<Person> list = testQuery.getPersonOrderByLastName(qo);
+
+        assertEquals("Pedro", list.get(0).getName());
+    }
+
+    @Test
+    public void complexQueryObjectTest() {
+        ComplexQueryObject qo = new ComplexQueryObject();
+        qo.setLastName("Silva");
+        qo.setAddressState("MG");
+        qo.setLastNameStarts("Si");
+        qo.setName("Pedro");
+        qo.setAge(null);
+
+        List<Person> list = testQuery.getPersonOrderById(qo);
+
+        assertEquals("Pedro", list.get(0).getName());
+    }
+
 
 }

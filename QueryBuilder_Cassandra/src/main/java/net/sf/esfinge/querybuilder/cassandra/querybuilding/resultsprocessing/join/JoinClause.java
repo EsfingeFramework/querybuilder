@@ -61,8 +61,8 @@ public class JoinClause {
     @Override
     public String toString() {
         return "JoinClause{" +
-                "propertyTypeName='" + joinTypeName + '\'' +
-                ", propertyName='" + joinAttributeName + '\'' +
+                "joinTypeName='" + joinTypeName + '\'' +
+                ", joinAttributeName='" + joinAttributeName + '\'' +
                 ", comparisonType=" + comparisonType +
                 ", value=" + value +
                 ", argPosition=" + argPosition +

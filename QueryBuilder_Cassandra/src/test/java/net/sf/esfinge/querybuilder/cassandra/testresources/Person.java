@@ -19,6 +19,8 @@ public class Person implements CassandraEntity {
     private String lastName;
     private Integer age;
 
+    private Address address;
+
     public Integer getId() {
         return id;
     }
@@ -51,6 +53,14 @@ public class Person implements CassandraEntity {
         this.age = age;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -58,6 +68,7 @@ public class Person implements CassandraEntity {
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
+                ", address=" + address +
                 '}';
     }
 

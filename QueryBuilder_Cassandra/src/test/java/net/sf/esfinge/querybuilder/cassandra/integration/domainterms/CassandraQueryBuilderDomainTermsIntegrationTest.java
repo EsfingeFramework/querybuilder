@@ -37,11 +37,24 @@ public class CassandraQueryBuilderDomainTermsIntegrationTest extends CassandraBa
     }
 
     @Test
-    public void domainTermWithParameter() {
+    public void domainTermWithParameterTest() {
         List<Person> list = testQuery.getPersonSilvaFamilyByAge(25);
         assertEquals("The list should have 1 person", 1, list.size());
         assertEquals("The list should have Marcos", "Marcos", list.get(0).getName());
     }
 
+    @Test
+    public void twoDomainTermsWithJoinTest() {
+        List<Person> list = testQuery.getPersonSilvaFamilyFromCampos();
+        assertEquals("The list should have 1 person", 1, list.size());
+        assertEquals("The list should have Marcos", "Marcos", list.get(0).getName());
+    }
 
+    @Test
+    public void domainTermWithSpecialComparisonTest() {
+        List<Person> list = testQuery.getPersonNameStartsWithM();
+        assertEquals("The list should have 2 persons", 2, list.size());
+        assertEquals("The list should have Maria", "Maria", list.get(0).getName());
+        assertEquals("The list should have Marcos", "Marcos", list.get(1).getName());
+    }
 }

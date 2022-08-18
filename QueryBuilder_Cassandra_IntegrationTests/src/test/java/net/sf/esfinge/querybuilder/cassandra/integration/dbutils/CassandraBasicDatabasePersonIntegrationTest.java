@@ -12,16 +12,17 @@ public class CassandraBasicDatabasePersonIntegrationTest {
     @BeforeClass
     public static void initDB() throws TTransportException, IOException, InterruptedException {
         CassandraTestUtils.initDB();
-        CassandraTestUtils.createTablesPerson();
+        CassandraTestUtils.createTables();
     }
+
     @Before
     public void populateTables() {
-        CassandraTestUtils.populateTablesPerson();
+        CassandraTestUtils.populateTables();
     }
 
     @After
     public void cleanTables() {
-        CassandraTestUtils.cleanTablesPerson();
+        CassandraTestUtils.cleanTables();
     }
 
     // DROPPING THE DB IN THE INTEGRATION TESTS CAN LEAD TO UNEXPECTED ERRORS
@@ -29,5 +30,4 @@ public class CassandraBasicDatabasePersonIntegrationTest {
     public static void dropDB() {
         CassandraTestUtils.dropDB();
     }*/
-
 }

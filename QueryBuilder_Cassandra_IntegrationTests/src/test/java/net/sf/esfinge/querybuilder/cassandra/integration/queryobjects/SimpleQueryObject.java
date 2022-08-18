@@ -4,7 +4,6 @@ public class SimpleQueryObject {
 
     private String lastName;
     private Integer age;
-    //private String addressState;
 
     public String getLastName() {
         return lastName;
@@ -21,13 +20,5 @@ public class SimpleQueryObject {
     public void setAge(Integer age) {
         this.age = age;
     }
-
-	/*
-	public String getAddressState() {
-		return addressState;
-	}
-	public void setAddressState(String addressState) {
-		this.addressState = addressState;
-	}*/
 
 }

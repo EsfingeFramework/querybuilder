@@ -132,6 +132,10 @@ public class CassandraQueryBuilderNullValuesIntegrationTest extends CassandraBas
         List<Person> list = testQuery.getPersonByNameAndLastName(null, null);
         assertEquals("The list should have 5 persons", 5, list.size());
     }
-
+    @Test
+    public void ignoreWhenNullWithTwoParamsBothNullAndOrConnectorTest() {
+        List<Person> list = testQuery.getPersonByNameOrLastName(null, null);
+        assertEquals("The list should have 5 persons", 5, list.size());
+    }
 
 }

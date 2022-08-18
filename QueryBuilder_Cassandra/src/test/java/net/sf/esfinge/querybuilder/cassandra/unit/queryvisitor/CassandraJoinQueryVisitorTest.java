@@ -23,7 +23,7 @@ public class CassandraJoinQueryVisitorTest {
 
     @Test
     public void oneJoinConditionTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitEnd();
 
@@ -33,7 +33,7 @@ public class CassandraJoinQueryVisitorTest {
         JoinClause expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Worker",
+                "SELECT * FROM <#keyspace-name#>.Person",
                 query);
         assertEquals(expected, ((CassandraQueryRepresentation) qr).getJoinClauses().get(0));
 
@@ -41,7 +41,7 @@ public class CassandraJoinQueryVisitorTest {
 
     @Test
     public void twoJoinConditionsTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitConector("AND");
         visitor.visitCondition("address.city", ComparisonType.EQUALS);
@@ -55,7 +55,7 @@ public class CassandraJoinQueryVisitorTest {
         expected2.setArgPosition(1);
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Worker",
+                "SELECT * FROM <#keyspace-name#>.Person",
                 query);
         assertEquals(expected1, ((CassandraQueryRepresentation) qr).getJoinClauses().get(0));
         assertEquals(expected2, ((CassandraQueryRepresentation) qr).getJoinClauses().get(1));
@@ -64,7 +64,7 @@ public class CassandraJoinQueryVisitorTest {
 
     @Test
     public void oneConditionForMainEntityAndOneJoinTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitConector("AND");
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
@@ -77,7 +77,7 @@ public class CassandraJoinQueryVisitorTest {
         expected.setArgPosition(1);
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Worker WHERE name = 0? ALLOW FILTERING",
+                "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? ALLOW FILTERING",
                 query);
         assertEquals(expected, ((CassandraQueryRepresentation) qr).getJoinClauses().get(0));
 
@@ -86,7 +86,7 @@ public class CassandraJoinQueryVisitorTest {
 
     @Test
     public void twoConditionsForMainEntityAndOneJoinTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitConector("AND");
         visitor.visitCondition("lastname", ComparisonType.EQUALS);
@@ -101,14 +101,14 @@ public class CassandraJoinQueryVisitorTest {
         expected.setArgPosition(2);
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Worker WHERE name = 0? AND lastname = 1? ALLOW FILTERING",
+                "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND lastname = 1? ALLOW FILTERING",
                 query);
         assertEquals(expected, ((CassandraQueryRepresentation) qr).getJoinClauses().get(0));
     }
 
     @Test
     public void oneJoinAndOneConditionForMainEntityTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitConector("AND");
         visitor.visitCondition("name", ComparisonType.EQUALS);
@@ -120,7 +120,7 @@ public class CassandraJoinQueryVisitorTest {
         JoinClause expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Worker WHERE name = 1? ALLOW FILTERING",
+                "SELECT * FROM <#keyspace-name#>.Person WHERE name = 1? ALLOW FILTERING",
                 query);
 
         assertEquals(expected, ((CassandraQueryRepresentation) qr).getJoinClauses().get(0));
@@ -128,7 +128,7 @@ public class CassandraJoinQueryVisitorTest {
 
     @Test
     public void twoJoinsAndOneConditionForMainEntityTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitConector("AND");
         visitor.visitCondition("address.city", ComparisonType.EQUALS);
@@ -144,7 +144,7 @@ public class CassandraJoinQueryVisitorTest {
         expected2.setArgPosition(1);
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Worker WHERE name = 2? ALLOW FILTERING",
+                "SELECT * FROM <#keyspace-name#>.Person WHERE name = 2? ALLOW FILTERING",
                 query);
         assertEquals(expected1, ((CassandraQueryRepresentation) qr).getJoinClauses().get(0));
         assertEquals(expected2, ((CassandraQueryRepresentation) qr).getJoinClauses().get(1));
@@ -152,7 +152,7 @@ public class CassandraJoinQueryVisitorTest {
 
     @Test
     public void oneJoinConditionAndOneOrderByClauseTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitEnd();
@@ -164,7 +164,7 @@ public class CassandraJoinQueryVisitorTest {
         JoinClause expectedJoin = new JoinClause("address", "state", JoinComparisonType.EQUALS);
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Worker",
+                "SELECT * FROM <#keyspace-name#>.Person",
                 query);
         assertEquals(expectedOrderBy, ((CassandraQueryRepresentation) visitor.getQueryRepresentation()).getOrderByClauses().get(0));
         assertEquals(expectedJoin, ((CassandraQueryRepresentation) qr).getJoinClauses().get(0));
@@ -172,7 +172,7 @@ public class CassandraJoinQueryVisitorTest {
 
     @Test
     public void oneJoinConditionAndOneSpecialClauseTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitConector("and");
         visitor.visitCondition("name", ComparisonType.NOT_EQUALS);
@@ -186,7 +186,7 @@ public class CassandraJoinQueryVisitorTest {
         JoinClause expectedJoin = new JoinClause("address", "state", JoinComparisonType.EQUALS);
 
         assertEquals(
-                "SELECT * FROM <#keyspace-name#>.Worker",
+                "SELECT * FROM <#keyspace-name#>.Person",
                 query);
 
         assertEquals(expectedSpecialClause, ((CassandraQueryRepresentation) visitor.getQueryRepresentation()).getSpecialComparisonClauses().get(0));
@@ -195,7 +195,7 @@ public class CassandraJoinQueryVisitorTest {
 
     @Test
     public void joinDepthExceededTest() {
-        visitor.visitEntity("Worker");
+        visitor.visitEntity("Person");
         assertThrows(JoinDepthLimitExceededException.class, () -> visitor.visitCondition("address.state.name", ComparisonType.EQUALS));
     }
 

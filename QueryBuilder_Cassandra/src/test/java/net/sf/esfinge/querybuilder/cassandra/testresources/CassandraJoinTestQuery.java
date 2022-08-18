@@ -6,23 +6,23 @@ import net.sf.esfinge.querybuilder.annotation.Starts;
 
 import java.util.List;
 
-public interface CassandraJoinTestQuery extends Repository<Worker> {
+public interface CassandraJoinTestQuery extends Repository<Person> {
 
-    List<Worker> getWorkerByAddressCity(String city);
+    List<Person> getPersonByAddressCity(String city);
 
-    List<Worker> getWorkerByAddressCityAndAddressState(String city, String state);
+    List<Person> getPersonByAddressCityAndAddressState(String city, String state);
 
-    List<Worker> getWorkerByLastNameAndAddressState(String lastname, String state);
+    List<Person> getPersonByLastNameAndAddressState(String lastname, String state);
 
-    List<Worker> getWorkerByAddressStateAndLastName(String state, String lastname);
+    List<Person> getPersonByAddressStateAndLastName(String state, String lastname);
 
-    List<Worker> getWorkerByAddressCityOrAddressState(String city, String state);
+    List<Person> getPersonByAddressCityOrAddressState(String city, String state);
 
-    List<Worker> getWorkerByAddressCityOrLastName(String city, String lastName);
+    List<Person> getPersonByAddressCityOrLastName(String city, String lastName);
 
-    List<Worker> getWorkerByAddressCityOrLastNameOrderById(String city, String lastName);
+    List<Person> getPersonByAddressCityOrLastNameOrderById(String city, String lastName);
 
-    List<Worker> getWorkerByAddressState(@CompareToNull String state);
+    List<Person> getPersonByAddressState(@CompareToNull String state);
 
-    List<Worker> getWorkerByNameOrAddressCityAndAgeLesserOrLastNameOrderByName(String name, String city, Integer age, @Starts String lastName);
+    List<Person> getPersonByNameOrAddressCityAndAgeLesserOrLastNameOrderByName(String name, String city, Integer age, @Starts String lastName);
 }

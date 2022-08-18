@@ -2,7 +2,6 @@ package net.sf.esfinge.querybuilder.cassandra.integration.dbutils;
 
 import com.datastax.driver.core.Session;
 import org.apache.thrift.transport.TTransportException;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 
 import java.io.IOException;
 
@@ -25,61 +24,28 @@ public class CassandraTestUtils {
         // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
     }
 
-    public static void createTablesPerson() {
-        Session session = getSession();
-
-        String query = "CREATE TABLE IF NOT EXISTS test.person(id int PRIMARY KEY, name text,lastname text, age int);";
-
-        session.execute(query);
-        session.close();
-    }
-
-    public static void populateTablesPerson() {
-        Session session = getSession();
-
-        String query = "BEGIN BATCH\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (1, 'Pedro', 'Silva', 20);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (2, 'Maria', 'Ferreira', 23);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (3, 'Marcos', 'Silva', 50);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (4, 'Antonio', 'Marques', 33);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (5, 'Silvia', 'Bressan', 11);\n" +
-                "        APPLY BATCH";
-
-        session.execute(query);
-        session.close();
-    }
-
-    public static void cleanTablesPerson() {
-        Session session = getSession();
-
-        String query = "TRUNCATE test.person";
-
-        session.execute(query);
-        session.close();
-    }
-
-    public static void createTablesWorker() {
+    public static void createTables() {
         Session session = getSession();
 
         String query = "CREATE TYPE IF NOT EXISTS test.address (city text, state text);";
 
         session.execute(query);
 
-        query = "CREATE TABLE IF NOT EXISTS test.worker(id int PRIMARY KEY, name text,lastname text, age int, address frozen<address>);";
+        query = "CREATE TABLE IF NOT EXISTS test.Person(id int PRIMARY KEY, name text,lastname text, age int, address frozen<address>);";
 
         session.execute(query);
         session.close();
     }
 
-    public static void populateTablesWorker() {
+    public static void populateTables() {
         Session session = getSession();
 
         String query = "BEGIN BATCH\n" +
-                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (1, 'Pedro', 'Silva', 20, {city: 'Juiz de Fora', state: 'MG'});\n" +
-                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (2, 'Maria', 'Ferreira', 23, {city: 'SJCampos', state: 'SP'});\n" +
-                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (3, 'Marcos', 'Silva', 50, {city: 'SJCampos', state: 'SP'});\n" +
-                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (4, 'Antonio', 'Marques', 33, {city: 'Juiz de Fora', state: 'MG'});\n" +
-                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (5, 'Silvia', 'Bressan', 11, {city: 'Juiz de Fora', state: 'MG'});\n" +
+                "        INSERT INTO test.Person(id, name, lastname, age, address) VALUES (1, 'Pedro', 'Silva', 20, {city: 'Juiz de Fora', state: 'MG'});\n" +
+                "        INSERT INTO test.Person(id, name, lastname, age, address) VALUES (2, 'Maria', 'Ferreira', 23, {city: 'SJCampos', state: 'SP'});\n" +
+                "        INSERT INTO test.Person(id, name, lastname, age, address) VALUES (3, 'Marcos', 'Silva', 50, {city: 'SJCampos', state: 'SP'});\n" +
+                "        INSERT INTO test.Person(id, name, lastname, age, address) VALUES (4, 'Antonio', 'Marques', 33, {city: 'Juiz de Fora', state: 'MG'});\n" +
+                "        INSERT INTO test.Person(id, name, lastname, age, address) VALUES (5, 'Silvia', 'Bressan', 11, {city: 'Juiz de Fora', state: 'MG'});\n" +
                 "        APPLY BATCH";
 
         session.execute(query);
@@ -88,10 +54,10 @@ public class CassandraTestUtils {
         session.close();
     }
 
-    public static void cleanTablesWorker() {
+    public static void cleanTables() {
         Session session = getSession();
 
-        String query = "TRUNCATE test.worker";
+        String query = "TRUNCATE test.Person";
 
         session.execute(query);
 

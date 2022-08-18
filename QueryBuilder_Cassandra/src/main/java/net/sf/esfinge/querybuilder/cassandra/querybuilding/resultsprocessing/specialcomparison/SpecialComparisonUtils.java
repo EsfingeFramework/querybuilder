@@ -63,7 +63,9 @@ public class SpecialComparisonUtils {
         List<SpecialComparisonClause> newSpc = new ArrayList<>();
 
         for (SpecialComparisonClause c : spc) {
-            c.setValue(args[c.getArgPosition()]);
+            if (c.getValue() == null)
+                c.setValue(args[c.getArgPosition()]);
+
             newSpc.add(c);
         }
 

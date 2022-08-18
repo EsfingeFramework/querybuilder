@@ -70,13 +70,19 @@ public class CassandraRepository<E> implements Repository<E> {
 
         queryBuilder.append("SELECT * FROM ").append(clazz.getDeclaredAnnotation(Table.class).keyspace()).append(".").append(clazz.getSimpleName()).append(" WHERE ");
 
+        int conditions = 0;
+
         for (int i = 0; i < getters.length; i++) {
             try {
+
                 if (getters[i].invoke(e) != null) {
-                    if (i > 0)
+
+                    if (conditions > 0){
                         queryBuilder.append(" AND ");
+                    }
 
                     queryBuilder.append(getters[i].getName().substring(3).toLowerCase()).append(" = ");
+                    conditions++;
 
                     if (getters[i].getReturnType() == String.class)
                         queryBuilder.append("'").append(getters[i].invoke(e)).append("'");
@@ -93,6 +99,8 @@ public class CassandraRepository<E> implements Repository<E> {
         queryBuilder.append(" ALLOW FILTERING");
 
         Mapper<E> mapper = provider.getManager().mapper(clazz);
+
+        System.out.println(queryBuilder.toString());
 
         ResultSet results = provider.getSession().execute(queryBuilder.toString());
         Result<E> objects = mapper.map(results);

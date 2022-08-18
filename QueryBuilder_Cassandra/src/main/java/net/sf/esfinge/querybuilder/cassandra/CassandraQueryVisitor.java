@@ -136,7 +136,13 @@ public class CassandraQueryVisitor implements QueryVisitor {
     public void visitCondition(String parameter, ComparisonType comparisonType, Object value) {
         visitCondition(parameter, comparisonType);
 
-        conditions.get(conditions.size() - 1).setValue(value);
+        if (parameter.contains("."))
+            joinClauses.get(joinClauses.size() - 1).setValue(value);
+        else if (comparisonType == ComparisonType.NOT_EQUALS || comparisonType == ComparisonType.STARTS || comparisonType == ComparisonType.ENDS || comparisonType == ComparisonType.CONTAINS){
+            specialComparisonClauses.get(specialComparisonClauses.size() - 1).setValue(value);
+        } else
+            conditions.get(conditions.size() - 1).setValue(value);
+
         numberOfFixedValues++;
     }
 
