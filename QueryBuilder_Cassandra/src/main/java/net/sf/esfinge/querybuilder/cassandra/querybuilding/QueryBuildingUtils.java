@@ -28,7 +28,7 @@ public class QueryBuildingUtils {
         return newQuery;
     }
 
-    private static int countOccurrenceOfCharacterInString(String string, Character character) {
+    public static int countOccurrenceOfCharacterInString(String string, Character character) {
         return string.chars()
                 .filter(c -> c == character)
                 .toArray()

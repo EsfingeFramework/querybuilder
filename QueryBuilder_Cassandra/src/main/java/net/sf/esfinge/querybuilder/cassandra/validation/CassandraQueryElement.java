@@ -6,5 +6,9 @@ public enum CassandraQueryElement {
     CONNECTOR,
     NONE,
     ORDER_BY,
-    SPECIAL_COMPARISON
+    SPECIAL_COMPARISON,
+
+    JOIN,
+
+    END
 }

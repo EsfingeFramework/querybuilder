@@ -28,7 +28,7 @@ public class KeyspaceRepositoryIntegrationTest {
 
     @Before
     public void init() throws TTransportException, IOException, InterruptedException {
-        CassandraTestUtils.initCassandaUnit();
+        CassandraTestUtils.initCassandraUnit();
 
         this.session = CassandraTestUtils.getSession();
 

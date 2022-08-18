@@ -3,7 +3,7 @@ package net.sf.esfinge.querybuilder.cassandra.integration.main;
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.SecondaryQueryLimitExceededException;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabasePersonIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraSecondaryQueryTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
@@ -14,19 +14,9 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CassandraSecondaryQueryQueryBuilderIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
+public class CassandraSecondaryQueryQueryBuilderIntegrationTest extends CassandraBasicDatabasePersonIntegrationTest {
 
     CassandraSecondaryQueryTestQuery testQuery = QueryBuilder.create(CassandraSecondaryQueryTestQuery.class);
-
-    /*
-    String query = "BEGIN BATCH\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (1, 'Pedro', 'Silva', 20);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (2, 'Maria', 'Ferreira', 23);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (3, 'Marcos', 'Silva', 50);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (4, 'Antonio', 'Marques', 33);\n" +
-                "        INSERT INTO test.person(id, name, lastname, age) VALUES (5, 'Silvia', 'Bressan', 11);\n" +
-                "        APPLY BATCH";
-     */
 
     @Test
     public void queryWithOneOrConnectorTest() {
@@ -113,19 +103,12 @@ public class CassandraSecondaryQueryQueryBuilderIntegrationTest extends Cassandr
 
     @Test
     public void queryWithComplexOrConnectorTest() {
-        List<Person> list = testQuery.getPersonByNameStartsOrAgeAndLastNameNotEqualsOrIdOrderById("Ma", 25, "Whatever", 3);
+        List<Person> list = testQuery.getPersonByNameStartsOrIdAndLastNameNotEqualsOrAgeOrderById("Ma", 3, "Whatever", 25);
 
-        assertEquals(4, list.size());
+        assertEquals(3, list.size());
+
         assertEquals(new Integer(2), list.get(0).getId());
-        assertEquals(new Integer(5), list.get(3).getId());
+        assertEquals(new Integer(4), list.get(2).getId());
     }
 
-    /*@Test
-    public void queryWithComplexOrConnectorTest() {
-        List<Person> list = testQuery.getPersonByNameStartsOrAgeAndLastNameNotEqualsOrIdOrderById("Ma", 25, "Whatever", 3);
-
-        assertEquals(4, list.size());
-        assertEquals(new Integer(2), list.get(0).getId());
-        assertEquals(new Integer(5), list.get(3).getId());
-    }*/
 }

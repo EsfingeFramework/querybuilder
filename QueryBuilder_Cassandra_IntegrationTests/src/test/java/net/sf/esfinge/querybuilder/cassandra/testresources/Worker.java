@@ -6,18 +6,19 @@ import net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity;
 
 import java.util.Objects;
 
-@Table(keyspace = "test", name = "person",
+@Table(keyspace = "test", name = "worker",
         readConsistency = "QUORUM",
         writeConsistency = "QUORUM",
         caseSensitiveKeyspace = false,
         caseSensitiveTable = false)
-public class Person implements CassandraEntity {
-
+public class Worker implements CassandraEntity {
     @PartitionKey
     private Integer id;
     private String name;
     private String lastName;
     private Integer age;
+
+    private Address address;
 
     public Integer getId() {
         return id;
@@ -51,13 +52,22 @@ public class Person implements CassandraEntity {
         this.age = age;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
-        return "Person{" +
+        return "PersonWithAddress{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
+                ", address=" + address +
                 '}';
     }
 
@@ -65,12 +75,12 @@ public class Person implements CassandraEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equals(id, person.id) && Objects.equals(name, person.name) && Objects.equals(lastName, person.lastName) && Objects.equals(age, person.age);
+        Worker that = (Worker) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(lastName, that.lastName) && Objects.equals(age, that.age) && Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastName, age);
+        return Objects.hash(id, name, lastName, age, address);
     }
 }

@@ -2,7 +2,7 @@ package net.sf.esfinge.querybuilder.cassandra.integration.nullvalues;
 
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabasePersonIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CassandraQueryBuilderNullValuesIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
+public class CassandraQueryBuilderNullValuesIntegrationTest extends CassandraBasicDatabasePersonIntegrationTest {
 
     private final CassandraNullValueTestQueries testQuery = QueryBuilder.create(CassandraNullValueTestQueries.class);
 

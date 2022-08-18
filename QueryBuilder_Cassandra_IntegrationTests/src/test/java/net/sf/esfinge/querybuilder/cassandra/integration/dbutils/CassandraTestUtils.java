@@ -8,7 +8,7 @@ import java.io.IOException;
 public class CassandraTestUtils {
 
     public static void initDB() throws TTransportException, IOException, InterruptedException {
-        initCassandaUnit();
+        initCassandraUnit();
 
         Session session = getSession();
 
@@ -18,13 +18,13 @@ public class CassandraTestUtils {
         session.close();
     }
 
-    public static void initCassandaUnit() throws TTransportException, IOException, InterruptedException {
+    public static void initCassandraUnit() throws TTransportException, IOException, InterruptedException {
         // Uncomment next line to use cassandra unit db instead of a local one
         // Need to use Java 1.8, this particular version of Cassandra Unit might not work with newer releases
         // EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
     }
 
-    public static void createTables() {
+    public static void createTablesPerson() {
         Session session = getSession();
 
         String query = "CREATE TABLE IF NOT EXISTS test.person(id int PRIMARY KEY, name text,lastname text, age int);";
@@ -33,7 +33,7 @@ public class CassandraTestUtils {
         session.close();
     }
 
-    public static void populateTables() {
+    public static void populateTablesPerson() {
         Session session = getSession();
 
         String query = "BEGIN BATCH\n" +
@@ -48,12 +48,52 @@ public class CassandraTestUtils {
         session.close();
     }
 
-    public static void cleanTables() {
+    public static void cleanTablesPerson() {
         Session session = getSession();
 
         String query = "TRUNCATE test.person";
 
         session.execute(query);
+        session.close();
+    }
+
+    public static void createTablesWorker() {
+        Session session = getSession();
+
+        String query = "CREATE TYPE IF NOT EXISTS test.address (city text, state text);";
+
+        session.execute(query);
+
+        query = "CREATE TABLE IF NOT EXISTS test.worker(id int PRIMARY KEY, name text,lastname text, age int, address address);";
+
+        session.execute(query);
+        session.close();
+    }
+
+    public static void populateTablesWorker() {
+        Session session = getSession();
+
+        String query = "BEGIN BATCH\n" +
+                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (1, 'Pedro', 'Silva', 20, {city: 'Juiz de Fora', state: 'MG'});\n" +
+                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (2, 'Maria', 'Ferreira', 23, {city: 'SJCampos', state: 'SP'});\n" +
+                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (3, 'Marcos', 'Silva', 50, {city: 'SJCampos', state: 'SP'});\n" +
+                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (4, 'Antonio', 'Marques', 33, {city: 'Juiz de Fora', state: 'MG'});\n" +
+                "        INSERT INTO test.worker(id, name, lastname, age, address) VALUES (5, 'Silvia', 'Bressan', 11, {city: 'Juiz de Fora', state: 'MG'});\n" +
+                "        APPLY BATCH";
+
+        session.execute(query);
+
+
+        session.close();
+    }
+
+    public static void cleanTablesWorker() {
+        Session session = getSession();
+
+        String query = "TRUNCATE test.worker";
+
+        session.execute(query);
+
         session.close();
     }
 

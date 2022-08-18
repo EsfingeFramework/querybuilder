@@ -2,7 +2,7 @@ package net.sf.esfinge.querybuilder.cassandra.integration.queryobjects;
 
 import com.datastax.driver.core.Session;
 import net.sf.esfinge.querybuilder.QueryBuilder;
-import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabaseIntegrationTest;
+import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicDatabasePersonIntegrationTest;
 import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CassandraQueryObjectIntegrationTest extends CassandraBasicDatabaseIntegrationTest {
+public class CassandraQueryObjectIntegrationTest extends CassandraBasicDatabasePersonIntegrationTest {
 
     private final TestQueryObject testQuery = QueryBuilder.create(TestQueryObject.class);
 

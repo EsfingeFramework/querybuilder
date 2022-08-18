@@ -1,7 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra;
 
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.ConditionStatement;
-import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ResultsProcessor;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.join.JoinClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering.OrderByClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
@@ -19,16 +19,17 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     private final List<ConditionStatement> conditions;
     private final List<OrderByClause> orderByClauses;
     private final List<SpecialComparisonClause> specialComparisonClauses;
+    private final List<JoinClause> joinClauses;
     private final String entity;
 
-
-    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClauses, List<SpecialComparisonClause> specialComparisonClauses, String entity) {
+    public CassandraQueryRepresentation(String query, boolean dynamic, Map<String, Object> fixParametersMap, List<ConditionStatement> conditions, List<OrderByClause> orderByClauses, List<SpecialComparisonClause> specialComparisonClauses, List<JoinClause> joinClauses, String entity) {
         this.query = query;
         this.dynamic = dynamic;
         this.fixParametersMap = fixParametersMap;
         this.conditions = conditions;
         this.orderByClauses = orderByClauses;
         this.specialComparisonClauses = specialComparisonClauses;
+        this.joinClauses = joinClauses;
         this.entity = entity;
     }
 
@@ -119,4 +120,7 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
         return specialComparisonClauses;
     }
 
+    public List<JoinClause> getJoinClauses() {
+        return joinClauses;
+    }
 }

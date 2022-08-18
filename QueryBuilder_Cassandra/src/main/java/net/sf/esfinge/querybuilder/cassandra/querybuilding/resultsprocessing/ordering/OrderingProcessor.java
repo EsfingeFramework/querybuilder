@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class OrderingProcessor extends BasicResultsProcessor {
 
     private final List<OrderByClause> orderByClauses;
-    private int orderingLimit;
 
     public OrderingProcessor(List<OrderByClause> orderByClauses) {
         super();
@@ -25,7 +24,7 @@ public class OrderingProcessor extends BasicResultsProcessor {
 
     @Override
     public <E> List<E> resultsProcessing(List<E> list) {
-        this.orderingLimit = ConfigReader.getConfiguration().getOrderingLimit();
+        int orderingLimit = ConfigReader.getConfiguration().getOrderingLimit();
 
         if (orderByClauses.isEmpty() || list.isEmpty())
             return list;
@@ -34,7 +33,7 @@ public class OrderingProcessor extends BasicResultsProcessor {
             throw new OrderingLimitExceededException("Ordering limit has been set to " + orderingLimit + ", but the query returned " + list.size() + " results.");
         }
 
-        Class clazz = list.get(0).getClass();
+        Class<?> clazz = list.get(0).getClass();
 
         ChainComparator comparator = ChainComparatorFactory.createChainComparator(clazz, orderByClauses);
 

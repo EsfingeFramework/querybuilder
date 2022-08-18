@@ -7,28 +7,27 @@ import org.junit.BeforeClass;
 
 import java.io.IOException;
 
-public class CassandraBasicDatabaseIntegrationTest {
+public class CassandraBasicDatabasePersonIntegrationTest {
 
     @BeforeClass
     public static void initDB() throws TTransportException, IOException, InterruptedException {
         CassandraTestUtils.initDB();
-        CassandraTestUtils.createTables();
+        CassandraTestUtils.createTablesPerson();
+    }
+    @Before
+    public void populateTables() {
+        CassandraTestUtils.populateTablesPerson();
     }
 
+    @After
+    public void cleanTables() {
+        CassandraTestUtils.cleanTablesPerson();
+    }
 
-    // TODO: DROPPING THE DB IN THE INTEGRATION TESTS CAN LEAD TO UNEXPECTED ERRORS
+    // DROPPING THE DB IN THE INTEGRATION TESTS CAN LEAD TO UNEXPECTED ERRORS
     /*@AfterClass
     public static void dropDB() {
         CassandraTestUtils.dropDB();
     }*/
 
-    @Before
-    public void populateTables() {
-        CassandraTestUtils.populateTables();
-    }
-
-    @After
-    public void cleanTables() {
-        CassandraTestUtils.cleanTables();
-    }
 }

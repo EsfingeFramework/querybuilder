@@ -1,2 +1,3 @@
-net.sf.esfinge.querybuilder.cassandra.testresources.Person
 net.sf.esfinge.querybuilder.cassandra.testresources.Address
+net.sf.esfinge.querybuilder.cassandra.testresources.Worker
+net.sf.esfinge.querybuilder.cassandra.testresources.Person
