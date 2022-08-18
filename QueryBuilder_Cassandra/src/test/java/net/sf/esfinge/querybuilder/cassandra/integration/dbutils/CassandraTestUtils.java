@@ -2,6 +2,7 @@ package net.sf.esfinge.querybuilder.cassandra.integration.dbutils;
 
 import com.datastax.driver.core.Session;
 import org.apache.thrift.transport.TTransportException;
+import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 
 import java.io.IOException;
 
@@ -64,7 +65,7 @@ public class CassandraTestUtils {
 
         session.execute(query);
 
-        query = "CREATE TABLE IF NOT EXISTS test.worker(id int PRIMARY KEY, name text,lastname text, age int, address address);";
+        query = "CREATE TABLE IF NOT EXISTS test.worker(id int PRIMARY KEY, name text,lastname text, age int, address frozen<address>);";
 
         session.execute(query);
         session.close();
