@@ -15,7 +15,7 @@ public class ChainComparatorFactory {
         List<Comparator> comparatorsList = new ArrayList<>();
 
         for (OrderByClause o : orderByClauses) {
-            Method fieldGetter = CassandraReflectionUtils.getClassGetterForField(clazz, getters, o.propertyName);
+            Method fieldGetter = CassandraReflectionUtils.getClassGetterForField(clazz, getters, o.getPropertyName());
             comparatorsList.add(new OrderableComparator(fieldGetter, o.getDirection()));
         }
 
