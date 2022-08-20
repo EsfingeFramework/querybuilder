@@ -25,7 +25,6 @@ public class CassandraQueryVisitor implements QueryVisitor {
     private final List<SpecialComparisonClause> specialComparisonClauses = new ArrayList<>();
     private final List<JoinClause> joinClauses = new ArrayList<>();
     private final int argumentPositionOffset;
-    CassandraQueryVisitor previousVisitor;
     private String entity;
     private String query = "";
     private int numberOfFixedValues = 0;
@@ -35,17 +34,15 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     public CassandraQueryVisitor(CassandraQueryVisitor previousVisitor) {
-        // When call this constructor when we have a secondary query, in that case
+
+        // We call this constructor when we have a secondary query, in that case
         // we need to pass the previous visitor in order to update the offset for
         // the position of the arguments of the secondary queries
-
         this.argumentPositionOffset = previousVisitor.getConditions().size() +
                 previousVisitor.getSpecialComparisonClauses().size() +
                 previousVisitor.getJoinClauses().size() -
                 previousVisitor.getNumberOfFixedValues() +
                 previousVisitor.getArgumentPositionOffset();
-
-        this.previousVisitor = previousVisitor;
     }
 
     @Override
