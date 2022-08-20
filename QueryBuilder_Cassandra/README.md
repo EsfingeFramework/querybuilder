@@ -51,9 +51,11 @@ any other method to manage dependencies.
                 └───services
 ```
 
-* In the `META-INF/services` folder you need to create the following three files:
+* In the `META-INF/services/` folder you need to create the following three files:
     * net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider
     * net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity
+* In the `META-INF/` folder you can also add an optional `config.json` file, see [framework limitations](#framework-limitations) 
+for more information. 
 * Now you need to provide the concrete implementations of these two intefaces, namely: `CassandraSessionProvider`
   , `CassandraEntity`.
   For example for `CassandraSessionProvider`:
@@ -187,8 +189,7 @@ CREATE TABLE test.Person
 
 ## Dependencies
 
-* You need to add the following dependencies either in your `pom.xml` file or as local `.jar` files, for the purpose of
-  this guide we list the dependencies in the `Maven` style:
+* You need to add the following dependencies either in your `pom.xml` file or as local `.jar` files, here is a list of the `Maven` dependencies needed:
 
 ```xml
 
@@ -219,7 +220,6 @@ CREATE TABLE test.Person
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>1.6.1</version>
-        <scope>test</scope>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
@@ -227,7 +227,6 @@ CREATE TABLE test.Person
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
         <version>1.6.4</version>
-        <scope>test</scope>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
@@ -276,6 +275,26 @@ The following are the main limitations of cassandra with respect to a relational
 All these limitations have been overcome by the framework by adding a layer at the application level. Please keep in mind
 that joins are only limited to a depth of 1, for this reason a custom attribute must not contain other custom
 attributes itself.
+
+In the `META-INF/` folder you can also add an optional `config.json` file, where you can configure the maximum number of 
+entities that can be ordered from a result and the maximum depth of secondary queries. Secondary queries are used to mimic
+the behaviour of the `OR` operator, this limit basically defines the maximum number of `OR` connectors in the query, here is an 
+example fo the configuration file:
+
+```Json
+{
+  "orderingLimit": 10,
+  "secondaryQueryLimit": 2
+}
+```
+
+If this file is omitted, the configuration will automatically default to: 
+```Json
+{
+  "orderingLimit": 1000,
+  "secondaryQueryLimit": 3
+}
+```
 
 # Author
 
