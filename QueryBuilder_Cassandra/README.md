@@ -8,6 +8,9 @@ the integration with the `NoSQL` distributed database Cassandra.
 * [Prerequisites](#prerequisites)
 * [How to configure the project ](#how-to-configure-the-project-on-intellij-idea)
 * [How to use the Querybuilder](#how-to-use-the-querybuilder)
+  * [Project configuration](#project-configuration) 
+  * [Depencencies](#dependencies)
+* [Framework limitations](#framework-limitations)
 
 # Prerequisites
 
@@ -197,8 +200,16 @@ CassandraSimpleTestQuery cassandra=QueryBuilder.create(CassandraSimpleTestQuery.
   file for use you can open this project with maven and run `mvn package` , the `.jar` file will be created in
   the `/target` folder.
 
-## Framework limitations
+# Framework limitations
 
 The cassandra database works similar to a relational database, but since its main purpose is to handle huge amounts of
 data and provide reliability and scaling mechanisms there are some differences in which operations are allowed or not.
-CONTINUES...
+The following are the main limitations of cassandra with respect to a relational database:
+
+* Join Queries are not supported
+* Queries with `OR` are not supported
+* Ordering is not supported 
+* `LIKE`, `STARTS`, `ENDS` and `CONTAINS` operators are not supported.
+* Comparing to null is not supported
+
+All these limitations have been overcome by the framework by adding a layer at the application level.
