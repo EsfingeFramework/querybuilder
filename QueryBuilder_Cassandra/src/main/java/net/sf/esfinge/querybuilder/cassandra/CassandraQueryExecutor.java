@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 public class CassandraQueryExecutor<E> implements QueryExecutor {
 
-    MappingManagerProvider provider;
+    private MappingManagerProvider provider;
     private Class<E> clazz;
 
     public CassandraQueryExecutor() {
