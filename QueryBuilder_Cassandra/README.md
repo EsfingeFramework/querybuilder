@@ -1,16 +1,19 @@
 # Querybuilder Cassandra
 
-This project extends the [Esfinge Querybuilder](http://esfinge.sourceforge.net/Query%20Builder.html) whit a plugin for
-the integration with the `NoSQL` distributed database Cassandra.
+This project extends the [Esfinge Querybuilder](http://esfinge.sourceforge.net/Query%20Builder.html) framework whith an 
+integration for the `NoSQL` database Apache Cassandra. Cassandra is an open source NoSQL distributed database
+trusted by thousands of companies for scalability and high availability without compromising performance
 
 # Table of contents
 
 * [Prerequisites](#prerequisites)
 * [How to configure the project ](#how-to-configure-the-project-on-intellij-idea)
 * [How to use the Querybuilder](#how-to-use-the-querybuilder)
-  * [Project configuration](#project-configuration) 
-  * [Depencencies](#dependencies)
+    * [Project configuration](#project-configuration)
+    * [Depencencies](#dependencies)
 * [Framework limitations](#framework-limitations)
+* [Author](#author)
+* [Notes](#notes)
 
 # Prerequisites
 
@@ -48,7 +51,7 @@ any other method to manage dependencies.
 └───services
 ```
 
-* In the `META-INF` folder you need to create the following three files:
+* In the `META-INF/services` folder you need to create the following three files:
     * net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider
     * net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity
 * Now you need to provide the concrete implementations of these two intefaces, namely: `CassandraSessionProvider`
@@ -90,7 +93,8 @@ For the classes implementing the `CassandraEntity` please keep in mind that you 
 and `@PartitionKey` annotations of the `com.datastax.driver.mapping.annotations` library, which is used by this
 framework to do the object mapping.
 
-* In the files contained in the `META-INF` folder you need to include the full path to your implementation of the
+* In the files contained in the `META-INF/services` folder you need to include the full path to your implementation of
+  the
   specific interface, for example in the `net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider`, supposing you
   named the implementation as `MySessionProvider` in the package `org.example` you will include the
   path `org.example.MySessionProvider`.
@@ -99,7 +103,7 @@ framework to do the object mapping.
   the `CassandraEntity` interface, for example:
 
 ```Java
-public interface CassandraSimpleTestQuery extends Repository<Person> {
+public interface PersonDao extends Repository<Person> {
 
     List<Person> getPerson();
 
@@ -114,15 +118,72 @@ basic `CRUD` operations, for example `save` and `delete` are available by defaul
 * Here is how to create the instance of the class that actually implements this interface:
 
 ```Java
-CassandraSimpleTestQuery cassandra=QueryBuilder.create(CassandraSimpleTestQuery.class);
+PersonDao dao=QueryBuilder.create(PersonDao.class);
 ```
 
 * Now you are ready to go and the framework should already work. For example you could call the
-  method `cassandra.getPersonById(1)` and the framework will manage connecting to the database,
+  method `dao.getPersonById(1)` and the framework will manage connecting to the database,
   translating the method into a query and retrieving the results as a `Person` class.
 * Please keep in mind that the database does not automatically create the `Keyspace` and the `Tables` for storing the
   data, this is left to the user, which can also use the `KeyspaceRepository` class of the framework, which provides
   utility methods for handling keyspaces and tables.
+
+### Managing entities with custom attributes
+
+If you are using an entity with a custom attribute, you need to use the datastax `@UDT` annotation
+when defining that custom attribute, for example for:
+
+```Java
+
+@Table(keyspace = "test", name = "person",
+        readConsistency = "QUORUM",
+        writeConsistency = "QUORUM",
+        caseSensitiveKeyspace = false,
+        caseSensitiveTable = false)
+public class Person implements CassandraEntity {
+
+    @PartitionKey
+    private Integer id;
+    private String name;
+    private Address address; // CUSTOM ATTRIBUTE
+
+    // getters and setters omitted...
+}
+```
+
+You need to define the `Address` class by providing the annotation:
+
+```Java
+
+@UDT(keyspace = "test", name = "address")
+public class Address implements CassandraEntity {
+    private String city;
+    private String state;
+
+    // getters and setters omitted...
+}
+```
+
+In addition, when you are defining the table in the cassandra database,
+you need first to create the type and to provide the `frozen` attribute for
+the custom type in the table.
+A possible definition of table and type for the
+classes above would be:
+
+```SQL
+CREATE TYPE test.address (city text, state text);
+```
+
+And for the table:
+
+```SQL
+CREATE TABLE test.Person
+(
+    id int PRIMARY KEY,
+    name text,
+    address frozen<address>
+);
+```
 
 ## Dependencies
 
@@ -208,8 +269,22 @@ The following are the main limitations of cassandra with respect to a relational
 
 * Join Queries are not supported
 * Queries with `OR` are not supported
-* Ordering is not supported 
+* Ordering is not supported
 * `LIKE`, `STARTS`, `ENDS` and `CONTAINS` operators are not supported.
 * Comparing to null is not supported
 
-All these limitations have been overcome by the framework by adding a layer at the application level.
+All these limitations have been overcome by the framework by adding a layer at the application level. Please keep in mind
+that joins are only limited to a depth of 1, for this reason a custom attribute must not contain other custom
+attributes itself.
+
+# Author
+
+**Name**: Samuel Dalvai <br>
+**Email**: samdalvai@unibz.it <br>
+
+# Notes
+
+This project has been developed at the Free University of Bolzano, as argument for the final thesis
+of a BSc in Computer Science, with the supervision of Professor Martins Guerra Eduardo, which is also the author of 
+the `Esfinge Querybuilde Framework`. Please visit [Esfinge Querybuilder](http://esfinge.sourceforge.net/Query%20Builder.html)
+for more information on the framework.
