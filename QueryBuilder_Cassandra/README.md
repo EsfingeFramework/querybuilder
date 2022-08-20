@@ -44,11 +44,11 @@ any other method to manage dependencies.
 
 ```markdown
 └───src
-└───main
-├───java
-└───resources
-└───META-INF
-└───services
+    └───main
+        ├───java
+        └───resources
+            └───META-INF
+                └───services
 ```
 
 * In the `META-INF/services` folder you need to create the following three files:
