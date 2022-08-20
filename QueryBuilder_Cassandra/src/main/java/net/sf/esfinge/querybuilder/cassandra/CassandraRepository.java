@@ -100,8 +100,6 @@ public class CassandraRepository<E> implements Repository<E> {
 
         Mapper<E> mapper = provider.getManager().mapper(clazz);
 
-        System.out.println(queryBuilder.toString());
-
         ResultSet results = provider.getSession().execute(queryBuilder.toString());
         Result<E> objects = mapper.map(results);
         List<E> objectsList = new ArrayList<>();
