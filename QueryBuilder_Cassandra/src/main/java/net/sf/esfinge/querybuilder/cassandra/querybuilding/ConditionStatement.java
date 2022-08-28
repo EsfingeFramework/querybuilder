@@ -3,18 +3,14 @@ package net.sf.esfinge.querybuilder.cassandra.querybuilding;
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 import net.sf.esfinge.querybuilder.methodparser.conditions.NullOption;
 
-public class ConditionStatement {
+public class ConditionStatement extends Clause {
 
-    private String propertyName;
     private ComparisonType comparisonType;
-    private Object value = null;
-
-    private int conditionIndex = -1;
     private NullOption nullOption = NullOption.NONE;
     private String nextConnector = null;
 
     public ConditionStatement(String propertyName, ComparisonType comparisonType) {
-        this.propertyName = propertyName;
+        super(propertyName);
         this.comparisonType = comparisonType;
     }
 
@@ -42,12 +38,12 @@ public class ConditionStatement {
         this.value = value;
     }
 
-    public int getConditionIndex() {
-        return conditionIndex;
+    public int getArgPosition() {
+        return argPosition;
     }
 
-    public void setConditionIndex(int conditionIndex) {
-        this.conditionIndex = conditionIndex;
+    public void setArgPosition(int argPosition) {
+        this.argPosition = argPosition;
     }
 
     public NullOption getNullOption() {
@@ -86,7 +82,7 @@ public class ConditionStatement {
     }
 
     private String getValueRepresentation() {
-        return value != null ? QueryBuildingUtils.getValueRepresentationByType(value) : conditionIndex + "?";
+        return value != null ? QueryBuildingUtils.getValueRepresentationByType(value) : argPosition + "?";
     }
 
     @Override

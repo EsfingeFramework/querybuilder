@@ -1,15 +1,15 @@
 package net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.ordering;
 
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.Clause;
 import net.sf.esfinge.querybuilder.methodparser.OrderingDirection;
 
 import java.util.Objects;
 
-public class OrderByClause {
-    String propertyName;
+public class OrderByClause extends Clause {
     OrderingDirection direction;
 
     public OrderByClause(String propertyName, OrderingDirection direction) {
-        this.propertyName = propertyName;
+        super(propertyName);
         this.direction = direction;
     }
 

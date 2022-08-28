@@ -1,29 +1,25 @@
 package net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.join;
 
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.Clause;
+
 import java.util.Objects;
 
-public class JoinClause {
-
-    private String joinTypeName;
+public class JoinClause extends Clause {
     private String joinAttributeName;
     private JoinComparisonType comparisonType;
 
-    private Object value;
-
-    private int argPosition;
-
     public JoinClause(String joinTypeName, String joinAttributeName, JoinComparisonType comparisonType) {
-        this.joinTypeName = joinTypeName;
+        super(joinTypeName);
         this.joinAttributeName = joinAttributeName;
         this.comparisonType = comparisonType;
     }
 
     public String getJoinTypeName() {
-        return joinTypeName;
+        return propertyName;
     }
 
     public void setJoinTypeName(String joinTypeName) {
-        this.joinTypeName = joinTypeName;
+        this.propertyName = joinTypeName;
     }
 
     public String getJoinAttributeName() {
@@ -61,7 +57,7 @@ public class JoinClause {
     @Override
     public String toString() {
         return "JoinClause{" +
-                "joinTypeName='" + joinTypeName + '\'' +
+                "joinTypeName='" + propertyName + '\'' +
                 ", joinAttributeName='" + joinAttributeName + '\'' +
                 ", comparisonType=" + comparisonType +
                 ", value=" + value +
@@ -74,11 +70,11 @@ public class JoinClause {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JoinClause that = (JoinClause) o;
-        return argPosition == that.argPosition && Objects.equals(joinTypeName, that.joinTypeName) && Objects.equals(joinAttributeName, that.joinAttributeName) && comparisonType == that.comparisonType && Objects.equals(value, that.value);
+        return argPosition == that.argPosition && Objects.equals(propertyName, that.propertyName) && Objects.equals(joinAttributeName, that.joinAttributeName) && comparisonType == that.comparisonType && Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(joinTypeName, joinAttributeName, comparisonType, value, argPosition);
+        return Objects.hash(propertyName, joinAttributeName, comparisonType, value, argPosition);
     }
 }

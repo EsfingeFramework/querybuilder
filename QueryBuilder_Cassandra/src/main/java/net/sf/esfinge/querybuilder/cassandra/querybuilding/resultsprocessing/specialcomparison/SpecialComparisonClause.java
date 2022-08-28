@@ -1,25 +1,19 @@
 package net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.MethodInvocationException;
+import net.sf.esfinge.querybuilder.cassandra.querybuilding.Clause;
 import net.sf.esfinge.querybuilder.cassandra.reflection.CassandraReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-public class SpecialComparisonClause {
-
-    private String propertyName;
+public class SpecialComparisonClause extends Clause {
 
     private SpecialComparisonType specialComparisonType;
 
-    private Object value;
-
-    private int argPosition;
-
     public SpecialComparisonClause(String propertyName, SpecialComparisonType specialComparisonType) {
-        this.propertyName = propertyName;
+        super(propertyName);
         this.specialComparisonType = specialComparisonType;
-        this.value = null;
     }
 
     public String getPropertyName() {

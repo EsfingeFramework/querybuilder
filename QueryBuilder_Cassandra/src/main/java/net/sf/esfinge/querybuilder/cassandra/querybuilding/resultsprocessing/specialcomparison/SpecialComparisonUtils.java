@@ -1,6 +1,7 @@
 package net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison;
 
 import net.sf.esfinge.querybuilder.annotation.CompareToNull;
+import net.sf.esfinge.querybuilder.cassandra.exceptions.ComparisonTypeNotFoundException;
 import net.sf.esfinge.querybuilder.cassandra.exceptions.MethodInvocationException;
 import net.sf.esfinge.querybuilder.cassandra.reflection.CassandraReflectionUtils;
 
@@ -25,7 +26,7 @@ public class SpecialComparisonUtils {
             case COMPARE_TO_NULL:
                 return queryParameterValue == null ? objectAttributeValue == null : objectAttributeValue.equals(queryParameterValue);
             default:
-                return true;
+                throw new ComparisonTypeNotFoundException("");
         }
     }
 
