@@ -35,6 +35,12 @@
             <organization/>
             <organizationUrl/>
         </developer>
+        <developer>
+            <name>Samuel Dalvai</name>
+            <email>samuel.dalvai@gmail.com</email>
+            <organization/>
+            <organizationUrl/>
+        </developer>
     </developers>
 
     <scm>
