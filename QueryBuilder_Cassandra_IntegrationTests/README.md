@@ -1,7 +1,7 @@
 # Querybuilder Cassandra - Integration tests
 This project is used to perform various integrations tests on the functionalities of the Cassandra query builder plugin for the `Esfinge Framework`.
 The projects `pom.xml` relies on the local dependency of the `.jar` file of the plugin. In order to update the jar, you need to substitute/update the one which is already present in the `/resources` folder in 
-the root of the project. If the version of the jar has changed, for example from `querybuilder-cassandra-1.0.0.jar` to `querybuilder-cassandra-1.1.0.jar` you need also to update the corresponidn entry 
+the root of the project. If the version of the jar has changed, for example from `querybuilder-cassandra-1.7.0.jar` to `querybuilder-cassandra-1.7.1.jar` you need also to update the corresponding entry 
 in the `pom.xml` file.
 
 # Prerequisites

@@ -155,7 +155,7 @@
             <artifactId>querybuilder-cassandra</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/resources/querybuilder-cassandra-1.0.0.jar</systemPath>
+            <systemPath>${project.basedir}/resources/querybuilder-cassandra-1.7.0.jar</systemPath>
         </dependency>
 
     </dependencies>
