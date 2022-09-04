@@ -46,7 +46,7 @@
     <scm>
         <connection>scm:git:git://github.com/EsfingeFramework/querybuilder.git</connection>
         <developerConnection>scm:git:ssh://github.com:EsfingeFramework/querybuilder.git</developerConnection>
-        <url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_Cassandra</url>
+        <url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_Cassandra_IntegrationTests</url>
     </scm>
 
     <properties>
