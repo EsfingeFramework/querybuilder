@@ -8,4 +8,4 @@ services:
     volumes:
       - ~/apps/cassandra:/var/lib/cassandra
     environment:
-      - CASSANDRA_CLUSTER_NAME=citizix
+      - CASSANDRA_CLUSTER_NAME=testcluster
