@@ -28,7 +28,7 @@ trusted by thousands of companies for scalability and high availability without 
 * Load `Maven script` if prompted by the IDE
 * Run `docker-compose up -d` to run the Cassandra database or use `Cassandra Unit` by uncommenting the line in the
   method `initCassandaUnit` of the class `net.sfesfinge.querybuilder.cassandra.integration.dbutils.CassandraTestUtils`.
-* Run the tests with `mvn test`
+* Run the tests with `mvn test`. Please note that there is another project in this repository called `QueryBuilder_Cassandra_IntegrationTests`, which contains just the integration tests performed with a packaged version of `QueryBuilder Cassandra`. 
 
 # How to use the QueryBuilder
 
