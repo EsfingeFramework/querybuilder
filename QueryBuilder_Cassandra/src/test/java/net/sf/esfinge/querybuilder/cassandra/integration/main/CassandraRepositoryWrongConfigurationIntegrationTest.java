@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.unit;
+package net.sf.esfinge.querybuilder.cassandra.integration.main;
 
 import net.sf.esfinge.querybuilder.QueryBuilder;
 import net.sf.esfinge.querybuilder.Repository;
@@ -9,7 +9,7 @@ import net.sf.esfinge.querybuilder.cassandra.testresources.wrongconfiguration.Cl
 import net.sf.esfinge.querybuilder.cassandra.testresources.wrongconfiguration.ClassWithMissingPartitionKey;
 import org.junit.Test;
 
-public class CassandraRepositoryWrongConfigurationTest {
+public class CassandraRepositoryWrongConfigurationIntegrationTest {
 
     @Test(expected = MissingAnnotationException.class)
     public void missingAnnotationFromClassTest() {
