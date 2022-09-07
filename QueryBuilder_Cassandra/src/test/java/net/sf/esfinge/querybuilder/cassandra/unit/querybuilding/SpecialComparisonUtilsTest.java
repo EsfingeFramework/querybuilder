@@ -1,10 +1,10 @@
 package net.sf.esfinge.querybuilder.cassandra.unit.querybuilding;
 
 import net.sf.esfinge.querybuilder.cassandra.exceptions.GetterNotFoundInClassException;
-import net.sf.esfinge.querybuilder.cassandra.integration.queryobjects.CompareNullQueryObject;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonClause;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonType;
 import net.sf.esfinge.querybuilder.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonUtils;
+import net.sf.esfinge.querybuilder.cassandra.testresources.CompareNullQueryObject;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
 import org.junit.Test;
 

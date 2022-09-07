@@ -1,4 +1,4 @@
-package net.sf.esfinge.querybuilder.cassandra.integration.queryobjects;
+package net.sf.esfinge.querybuilder.cassandra.testresources;
 
 import net.sf.esfinge.querybuilder.annotation.CompareToNull;
 
