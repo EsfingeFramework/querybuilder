@@ -147,15 +147,13 @@
         </dependency>
 
         <!-- This is a local dependency, if a new version of Cassandra Querybuilder is
-        released, you need to replace the jar file in the resources/ folder in the root of
-        the project
-         -->
+        released, you need to replace the jar file in the /src/test/resources folder -->
         <dependency>
             <groupId>net.sf.esfinge</groupId>
             <artifactId>querybuilder-cassandra</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/resources/querybuilder-cassandra-1.7.0.jar</systemPath>
+            <systemPath>${project.basedir}/src/test/resources/querybuilder-cassandra-1.7.0.jar</systemPath>
         </dependency>
 
     </dependencies>

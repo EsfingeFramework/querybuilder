@@ -6,7 +6,6 @@ import net.sf.esfinge.querybuilder.cassandra.integration.dbutils.CassandraBasicD
 import net.sf.esfinge.querybuilder.cassandra.testresources.Address;
 import net.sf.esfinge.querybuilder.cassandra.testresources.CassandraOrderByTestQuery;
 import net.sf.esfinge.querybuilder.cassandra.testresources.Person;
-import org.apache.commons.math3.analysis.function.Add;
 import org.junit.Test;
 
 import java.util.List;
