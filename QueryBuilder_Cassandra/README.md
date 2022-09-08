@@ -11,6 +11,7 @@ trusted by thousands of companies for scalability and high availability without 
 * [How to use the Querybuilder](#how-to-use-the-querybuilder)
     * [Project configuration](#project-configuration)
     * [Depencencies](#dependencies)
+    * [Example application](#example-application)
 * [Framework limitations](#framework-limitations)
 * [Author](#author)
 * [Notes](#notes)
@@ -253,9 +254,13 @@ CREATE TABLE test.Person
 
 * You will notice that the `querybuilder-cassandra` dependency is the only local one. This i because the software has
   not been released in the maven repository, but needs to be added as local `.jar` file. In order to create the `.jar`
-  file for use you can open this project with maven and run `mvn package` , the `.jar` file will be created in
+  file for use you can open this project with maven and run `mvn package`, the `.jar` file will be created in
   the `/target` folder.
 
+## Example application
+
+An example of an application configured for using the QueryBuilder Cassandra module, can be found in this [GitHub repository](https://github.com/samdalvai/esfinge-querybuilder-thesis/tree/main/BookStore_APP).
+The repository contains two versions of the same Java Servlet CRUD apllication, one using QueryBuilder JDBC as persistence layer, the other using QueryBuilder Cassandra.
 # Framework limitations
 
 The cassandra database works similar to a relational database, but since its main purpose is to handle huge amounts of
