@@ -1,63 +1,60 @@
 package net.sf.esfinge.querybuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.esfinge.querybuilder.Repository;
+public class DummyRepository<E> implements Repository<E> {
 
-public class DummyRepository<E> implements Repository<E>{
-	
-	public static DummyRepository<?> instance;
+    public static DummyRepository<?> instance;
 
-	public DummyRepository() {
-		super();
-		instance = this;
-	}
+    public DummyRepository() {
+        super();
+        instance = this;
+    }
 
-	private String lastMethodCalled;
-	private Class configuredClass;
-	
-	@Override
-	public E save(E obj) {
-		lastMethodCalled = "save";
-		return null;
-	}
+    private String lastMethodCalled;
+    private Class configuredClass;
 
-	@Override
-	public void delete(Object id) {
-		lastMethodCalled = "delete";
-		
-	}
+    @Override
+    public E save(E obj) {
+        lastMethodCalled = "save";
+        return null;
+    }
 
-	@Override
-	public List<E> list() {
-		lastMethodCalled = "list";
-		return null;
-	}
+    @Override
+    public void delete(Object id) {
+        lastMethodCalled = "delete";
 
-	@Override
-	public E getById(Object id) {
-		lastMethodCalled = "getById";
-		return null;
-	}
+    }
 
-	@Override
-	public void configureClass(Class<E> clazz) {
-		configuredClass = clazz;	
-	}
+    @Override
+    public List<E> list() {
+        lastMethodCalled = "list";
+        return null;
+    }
 
-	public String getLastMethodCalled() {
-		return lastMethodCalled;
-	}
+    @Override
+    public E getById(Object id) {
+        lastMethodCalled = "getById";
+        return null;
+    }
 
-	public Class getConfiguredClass() {
-		return configuredClass;
-	}
+    @Override
+    public void configureClass(Class<E> clazz) {
+        configuredClass = clazz;
+    }
 
-	@Override
-	public List<E> queryByExample(E obj) {
-		lastMethodCalled = "queryByExample";
-		return null;
-	}
+    public String getLastMethodCalled() {
+        return lastMethodCalled;
+    }
+
+    public Class getConfiguredClass() {
+        return configuredClass;
+    }
+
+    @Override
+    public List<E> queryByExample(E obj) {
+        lastMethodCalled = "queryByExample";
+        return null;
+    }
 
 }

@@ -4,45 +4,45 @@ import net.sf.esfinge.querybuilder.annotations.Column;
 import net.sf.esfinge.querybuilder.annotations.ID;
 import net.sf.esfinge.querybuilder.annotations.Table;
 
-@Table(name="worker")
+@Table(name = "worker")
 public class Worker {
 
-	@ID
-	@Column(name = "id")
-	private Integer id;
-	private String name;
-	private String lastName;
-	private Integer age;
-		
-	public Integer getId() {
-		return id;
-	}
+    @ID
+    @Column(name = "id")
+    private Integer id;
+    private String name;
+    private String lastName;
+    private Integer age;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public Integer getAge() {
-		return age;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public void setAge(Integer age) {
-		this.age = age;
-	}
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 }

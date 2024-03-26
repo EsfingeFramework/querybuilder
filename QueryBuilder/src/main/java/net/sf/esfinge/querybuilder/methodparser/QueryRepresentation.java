@@ -4,15 +4,15 @@ import java.util.Map;
 import java.util.Set;
 
 public interface QueryRepresentation {
-	
-	public boolean isDynamic();
-	
-	public Object getQuery();
-	
-	public Object getQuery(Map<String, Object> params);
 
-	public Set<String> getFixParameters();
+    boolean isDynamic();
 
-	public Object getFixParameterValue(String param);
+    Object getQuery();
+
+    Object getQuery(Map<String, Object> params);
+
+    Set<String> getFixParameters();
+
+    Object getFixParameterValue(String param);
 
 }

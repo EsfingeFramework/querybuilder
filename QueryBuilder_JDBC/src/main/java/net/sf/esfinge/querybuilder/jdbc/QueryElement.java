@@ -2,5 +2,5 @@ package net.sf.esfinge.querybuilder.jdbc;
 
 public enum QueryElement {
 
-	ENTITY, CONDITION, CONECTOR, NONE;
+    ENTITY, CONDITION, CONECTOR, NONE;
 }

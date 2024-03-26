@@ -1,35 +1,33 @@
 package net.sf.esfinge.querybuilder.methodparser;
 
 public class Address {
-	
-	private int number;
-	private String city;
-	private Street street;
 
-	public int getNumber() {
-		return number;
-	}
+    private int number;
+    private String city;
+    private Street street;
 
-	public void setNumber(int number) {
-		this.number = number;
-	}
+    public int getNumber() {
+        return number;
+    }
 
-	public Street getStreet() {
-		return street;
-	}
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
-	public void setStreet(Street street) {
-		this.street = street;
-	}
+    public Street getStreet() {
+        return street;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public void setStreet(Street street) {
+        this.street = street;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
-	
-	
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
 }

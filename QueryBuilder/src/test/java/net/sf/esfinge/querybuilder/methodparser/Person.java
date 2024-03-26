@@ -1,66 +1,67 @@
 package net.sf.esfinge.querybuilder.methodparser;
 
 public class Person {
-	
-	private String name;
-	private String lastName;
-	private int age;
-	private boolean authorized;
-	private Address address;
-	private String job;
-	
-	public Person(String name) {
-		this.name = name;
-	}
-	
-	public Person() {}
 
-	public Address getAddress() {
-		return address;
-	}
+    private String name;
+    private String lastName;
+    private int age;
+    private boolean authorized;
+    private Address address;
+    private String job;
 
-	public void setAddress(Address address) {
-		this.address = address;
-	}
+    public Person(String name) {
+        this.name = name;
+    }
 
-	public boolean isAuthorized() {
-		return authorized;
-	}
+    public Person() {
+    }
 
-	public void setAuthorized(boolean authorized) {
-		this.authorized = authorized;
-	}
+    public Address getAddress() {
+        return address;
+    }
 
-	public int getAge() {
-		return age;
-	}
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+    public boolean isAuthorized() {
+        return authorized;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setAuthorized(boolean authorized) {
+        this.authorized = authorized;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getJob() {
-		return job;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setJob(String job) {
-		this.job = job;
-	}
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
 
 }

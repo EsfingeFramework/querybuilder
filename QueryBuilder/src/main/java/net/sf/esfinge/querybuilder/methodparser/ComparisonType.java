@@ -43,10 +43,10 @@ public enum ComparisonType {
 	}
 
 	public static ComparisonType getComparisonType(List<String> comparisonName, int index) {
-		for(ComparisonType cp : values()){
-			String[] values = cp.name().split("_");
-			boolean flag = true;
-			for(int i = 0; i<values.length; i++){
+		for(var cp : values()){
+			var values = cp.name().split("_");
+			var flag = true;
+			for(var i = 0; i<values.length; i++){
 				if(comparisonName.size() <= index+i || !values[i].toLowerCase().equals(comparisonName.get(index+i))){
 					flag = false;
 				}
@@ -58,8 +58,8 @@ public enum ComparisonType {
 	}
 
 	public static boolean isOperator(String firstWord) {
-		for(ComparisonType cp : values()){
-			String[] values = cp.name().split("_");
+		for(var cp : values()){
+			var values = cp.name().split("_");
 			if(values[0].toLowerCase().equals(firstWord))
 				return true;
 		}
@@ -67,8 +67,8 @@ public enum ComparisonType {
 	}
 
 	public static ComparisonType getComparisonType(String property) {
-		for(ComparisonType comparisonType : values()){
-			String comparison = comparisonType.name().replace("_", "");
+		for(var comparisonType : values()){
+			var comparison = comparisonType.name().replace("_", "");
 
 			if (property.toUpperCase().contains(comparison)) {
 				return comparisonType;

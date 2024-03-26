@@ -4,16 +4,16 @@ import java.lang.reflect.Method;
 
 public interface MethodParser {
 
-	public abstract QueryInfo parse(Method m);
+    abstract QueryInfo parse(Method m);
 
-	public abstract void setEntityClassProvider(EntityClassProvider classProvider);
-	
-	public boolean fitParserConvention(Method m);
+    abstract void setEntityClassProvider(EntityClassProvider classProvider);
 
-	public abstract void setInterface(Class<?> interf);
-	
-	// adding this only for the recognition of domain terms by the plugin
-	// this does not imply any change in the main flow
-	public abstract void setInterface(Class<?> interf, ClassLoader loader);
+    boolean fitParserConvention(Method m);
+
+    void setInterface(Class<?> interf);
+
+    // adding this only for the recognition of domain terms by the plugin
+    // this does not imply any change in the main flow
+    void setInterface(Class<?> interf, ClassLoader loader);
 
 }

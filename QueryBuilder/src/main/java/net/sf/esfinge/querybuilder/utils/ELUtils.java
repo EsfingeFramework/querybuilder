@@ -1,17 +1,14 @@
 package net.sf.esfinge.querybuilder.utils;
 
+import jakarta.el.ArrayELResolver;
+import jakarta.el.BeanELResolver;
+import jakarta.el.FunctionMapper;
+import jakarta.el.ListELResolver;
+import jakarta.el.MapELResolver;
+import jakarta.el.VariableMapper;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.el.ArrayELResolver;
-import javax.el.BeanELResolver;
-import javax.el.FunctionMapper;
-import javax.el.ListELResolver;
-import javax.el.MapELResolver;
-import javax.el.ValueExpression;
-import javax.el.VariableMapper;
-
 import org.apache.el.ExpressionFactoryImpl;
 import org.apache.el.ValueExpressionLiteral;
 import org.apache.el.lang.EvaluationContext;
@@ -22,25 +19,24 @@ public class ELUtils {
 
     public static FunctionMapper buildFunctionMapper(
             Map<String, Method> functionMethodMap) {
-        FunctionMapperImpl mapper = new FunctionMapperImpl();
-        for (String functionName : functionMethodMap.keySet()) {
-            mapper.addFunction("", functionName,
-                    functionMethodMap.get(functionName));
-        }
+        var mapper = new FunctionMapperImpl();
+        functionMethodMap.keySet().forEach(functionName
+                -> mapper.mapFunction("", functionName, functionMethodMap.get(functionName)));
         return mapper;
     }
 
     public static VariableMapper buildVariableMapper(
             Map<String, Object> attributeMap) {
-        VariableMapperImpl mapper = new VariableMapperImpl();
-        for (String attributeName : attributeMap.keySet()) {
+        var mapper = new VariableMapperImpl();
+        attributeMap.keySet().forEach(attributeName -> {
             Class<?> clazz = Object.class;
-            if (attributeMap.get(attributeName) != null)
+            if (attributeMap.get(attributeName) != null) {
                 clazz = attributeMap.get(attributeName).getClass();
-            ValueExpressionLiteral expression = new ValueExpressionLiteral(
+            }
+            var expression = new ValueExpressionLiteral(
                     attributeMap.get(attributeName), clazz);
             mapper.setVariable(attributeName, expression);
-        }
+        });
         return mapper;
     }
 
@@ -48,28 +44,27 @@ public class ELUtils {
             Map<String, Method> functionMethodMap,
             Map<String, Object> attributeMap) {
 
-        VariableMapper vMapper = buildVariableMapper(attributeMap);
-        FunctionMapper fMapper = buildFunctionMapper(functionMethodMap);
-
-        EsfingeELContext context = new EsfingeELContext(fMapper, vMapper,
-        		new ArrayELResolver(), new ListELResolver(), new MapELResolver(), new BeanELResolver());
+        var vMapper = buildVariableMapper(attributeMap);
+        var fMapper = buildFunctionMapper(functionMethodMap);
+        var context = new EsfingeELContext(fMapper, vMapper,
+                new ArrayELResolver(), new ListELResolver(), new MapELResolver(), new BeanELResolver());
 
         return new EvaluationContext(context, fMapper, vMapper);
     }
 
     public static Object evaluateExpression(EvaluationContext elContext,
             String expression) {
-        ValueExpression result = new ExpressionFactoryImpl()
+        var result = new ExpressionFactoryImpl()
                 .createValueExpression(elContext, expression, Object.class);
 
         return result.getValue(elContext);
     }
-    
+
     public static EvaluationContext buildContext(Object[] params) {
-        Map<String, Object> varMap = new HashMap<String, Object>();
+        Map<String, Object> varMap = new HashMap<>();
         varMap.put("param", params);
-        Map<String, Method> funcMap = new HashMap<String, Method>();
+        Map<String, Method> funcMap = new HashMap<>();
         return buildEvaluationContext(funcMap, varMap);
     }
-    
+
 }

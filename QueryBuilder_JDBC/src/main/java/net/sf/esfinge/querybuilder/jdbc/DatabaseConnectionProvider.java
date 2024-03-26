@@ -4,7 +4,6 @@ import java.sql.Connection;
 
 public interface DatabaseConnectionProvider {
 
-	public Connection getConnection();
+    Connection getConnection();
 
 }
- 

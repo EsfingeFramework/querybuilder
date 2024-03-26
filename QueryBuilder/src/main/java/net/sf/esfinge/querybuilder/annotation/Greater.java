@@ -4,11 +4,10 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import net.sf.esfinge.querybuilder.methodparser.ComparisonType;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER,ElementType.FIELD,ElementType.METHOD})
+@Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.METHOD})
 @ComparisonOperator(ComparisonType.GREATER)
 public @interface Greater {
 }
