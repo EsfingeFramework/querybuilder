@@ -3,46 +3,46 @@ module querybuilder.core {
     requires jakarta.el;
     requires cglib;
 
-    exports net.sf.esfinge.querybuilder;
-    exports net.sf.esfinge.querybuilder.annotation;
-    exports net.sf.esfinge.querybuilder.exception;
-    exports net.sf.esfinge.querybuilder.executor;
-    exports net.sf.esfinge.querybuilder.methodparser;
-    exports net.sf.esfinge.querybuilder.methodparser.conditions;
-    exports net.sf.esfinge.querybuilder.methodparser.conversor;
-    exports net.sf.esfinge.querybuilder.methodparser.formater;
-    exports net.sf.esfinge.querybuilder.utils;
+    exports esfinge.querybuilder.core;
+    exports esfinge.querybuilder.core.annotation;
+    exports esfinge.querybuilder.core.exception;
+    exports esfinge.querybuilder.core.executor;
+    exports esfinge.querybuilder.core.methodparser;
+    exports esfinge.querybuilder.core.methodparser.conditions;
+    exports esfinge.querybuilder.core.methodparser.conversor;
+    exports esfinge.querybuilder.core.methodparser.formater;
+    exports esfinge.querybuilder.core.utils;
 
-    opens net.sf.esfinge.querybuilder.annotation;
-    opens net.sf.esfinge.querybuilder.exception;
-    opens net.sf.esfinge.querybuilder.executor;
-    opens net.sf.esfinge.querybuilder.methodparser;
-    opens net.sf.esfinge.querybuilder.methodparser.conditions;
-    opens net.sf.esfinge.querybuilder.methodparser.conversor;
-    opens net.sf.esfinge.querybuilder.methodparser.formater;
-    opens net.sf.esfinge.querybuilder.utils;
+    opens esfinge.querybuilder.core.annotation;
+    opens esfinge.querybuilder.core.exception;
+    opens esfinge.querybuilder.core.executor;
+    opens esfinge.querybuilder.core.methodparser;
+    opens esfinge.querybuilder.core.methodparser.conditions;
+    opens esfinge.querybuilder.core.methodparser.conversor;
+    opens esfinge.querybuilder.core.methodparser.formater;
+    opens esfinge.querybuilder.core.utils;
 
-    uses net.sf.esfinge.querybuilder.Repository;
-    uses net.sf.esfinge.querybuilder.methodparser.EntityClassProvider;
-    uses net.sf.esfinge.querybuilder.executor.QueryExecutor;
-    uses net.sf.esfinge.querybuilder.methodparser.conversor.FromStringConversor;
-    uses net.sf.esfinge.querybuilder.methodparser.MethodParser;
-    uses net.sf.esfinge.querybuilder.methodparser.formater.FormaterFactory;
+    uses esfinge.querybuilder.core.Repository;
+    uses esfinge.querybuilder.core.methodparser.EntityClassProvider;
+    uses esfinge.querybuilder.core.executor.QueryExecutor;
+    uses esfinge.querybuilder.core.methodparser.conversor.FromStringConversor;
+    uses esfinge.querybuilder.core.methodparser.MethodParser;
+    uses esfinge.querybuilder.core.methodparser.formater.FormaterFactory;
 
-    provides net.sf.esfinge.querybuilder.methodparser.conversor.FromStringConversor with
-            net.sf.esfinge.querybuilder.methodparser.conversor.ToBooleanConversor,
-            net.sf.esfinge.querybuilder.methodparser.conversor.ToByteConversor,
-            net.sf.esfinge.querybuilder.methodparser.conversor.ToDoubleConversor,
-            net.sf.esfinge.querybuilder.methodparser.conversor.ToFloatConversor,
-            net.sf.esfinge.querybuilder.methodparser.conversor.ToIntConversor,
-            net.sf.esfinge.querybuilder.methodparser.conversor.ToLongConversor,
-            net.sf.esfinge.querybuilder.methodparser.conversor.ToShortConversor;
+    provides esfinge.querybuilder.core.methodparser.conversor.FromStringConversor with
+            esfinge.querybuilder.core.methodparser.conversor.ToBooleanConversor,
+            esfinge.querybuilder.core.methodparser.conversor.ToByteConversor,
+            esfinge.querybuilder.core.methodparser.conversor.ToDoubleConversor,
+            esfinge.querybuilder.core.methodparser.conversor.ToFloatConversor,
+            esfinge.querybuilder.core.methodparser.conversor.ToIntConversor,
+            esfinge.querybuilder.core.methodparser.conversor.ToLongConversor,
+            esfinge.querybuilder.core.methodparser.conversor.ToShortConversor;
 
-    provides net.sf.esfinge.querybuilder.methodparser.MethodParser with
-            net.sf.esfinge.querybuilder.methodparser.DSLMethodParser,
-            net.sf.esfinge.querybuilder.methodparser.QueryObjectMethodParser;
+    provides esfinge.querybuilder.core.methodparser.MethodParser with
+            esfinge.querybuilder.core.methodparser.DSLMethodParser,
+            esfinge.querybuilder.core.methodparser.QueryObjectMethodParser;
 
-    provides net.sf.esfinge.querybuilder.methodparser.formater.FormaterFactory with
-            net.sf.esfinge.querybuilder.methodparser.formater.RelationalFormaterFactory;
+    provides esfinge.querybuilder.core.methodparser.formater.FormaterFactory with
+            esfinge.querybuilder.core.methodparser.formater.RelationalFormaterFactory;
 
 }

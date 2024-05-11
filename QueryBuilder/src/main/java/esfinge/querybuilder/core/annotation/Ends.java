@@ -1,0 +1,14 @@
+package esfinge.querybuilder.core.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import esfinge.querybuilder.core.methodparser.ComparisonType;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.METHOD})
+@ComparisonOperator(ComparisonType.ENDS)
+public @interface Ends {
+
+}
