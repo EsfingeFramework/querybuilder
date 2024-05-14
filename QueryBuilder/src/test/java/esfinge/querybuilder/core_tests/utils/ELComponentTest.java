@@ -1,11 +1,11 @@
 package esfinge.querybuilder.core_tests.utils;
 
+import esfinge.querybuilder.core.utils.ELUtils;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import esfinge.querybuilder.core.utils.ELUtils;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 

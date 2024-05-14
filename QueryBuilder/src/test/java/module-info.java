@@ -1,6 +1,6 @@
 module querybuilder.core_tests {
     requires querybuilder.core;
-    requires junit.dep;
+    requires junit.dep; 
 
     exports esfinge.querybuilder.core_tests;
     exports esfinge.querybuilder.core_tests.methodparser;
