@@ -1,6 +1,5 @@
 module querybuilder.core {
     requires org.apache.tomcat.jasper.el;
-    requires jakarta.el;
     requires cglib;
 
     exports esfinge.querybuilder.core;

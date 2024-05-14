@@ -1,7 +1,7 @@
-module querybuilder.jpa1 {
+module querybuilder.jpa_one {
     requires org.apache.tomcat.jasper.el;
     requires java.persistence;
-    requires querybuilder.core;
+    requires transitive querybuilder.core;
 
     exports esfinge.querybuilder.jpa1;
 
