@@ -1,5 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.github.esfingeframework</groupId>
     <artifactId>querybuilder-jpa1</artifactId>
     <version>2.0.0-SNAPSHOT</version>
@@ -42,6 +43,12 @@
         <developerConnection>scm:git:ssh://github.com:EsfingeFramework/querybuilder.git</developerConnection>
         <url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_JPA1</url>
     </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -55,10 +62,6 @@
             </plugin>
         </plugins>
     </build>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -104,7 +107,7 @@
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
+            <artifactId>cglib-nodep</artifactId>
             <version>2.2.2</version>
             <scope>provided</scope>
             <exclusions>
@@ -158,8 +161,16 @@
             <build>
                 <resources>
                     <resource>
+                        <directory>src/main/java</directory>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
+                    </resource>
+                    <resource>
                         <directory>src/main/resources</directory>
-                        <filtering>true</filtering>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
                     </resource>
                 </resources>
                 <plugins>
@@ -268,8 +279,16 @@
             <build>
                 <resources>
                     <resource>
+                        <directory>src/main/java</directory>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
+                    </resource>
+                    <resource>
                         <directory>src/main/resources</directory>
-                        <filtering>true</filtering>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
                     </resource>
                 </resources>
                 <plugins>

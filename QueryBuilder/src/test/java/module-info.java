@@ -7,7 +7,7 @@ module querybuilder.core_tests {
     exports esfinge.querybuilder.core_tests.methodparser.conversor;
     exports esfinge.querybuilder.core_tests.utils;
 
-    opens esfinge.querybuilder.core_tests; 
+    opens esfinge.querybuilder.core_tests;
     opens esfinge.querybuilder.core_tests.methodparser;
     opens esfinge.querybuilder.core_tests.methodparser.conversor;
     opens esfinge.querybuilder.core_tests.utils;
