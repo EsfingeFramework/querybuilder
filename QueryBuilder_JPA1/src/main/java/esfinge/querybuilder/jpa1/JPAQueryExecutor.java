@@ -7,6 +7,7 @@ import esfinge.querybuilder.core.methodparser.QueryStyle;
 import esfinge.querybuilder.core.methodparser.QueryType;
 import esfinge.querybuilder.core.methodparser.QueryVisitor;
 import esfinge.querybuilder.core.methodparser.formater.ParameterFormater;
+import esfinge.querybuilder.core.utils.ImplementationName;
 import esfinge.querybuilder.core.utils.ReflectionUtils;
 import esfinge.querybuilder.core.utils.ServiceLocator;
 import java.util.HashMap;
@@ -15,9 +16,10 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+@ImplementationName("JPA1")
 public class JPAQueryExecutor implements QueryExecutor {
 
-    private static Map<QueryInfo, QueryRepresentation> cache = new HashMap<QueryInfo, QueryRepresentation>();
+    private static Map<QueryInfo, QueryRepresentation> cache = new HashMap<>();
 
     @Override
     public Object executeQuery(QueryInfo info, Object[] args) {
@@ -25,12 +27,12 @@ public class JPAQueryExecutor implements QueryExecutor {
         if (cache.containsKey(info)) {
             qr = cache.get(info);
         } else {
-            QueryVisitor visitor = JPAVisitorFactory.createQueryVisitor();
+            var visitor = JPAVisitorFactory.createQueryVisitor();
             info.visit(visitor);
             qr = visitor.getQueryRepresentation();
             cache.put(info, qr);
         }
-        Query q = createJPAQuery(info, args, qr);
+        var q = createJPAQuery(info, args, qr);
         if (info.getQueryType() == QueryType.RETRIEVE_SINGLE) {
             return q.getSingleResult();
         } else {
@@ -39,28 +41,28 @@ public class JPAQueryExecutor implements QueryExecutor {
     }
 
     private EntityManager getEntityManager() {
-        EntityManagerProvider emp = ServiceLocator.getServiceImplementation(EntityManagerProvider.class);
-        EntityManager em = emp.getEntityManager();
+        var emp = ServiceLocator.getServiceImplementation(EntityManagerProvider.class);
+        var em = emp.getEntityManager();
         return em;
     }
 
     protected Query createJPAQuery(QueryInfo info, Object[] args, QueryRepresentation qr) {
-        EntityManager em = getEntityManager();
-        String query = getQuery(info, args, qr);
-        Query q = em.createQuery(query);
-        List<ParameterFormater> formatters = info.getCondition().getParameterFormatters();
-        int formatterIndex = 0;
-        for (String fixParam : qr.getFixParameters()) {
+        var em = getEntityManager();
+        var query = getQuery(info, args, qr);
+        var q = em.createQuery(query);
+        var formatters = info.getCondition().getParameterFormatters();
+        var formatterIndex = 0;
+        for (var fixParam : qr.getFixParameters()) {
             q.setParameter(fixParam, formatters.get(formatterIndex).formatParameter(qr.getFixParameterValue(fixParam)));
             formatterIndex++;
         }
         if (args != null) {
-            List<String> namedParameters = info.getNamedParemeters();
+            var namedParameters = info.getNamedParemeters();
 
             Integer number = null;
-            Integer size = info.getPageSize();
+            var size = info.getPageSize();
 
-            for (int index = 0; index < args.length; index++) {
+            for (var index = 0; index < args.length; index++) {
                 if (index == info.getPageNumberParameterIndex()) {
                     number = (Integer) args[index];
                 } else if (index == info.getPageSizeParameterIndex()) {
@@ -72,10 +74,10 @@ public class JPAQueryExecutor implements QueryExecutor {
 
                     formatterIndex++;
                 } else if (info.getQueryStyle() == QueryStyle.QUERY_OBJECT) {
-                    Map<String, Object> paramMap = ReflectionUtils.toParameterMap(args[index]);
-                    for (int i = 0; i < namedParameters.size(); i++) {
-                        String param = namedParameters.get(i);
-                        Object value = paramMap.get(param);
+                    var paramMap = ReflectionUtils.toParameterMap(args[index]);
+                    for (var i = 0; i < namedParameters.size(); i++) {
+                        var param = namedParameters.get(i);
+                        var value = paramMap.get(param);
                         if (value != null) {
                             q.setParameter(param, formatters.get(formatterIndex).formatParameter(value));
                         }
@@ -98,10 +100,10 @@ public class JPAQueryExecutor implements QueryExecutor {
         if (!qr.isDynamic()) {
             return qr.getQuery().toString();
         } else {
-            Map<String, Object> params = new HashMap<String, Object>();
-            List<String> namedParameters = info.getNamedParemeters();
+            Map<String, Object> params = new HashMap<>();
+            var namedParameters = info.getNamedParemeters();
             if (info.getQueryStyle() == QueryStyle.METHOD_SIGNATURE) {
-                for (int i = 0; i < args.length; i++) {
+                for (var i = 0; i < args.length; i++) {
                     if (args[i] != null) {
                         params.put(namedParameters.get(i), args[i]);
                     } else {
@@ -109,10 +111,10 @@ public class JPAQueryExecutor implements QueryExecutor {
                     }
                 }
             } else if (info.getQueryStyle() == QueryStyle.QUERY_OBJECT) {
-                Map<String, Object> paramMap = ReflectionUtils.toParameterMap(args[0]);
-                for (int i = 0; i < namedParameters.size(); i++) {
-                    String param = namedParameters.get(i);
-                    Object value = paramMap.get(param);
+                var paramMap = ReflectionUtils.toParameterMap(args[0]);
+                for (var i = 0; i < namedParameters.size(); i++) {
+                    var param = namedParameters.get(i);
+                    var value = paramMap.get(param);
                     if (value != null) {
                         params.put(param, value);
                     } else {

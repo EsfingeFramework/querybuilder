@@ -1,11 +1,7 @@
 package esfinge.querybuilder.core;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.HashMap;
-import java.util.Map;
+import esfinge.querybuilder.core.annotation.DatabaseAccess;
+import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.EntityClassProvider;
 import esfinge.querybuilder.core.methodparser.MethodParser;
@@ -13,12 +9,18 @@ import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.SelectorMethodParser;
 import esfinge.querybuilder.core.utils.ReflectionUtils;
 import esfinge.querybuilder.core.utils.ServiceLocator;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 
 public class QueryBuilder implements InvocationHandler {
 
     //Static Part
     private static MethodParser configuredMethodParser;
-    private static QueryExecutor configuredQueryExecutor;
+    private static Map<String, QueryExecutor> configuredQueryExecutors;
 
     private static final Map<Class, Object> cachedProxies = new HashMap<>();
     private static final Map<Method, QueryInfo> queryInfoCache = new HashMap<>();
@@ -41,24 +43,35 @@ public class QueryBuilder implements InvocationHandler {
         configuredMethodParser = mp;
     }
 
-    public static QueryExecutor getConfiguredQueryExecutor() {
-        if (configuredQueryExecutor == null) {
-            configuredQueryExecutor = ServiceLocator.getServiceImplementation(QueryExecutor.class);
+    public static QueryExecutor getConfiguredQueryExecutor(String implementationName) {
+        if (configuredQueryExecutors == null) {
+            configuredQueryExecutors = ServiceLocator.getServiceImplementationMap(QueryExecutor.class);
         }
-        return configuredQueryExecutor;
+        return configuredQueryExecutors.get(implementationName);
     }
 
-    public static void configureQueryExecutor(QueryExecutor qe) {
-        configuredQueryExecutor = qe;
+    public static void configureQueryExecutors(Map<String, QueryExecutor> qes) {
+        configuredQueryExecutors = qes;
     }
 
     public static <E> E create(Class<E> interf) {
         if (cachedProxies.containsKey(interf)) {
             return (E) cachedProxies.get(interf);
         }
+
+        var implementationName = "JPA1";
+        var targetEntity = TargetEntity.class;
+        var databaseAccess = DatabaseAccess.class;
+        if (interf.isAnnotationPresent(targetEntity)) {
+            var entityClass = interf.getAnnotation(targetEntity).value();
+            if (entityClass != null && entityClass.isAnnotationPresent(databaseAccess)) {
+                implementationName = entityClass.getAnnotation(databaseAccess).value();
+            }
+        }
+
         var qb = new QueryBuilder();
         qb.setMethodParser(getConfiguredMethodParser(interf));
-        qb.setQueryExecutor(getConfiguredQueryExecutor());
+        qb.setQueryExecutor(getConfiguredQueryExecutor(implementationName));
 
         for (Class superinterf : interf.getInterfaces()) {
             var impl = ServiceLocator.getServiceImplementation(superinterf);
@@ -98,8 +111,7 @@ public class QueryBuilder implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object obj, Method m, Object[] args)
-            throws Throwable {
+    public Object invoke(Object obj, Method m, Object[] args) throws Throwable {
         for (var superinterf : implementedInterfaces.keySet()) {
             try {
                 var customMethod = superinterf.getMethod(m.getName(), m.getParameterTypes());

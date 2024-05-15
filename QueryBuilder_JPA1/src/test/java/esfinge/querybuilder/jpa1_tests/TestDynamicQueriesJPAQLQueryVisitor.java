@@ -19,10 +19,10 @@ public class TestDynamicQueriesJPAQLQueryVisitor extends GenericTestJPAQLQueryVi
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.NONE);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
+        var qr = visitor.getQueryRepresentation();
 
         assertFalse("Query should not be dynamic", qr.isDynamic());
-        String query = qr.getQuery().toString();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.name = :nameEquals");
     }
 
@@ -31,19 +31,19 @@ public class TestDynamicQueriesJPAQLQueryVisitor extends GenericTestJPAQLQueryVi
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
+        var qr = visitor.getQueryRepresentation();
 
         assertTrue("Query should be dynamic", qr.isDynamic());
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("nameEquals", null);
 
-        String query1 = qr.getQuery(params).toString();
+        var query1 = qr.getQuery(params).toString();
         assertEquals(query1, "SELECT o FROM Person o");
 
         params.put("nameEquals", "James");
 
-        String query2 = qr.getQuery(params).toString();
+        var query2 = qr.getQuery(params).toString();
         assertEquals(query2, "SELECT o FROM Person o WHERE o.name = :nameEquals");
     }
 
@@ -52,19 +52,19 @@ public class TestDynamicQueriesJPAQLQueryVisitor extends GenericTestJPAQLQueryVi
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
+        var qr = visitor.getQueryRepresentation();
 
         assertTrue("Query should be dynamic", qr.isDynamic());
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("nameEquals", null);
 
-        String query1 = qr.getQuery(params).toString();
+        var query1 = qr.getQuery(params).toString();
         assertEquals(query1, "SELECT o FROM Person o WHERE o.name IS NULL");
 
         params.put("nameEquals", "James");
 
-        String query2 = qr.getQuery(params).toString();
+        var query2 = qr.getQuery(params).toString();
         assertEquals(query2, "SELECT o FROM Person o WHERE o.name = :nameEquals");
     }
 
@@ -75,28 +75,28 @@ public class TestDynamicQueriesJPAQLQueryVisitor extends GenericTestJPAQLQueryVi
         visitor.visitConector("and");
         visitor.visitCondition("lastName", ComparisonType.EQUALS, NullOption.COMPARE_TO_NULL);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
+        var qr = visitor.getQueryRepresentation();
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("nameEquals", null);
         params.put("lastNameEquals", null);
 
-        String query1 = qr.getQuery(params).toString();
+        var query1 = qr.getQuery(params).toString();
         assertEquals(query1, "SELECT o FROM Person o WHERE o.name IS NULL and o.lastName IS NULL");
 
         params.put("nameEquals", "James");
 
-        String query2 = qr.getQuery(params).toString();
+        var query2 = qr.getQuery(params).toString();
         assertEquals(query2, "SELECT o FROM Person o WHERE o.name = :nameEquals and o.lastName IS NULL");
 
         params.put("lastNameEquals", "McLoud");
 
-        String query3 = qr.getQuery(params).toString();
+        var query3 = qr.getQuery(params).toString();
         assertEquals(query3, "SELECT o FROM Person o WHERE o.name = :nameEquals and o.lastName = :lastNameEquals");
 
         params.put("nameEquals", null);
 
-        String query4 = qr.getQuery(params).toString();
+        var query4 = qr.getQuery(params).toString();
         assertEquals(query4, "SELECT o FROM Person o WHERE o.name IS NULL and o.lastName = :lastNameEquals");
     }
 
@@ -107,28 +107,28 @@ public class TestDynamicQueriesJPAQLQueryVisitor extends GenericTestJPAQLQueryVi
         visitor.visitConector("and");
         visitor.visitCondition("lastName", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
+        var qr = visitor.getQueryRepresentation();
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("nameEquals", null);
         params.put("lastNameEquals", null);
 
-        String query1 = qr.getQuery(params).toString();
+        var query1 = qr.getQuery(params).toString();
         assertEquals(query1, "SELECT o FROM Person o");
 
         params.put("nameEquals", "James");
 
-        String query2 = qr.getQuery(params).toString();
+        var query2 = qr.getQuery(params).toString();
         assertEquals(query2, "SELECT o FROM Person o WHERE o.name = :nameEquals");
 
         params.put("lastNameEquals", "McLoud");
 
-        String query3 = qr.getQuery(params).toString();
+        var query3 = qr.getQuery(params).toString();
         assertEquals(query3, "SELECT o FROM Person o WHERE o.name = :nameEquals and o.lastName = :lastNameEquals");
 
         params.put("nameEquals", null);
 
-        String query4 = qr.getQuery(params).toString();
+        var query4 = qr.getQuery(params).toString();
         assertEquals(query4, "SELECT o FROM Person o WHERE o.lastName = :lastNameEquals");
     }
 
@@ -141,29 +141,29 @@ public class TestDynamicQueriesJPAQLQueryVisitor extends GenericTestJPAQLQueryVi
         visitor.visitConector("and");
         visitor.visitCondition("lastName", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
+        var qr = visitor.getQueryRepresentation();
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("nameEquals", null);
         params.put("ageGreaterOrEquals", 18);
         params.put("lastNameEquals", null);
 
-        String query1 = qr.getQuery(params).toString();
+        var query1 = qr.getQuery(params).toString();
         assertEquals(query1, "SELECT o FROM Person o WHERE o.age >= :ageGreaterOrEquals");
 
         params.put("nameEquals", "James");
 
-        String query2 = qr.getQuery(params).toString();
+        var query2 = qr.getQuery(params).toString();
         assertEquals(query2, "SELECT o FROM Person o WHERE o.name = :nameEquals and o.age >= :ageGreaterOrEquals");
 
         params.put("lastNameEquals", "McLoud");
 
-        String query3 = qr.getQuery(params).toString();
+        var query3 = qr.getQuery(params).toString();
         assertEquals(query3, "SELECT o FROM Person o WHERE o.name = :nameEquals and o.age >= :ageGreaterOrEquals and o.lastName = :lastNameEquals");
 
         params.put("nameEquals", null);
 
-        String query4 = qr.getQuery(params).toString();
+        var query4 = qr.getQuery(params).toString();
         assertEquals(query4, "SELECT o FROM Person o WHERE o.age >= :ageGreaterOrEquals and o.lastName = :lastNameEquals");
     }
 
@@ -176,29 +176,29 @@ public class TestDynamicQueriesJPAQLQueryVisitor extends GenericTestJPAQLQueryVi
         visitor.visitConector("and");
         visitor.visitCondition("lastName", ComparisonType.EQUALS, NullOption.IGNORE_WHEN_NULL);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
+        var qr = visitor.getQueryRepresentation();
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("nameEquals", null);
         params.put("ageGreaterOrEquals", null);
         params.put("lastNameEquals", null);
 
-        String query1 = qr.getQuery(params).toString();
+        var query1 = qr.getQuery(params).toString();
         assertEquals(query1, "SELECT o FROM Person o");
 
         params.put("lastNameEquals", "McLoud");
 
-        String query2 = qr.getQuery(params).toString();
+        var query2 = qr.getQuery(params).toString();
         assertEquals(query2, "SELECT o FROM Person o WHERE o.lastName = :lastNameEquals");
 
         params.put("ageGreaterOrEquals", 18);
 
-        String query3 = qr.getQuery(params).toString();
+        var query3 = qr.getQuery(params).toString();
         assertEquals(query3, "SELECT o FROM Person o WHERE o.age >= :ageGreaterOrEquals and o.lastName = :lastNameEquals");
 
         params.put("nameEquals", "James");
 
-        String query4 = qr.getQuery(params).toString();
+        var query4 = qr.getQuery(params).toString();
         assertEquals(query4, "SELECT o FROM Person o WHERE o.name = :nameEquals and o.age >= :ageGreaterOrEquals and o.lastName = :lastNameEquals");
     }
 

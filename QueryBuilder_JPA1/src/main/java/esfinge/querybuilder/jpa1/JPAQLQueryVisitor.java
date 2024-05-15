@@ -31,7 +31,7 @@ public class JPAQLQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String propertyName, ComparisonType op) {
-        ConditionDescription cond = new ConditionDescription(propertyName, op);
+        var cond = new ConditionDescription(propertyName, op);
         conditions.add(cond);
     }
 
@@ -46,14 +46,14 @@ public class JPAQLQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String propertyName, ComparisonType operator, Object fixedValue) {
-        ConditionDescription cond = new ConditionDescription(propertyName, operator);
+        var cond = new ConditionDescription(propertyName, operator);
         cond.setFixedValue(fixedValue);
         conditions.add(cond);
     }
 
     @Override
     public void visitOrderBy(String property, OrderingDirection dir) {
-        QueryOrder qo = new QueryOrder(property, dir);
+        var qo = new QueryOrder(property, dir);
         order.add(qo);
     }
 
@@ -69,14 +69,14 @@ public class JPAQLQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitCondition(String propertyName, ComparisonType op, NullOption nullOption) {
-        ConditionDescription cond = new ConditionDescription(propertyName, op);
+        var cond = new ConditionDescription(propertyName, op);
         cond.setNullOption(nullOption);
         conditions.add(cond);
     }
 
     @Override
     public boolean isDynamic() {
-        for (ConditionDescription cond : conditions) {
+        for (var cond : conditions) {
             if (cond.getNullOption() != NullOption.NONE) {
                 return true;
             }
@@ -91,7 +91,7 @@ public class JPAQLQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitEnd() {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("SELECT o FROM ").append(entity).append(" o");
         addWhere(sb);
         addConditions(sb);
@@ -101,10 +101,10 @@ public class JPAQLQueryVisitor implements QueryVisitor {
     }
 
     protected void addConditions(StringBuilder sb) {
-        boolean hasOnlyIgnorableBefore = true;
+        var hasOnlyIgnorableBefore = true;
         List<String> previousIgnorableParams = new ArrayList<>();
-        for (int i = 0; i < conditions.size(); i++) {
-            ConditionDescription cond = conditions.get(i);
+        for (var i = 0; i < conditions.size(); i++) {
+            var cond = conditions.get(i);
             if (i != 0) {
                 addConector(sb, hasOnlyIgnorableBefore, previousIgnorableParams, i, cond);
             }
@@ -119,7 +119,7 @@ public class JPAQLQueryVisitor implements QueryVisitor {
     }
 
     protected void addOrderBy(StringBuilder sb) {
-        for (int i = 0; i < order.size(); i++) {
+        for (var i = 0; i < order.size(); i++) {
             if (i == 0) {
                 sb.append(" ORDER BY");
             } else {
@@ -136,7 +136,7 @@ public class JPAQLQueryVisitor implements QueryVisitor {
         if (hasOnlyIgnorableBefore || cond.getNullOption() == NullOption.IGNORE_WHEN_NULL) {
             sb.append("#{((");
             if (hasOnlyIgnorableBefore) {
-                for (int j = 0; j < previousIgnorableParams.size(); j++) {
+                for (var j = 0; j < previousIgnorableParams.size(); j++) {
                     if (j != 0) {
                         sb.append(" &&");
                     }
@@ -165,7 +165,7 @@ public class JPAQLQueryVisitor implements QueryVisitor {
     }
 
     private boolean hasOneNoIgnorableProperty() {
-        for (ConditionDescription cond : conditions) {
+        for (var cond : conditions) {
             if (cond.getNullOption() != NullOption.IGNORE_WHEN_NULL) {
                 return true;
             }
@@ -175,7 +175,7 @@ public class JPAQLQueryVisitor implements QueryVisitor {
 
     private Map<String, Object> getFixParameterMap() {
         Map<String, Object> fixParameters = new HashMap<>();
-        for (ConditionDescription cond : conditions) {
+        for (var cond : conditions) {
             if (cond.getFixedValue() != null) {
                 fixParameters.put(cond.getParamName(), cond.getFixedValue());
             }
@@ -185,7 +185,7 @@ public class JPAQLQueryVisitor implements QueryVisitor {
 
     @Override
     public QueryRepresentation getQueryRepresentation() {
-        JPAQueryRepresentation qr = new JPAQueryRepresentation(getQuery(), isDynamic(), getFixParameterMap());
+        var qr = new JPAQueryRepresentation(getQuery(), isDynamic(), getFixParameterMap());
         return qr;
     }
 

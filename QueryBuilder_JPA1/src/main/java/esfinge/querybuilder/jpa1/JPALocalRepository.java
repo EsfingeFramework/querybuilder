@@ -8,7 +8,7 @@ public class JPALocalRepository<E> extends JPARepository<E> {
     @Override
     public E save(E obj) {
         em.getTransaction().begin();
-        E saved = super.save(obj);
+        var saved = super.save(obj);
         em.getTransaction().commit();
         return saved;
     }

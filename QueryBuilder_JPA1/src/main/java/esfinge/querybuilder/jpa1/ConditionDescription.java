@@ -49,7 +49,7 @@ public class ConditionDescription {
     }
 
     public String getConditionString() {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         if (nullOption != NullOption.NONE) {
             sb.append("#{(").append(paramName).append(" != null)? '");
         }

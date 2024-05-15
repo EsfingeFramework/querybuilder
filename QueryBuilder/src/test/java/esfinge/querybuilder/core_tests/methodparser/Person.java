@@ -1,5 +1,8 @@
 package esfinge.querybuilder.core_tests.methodparser;
 
+import esfinge.querybuilder.core.annotation.DatabaseAccess;
+
+@DatabaseAccess("Dummy")
 public class Person {
 
     private String name;

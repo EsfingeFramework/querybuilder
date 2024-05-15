@@ -16,9 +16,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
     public void singleEntity() {
         visitor.visitEntity("Person");
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o");
     }
 
@@ -27,9 +26,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.name = :nameEquals");
     }
 
@@ -59,9 +57,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitConector("and");
         visitor.visitCondition("lastName", ComparisonType.EQUALS);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.name = :nameEquals and o.lastName = :lastNameEquals");
     }
 
@@ -70,9 +67,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitEntity("Person");
         visitor.visitCondition("address.city", ComparisonType.EQUALS);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.address.city = :addressCityEquals");
     }
 
@@ -85,9 +81,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitConector("and");
         visitor.visitCondition("address.city", ComparisonType.EQUALS);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.name = :nameEquals or o.lastName = :lastNameEquals and o.address.city = :addressCityEquals");
     }
 
@@ -135,9 +130,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visit.visitEntity("Person");
         visit.visitCondition(property, cp);
         visit.visitEnd();
-        QueryRepresentation qr = visit.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visit.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE " + comparison);
     }
 
@@ -146,9 +140,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitEntity("Person");
         visitor.visitCondition("name", ComparisonType.EQUALS, "Maria");
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.name = :nameEquals");
         assertEquals(qr.getFixParameterValue("nameEquals"), "Maria");
         assertTrue(qr.getFixParameters().contains("nameEquals"));
@@ -161,9 +154,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitConector("and");
         visitor.visitCondition("age", ComparisonType.GREATER);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.name = :nameEquals and o.age > :ageGreater");
         assertEquals(qr.getFixParameterValue("nameEquals"), "Maria");
         assertTrue(qr.getFixParameters().contains("nameEquals"));
@@ -176,9 +168,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitConector("and");
         visitor.visitCondition("age", ComparisonType.GREATER);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.address.state = :addressStateEquals and o.age > :ageGreater");
         assertEquals(qr.getFixParameterValue("addressStateEquals"), "SP");
         assertTrue(qr.getFixParameters().contains("addressStateEquals"));
@@ -189,9 +180,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitEntity("Person");
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o ORDER BY o.age ASC");
     }
 
@@ -239,9 +229,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitOrderBy("name", OrderingDirection.DESC);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o ORDER BY o.age ASC, o.name DESC");
     }
 
@@ -254,9 +243,8 @@ public class TestJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitOrderBy("name", OrderingDirection.DESC);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals(query, "SELECT o FROM Person o WHERE o.address.state = :addressStateEquals and o.age > :ageGreater ORDER BY o.age ASC, o.name DESC");
     }
 

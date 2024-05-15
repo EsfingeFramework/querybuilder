@@ -24,21 +24,21 @@ public class TestJPADAOUtils {
     @Test
     public void testIsGetter() throws Exception {
         clazz = mockClass.createClass();
-        Method m = clazz.getMethod("getProp");
+        var m = clazz.getMethod("getProp");
         assertTrue(JPADAOUtils.isGetter(m));
     }
 
     @Test
     public void testIsNotGetter() throws Exception {
         clazz = mockClass.createClass();
-        Method m = clazz.getMethod("setProp", String.class);
+        var m = clazz.getMethod("setProp", String.class);
         assertFalse(JPADAOUtils.isGetter(m));
     }
 
     @Test
     public void testIsNotTransientGetter() throws Exception {
         clazz = mockClass.createClass();
-        Method m = clazz.getMethod("getProp");
+        var m = clazz.getMethod("getProp");
         assertTrue(JPADAOUtils.isGetterWhichIsNotTransient(m, clazz));
     }
 
@@ -46,7 +46,7 @@ public class TestJPADAOUtils {
     public void testIsTransientGetterWithGetterAnnotation() throws Exception {
         mockClass.addAnnotation("prop", Transient.class, Location.GETTER);
         clazz = mockClass.createClass();
-        Method m = clazz.getMethod("getProp");
+        var m = clazz.getMethod("getProp");
         assertFalse(JPADAOUtils.isGetterWhichIsNotTransient(m, clazz));
     }
 
@@ -54,7 +54,7 @@ public class TestJPADAOUtils {
     public void testIsTransientGetterWithFieldAnnotation() throws Exception {
         mockClass.addAnnotation("prop", Transient.class, Location.FIELD);
         clazz = mockClass.createClass();
-        Method m = clazz.getMethod("getProp");
+        var m = clazz.getMethod("getProp");
         assertFalse(JPADAOUtils.isGetterWhichIsNotTransient(m, clazz));
     }
 

@@ -1,13 +1,13 @@
 package esfinge.querybuilder.core.utils;
 
+import esfinge.querybuilder.core.annotation.ClassBasedService;
+import esfinge.querybuilder.core.annotation.ServicePriority;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
-import esfinge.querybuilder.core.annotation.ClassBasedService;
-import esfinge.querybuilder.core.annotation.ServicePriority;
 
 public class ServiceLocator {
 
@@ -40,6 +40,18 @@ public class ServiceLocator {
         return list;
     }
 
+    public static <E> Map<String, E> getServiceImplementationMap(Class<E> interf) {
+        var loader = ServiceLoader.load(interf);
+        var it = loader.iterator();
+        Map<String, E> map = new HashMap<>();
+        while (it.hasNext()) {
+            var implementation = it.next();
+            var implementationName = implementation.getClass().getAnnotation(ImplementationName.class).value();
+            map.put(implementationName, implementation);
+        }
+        return map;
+    }
+
     public static int getObjectPriority(Object obj) {
         if (!obj.getClass().isAnnotationPresent(ServicePriority.class)) {
             return 0;
@@ -57,24 +69,12 @@ public class ServiceLocator {
         }
     }
 
-//    private static <E> boolean isRelatedWithClass(Class<?> related, E obj) {
-//        if (!obj.getClass().isAnnotationPresent(ClassBasedService.class)) {
-//            return false;
-//        }
-//        for (Class<?> clazz : obj.getClass()
-//                .getAnnotation(ClassBasedService.class).value()) {
-//            if (clazz == related) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
     private static <E> void loadClasses(Class<E> interf) {
         synchronized (classRelatedServices) {
             Map<Class, Object> map = new HashMap<>();
             classRelatedServices.put(interf, map);
             var loader = ServiceLoader.load(interf);
-            for (E obj : loader) {
+            for (var obj : loader) {
                 if (obj.getClass().isAnnotationPresent(ClassBasedService.class)) {
                     for (Class<?> clazz : obj.getClass()
                             .getAnnotation(ClassBasedService.class).value()) {

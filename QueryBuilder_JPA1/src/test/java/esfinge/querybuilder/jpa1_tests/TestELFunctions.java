@@ -10,7 +10,7 @@ public class TestELFunctions {
 
     @Test
     public void mapWithNoValuesNull() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("value1", "1");
         map.put("value2", 2);
         map.put("value3", 2.32);
@@ -20,7 +20,7 @@ public class TestELFunctions {
 
     @Test
     public void mapWithOneValueNull() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("value1", "1");
         map.put("value2", null);
         map.put("value3", 2.32);
@@ -30,7 +30,7 @@ public class TestELFunctions {
 
     @Test
     public void mapWithAllValuesNull() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("value1", null);
         map.put("value2", null);
         map.put("value3", null);

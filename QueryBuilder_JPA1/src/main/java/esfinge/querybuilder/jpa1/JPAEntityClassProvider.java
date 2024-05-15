@@ -9,10 +9,10 @@ public class JPAEntityClassProvider implements EntityClassProvider {
 
     @Override
     public Class<?> getEntityClass(String name) {
-        EntityManagerProvider emp = ServiceLocator.getServiceImplementation(EntityManagerProvider.class);
-        EntityManagerFactory emf = emp.getEntityManagerFactory();
+        var emp = ServiceLocator.getServiceImplementation(EntityManagerProvider.class);
+        var emf = emp.getEntityManagerFactory();
         for (EntityType et : emf.getMetamodel().getEntities()) {
-            String entityName = et.getName().substring(et.getName().lastIndexOf(".") + 1);
+            var entityName = et.getName().substring(et.getName().lastIndexOf(".") + 1);
             if (entityName.equalsIgnoreCase(name)) {
                 return et.getJavaType();
             }

@@ -34,16 +34,15 @@ public class JPAQueryRepresentation implements QueryRepresentation {
     @Override
     public Object getQuery(Map<String, Object> params) {
         Map<String, Method> funcMap = new HashMap<>();
-        for (Method m : ELFunctions.class.getMethods()) {
+        for (var m : ELFunctions.class.getMethods()) {
             funcMap.put(m.getName(), m);
         }
         Map<String, Object> propMap = new HashMap<>();
         propMap.put("map", params);
-        for (String key : params.keySet()) {
+        for (var key : params.keySet()) {
             propMap.put(key, params.get(key));
         }
-
-        EvaluationContext ctx = ELUtils.buildEvaluationContext(funcMap, propMap);
+        var ctx = ELUtils.buildEvaluationContext(funcMap, propMap);
 
         return ELUtils.evaluateExpression(ctx, getQuery().toString());
     }

@@ -16,25 +16,25 @@ public class JPARepository<E> implements Repository<E> {
     protected Class<E> clazz;
 
     public JPARepository() {
-        EntityManagerProvider emp = ServiceLocator.getServiceImplementation(EntityManagerProvider.class);
+        var emp = ServiceLocator.getServiceImplementation(EntityManagerProvider.class);
         em = emp.getEntityManager();
     }
 
     @Override
     public E save(E obj) {
-        E saved = em.merge(obj);
+        var saved = em.merge(obj);
         return saved;
     }
 
     @Override
     public void delete(Object id) {
-        E e = em.find(clazz, id);
+        var e = em.find(clazz, id);
         em.remove(e);
     }
 
     @Override
     public List<E> list() {
-        Query q = em.createQuery("select o from " + clazz.getSimpleName() + " o");
+        var q = em.createQuery("select o from " + clazz.getSimpleName() + " o");
         return q.getResultList();
     }
 
@@ -50,18 +50,18 @@ public class JPARepository<E> implements Repository<E> {
 
     @Override
     public List<E> queryByExample(E obj) {
-        Class<?> clazz = obj.getClass();
-        StringBuilder query = new StringBuilder("select o from "
+        var clazz = obj.getClass();
+        var query = new StringBuilder("select o from "
                 + clazz.getSimpleName() + " o where ");
-        Map<String, Object> params = new HashMap<String, Object>();
-        boolean first = true;
+        Map<String, Object> params = new HashMap<>();
+        var first = true;
         try {
-            for (Method m : clazz.getMethods()) {
+            for (var m : clazz.getMethods()) {
                 if (!m.getName().equals("getClass")
                         && JPADAOUtils.isGetterWhichIsNotTransient(m, clazz)) {
-                    Object value = m.invoke(obj);
+                    var value = m.invoke(obj);
                     if (value != null && !value.toString().trim().equals("")) {
-                        String prop = m.getName().substring(3, 4).toLowerCase()
+                        var prop = m.getName().substring(3, 4).toLowerCase()
                                 + m.getName().substring(4);
                         params.put(prop, value);
                         if (first) {
@@ -78,8 +78,8 @@ public class JPARepository<E> implements Repository<E> {
             throw new InvalidPropertyException("Error building query", e);
         }
 
-        Query q = em.createQuery(query.toString().toString());
-        for (String prop : params.keySet()) {
+        var q = em.createQuery(query.toString().toString());
+        for (var prop : params.keySet()) {
             q.setParameter(prop, params.get(prop));
         }
         return q.getResultList();
