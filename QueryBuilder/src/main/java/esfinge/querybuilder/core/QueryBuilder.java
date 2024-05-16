@@ -59,7 +59,14 @@ public class QueryBuilder implements InvocationHandler {
             return (E) cachedProxies.get(interf);
         }
 
+        /*Atividades:
+        - Corrigir problema de não identificação de classe no parâmetro da anotação carregada pelo virtuallab (Ex.: Temperatura.class)
+        - Corrigir problema do módulo mongodb para executar testes JPMS
+        - Instalar MongoDB para testes*/
+        //
+        //TODO: teste setando JPA1 para virtuallab (erro de leitura da classe na anotação
         var implementationName = "JPA1";
+
         var targetEntity = TargetEntity.class;
         var databaseAccess = DatabaseAccess.class;
         if (interf.isAnnotationPresent(targetEntity)) {

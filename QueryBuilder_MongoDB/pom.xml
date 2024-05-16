@@ -153,6 +153,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
+                    <skipTests>true</skipTests>
                     <argLine>
                         -Dfile.encoding=UTF-8
                         --add-opens java.base/java.lang=cglib
