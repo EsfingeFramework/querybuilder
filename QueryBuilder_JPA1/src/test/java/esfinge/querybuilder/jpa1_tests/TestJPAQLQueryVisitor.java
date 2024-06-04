@@ -3,7 +3,6 @@ package esfinge.querybuilder.jpa1_tests;
 import esfinge.querybuilder.core.exception.InvalidQuerySequenceException;
 import esfinge.querybuilder.core.methodparser.ComparisonType;
 import esfinge.querybuilder.core.methodparser.OrderingDirection;
-import esfinge.querybuilder.core.methodparser.QueryRepresentation;
 import esfinge.querybuilder.core.methodparser.QueryVisitor;
 import esfinge.querybuilder.jpa1.JPAQLQueryVisitor;
 import static org.junit.Assert.assertEquals;

@@ -5,15 +5,15 @@ import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.QueryRepresentation;
 import esfinge.querybuilder.core.methodparser.QueryStyle;
 import esfinge.querybuilder.core.methodparser.QueryType;
-import esfinge.querybuilder.core.utils.ImplementationName;
 import esfinge.querybuilder.core.utils.ReflectionUtils;
 import esfinge.querybuilder.core.utils.ServiceLocator;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import esfinge.querybuilder.core.annotation.QueryExecutorType;
 
-@ImplementationName("JPA1")
+@QueryExecutorType("JPA1")
 public class JPAQueryExecutor implements QueryExecutor {
 
     private static final Map<QueryInfo, QueryRepresentation> cache = new HashMap<>();

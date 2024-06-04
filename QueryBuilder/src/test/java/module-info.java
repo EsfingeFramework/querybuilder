@@ -1,6 +1,6 @@
 module querybuilder.core_tests {
     requires querybuilder.core;
-    requires junit.dep;
+    requires junit.dep; 
 
     exports esfinge.querybuilder.core_tests;
     exports esfinge.querybuilder.core_tests.methodparser;
@@ -20,9 +20,6 @@ module querybuilder.core_tests {
 
     provides esfinge.querybuilder.core.executor.QueryExecutor with
             esfinge.querybuilder.core_tests.DummyQueryExecutor;
-
-    provides esfinge.querybuilder.core.methodparser.EntityClassProvider with
-            esfinge.querybuilder.core_tests.DummyEntityClassProvider;
 
     provides esfinge.querybuilder.core_tests.utils.InterfacePriority with
             esfinge.querybuilder.core_tests.utils.LowPriority,

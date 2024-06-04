@@ -3,9 +3,8 @@ package esfinge.querybuilder.jpa1_tests;
 import esfinge.querybuilder.core.Repository;
 import esfinge.querybuilder.core.annotation.Greater;
 import esfinge.querybuilder.core.annotation.Starts;
-import java.util.List;
-
 import esfinge.querybuilder.jpa1_tests.resources.Person;
+import java.util.List;
 
 public interface TestQuery extends Repository<Person> {
 

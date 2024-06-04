@@ -1,12 +1,10 @@
 package esfinge.querybuilder.core.methodparser;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.List;
 import esfinge.querybuilder.core.annotation.DomainTerm;
 import esfinge.querybuilder.core.annotation.InvariablePageSize;
 import esfinge.querybuilder.core.annotation.PageNumber;
+import esfinge.querybuilder.core.annotation.PersistenceType;
+import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.annotation.VariablePageSize;
 import esfinge.querybuilder.core.exception.EntityClassNotFoundException;
 import esfinge.querybuilder.core.exception.InvalidPaginationAnnotationSchemeException;
@@ -16,17 +14,14 @@ import esfinge.querybuilder.core.methodparser.conditions.SimpleDefinedCondition;
 import esfinge.querybuilder.core.methodparser.conversor.ConversorFactory;
 import esfinge.querybuilder.core.utils.ReflectionUtils;
 import esfinge.querybuilder.core.utils.StringUtils;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.List;
 
 public abstract class BasicMethodParser implements MethodParser {
 
-    protected EntityClassProvider classProvider;
-    //private final List<DomainTerm> terms = new ArrayList<>();
     protected TermLibrary termLib;
-
-    @Override
-    public void setEntityClassProvider(EntityClassProvider classProvider) {
-        this.classProvider = classProvider;
-    }
 
     protected String getEntityName(List<String> words, IndexCounter index) {
         var entityNameBuilder = new StringBuilder();
@@ -75,11 +70,11 @@ public abstract class BasicMethodParser implements MethodParser {
         var qi = new QueryInfo();
         qi.setQueryType(m);
         qi.setEntityName(getEntityName(words, index));
-        var entityClass = classProvider.getEntityClass(qi.getEntityName());
-        if (entityClass == null) {
+        var targetEntity = m.getDeclaringClass().getAnnotation(TargetEntity.class);
+        if (targetEntity == null || targetEntity.value() == null) {
             throw new EntityClassNotFoundException("Entity class " + qi.getEntityName() + " not found.");
         }
-        qi.setEntityType(entityClass);
+        qi.setEntityType(targetEntity.value());
         readDomainTerms(qi, words, index);
         return qi;
     }
@@ -111,10 +106,22 @@ public abstract class BasicMethodParser implements MethodParser {
         if (!words.get(0).equals("get")) {
             return false;
         }
-        var index = new IndexCounter();
-        var name = getEntityName(words, index);
-        Class c = classProvider.getEntityClass(name);
-        return c != null;
+        var interf = m.getDeclaringClass();
+        if (interf.isAnnotationPresent(TargetEntity.class)) {
+            var entityClass = interf.getAnnotation(TargetEntity.class).value();
+            if (entityClass != null) {
+                if (entityClass.isAnnotationPresent(PersistenceType.class)) {
+                    return entityClass.getAnnotation(PersistenceType.class).value() != null;
+                } else {
+                    System.out.println("There is no @PersistenceType annotation.");
+                }
+            } else {
+                System.out.println("EntityClass in @TargetEntity is null.");
+            }
+        } else {
+            System.out.println("There is no @TargetEntity annotation.");
+        }
+        return false;
     }
 
     protected String getPropertyName(List<String> words, IndexCounter index, Class entityClass) {

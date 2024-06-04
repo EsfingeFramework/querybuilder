@@ -1,8 +1,5 @@
 package esfinge.querybuilder.core_tests.methodparser;
 
-import java.util.List;
-import net.sf.esfinge.classmock.Annotation;
-import net.sf.esfinge.classmock.ClassMock;
 import esfinge.querybuilder.core.annotation.CompareToNull;
 import esfinge.querybuilder.core.annotation.Contains;
 import esfinge.querybuilder.core.annotation.DomainTerms;
@@ -16,8 +13,8 @@ import esfinge.querybuilder.core.annotation.LesserOrEquals;
 import esfinge.querybuilder.core.annotation.NotEquals;
 import esfinge.querybuilder.core.annotation.PageNumber;
 import esfinge.querybuilder.core.annotation.Starts;
+import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.annotation.VariablePageSize;
-import esfinge.querybuilder.core_tests.utils.AssertException;
 import esfinge.querybuilder.core.exception.EntityClassNotFoundException;
 import esfinge.querybuilder.core.exception.InvalidPaginationAnnotationSchemeException;
 import esfinge.querybuilder.core.exception.InvalidPropertyException;
@@ -31,6 +28,10 @@ import esfinge.querybuilder.core.methodparser.OrderingDirection;
 import esfinge.querybuilder.core.methodparser.QueryType;
 import esfinge.querybuilder.core.methodparser.QueryVisitor;
 import esfinge.querybuilder.core.methodparser.conditions.NullOption;
+import esfinge.querybuilder.core_tests.utils.AssertException;
+import java.util.List;
+import net.sf.esfinge.classmock.Annotation;
+import net.sf.esfinge.classmock.ClassMock;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JMock;
 import static org.junit.Assert.assertEquals;
@@ -57,7 +58,7 @@ public class DSLMethodParserTest extends MethodParserTest {
 
     @Test
     public void entityCompositeName() throws Exception {
-        var m = createMethodForTesting(Object.class, "getJuridicPerson");
+        var m = createMethodForTesting(Object.class, "JuridicPerson", "getJuridicPerson");
         var qi = parser.parse(m);
         assertEquals("The entity name should be JuridicPerson", "JuridicPerson", qi.getEntityName());
         assertEquals("The query type should be RETRIEVE_LIST", QueryType.RETRIEVE_SINGLE, qi.getQueryType());
@@ -151,7 +152,7 @@ public class DSLMethodParserTest extends MethodParserTest {
 
     @Test
     public void typoMissingLetterInEntityName() throws Exception {
-        final var m = createMethodForTesting(Object.class, "getPersoByName", String.class);
+        final var m = createMethodForTesting(Object.class, "Perso", "getPersoByName", String.class);
         new AssertException(EntityClassNotFoundException.class, "Perso") {
             @Override
             protected void run() {
@@ -162,7 +163,7 @@ public class DSLMethodParserTest extends MethodParserTest {
 
     @Test
     public void typoExtraLetterInEntityName() throws Exception {
-        final var m = createMethodForTesting(Object.class, "getPersonaByName", String.class);
+        final var m = createMethodForTesting(Object.class, "Persona", "getPersonaByName", String.class);
         new AssertException(EntityClassNotFoundException.class, "Persona") {
             @Override
             protected void run() {
@@ -173,7 +174,7 @@ public class DSLMethodParserTest extends MethodParserTest {
 
     @Test
     public void typoChangeLetterInEntityName() throws Exception {
-        final var m = createMethodForTesting(Object.class, "getPergonByName", String.class);
+        final var m = createMethodForTesting(Object.class, "Pergon", "getPergonByName", String.class);
         new AssertException(EntityClassNotFoundException.class, "Pergon") {
             @Override
             protected void run() {
@@ -217,7 +218,7 @@ public class DSLMethodParserTest extends MethodParserTest {
 
     @Test
     public void typoMissingEntityName() throws Exception {
-        final var m = createMethodForTesting(Object.class, "getByNameOrderByAge", String.class);
+        final var m = createMethodForTesting(Object.class, null, "getByNameOrderByAge", String.class);
         new AssertException(EntityClassNotFoundException.class, "") {
             @Override
             protected void run() {
@@ -424,6 +425,7 @@ public class DSLMethodParserTest extends MethodParserTest {
 
     private void executeConditionTypesWithMethodNamed(String methodName, final ComparisonType expectedType, int mockNumber, Class parameterType, final String property) throws NoSuchMethodException {
         mockClass = new ClassMock("ExampleInterface", true);
+        mockClass.addAnnotation(TargetEntity.class, "value", Person.class);
         var m = createMethodForTesting(Object.class, methodName, parameterType);
         var qi = parser.parse(m);
         final var visitorMock = context.mock(QueryVisitor.class, "QueryVisitor" + mockNumber);
@@ -848,7 +850,7 @@ public class DSLMethodParserTest extends MethodParserTest {
 
     @Test
     public void methodThatNotFitsBecauseDontHaveAClass() throws Exception {
-        var m = createMethodForTesting(List.class, "getUnknownEntity");
+        var m = createMethodForTesting(List.class, null, "getUnknownEntity");
         assertFalse(parser.fitParserConvention(m));
     }
 
@@ -881,12 +883,13 @@ public class DSLMethodParserTest extends MethodParserTest {
 
         mockClass.addAbstractMethod(Person.class, "getPerson");
         mockClass.addMethodAnnotation("getPerson", InvariablePageSize.class, 10);
+        mockClass.addAnnotation(TargetEntity.class, "value", classProviderMock.getEntityClass("Person"));
 
         Class<?> c = mockClass.createClass();
         parser = createParserClass();
         parser.setInterface(c);
 
-        parser.setEntityClassProvider(classProviderMock);
+        //parser.setEntityClassProvider(classProviderMock);
         final var m = c.getMethod("getPerson");
 
         new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson is using an page size annotation but no parameter with @PageNumber was found") {
@@ -906,12 +909,13 @@ public class DSLMethodParserTest extends MethodParserTest {
         mockClass.addMethodAnnotation("getPerson", InvariablePageSize.class, 10);
         mockClass.addMethodParamAnnotation(0, "getPerson", PageNumber.class);
         mockClass.addMethodParamAnnotation(1, "getPerson", PageNumber.class);
+        mockClass.addAnnotation(TargetEntity.class, "value", classProviderMock.getEntityClass("Person"));
 
         Class<?> c = mockClass.createClass();
         parser = createParserClass();
         parser.setInterface(c);
 
-        parser.setEntityClassProvider(classProviderMock);
+        //parser.setEntityClassProvider(classProviderMock);
         final var m = c.getMethod("getPerson", Integer.class, Integer.class);
 
         new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson should have only one @PageNumber annotation") {
@@ -930,12 +934,13 @@ public class DSLMethodParserTest extends MethodParserTest {
         mockClass.addAbstractMethod(Person.class, "getPerson", Integer.class, Integer.class);
         mockClass.addMethodParamAnnotation(0, "getPerson", VariablePageSize.class);
         mockClass.addMethodParamAnnotation(1, "getPerson", VariablePageSize.class);
+        mockClass.addAnnotation(TargetEntity.class, "value", classProviderMock.getEntityClass("Person"));
 
         Class<?> c = mockClass.createClass();
         parser = createParserClass();
         parser.setInterface(c);
 
-        parser.setEntityClassProvider(classProviderMock);
+        //parser.setEntityClassProvider(classProviderMock);
         final var m = c.getMethod("getPerson", Integer.class, Integer.class);
 
         new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson should have only one page size annotation") {
@@ -976,12 +981,13 @@ public class DSLMethodParserTest extends MethodParserTest {
         mockClass.addAbstractMethod(Person.class, "getPerson", Integer.class, Integer.class);
         mockClass.addMethodAnnotation("getPerson", InvariablePageSize.class, 10);
         mockClass.addMethodParamAnnotation(0, "getPerson", VariablePageSize.class);
+        mockClass.addAnnotation(TargetEntity.class, "value", classProviderMock.getEntityClass("Person"));
 
         Class<?> c = mockClass.createClass();
         parser = createParserClass();
         parser.setInterface(c);
 
-        parser.setEntityClassProvider(classProviderMock);
+        //parser.setEntityClassProvider(classProviderMock);
         final var m = c.getMethod("getPerson", Integer.class, Integer.class);
 
         new AssertException(InvalidPaginationAnnotationSchemeException.class, "The method getPerson should have only one page size annotation") {

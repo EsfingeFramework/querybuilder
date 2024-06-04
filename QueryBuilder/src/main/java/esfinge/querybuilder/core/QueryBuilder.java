@@ -1,9 +1,8 @@
 package esfinge.querybuilder.core;
 
-import esfinge.querybuilder.core.annotation.DatabaseAccess;
+import esfinge.querybuilder.core.annotation.PersistenceType;
 import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.executor.QueryExecutor;
-import esfinge.querybuilder.core.methodparser.EntityClassProvider;
 import esfinge.querybuilder.core.methodparser.MethodParser;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.SelectorMethodParser;
@@ -21,6 +20,7 @@ public class QueryBuilder implements InvocationHandler {
     //Static Part
     private static MethodParser configuredMethodParser;
     private static Map<String, QueryExecutor> configuredQueryExecutors;
+    private static Map<String, NeedClassConfiguration> configuredClassConfigs;
 
     private static final Map<Class, Object> cachedProxies = new HashMap<>();
     private static final Map<Method, QueryInfo> queryInfoCache = new HashMap<>();
@@ -33,7 +33,6 @@ public class QueryBuilder implements InvocationHandler {
         if (configuredMethodParser == null) {
             var mp = new SelectorMethodParser();
             mp.setInterface(interf);
-            mp.setEntityClassProvider(ServiceLocator.getServiceImplementation(EntityClassProvider.class));
             return mp;
         }
         return configuredMethodParser;
@@ -54,34 +53,40 @@ public class QueryBuilder implements InvocationHandler {
         configuredQueryExecutors = qes;
     }
 
+    public static NeedClassConfiguration getConfiguredClassConfig(Class superinterf, String implementationName) {
+        if (configuredClassConfigs == null) {
+            configuredClassConfigs = ServiceLocator.getServiceImplementationMap(superinterf);
+        }
+        return configuredClassConfigs.get(implementationName);
+    }
+
     public static <E> E create(Class<E> interf) {
         if (cachedProxies.containsKey(interf)) {
             return (E) cachedProxies.get(interf);
         }
 
-        /*Atividades:
-        - Corrigir problema de não identificação de classe no parâmetro da anotação carregada pelo virtuallab (Ex.: Temperatura.class)
-        - Corrigir problema do módulo mongodb para executar testes JPMS
-        - Instalar MongoDB para testes*/
-        //
-        //TODO: teste setando JPA1 para virtuallab (erro de leitura da classe na anotação
-        var implementationName = "JPA1";
-
-        var targetEntity = TargetEntity.class;
-        var databaseAccess = DatabaseAccess.class;
-        if (interf.isAnnotationPresent(targetEntity)) {
-            var entityClass = interf.getAnnotation(targetEntity).value();
-            if (entityClass != null && entityClass.isAnnotationPresent(databaseAccess)) {
-                implementationName = entityClass.getAnnotation(databaseAccess).value();
+        var persistenceType = "";
+        if (interf.isAnnotationPresent(TargetEntity.class)) {
+            var entityClass = interf.getAnnotation(TargetEntity.class).value();
+            if (entityClass != null) {
+                if (entityClass.isAnnotationPresent(PersistenceType.class)) {
+                    persistenceType = entityClass.getAnnotation(PersistenceType.class).value();
+                } else {
+                    System.out.println("There is no @PersistenceType annotation.");
+                }
+            } else {
+                System.out.println("EntityClass in @TargetEntity is null.");
             }
+        } else {
+            System.out.println("There is no @TargetEntity annotation.");
         }
 
         var qb = new QueryBuilder();
         qb.setMethodParser(getConfiguredMethodParser(interf));
-        qb.setQueryExecutor(getConfiguredQueryExecutor(implementationName));
+        qb.setQueryExecutor(getConfiguredQueryExecutor(persistenceType));
 
         for (Class superinterf : interf.getInterfaces()) {
-            var impl = ServiceLocator.getServiceImplementation(superinterf);
+            var impl = getConfiguredClassConfig(superinterf, persistenceType);
             if (impl != null) {
                 qb.addImplementation(superinterf, impl);
                 if (NeedClassConfiguration.class.isAssignableFrom(superinterf)) {

@@ -1,5 +1,6 @@
 package esfinge.querybuilder.core.utils;
 
+import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import esfinge.querybuilder.core.annotation.ClassBasedService;
 import esfinge.querybuilder.core.annotation.ServicePriority;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class ServiceLocator {
         Map<String, E> map = new HashMap<>();
         while (it.hasNext()) {
             var implementation = it.next();
-            var implementationName = implementation.getClass().getAnnotation(ImplementationName.class).value();
+            var implementationName = implementation.getClass().getAnnotation(QueryExecutorType.class).value();
             map.put(implementationName, implementation);
         }
         return map;

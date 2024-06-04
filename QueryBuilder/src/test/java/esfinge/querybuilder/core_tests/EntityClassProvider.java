@@ -1,4 +1,4 @@
-package esfinge.querybuilder.core.methodparser;
+package esfinge.querybuilder.core_tests;
 
 public interface EntityClassProvider {
 

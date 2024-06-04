@@ -7,11 +7,13 @@ import esfinge.querybuilder.core.annotation.DomainTerm;
 import esfinge.querybuilder.core.annotation.GreaterOrEquals;
 import esfinge.querybuilder.core.annotation.IgnoreWhenNull;
 import esfinge.querybuilder.core.annotation.Starts;
+import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.methodparser.ComparisonType;
 import java.util.List;
 
 @DomainTerm(term = "carioca", conditions = @Condition(property = "address.city", comparison = ComparisonType.EQUALS, value = "Rio de Janeiro"))
 
+@TargetEntity(Person.class)
 public interface TestQuery extends Repository<Person> {
 
     public List<Person> getPerson();

@@ -4,9 +4,7 @@ import java.lang.reflect.Method;
 
 public interface MethodParser {
 
-    abstract QueryInfo parse(Method m);
-
-    abstract void setEntityClassProvider(EntityClassProvider classProvider);
+    QueryInfo parse(Method m);
 
     boolean fitParserConvention(Method m);
 

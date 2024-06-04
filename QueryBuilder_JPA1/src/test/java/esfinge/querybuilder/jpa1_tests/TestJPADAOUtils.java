@@ -1,7 +1,6 @@
 package esfinge.querybuilder.jpa1_tests;
 
 import esfinge.querybuilder.jpa1.JPADAOUtils;
-import java.lang.reflect.Method;
 import javax.persistence.Transient;
 import net.sf.esfinge.classmock.ClassMock;
 import net.sf.esfinge.classmock.Location;

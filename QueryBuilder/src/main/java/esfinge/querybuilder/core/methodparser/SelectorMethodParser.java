@@ -1,14 +1,13 @@
 package esfinge.querybuilder.core.methodparser;
 
-import java.lang.reflect.Method;
-import java.util.List;
 import esfinge.querybuilder.core.exception.InvalidQuerySequenceException;
 import esfinge.querybuilder.core.utils.ServiceLocator;
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class SelectorMethodParser implements MethodParser {
 
     private final List<MethodParser> parserList;
-    private EntityClassProvider classProvider;
 
     public SelectorMethodParser() {
         parserList = ServiceLocator.getServiceImplementationList(MethodParser.class);
@@ -22,12 +21,6 @@ public class SelectorMethodParser implements MethodParser {
             }
         }
         throw new InvalidQuerySequenceException("The method " + m.getModifiers() + " does not fit in any possible QueryBuilder convention for query methods");
-    }
-
-    @Override
-    public void setEntityClassProvider(EntityClassProvider classProvider) {
-        this.classProvider = classProvider;
-        parserList.forEach(mp -> mp.setEntityClassProvider(classProvider));
     }
 
     @Override
@@ -45,10 +38,6 @@ public class SelectorMethodParser implements MethodParser {
     @Override
     public void setInterface(Class<?> interf, ClassLoader loader) {
         parserList.forEach(mp -> mp.setInterface(interf, loader));
-    }
-
-    public EntityClassProvider getEntityClassProvider() {
-        return classProvider;
     }
 
 }

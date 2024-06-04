@@ -8,7 +8,10 @@ module querybuilder.mongodb_tests {
     opens esfinge.querybuilder.mongodb_tests;
     opens esfinge.querybuilder.mongodb_tests.dynamic;
 
+    uses esfinge.querybuilder.mongodb.DatastoreProvider;
+
     provides esfinge.querybuilder.mongodb.DatastoreProvider with
             esfinge.querybuilder.mongodb_tests.TestMongoDBDatastoreProvider;
+
 
 }

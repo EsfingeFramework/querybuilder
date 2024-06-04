@@ -1,14 +1,15 @@
 package esfinge.querybuilder.core_tests.methodparser;
 
+import esfinge.querybuilder.core.annotation.Condition;
+import esfinge.querybuilder.core.annotation.DomainTerm;
+import esfinge.querybuilder.core.annotation.TargetEntity;
+import esfinge.querybuilder.core.exception.EntityClassNotFoundException;
+import esfinge.querybuilder.core.methodparser.ComparisonType;
+import esfinge.querybuilder.core.methodparser.MethodParser;
+import esfinge.querybuilder.core_tests.EntityClassProvider;
 import java.lang.reflect.Method;
 import net.sf.esfinge.classmock.Annotation;
 import net.sf.esfinge.classmock.ClassMock;
-import esfinge.querybuilder.core.annotation.Condition;
-import esfinge.querybuilder.core.annotation.DomainTerm;
-import esfinge.querybuilder.core.exception.EntityClassNotFoundException;
-import esfinge.querybuilder.core.methodparser.ComparisonType;
-import esfinge.querybuilder.core.methodparser.EntityClassProvider;
-import esfinge.querybuilder.core.methodparser.MethodParser;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
@@ -50,11 +51,19 @@ public abstract class MethodParserTest {
 
     protected Method createMethodForTesting(Class<?> returnType, String methodName,
             Class<?>... paramTypes) throws NoSuchMethodException {
+        return createMethodForTesting(returnType, "Person", methodName, paramTypes);
+    }
+
+    protected Method createMethodForTesting(Class<?> returnType, String classMockName, String methodName,
+            Class<?>... paramTypes) throws NoSuchMethodException {
         mockClass.addAbstractMethod(returnType, methodName, paramTypes);
+        var entityClass = classProviderMock.getEntityClass(classMockName);
+        if (entityClass != null) {
+            mockClass.addAnnotation(TargetEntity.class, "value", entityClass);
+        }
         Class<?> c = mockClass.createClass();
         parser = createParserClass();
         parser.setInterface(c);
-        parser.setEntityClassProvider(classProviderMock);
         return c.getMethod(methodName, paramTypes);
     }
 
@@ -64,16 +73,16 @@ public abstract class MethodParserTest {
             String methodName, Class<?> annotation, Class<?>... paramTypes) throws NoSuchMethodException {
         mockClass.addAbstractMethod(returnType, methodName, paramTypes);
         mockClass.addMethodParamAnnotation(0, methodName, annotation);
+        mockClass.addAnnotation(TargetEntity.class, "value", classProviderMock.getEntityClass("Person"));
         Class<?> c = mockClass.createClass();
         parser = createParserClass();
         parser.setInterface(c);
-        parser.setEntityClassProvider(classProviderMock);
         return c.getMethod(methodName, paramTypes);
     }
 
     @Test(expected = EntityClassNotFoundException.class)
     public void entityClassNotFound() throws Exception {
-        var m = createMethodForTesting(Object.class, "getUnknownEntity");
+        var m = createMethodForTesting(Object.class, null, "getUnknownEntity");
         parser.parse(m);
     }
 

@@ -1,5 +1,8 @@
 package esfinge.querybuilder.core.methodparser;
 
+import esfinge.querybuilder.core.annotation.DomainTerm;
+import esfinge.querybuilder.core.annotation.DomainTerms;
+import esfinge.querybuilder.core.utils.StringUtils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,9 +12,6 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import esfinge.querybuilder.core.annotation.DomainTerm;
-import esfinge.querybuilder.core.annotation.DomainTerms;
-import esfinge.querybuilder.core.utils.StringUtils;
 
 public class TermLibrary {
 
@@ -74,8 +74,8 @@ public class TermLibrary {
      * @param annotation - the annotation to be cloned.
      * @return The annotation clone with the appropriate ClassLoader. When it's not possible to clone the annotation by
      * serialization then return the own annotation without changing it's ClassLoader.
-     * @throws java.io.IOException
-     * @throws java.lang.ClassNotFoundException
+     * @throws java.io.IOException when io error occurred.
+     * @throws java.lang.ClassNotFoundException when io error occurred.
      */
     public static Annotation cloneAnnotationBySerialization(Annotation annotation) throws IOException, ClassNotFoundException {
         var out = new ByteArrayOutputStream();

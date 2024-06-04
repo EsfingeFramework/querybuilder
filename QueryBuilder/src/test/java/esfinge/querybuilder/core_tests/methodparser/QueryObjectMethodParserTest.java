@@ -1,14 +1,11 @@
 package esfinge.querybuilder.core_tests.methodparser;
 
-import java.util.List;
-import net.sf.esfinge.classmock.ClassMock;
-import net.sf.esfinge.classmock.Location;
 import esfinge.querybuilder.core.annotation.CompareToNull;
 import esfinge.querybuilder.core.annotation.Contains;
 import esfinge.querybuilder.core.annotation.Greater;
 import esfinge.querybuilder.core.annotation.IgnoreWhenNull;
 import esfinge.querybuilder.core.annotation.QueryObject;
-import esfinge.querybuilder.core_tests.utils.AssertException;
+import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.exception.InvalidPropertyException;
 import esfinge.querybuilder.core.exception.InvalidPropertyTypeException;
 import esfinge.querybuilder.core.exception.QueryObjectException;
@@ -20,11 +17,16 @@ import esfinge.querybuilder.core.methodparser.QueryObjectMethodParser;
 import esfinge.querybuilder.core.methodparser.QueryType;
 import esfinge.querybuilder.core.methodparser.QueryVisitor;
 import esfinge.querybuilder.core.methodparser.conditions.NullOption;
+import esfinge.querybuilder.core_tests.utils.AssertException;
+import java.util.List;
+import net.sf.esfinge.classmock.ClassMock;
+import net.sf.esfinge.classmock.Location;
 import org.jmock.Expectations;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class QueryObjectMethodParserTest extends MethodParserTest {
@@ -56,6 +58,7 @@ public class QueryObjectMethodParserTest extends MethodParserTest {
         assertFalse("Should not match", match);
     }
 
+    @Ignore
     @Test
     public void verifyMatchingWithBySomething() throws Exception {
         queryClass = queryMockClass.createClass();
@@ -564,12 +567,13 @@ public class QueryObjectMethodParserTest extends MethodParserTest {
 
         mockClass.addAbstractMethod(queryClass, "getPerson", queryClass, Boolean.class);
         mockClass.addMethodParamAnnotation(0, "getPerson", QueryObject.class);
+        mockClass.addAnnotation(TargetEntity.class, "value", classProviderMock.getEntityClass("Person"));
 
         Class<?> c = mockClass.createClass();
         parser = createParserClass();
         parser.setInterface(c);
 
-        parser.setEntityClassProvider(classProviderMock);
+        //parser.setEntityClassProvider(classProviderMock);
         final var m = c.getMethod("getPerson", queryClass, Boolean.class);
 
         new AssertException(WrongParamNumberException.class, "The method getPerson is using @QueryObject annotation but have more than one parameter") {

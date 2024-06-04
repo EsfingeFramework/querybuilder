@@ -1,13 +1,11 @@
 package esfinge.querybuilder.mongodb_tests.dynamic;
 
 import esfinge.querybuilder.core.methodparser.DSLMethodParser;
-import esfinge.querybuilder.core.methodparser.EntityClassProvider;
 import esfinge.querybuilder.core.methodparser.MethodParser;
 import esfinge.querybuilder.core.methodparser.QueryVisitor;
-import esfinge.querybuilder.core.utils.ServiceLocator;
-import java.lang.reflect.Method;
 import esfinge.querybuilder.mongodb.MongoDBVisitorFactory;
 import esfinge.querybuilder.mongodb_tests.TestQuery;
+import java.lang.reflect.Method;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -23,7 +21,7 @@ public class TestDynamicQueriesMongoDBQueryVisitor {
     @Before
     public void init() {
         mp.setInterface(TestQuery.class);
-        mp.setEntityClassProvider(ServiceLocator.getServiceImplementation(EntityClassProvider.class));
+        //mp.setEntityClassProvider(ServiceLocator.getServiceImplementation(EntityClassProvider.class));
     }
 
     @Test

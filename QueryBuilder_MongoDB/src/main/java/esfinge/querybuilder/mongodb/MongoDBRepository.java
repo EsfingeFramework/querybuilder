@@ -2,11 +2,13 @@ package esfinge.querybuilder.mongodb;
 
 import esfinge.querybuilder.core.Repository;
 import esfinge.querybuilder.core.exception.InvalidPropertyException;
+import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import esfinge.querybuilder.core.utils.ServiceLocator;
 import java.util.List;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 
+@QueryExecutorType("MONGODB")
 public class MongoDBRepository<E> implements Repository<E> {
 
     protected Datastore ds;

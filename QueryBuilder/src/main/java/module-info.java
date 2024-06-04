@@ -22,7 +22,6 @@ module querybuilder.core {
     opens esfinge.querybuilder.core.utils;
 
     uses esfinge.querybuilder.core.Repository;
-    uses esfinge.querybuilder.core.methodparser.EntityClassProvider;
     uses esfinge.querybuilder.core.executor.QueryExecutor;
     uses esfinge.querybuilder.core.methodparser.conversor.FromStringConversor;
     uses esfinge.querybuilder.core.methodparser.MethodParser;

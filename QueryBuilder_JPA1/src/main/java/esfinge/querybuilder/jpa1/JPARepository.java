@@ -2,14 +2,14 @@ package esfinge.querybuilder.jpa1;
 
 import esfinge.querybuilder.core.Repository;
 import esfinge.querybuilder.core.exception.InvalidPropertyException;
+import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import esfinge.querybuilder.core.utils.ServiceLocator;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
+@QueryExecutorType("JPA1")
 public class JPARepository<E> implements Repository<E> {
 
     protected EntityManager em;

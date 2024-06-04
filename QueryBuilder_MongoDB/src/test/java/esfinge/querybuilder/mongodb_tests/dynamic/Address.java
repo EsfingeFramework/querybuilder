@@ -1,9 +1,11 @@
 package esfinge.querybuilder.mongodb_tests.dynamic;
 
+import esfinge.querybuilder.core.annotation.PersistenceType;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
 @Entity
+@PersistenceType("MONGODB")
 public class Address {
 
     @Id

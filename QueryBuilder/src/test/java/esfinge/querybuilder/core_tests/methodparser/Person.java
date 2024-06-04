@@ -1,8 +1,8 @@
 package esfinge.querybuilder.core_tests.methodparser;
 
-import esfinge.querybuilder.core.annotation.DatabaseAccess;
+import esfinge.querybuilder.core.annotation.PersistenceType;
 
-@DatabaseAccess("Dummy")
+@PersistenceType("Dummy")
 public class Person {
 
     private String name;

@@ -1,19 +1,16 @@
-module querybuilder.jpa_one {
-    requires org.apache.tomcat.jasper.el;
-    requires java.persistence;
+module querybuilder.jpaone {
     requires transitive querybuilder.core;
+    requires java.persistence;
 
     exports esfinge.querybuilder.jpa1;
 
     opens esfinge.querybuilder.jpa1;
 
-    provides esfinge.querybuilder.core.executor.QueryExecutor with
-            esfinge.querybuilder.jpa1.JPAQueryExecutor;
-
-    provides esfinge.querybuilder.core.methodparser.EntityClassProvider with
-            esfinge.querybuilder.jpa1.JPAEntityClassProvider;
+    uses esfinge.querybuilder.jpa1.EntityManagerProvider;
 
     provides esfinge.querybuilder.core.Repository with
-            esfinge.querybuilder.jpa1.JPARepository;
+        esfinge.querybuilder.jpa1.JPARepository;
 
+    provides esfinge.querybuilder.core.executor.QueryExecutor with
+        esfinge.querybuilder.jpa1.JPAQueryExecutor;
 }

@@ -3,10 +3,10 @@ package esfinge.querybuilder.mongodb;
 import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.QueryType;
-import esfinge.querybuilder.core.utils.ImplementationName;
+import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import org.mongodb.morphia.query.Query;
 
-@ImplementationName("MONGODB")
+@QueryExecutorType("MONGODB")
 public class MongoDBQueryExecutor implements QueryExecutor {
 
     @Override

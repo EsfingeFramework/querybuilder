@@ -1,15 +1,12 @@
 package esfinge.querybuilder.jpa1_tests;
 
 import esfinge.querybuilder.core.methodparser.ComparisonType;
-import esfinge.querybuilder.core.methodparser.QueryRepresentation;
 import esfinge.querybuilder.core.methodparser.conditions.NullOption;
+import java.util.HashMap;
+import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Test;
 
 public class TestDynamicQueriesJPAQLQueryVisitor extends GenericTestJPAQLQueryVisitor {

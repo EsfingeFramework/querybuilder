@@ -7,7 +7,6 @@ import static esfinge.querybuilder.core.methodparser.ComparisonType.GREATER_OR_E
 import static esfinge.querybuilder.core.methodparser.ComparisonType.LESSER;
 import static esfinge.querybuilder.core.methodparser.ComparisonType.LESSER_OR_EQUALS;
 import static esfinge.querybuilder.core.methodparser.ComparisonType.NOT_EQUALS;
-import esfinge.querybuilder.core.methodparser.EntityClassProvider;
 import esfinge.querybuilder.core.methodparser.conditions.NullOption;
 import esfinge.querybuilder.core.methodparser.formater.ParameterFormater;
 import esfinge.querybuilder.core.utils.ServiceLocator;
@@ -100,22 +99,28 @@ public class ConditionDescription {
                     newCriteria = compositeProperty(clazz, value);
                 } else {
 
-                    newCriteria = switch (compType) {
-                        case GREATER_OR_EQUALS ->
-                            getQuery(clazz).criteria(propertyName).greaterThanOrEq(value);
-                        case LESSER_OR_EQUALS ->
-                            getQuery(clazz).criteria(propertyName).lessThanOrEq(value);
-                        case GREATER ->
-                            getQuery(clazz).criteria(propertyName).greaterThan(value);
-                        case LESSER ->
-                            getQuery(clazz).criteria(propertyName).lessThan(value);
-                        case NOT_EQUALS ->
-                            getQuery(clazz).criteria(propertyName).notEqual(value);
-                        case EQUALS ->
-                            getQuery(clazz).criteria(propertyName).equal(value);
-                        default ->
-                            getQuery(clazz).criteria(propertyName).contains((String) value);
-                    };
+                    switch (compType) {
+                        case GREATER_OR_EQUALS:
+                            newCriteria = getQuery(clazz).criteria(propertyName).greaterThanOrEq(value);
+                            break;
+                        case LESSER_OR_EQUALS:
+                            newCriteria = getQuery(clazz).criteria(propertyName).lessThanOrEq(value);
+                            break;
+                        case GREATER:
+                            newCriteria = getQuery(clazz).criteria(propertyName).greaterThan(value);
+                            break;
+                        case LESSER:
+                            newCriteria = getQuery(clazz).criteria(propertyName).lessThan(value);
+                            break;
+                        case NOT_EQUALS:
+                            newCriteria = getQuery(clazz).criteria(propertyName).notEqual(value);
+                            break;
+                        case EQUALS:
+                            newCriteria = getQuery(clazz).criteria(propertyName).equal(value);
+                            break;
+                        default:
+                            newCriteria = getQuery(clazz).criteria(propertyName).contains((String) value);
+                    }
                 }
 
             } else {
@@ -130,45 +135,51 @@ public class ConditionDescription {
             criteria.get(criteria.size() - 1).add(newCriteria);
 
             switch (nextConector) {
-                case "and" -> {
+                case "and": {
+                    break;
                 }
-                case "or" ->
+                case "or":
                     criteria.add(new ArrayList<>());
-                case "" -> {
+                    break;
+                case "": {
+                    break;
                 }
-                default ->
+                default:
                     System.err.println("Unsupported connector!");
             }
-            //Do nothing
-            //Do nothing
         }
     }
 
     private Criteria compositeProperty(Class<?> clazz, Object value) {
 
-        var ecp = ServiceLocator.getServiceImplementation(EntityClassProvider.class);
         var properties = propertyName.split("\\.");
-        var q = getQuery(ecp.getEntityClass(properties[properties.length - 2]));
+        var q = getQuery(MongoDBEntityClassProvider.getEntityClass(properties[properties.length - 2]));
         switch (compType) {
-            case GREATER_OR_EQUALS ->
+            case GREATER_OR_EQUALS:
                 q.field(properties[properties.length - 1]).greaterThanOrEq(value);
-            case LESSER_OR_EQUALS ->
+                break;
+            case LESSER_OR_EQUALS:
                 q.field(properties[properties.length - 1]).lessThanOrEq(value);
-            case GREATER ->
+                break;
+            case GREATER:
                 q.field(properties[properties.length - 1]).greaterThan(value);
-            case LESSER ->
+                break;
+            case LESSER:
                 q.field(properties[properties.length - 1]).lessThan(value);
-            case NOT_EQUALS ->
+                break;
+            case NOT_EQUALS:
                 q.field(properties[properties.length - 1]).notEqual(value);
-            case EQUALS ->
+                break;
+            case EQUALS:
                 q.field(properties[properties.length - 1]).equal(value);
-            default ->
+                break;
+            default:
                 q.field(properties[properties.length - 1]).contains((String) value);
         }
         var results = q.asList();
 
         for (var i = properties.length - 3; i >= 0; i--) {
-            var query = getQuery(ecp.getEntityClass(properties[i]));
+            var query = getQuery(MongoDBEntityClassProvider.getEntityClass(properties[i]));
             query.field(properties[i + 1]).in(results);
             results = query.asList();
         }
