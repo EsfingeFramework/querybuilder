@@ -6,11 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface PersistenceType {
-
-    String value();
-
-    String secondary() default "NONE";
+@Target(ElementType.FIELD)
+public @interface ExternalPersistence {
 
 }

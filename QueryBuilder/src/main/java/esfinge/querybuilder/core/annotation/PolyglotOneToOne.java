@@ -6,11 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface PersistenceType {
+@Target(ElementType.FIELD)
+public @interface PolyglotOneToOne {
 
-    String value();
+    String mappedBy();
 
-    String secondary() default "NONE";
+    String joinColumn();
 
 }

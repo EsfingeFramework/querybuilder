@@ -1,6 +1,5 @@
 package com.example.polyglot.mongodb;
 
-import com.example.polyglot.entities.Address;
 import com.example.polyglot.entities.Person;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
@@ -17,7 +16,6 @@ public class PolyglotMongoDBDatastoreProvider extends DatastoreProvider {
         }
 
         getMorphia().map(Person.class);
-        getMorphia().map(Address.class);
     }
 
     @Override

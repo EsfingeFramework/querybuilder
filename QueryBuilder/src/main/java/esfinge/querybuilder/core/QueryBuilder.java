@@ -2,6 +2,7 @@ package esfinge.querybuilder.core;
 
 import esfinge.querybuilder.core.annotation.PersistenceType;
 import esfinge.querybuilder.core.annotation.TargetEntity;
+import esfinge.querybuilder.core.executor.CompositeQueryExecutor;
 import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.MethodParser;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
@@ -65,12 +66,14 @@ public class QueryBuilder implements InvocationHandler {
             return (E) cachedProxies.get(interf);
         }
 
-        var persistenceType = "";
+        var primaryPersistence = "";
+        var secondaryPersistence = "";
         if (interf.isAnnotationPresent(TargetEntity.class)) {
             var entityClass = interf.getAnnotation(TargetEntity.class).value();
             if (entityClass != null) {
                 if (entityClass.isAnnotationPresent(PersistenceType.class)) {
-                    persistenceType = entityClass.getAnnotation(PersistenceType.class).value();
+                    primaryPersistence = entityClass.getAnnotation(PersistenceType.class).value();
+                    secondaryPersistence = entityClass.getAnnotation(PersistenceType.class).secondary();
                 } else {
                     System.out.println("There is no @PersistenceType annotation.");
                 }
@@ -83,10 +86,16 @@ public class QueryBuilder implements InvocationHandler {
 
         var qb = new QueryBuilder();
         qb.setMethodParser(getConfiguredMethodParser(interf));
-        qb.setQueryExecutor(getConfiguredQueryExecutor(persistenceType));
+        if (!secondaryPersistence.equalsIgnoreCase("NONE")) {
+            var primaryQueryExecutor = getConfiguredQueryExecutor(primaryPersistence);
+            var secondaryQueryExecutor = getConfiguredQueryExecutor(secondaryPersistence);
+            qb.setQueryExecutor(new CompositeQueryExecutor(primaryQueryExecutor, secondaryQueryExecutor));
+        } else {
+            qb.setQueryExecutor(getConfiguredQueryExecutor(primaryPersistence));
+        }
 
         for (Class superinterf : interf.getInterfaces()) {
-            var impl = getConfiguredClassConfig(superinterf, persistenceType);
+            var impl = getConfiguredClassConfig(superinterf, primaryPersistence);
             if (impl != null) {
                 qb.addImplementation(superinterf, impl);
                 if (NeedClassConfiguration.class.isAssignableFrom(superinterf)) {

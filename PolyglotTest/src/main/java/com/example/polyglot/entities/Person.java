@@ -1,11 +1,14 @@
 package com.example.polyglot.entities;
 
+import esfinge.querybuilder.core.annotation.ExternalPersistence;
 import esfinge.querybuilder.core.annotation.PersistenceType;
+import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Transient;
 
 @Entity
-@PersistenceType("MONGODB")
+@PersistenceType(value = "MONGODB", secondary = "JPA1")
 public class Person {
 
     @Id
@@ -13,8 +16,11 @@ public class Person {
     private String name;
     private String lastName;
     private Integer age;
-
+    @Transient
+    @ExternalPersistence
+    @PolyglotOneToOne(mappedBy = "person", joinColumn = "id")
     private Address address;
+    //private L
 
     public Integer getId() {
         return id;

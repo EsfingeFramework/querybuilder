@@ -1,23 +1,28 @@
 package com.example.polyglot.entities;
 
 import esfinge.querybuilder.core.annotation.PersistenceType;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
-@PersistenceType("MONGODB")
-public class Address {
+@PersistenceType("JPA1")
+public class Address implements Serializable {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String city;
     private String state;
+    private Integer person;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -35,6 +40,14 @@ public class Address {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Integer getPerson() {
+        return person;
+    }
+
+    public void setPerson(Integer person) {
+        this.person = person;
     }
 
 }

@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@PersistenceType("JPA1")
+@PersistenceType(value = "JPA1")
 public class Temperatura implements Serializable {
 
     @Id
