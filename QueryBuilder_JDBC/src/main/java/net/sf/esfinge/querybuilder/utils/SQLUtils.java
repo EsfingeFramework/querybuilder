@@ -1,8 +1,6 @@
 package net.sf.esfinge.querybuilder.utils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-
 import net.sf.esfinge.querybuilder.annotations.Column;
 import net.sf.esfinge.querybuilder.annotations.ID;
 import net.sf.esfinge.querybuilder.annotations.JoinColumn;
@@ -12,292 +10,279 @@ import net.sf.esfinge.querybuilder.finder.XmlEntityFinder;
 
 public class SQLUtils {
 
-	private ArrayList<String> listOfChildEntities = null;
-	private ArrayList<String> listOfFieldsEntities = null;
-	private ArrayList<String> listOfJoinExpressions = null;
-	private ArrayList<String> listOfColumnsToInsertComand = null;
-	private ArrayList<String> listOfColumnsToUpdateComand = null;
-	private ArrayList<String> listOfJoinColumns = null;
-	private String mainEntity = "*EMPTY*";
-	private String primaryKeyOfMainEntity = "*EMPTY*";
-	
-	public ArrayList<String> getListOfJoinColumns() {
-		return listOfJoinColumns;
-	}
+    private ArrayList<String> listOfChildEntities = null;
+    private ArrayList<String> listOfFieldsEntities = null;
+    private ArrayList<String> listOfJoinExpressions = null;
+    private ArrayList<String> listOfColumnsToInsertComand = null;
+    private ArrayList<String> listOfColumnsToUpdateComand = null;
+    private ArrayList<String> listOfJoinColumns = null;
+    private String mainEntity = "*EMPTY*";
+    private String primaryKeyOfMainEntity = "*EMPTY*";
 
-	public void setListOfJoinColumns(ArrayList<String> listOfJoinColumns) {
-		this.listOfJoinColumns = listOfJoinColumns;
-	}
+    public ArrayList<String> getListOfJoinColumns() {
+        return listOfJoinColumns;
+    }
 
-	public String getPrimaryKeyOfMainEntity() {
-		return primaryKeyOfMainEntity;
-	}
+    public void setListOfJoinColumns(ArrayList<String> listOfJoinColumns) {
+        this.listOfJoinColumns = listOfJoinColumns;
+    }
 
-	private void setPrimaryKeyOfMainEntity(String primaryKeyOfMainEntity) {
-		this.primaryKeyOfMainEntity = primaryKeyOfMainEntity;
-	}
+    public String getPrimaryKeyOfMainEntity() {
+        return primaryKeyOfMainEntity;
+    }
 
-	public ArrayList<String> getListOfColumnsToInsertComand() {
-		return listOfColumnsToInsertComand;
-	}
+    private void setPrimaryKeyOfMainEntity(String primaryKeyOfMainEntity) {
+        this.primaryKeyOfMainEntity = primaryKeyOfMainEntity;
+    }
 
-	public boolean isJoinColumn(String columnName) {
+    public ArrayList<String> getListOfColumnsToInsertComand() {
+        return listOfColumnsToInsertComand;
+    }
 
-		for (String str : listOfJoinColumns) {
+    public boolean isJoinColumn(String columnName) {
 
-			if (str.equalsIgnoreCase(columnName)) {
-				return true;
-			}
+        for (var str : listOfJoinColumns) {
 
-		}
-		return false;
-	}
+            if (str.equalsIgnoreCase(columnName)) {
+                return true;
+            }
 
-	public String getColumnsToInsertComand() {
+        }
+        return false;
+    }
 
-		StringBuilder stB = new StringBuilder();
-		stB.append("(");
-		boolean firstIteration = true;
+    public String getColumnsToInsertComand() {
 
-		for (String str : listOfColumnsToInsertComand) {
+        var stB = new StringBuilder();
+        stB.append("(");
+        var firstIteration = true;
+        for (var str : listOfColumnsToInsertComand) {
 
-			if (firstIteration) {
-				firstIteration = false;
-			} else {
-				stB.append(",");
-			}
+            if (firstIteration) {
+                firstIteration = false;
+            } else {
+                stB.append(",");
+            }
 
-			if (str.contains(".")) {
+            if (str.contains(".")) {
 
-				str.indexOf(".");
-				str = (str.substring((str.indexOf(".") + 1)));
+                str.indexOf(".");
+                str = (str.substring((str.indexOf(".") + 1)));
 
-			}
+            }
 
-			stB.append(str);
-		}
-		stB.append(")");
-		return stB.toString().toLowerCase();
-	}
+            stB.append(str);
+        }
+        stB.append(")");
+        return stB.toString().toLowerCase();
+    }
 
-	public ArrayList<String> getListOfColumnsToUpdateComand() {
-		return listOfColumnsToUpdateComand;
-	}
+    public ArrayList<String> getListOfColumnsToUpdateComand() {
+        return listOfColumnsToUpdateComand;
+    }
 
-	public String getMainEntity() {
-		return mainEntity;
-	}
+    public String getMainEntity() {
+        return mainEntity;
+    }
 
-	private void setMainEntity(String mainEntity) {
-		this.mainEntity = mainEntity;
-	}
+    private void setMainEntity(String mainEntity) {
+        this.mainEntity = mainEntity;
+    }
 
-	public SQLUtils(String entity) {
+    public SQLUtils(String entity) {
 
-		listOfChildEntities = new ArrayList<String>();
-		listOfJoinExpressions = new ArrayList<String>();
-		listOfFieldsEntities = new ArrayList<String>();
-		listOfColumnsToInsertComand = new ArrayList<String>();
-		listOfColumnsToUpdateComand = new ArrayList<String>();
-		listOfJoinColumns = new ArrayList<String>();
+        listOfChildEntities = new ArrayList<>();
+        listOfJoinExpressions = new ArrayList<>();
+        listOfFieldsEntities = new ArrayList<>();
+        listOfColumnsToInsertComand = new ArrayList<>();
+        listOfColumnsToUpdateComand = new ArrayList<>();
+        listOfJoinColumns = new ArrayList<>();
 
-		loadAndAnalyzeEntities(entity);
+        loadAndAnalyzeEntities(entity);
 
-	}
+    }
 
-	public ArrayList<String> getListOfFieldsEntities() {
-		return listOfFieldsEntities;
-	}
+    public ArrayList<String> getListOfFieldsEntities() {
+        return listOfFieldsEntities;
+    }
 
-	public String getFieldsEntities() {
+    public String getFieldsEntities() {
 
-		StringBuilder stB = new StringBuilder();
+        var stB = new StringBuilder();
+        var i = 0;
+        for (var str : listOfFieldsEntities) {
 
-		int i = 0;
+            if (i > 0) {
 
-		for (String str : listOfFieldsEntities) {
+                stB.append(", ");
 
-			if (i > 0) {
+            }
 
-				stB.append(", ");
+            stB.append(str);
 
-			}
+            i++;
 
-			stB.append(str);
+        }
 
-			i++;
+        return stB.toString();
 
-		}
+    }
 
-		return stB.toString();
+    public boolean haveJoinColumn() {
+        return (listOfJoinExpressions.size() > 0) ? true : false;
+    }
 
-	}
+    public String getChildEntities() {
 
-	public boolean haveJoinColumn() {
-		return (listOfJoinExpressions.size() > 0) ? true : false;
-	}
+        var stB = new StringBuilder();
+        var i = 0;
+        for (var str : listOfChildEntities) {
 
-	public String getChildEntities() {
+            if (i > 0) {
 
-		StringBuilder stB = new StringBuilder();
+                stB.append(", ");
 
-		int i = 0;
+            }
 
-		for (String str : listOfChildEntities) {
+            stB.append(str);
 
-			if (i > 0) {
+            i++;
 
-				stB.append(", ");
+        }
 
-			}
+        return stB.toString();
 
-			stB.append(str);
+    }
 
-			i++;
+    public String getJoinExpressions() {
 
-		}
+        var stB = new StringBuilder();
+        var i = 0;
+        for (var str : listOfJoinExpressions) {
 
-		return stB.toString();
+            if (i > 0) {
 
-	}
+                stB.append(" and ");
 
-	public String getJoinExpressions() {
+            }
 
-		StringBuilder stB = new StringBuilder();
+            stB.append(str);
 
-		int i = 0;
+            i++;
 
-		for (String str : listOfJoinExpressions) {
+        }
 
-			if (i > 0) {
+        return stB.toString().toLowerCase();
 
-				stB.append(" and ");
+    }
 
-			}
+    private void loadAndAnalyzeEntities(String entity) {
 
-			stB.append(str);
+        String tableName = null;
 
-			i++;
+        var finderManager = new FinderManager(new XmlEntityFinder());
+        String resourceToFind = null;
 
-		}
+        resourceToFind = finderManager.find(entity);
 
-		return stB.toString().toLowerCase();
+        Class<?> clasz = null;
 
-	}
+        try {
 
-	private void loadAndAnalyzeEntities(String entity) {
+            clasz = Class.forName(resourceToFind).newInstance().getClass();
 
-		String tableName = null;
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-		FinderManager finderManager = new FinderManager(new XmlEntityFinder());
-		String resourceToFind = null;
+        if (clasz.isAnnotationPresent(Table.class)) {
+            var table = clasz.getAnnotation(Table.class);
+            tableName = table.name();
 
-		resourceToFind = finderManager.find(entity);
+        } else {
 
-		Class<?> clasz = null;
+            tableName = clasz.getSimpleName();
+        }
 
-		try {
+        if (mainEntity.equals("*EMPTY*")) {
+            setMainEntity(tableName);
+        }
 
-			clasz = Class.forName(resourceToFind).newInstance().getClass();
+        listOfChildEntities.add(tableName);
 
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+        String columnName = null;
+        String joinExpression = null;
 
-		if (clasz.isAnnotationPresent(Table.class)) {
-			Table table = clasz.getAnnotation(Table.class);
-			tableName = table.name();
+        var fields = clasz.getDeclaredFields();
+        for (var f : fields) {
 
-		} else {
+            if (f.isAnnotationPresent(JoinColumn.class)) {
 
-			tableName = clasz.getSimpleName();
-		}
+                var joinColumn = f.getAnnotation(JoinColumn.class);
+                var table = f.getAnnotation(Table.class);
 
-		if (mainEntity.equals("*EMPTY*")) {
-			setMainEntity(tableName);
-		}
+                joinExpression = tableName + "." + joinColumn.name() + " = "
+                        + f.getType().getSimpleName().toLowerCase() + "."
+                        + joinColumn.referencedColumnName();
 
-		listOfChildEntities.add(tableName);
+                listOfJoinExpressions.add(joinExpression);
 
-		String columnName = null;
-		String joinExpression = null;
+                listOfJoinColumns.add(joinColumn.name());
 
-		Field[] fields = clasz.getDeclaredFields();
+                listOfColumnsToInsertComand.add(table.name() + "."
+                        + joinColumn.name());
 
-		for (Field f : fields) {
+                listOfColumnsToUpdateComand.add(joinColumn.name());
 
-			if (f.isAnnotationPresent(JoinColumn.class)) {
+                loadAndAnalyzeEntities(f.getType().getSimpleName());
+            } else {
 
-				JoinColumn joinColumn = f.getAnnotation(JoinColumn.class);
+                var isAutoIncrement = false;
 
-				Table table = f.getAnnotation(Table.class);
+                if (f.isAnnotationPresent(Column.class)) {
 
-				joinExpression = tableName + "." + joinColumn.name() + " = "
-						+ f.getType().getSimpleName().toLowerCase() + "."
-						+ joinColumn.referencedColumnName();
+                    var column = f.getAnnotation(Column.class);
+                    columnName = column.name();
 
-				listOfJoinExpressions.add(joinExpression);
+                    isAutoIncrement = column.autoIncrement();
 
-				listOfJoinColumns.add(joinColumn.name());
+                } else {
 
-				listOfColumnsToInsertComand.add(table.name() + "."
-						+ joinColumn.name());
-				
-				listOfColumnsToUpdateComand.add(joinColumn.name());
-				
-				loadAndAnalyzeEntities(f.getType().getSimpleName());
-			} else {
+                    columnName = f.getName();
 
-				boolean isAutoIncrement = false;
+                }
 
-				if (f.isAnnotationPresent(Column.class)) {
+                if (getPrimaryKeyOfMainEntity().equals("*EMPTY*")) {
+                    if (f.isAnnotationPresent(ID.class)) {
 
-					Column column = f.getAnnotation(Column.class);
-					columnName = column.name();
+                        if (f.isAnnotationPresent(Column.class)) {
+                            var column = f.getAnnotation(Column.class);
+                            setPrimaryKeyOfMainEntity(column.name());
+                        } else {
 
-					isAutoIncrement = column.autoIncrement();
+                            setPrimaryKeyOfMainEntity(f.getName());
+                        }
 
-				} else {
+                    }
+                }
 
-					columnName = f.getName();
+                if (!isAutoIncrement) {
+                    if (getMainEntity().contains(tableName)) {
+                        listOfColumnsToInsertComand.add(columnName);
 
-				}
+                        if (!f.isAnnotationPresent(ID.class)) {
+                            listOfColumnsToUpdateComand.add(columnName);
+                        }
 
-				if (getPrimaryKeyOfMainEntity().equals("*EMPTY*")) {
-					if (f.isAnnotationPresent(ID.class)) {
+                    }
+                }
 
-						if (f.isAnnotationPresent(Column.class)) {
-							Column column = f.getAnnotation(Column.class);
-							setPrimaryKeyOfMainEntity(column.name());
-						} else {
+                listOfFieldsEntities.add(tableName + "." + columnName);
 
-							setPrimaryKeyOfMainEntity(f.getName());
-						}
+            }
 
-					}
-				}
+        }
 
-				if (!isAutoIncrement) {
-					if (getMainEntity().contains(tableName)) {
-						listOfColumnsToInsertComand.add(columnName);
-
-						if (!f.isAnnotationPresent(ID.class)) {
-							listOfColumnsToUpdateComand.add(columnName);
-						}
-
-					}
-				}
-
-				listOfFieldsEntities.add(tableName + "." + columnName);
-
-			}
-
-		}
-
-	}
+    }
 
 }

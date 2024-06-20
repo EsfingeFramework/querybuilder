@@ -1,0 +1,7 @@
+esfinge.querybuilder.core.methodparser.conversor.ToIntConversor
+esfinge.querybuilder.core.methodparser.conversor.ToBooleanConversor
+esfinge.querybuilder.core.methodparser.conversor.ToShortConversor
+esfinge.querybuilder.core.methodparser.conversor.ToByteConversor
+esfinge.querybuilder.core.methodparser.conversor.ToDoubleConversor
+esfinge.querybuilder.core.methodparser.conversor.ToFloatConversor
+esfinge.querybuilder.core.methodparser.conversor.ToLongConversor

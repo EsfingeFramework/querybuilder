@@ -2,99 +2,99 @@ package net.sf.esfinge.querybuilder.utils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DataBaseChannel {
-	private Connection connection;
 
-	public DataBaseChannel(Connection con) {
-		setConnection(con);
-	}
+    private Connection connection;
 
-	public void setConnection(Connection con) {
-		this.connection = con;
-	}
+    public DataBaseChannel(Connection con) {
+        setConnection(con);
+    }
 
-	public boolean checkConnection() {
-		try {
-			return (connection == null || !connection.isClosed() || connection
-					.isValid(0));
-		} catch (Exception err) {
-			return false;
-		}
-	}
+    public void setConnection(Connection con) {
+        this.connection = con;
+    }
 
-	public int executeUpdate(String query) throws SQLException {
+    public boolean checkConnection() {
+        try {
+            return (connection == null || !connection.isClosed() || connection
+                    .isValid(0));
+        } catch (Exception err) {
+            return false;
+        }
+    }
 
-		int result = -1;
-		Statement stm = null;
+    public int executeUpdate(String query) throws SQLException {
 
-		stm = connection.createStatement();
-		result = stm.executeUpdate(query);
+        var result = -1;
+        Statement stm = null;
 
-		if (stm != null) {
-			try {
-				stm.close();
-				stm = null;
-			} catch (SQLException sqlerr) {
-			}
-		}
+        stm = connection.createStatement();
+        result = stm.executeUpdate(query);
 
-		if (connection != null) {
+        if (stm != null) {
+            try {
+                stm.close();
+                stm = null;
+            } catch (SQLException sqlerr) {
+            }
+        }
 
-			try {
-				connection.close();
-			} catch (SQLException sqlerr) {
-			}
-		}
+        if (connection != null) {
 
-		return result;
+            try {
+                connection.close();
+            } catch (SQLException sqlerr) {
+            }
+        }
 
-	}
+        return result;
 
-	public ArrayList<Line> executeQuery(String query) throws SQLException {
-		ArrayList<Line> listLineResult = new ArrayList<Line>();
-		ResultSet set = null;
-		Statement stm = null;
+    }
 
-		stm = connection.createStatement();
+    public ArrayList<Line> executeQuery(String query) throws SQLException {
+        var listLineResult = new ArrayList<Line>();
+        ResultSet set = null;
+        Statement stm = null;
 
-		set = stm.executeQuery(query);
+        stm = connection.createStatement();
 
-		ResultSetMetaData rsmd = set.getMetaData();
+        set = stm.executeQuery(query);
 
-		while (set.next()) {
-			Line line = new Line();
-			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-				LineField lineField = new LineField();
-				lineField.setFieldName(rsmd.getColumnName(i).toUpperCase());
-				lineField.setFieldType(rsmd.getColumnTypeName(i).getClass());
-				lineField.setFieldValue(set.getObject(i));
-				line.AddLineField(lineField);
-			}
-			listLineResult.add(line);
-		}
+        var rsmd = set.getMetaData();
 
-		if (stm != null) {
-			try {
-				stm.close();
-				stm = null;
-			} catch (SQLException sqlerr) {
-			}
-		}
+        while (set.next()) {
+            var line = new Line();
+            for (var i = 1; i <= rsmd.getColumnCount(); i++) {
+                var lineField = new LineField();
+                lineField.setFieldName(rsmd.getColumnName(i).toUpperCase());
+                lineField.setFieldType(rsmd.getColumnTypeName(i).getClass());
+                lineField.setFieldValue(set.getObject(i));
+                line.AddLineField(lineField);
+            }
+            listLineResult.add(line);
+        }
 
-		if (set != null) {
-			try {
-				set.close();
-				set = null;
-			} catch (SQLException sqlerr) {
-			}
-		}
+        if (stm != null) {
+            try {
+                stm.close();
+                stm = null;
+            } catch (SQLException sqlerr) {
+            }
+        }
 
-		return listLineResult;
-	}
+        if (set != null) {
+            try {
+                set.close();
+                set = null;
+            } catch (SQLException sqlerr) {
+            }
+        }
+
+        return listLineResult;
+    }
 
 }

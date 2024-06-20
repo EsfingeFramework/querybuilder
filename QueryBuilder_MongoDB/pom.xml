@@ -1,160 +1,228 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>net.sf.esfinge</groupId>
-	<artifactId>querybuilder-mongodb</artifactId>
-	<version>1.7.0</version>
-	<packaging>jar</packaging>
+    <groupId>com.github.esfingeframework</groupId>
+    <artifactId>querybuilder-mongodb</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-	<name>Esfinge QueryBuilder MongoDB</name>
-	<url>http://esfinge.sourceforge.net/</url>
-	<description>The Esfinge QueryBuilder MongoDB is the persistence framework for Esfinge QueryBuilder using Mongo Database.</description>
+    <name>Esfinge QueryBuilder MongoDB</name>
+    <url>https://github.com/EsfingeFramework/querybuilder</url>
+    <description>The Esfinge QueryBuilder MongoDB is the persistence framework for Esfinge QueryBuilder using Mongo Database.</description>
 
-	<organization>
-		<name>Esfinge Framework</name>
-		<url>http://esfinge.sourceforge.net/</url>
-	</organization>
-	
-	<licenses>
-		<license>
-			<name>MIT License</name>
-			<url>http://www.opensource.org/licenses/mit-license.php</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <organization>
+        <name>Esfinge Framework</name>
+        <url>https://github.com/EsfingeFramework</url>
+    </organization>
 
-	<developers>
-		<developer>
-			<name>Eduardo Guerra</name>
-			<email>guerraem@gmail.com</email>
-			<organization></organization>
-			<organizationUrl></organizationUrl>
-		</developer>
-	</developers>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<scm>
-		<connection>scm:git:git://github.com/EsfingeFramework/querybuilder.git</connection>
-		<developerConnection>scm:git:ssh://github.com:EsfingeFramework/querybuilder.git</developerConnection>
-		<url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_MongoDB</url>
-	</scm>
+    <developers>
+        <developer>
+            <name>Eduardo Guerra</name>
+            <email>guerraem@gmail.com</email>
+            <organization></organization>
+            <organizationUrl></organizationUrl>
+        </developer>
+        <developer>
+            <name>Fernando Pereira</name>
+            <email>fernando.opc@gmail.com</email>
+            <organization />
+            <organizationUrl />
+        </developer>
+    </developers>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+    <scm>
+        <connection>scm:git:git://github.com/EsfingeFramework/querybuilder.git</connection>
+        <developerConnection>scm:git:ssh://github.com:EsfingeFramework/querybuilder.git</developerConnection>
+        <url>https://github.com/EsfingeFramework/querybuilder/tree/master/QueryBuilder_MongoDB</url>
+    </scm>
 
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>src/resources/</directory>
-			</resource>
-		</resources>
-		<testSourceDirectory>test</testSourceDirectory>
-		<testResources>
-			<testResource>
-				<directory>test/resources/</directory>
-			</testResource>
-		</testResources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.esfingeframework</groupId>
+            <artifactId>querybuilder-core</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb.morphia</groupId>
+            <artifactId>morphia</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+    </dependencies>
 
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.7</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>net.sf.esfinge</groupId>
-			<artifactId>querybuilder-core</artifactId>
-			<version>1.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.mongodb</groupId>
-		    <artifactId>mongo-java-driver</artifactId>
-		    <version>3.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mongodb.morphia</groupId>
-			<artifactId>morphia</artifactId>
-		    <version>1.0.1</version>
-		</dependency>
-	</dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.8,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[11,)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                    <argLine>
+                        -Dfile.encoding=UTF-8
+                        --add-opens java.base/java.lang=cglib
+                        --add-opens java.base/java.net=ALL-UNNAMED
+                        --add-opens java.base/java.lang.ref=ALL-UNNAMED
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.security=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens java.base/java.nio=ALL-UNNAMED
+                        --add-exports java.base/sun.reflect.annotation=ALL-UNNAMED
+                        --add-opens java.prefs/java.util.prefs=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing.text=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing=ALL-UNNAMED
+                        --add-opens java.desktop/java.awt=ALL-UNNAMED
+                        --add-opens java.desktop/java.awt.event=ALL-UNNAMED
+                        --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing.plaf.synth=ALL-UNNAMED
+                        --add-opens java.desktop/com.sun.java.swing.plaf.gtk=ALL-UNNAMED
+                        --add-opens java.desktop/sun.awt.shell=ALL-UNNAMED
+                        --add-opens java.desktop/sun.awt.im=ALL-UNNAMED
+                        --add-exports java.desktop/sun.awt=ALL-UNNAMED
+                        --add-exports java.desktop/java.awt.peer=ALL-UNNAMED
+                        --add-exports java.desktop/com.sun.beans.editors=ALL-UNNAMED
+                        --add-exports java.desktop/sun.swing=ALL-UNNAMED
+                        --add-exports java.desktop/sun.awt.im=ALL-UNNAMED
+                        --add-exports java.desktop/com.sun.java.swing.plaf.motif=ALL-UNNAMED
+                        --add-exports java.desktop/com.apple.eio=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+                        --add-modules=jdk.jshell
+                        --add-opens jdk.jshell/jdk.jshell=ALL-UNNAMED
+                        --add-exports jdk.jdeps/com.sun.tools.classfile=ALL-UNNAMED
+                        --add-exports jdk.jdeps/com.sun.tools.javap=ALL-UNNAMED
+                        --add-exports jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED
+                        --add-exports jdk.internal.opt/jdk.internal.opt=ALL-UNNAMED
+                        --add-exports java.management/sun.management=ALL-UNNAMED
+                    </argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>

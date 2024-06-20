@@ -2,94 +2,82 @@ package net.sf.esfinge.querybuilder.jdbc;
 
 import java.util.Map;
 import java.util.Set;
-
 import net.sf.esfinge.querybuilder.methodparser.QueryRepresentation;
-import net.sf.esfinge.querybuilder.utils.DynamicHelperObject;
 
 public class JDBCQueryRepresentation implements QueryRepresentation {
 
-	private String jdbcQuery;
-	private boolean dynamic;
-	private Map<String, Object> fixParameters;
-	private JDBCQueryVisitor jdbcVisitor;
+    private final String jdbcQuery;
+    private final boolean dynamic;
+    private final Map<String, Object> fixParameters;
+    private final JDBCQueryVisitor jdbcVisitor;
 
-	public JDBCQueryRepresentation(String jdbcQuery, boolean dynamic,
-			Map<String, Object> fixParameters,
-			JDBCQueryVisitor jdbcVisitor) {
-		this.jdbcQuery = jdbcQuery;
-		this.dynamic = dynamic;
-		this.fixParameters = fixParameters;
-		this.jdbcVisitor = jdbcVisitor;
-	}
+    public JDBCQueryRepresentation(String jdbcQuery, boolean dynamic,
+            Map<String, Object> fixParameters,
+            JDBCQueryVisitor jdbcVisitor) {
+        this.jdbcQuery = jdbcQuery;
+        this.dynamic = dynamic;
+        this.fixParameters = fixParameters;
+        this.jdbcVisitor = jdbcVisitor;
+    }
 
-	public boolean isDynamic() {
+    @Override
+    public boolean isDynamic() {
+        return dynamic;
+    }
 
-		return dynamic;
-	}
+    @Override
+    public Object getQuery() {
+        return jdbcQuery;
+    }
 
-	public Object getQuery() {
+    @Override
+    public Object getQuery(Map<String, Object> params) {
+        var isFirst = true;
+        @SuppressWarnings("UnusedAssignment")
+        var stQuery = new StringBuilder();
+        stQuery = jdbcVisitor.getOriginalStQuery();
 
-		return jdbcQuery;
-	}
+        stQuery.delete(0, stQuery.length());
+        stQuery.append("select ");
+        stQuery.append(jdbcVisitor.getSqlUtils().getFieldsEntities());
+        stQuery.append(" from ");
+        stQuery.append(jdbcVisitor.getSqlUtils().getChildEntities());
 
-	public Object getQuery(Map<String, Object> params) {
-		boolean isFirst = true;
+        for (var dynamicVar : jdbcVisitor.getListOfDynamicsObjetcs()) {
+            dynamicVar.updateValues(params);
+            if (dynamicVar.isAddField()) {
+                if (isFirst) {
+                    stQuery.append(" where ");
+                    isFirst = false;
+                } else {
+                    stQuery.append(" and ");
+                }
+                stQuery.append(dynamicVar.getPropertyName()).append(" ");
+                stQuery.append(dynamicVar.getOperator()).append(" ");
+                stQuery.append(dynamicVar.getValueOfProperty());
+            }
 
-		StringBuilder stQuery = new StringBuilder();
-		stQuery = jdbcVisitor.getOriginalStQuery();
+        }
+        if (jdbcVisitor.getSqlUtils().haveJoinColumn()) {
+            if (stQuery.toString().contains("where")) {
+                stQuery.append(" and ");
+            } else {
+                stQuery.append(" where ");
+            }
+            stQuery.append(jdbcVisitor.getSqlUtils().getJoinExpressions());
 
-		stQuery.delete(0, stQuery.length());
-		stQuery.append("select ");
-		stQuery.append(jdbcVisitor.getSqlUtils().getFieldsEntities());
-		stQuery.append(" from ");
-		stQuery.append(jdbcVisitor.getSqlUtils().getChildEntities());
+        }
+        return jdbcVisitor.getStQuery();
+    }
 
-		for (DynamicHelperObject dynamic : jdbcVisitor
-				.getListOfDynamicsObjetcs()) {
+    @Override
+    public Set<String> getFixParameters() {
+        return fixParameters.keySet();
+    }
 
-			dynamic.updateValues(params);
-
-			if (dynamic.isAddField()) {
-
-				if (isFirst) {
-					stQuery.append(" where ");
-					isFirst = false;
-
-				} else {
-					stQuery.append(" and ");
-				}
-
-				stQuery.append(dynamic.getPropertyName() + " ");
-				stQuery.append(dynamic.getOperator() + " ");
-				stQuery.append(dynamic.getValueOfProperty());
-
-			}
-
-		}
-
-		if (jdbcVisitor.getSqlUtils().haveJoinColumn()) {
-
-			if (stQuery.toString().contains("where")) {
-				stQuery.append(" and ");
-			} else {
-				stQuery.append(" where ");
-			}
-
-			stQuery.append(jdbcVisitor.getSqlUtils().getJoinExpressions());
-
-		}
-
-		return jdbcVisitor.getStQuery();
-	}
-
-	public Set<String> getFixParameters() {
-
-		return fixParameters.keySet();
-	}
-
-	public Object getFixParameterValue(String param) {
-
-		return fixParameters.get(param);
-	}
+    @Override
+    public Object getFixParameterValue(String param) {
+        return fixParameters.get(param);
+    }
 
 }

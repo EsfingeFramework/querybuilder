@@ -5,323 +5,306 @@ import net.sf.esfinge.querybuilder.utils.reflection.ReflectionOperations;
 
 public class Query {
 
-	private String command;
-	private CommandType commandType;
-	private Object obj;
-	private Object idValue;
+    private String command;
+    private CommandType commandType;
+    private Object obj;
+    private Object idValue;
+
+    public Object getIdValue() {
+        return idValue;
+    }
+
+    public void setIdValue(Object idValue) {
+        this.idValue = idValue;
+    }
 
-	public Object getIdValue() {
-		return idValue;
-	}
+    public Object getObj() {
+        return obj;
+    }
 
-	public void setIdValue(Object idValue) {
-		this.idValue = idValue;
-	}
+    public void setObj(Object obj) {
 
-	public Object getObj() {
-		return obj;
-	}
+        this.obj = obj;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public CommandType getCommandType() {
+        return commandType;
+    }
+
+    public void setCommandType(CommandType commandType) {
+        this.commandType = commandType;
+    }
+
+    public String buildCommand() throws Exception {
 
-	public void setObj(Object obj) {
+        var line = DataExtractor.extract(this.obj);
+        command = switch (commandType) {
+            case SELECT_ALL ->
+                createSelect(line);
+            case SELECT_SINGLE ->
+                createSelect(line);
+            case SELECT_EXISTS ->
+                createSelect(line);
+            case SELECT_BY_EXAMPLE ->
+                createSelectByExample(line);
+            case INSERT ->
+                createInsert(line);
+            case UPDATE ->
+                createUpdate(line);
+            case DELETE ->
+                createDelete(line);
+            default ->
+                "";
+        };
 
-		this.obj = obj;
-	}
+        return command;
+
+    }
+
+    private String createUpdate(Line line) {
+
+        var builder = new StringBuilder();
+        var sqlUtils = new SQLUtils(obj.getClass().getSimpleName());
+        var rfp = new ReflectionOperations();
 
-	public String getCommand() {
-		return command;
-	}
+        builder.append("update ");
+        builder.append(sqlUtils.getMainEntity() + " ");
+        builder.append("set ");
 
-	public void setCommand(String command) {
-		this.command = command;
-	}
+        var firstValue = true;
+        for (var column : sqlUtils.getListOfColumnsToUpdateComand()) {
 
-	public CommandType getCommandType() {
-		return commandType;
-	}
+            if (!firstValue) {
 
-	public void setCommandType(CommandType commandType) {
-		this.commandType = commandType;
-	}
+                builder.append(", ");
+            }
 
-	public String buildCommand() throws Exception {
+            Object value = null;
 
-		Line line = DataExtractor.extract(this.obj);
+            if (sqlUtils.isJoinColumn(column)) {
+                value = rfp.findAttributeInClass(getObj(), column);
+            } else {
+                value = line.getValueByFieldName(column);
+            }
 
-		switch (commandType) {
-		case SELECT_ALL:
-			command = createSelect(line);
-			break;
+            if (value == null) {
+                builder.append(column + " = null");
+            } else {
+                builder.append(column + " = "
+                        + encapsulateValue(value).toString());
+            }
 
-		case SELECT_SINGLE:
-			command = createSelect(line);
-			break;
+            firstValue = false;
 
-		case SELECT_EXISTS:
-			command = createSelect(line);
-			break;
+        }
 
-		case SELECT_BY_EXAMPLE:
-			command = createSelectByExample(line);
-			break;
+        builder.append(" where ");
+        builder.append(sqlUtils.getPrimaryKeyOfMainEntity()
+                + " = "
+                + encapsulateValue(
+                        line.getValueByFieldName(sqlUtils
+                                .getPrimaryKeyOfMainEntity())).toString());
 
-		case INSERT:
-			command = createInsert(line);
-			break;
+        return builder.toString();
 
-		case UPDATE:
-			command = createUpdate(line);
-			break;
+    }
 
-		case DELETE:
-			command = createDelete(line);
-			break;
+    private String createSelect(Line line) {
 
-		default:
-			command = "";
-			break;
-		}
+        var builder = new StringBuilder();
+        var sqlUtils = new SQLUtils(obj.getClass().getSimpleName());
 
-		return command;
+        builder.append("select ");
+        builder.append(sqlUtils.getFieldsEntities());
+        builder.append(" from ");
+        builder.append(sqlUtils.getChildEntities());
 
-	}
+        if ((commandType == CommandType.SELECT_SINGLE)) {
+            builder.append(" where "
+                    + sqlUtils.getMainEntity()
+                    + "."
+                    + sqlUtils.getPrimaryKeyOfMainEntity()
+                    + " = "
+                    + (getIdValue() == null ? line.getValueByFieldName(
+                                    line.findPrimaryKey()).toString() : getIdValue()));
 
-	private String createUpdate(Line line) {
+            if (sqlUtils.haveJoinColumn()) {
 
-		StringBuilder builder = new StringBuilder();
-		SQLUtils sqlUtils = new SQLUtils(obj.getClass().getSimpleName());
-		ReflectionOperations rfp = new ReflectionOperations();
+                builder.append(" and "
+                        + sqlUtils.getJoinExpressions().toLowerCase());
 
-		builder.append("update ");
-		builder.append(sqlUtils.getMainEntity() + " ");
-		builder.append("set ");
+            }
 
-		boolean firstValue = true;
-		for (String column : sqlUtils.getListOfColumnsToUpdateComand()) {
+        } else if (commandType == CommandType.SELECT_EXISTS) {
 
-			if (!firstValue) {
+            builder.append(" where "
+                    + sqlUtils.getMainEntity()
+                    + "."
+                    + sqlUtils.getPrimaryKeyOfMainEntity()
+                    + " = "
+                    + line.getValueByFieldName(sqlUtils
+                            .getPrimaryKeyOfMainEntity()));
 
-				builder.append(", ");
-			}
+            if (sqlUtils.haveJoinColumn()) {
+                builder.append(" and "
+                        + sqlUtils.getJoinExpressions().toLowerCase());
+            }
 
-			Object value = null;
+        } else {
 
-			if (sqlUtils.isJoinColumn(column)) {
-				value = rfp.findAttributeInClass(getObj(), column);
-			} else {
-				value = line.getValueByFieldName(column);
-			}
+            if (!sqlUtils.haveJoinColumn()) {
+                builder.append(" where 1=1");
+            } else {
 
-			if (value == null) {
-				builder.append(column + " = null");
-			} else {
-				builder.append(column + " = "
-						+ encapsulateValue(value).toString());
-			}
+                builder.append(" where "
+                        + sqlUtils.getJoinExpressions().toLowerCase());
+            }
+        }
 
-			firstValue = false;
+        return builder.toString();
+    }
 
-		}
+    private String encapsulateValue(Object obj) {
 
-		builder.append(" where ");
-		builder.append(sqlUtils.getPrimaryKeyOfMainEntity()
-				+ " = "
-				+ encapsulateValue(
-						line.getValueByFieldName(sqlUtils
-								.getPrimaryKeyOfMainEntity())).toString());
+        var builder = new StringBuilder();
 
-		return builder.toString();
+        if (obj != null) {
+            var tipo = obj.getClass().getSimpleName().toUpperCase();
 
-	}
+            if (tipo.equals("STRING")) {
 
-	private String createSelect(Line line) {
+                builder.append("'");
+                builder.append(obj.toString().trim());
+                builder.append("'");
 
-		StringBuilder builder = new StringBuilder();
-		SQLUtils sqlUtils = new SQLUtils(obj.getClass().getSimpleName());
+            } else {
 
-		builder.append("select ");
-		builder.append(sqlUtils.getFieldsEntities());
-		builder.append(" from ");
-		builder.append(sqlUtils.getChildEntities());
+                builder.append(obj);
+            }
+        }
+        return builder.toString();
 
-		if ((commandType == CommandType.SELECT_SINGLE)) {
-			builder.append(" where "
-					+ sqlUtils.getMainEntity()
-					+ "."
-					+ sqlUtils.getPrimaryKeyOfMainEntity()
-					+ " = "
-					+ (getIdValue() == null ? line.getValueByFieldName(
-							line.findPrimaryKey()).toString() : getIdValue()));
+    }
 
-			if (sqlUtils.haveJoinColumn()) {
+    private String createInsert(Line line) {
 
-				builder.append(" and "
-						+ sqlUtils.getJoinExpressions().toLowerCase());
+        var builder = new StringBuilder();
+        var builderValues = new StringBuilder();
+        var rfp = new ReflectionOperations();
+        var sqlUtils = new SQLUtils(obj.getClass().getSimpleName());
 
-			}
+        builder.append("insert into ");
+        builder.append(sqlUtils.getMainEntity() + " ");
+        builder.append(sqlUtils.getColumnsToInsertComand());
+        builder.append(" values");
+        builder.append(" (");
 
-		} else if (commandType == CommandType.SELECT_EXISTS) {
+        var firstValue = true;
+        for (var column : sqlUtils.getListOfColumnsToInsertComand()) {
 
-			builder.append(" where "
-					+ sqlUtils.getMainEntity()
-					+ "."
-					+ sqlUtils.getPrimaryKeyOfMainEntity()
-					+ " = "
-					+ line.getValueByFieldName(sqlUtils
-							.getPrimaryKeyOfMainEntity()));
+            if (!firstValue) {
+                builderValues.append(",");
+            }
 
-			if (sqlUtils.haveJoinColumn()) {
-				builder.append(" and "
-						+ sqlUtils.getJoinExpressions().toLowerCase());
-			}
+            if (column.contains(".")) {
 
-		} else {
+                column.indexOf(".");
+                column = (column.substring((column.indexOf(".") + 1)));
 
-			if (!sqlUtils.haveJoinColumn()) {
-				builder.append(" where 1=1");
-			} else {
+            }
 
-				builder.append(" where "
-						+ sqlUtils.getJoinExpressions().toLowerCase());
-			}
-		}
+            Object value = null;
 
-		return builder.toString();
-	}
+            if (sqlUtils.isJoinColumn(column)) {
 
-	private String encapsulateValue(Object obj) {
+                value = rfp.findAttributeInClass(obj, column);
 
-		StringBuilder builder = new StringBuilder();
+            } else {
 
-		if (obj != null) {
-			String tipo = obj.getClass().getSimpleName().toUpperCase();
+                value = line.getValueByFieldName(column);
 
-			if (tipo.equals("STRING")) {
+            }
 
-				builder.append("'");
-				builder.append(obj.toString().trim());
-				builder.append("'");
+            if (value == null) {
+                builderValues.append("null");
+            } else {
+                builderValues.append(encapsulateValue(value).toString());
+            }
 
-			} else {
+            firstValue = false;
+        }
 
-				builder.append(obj);
-			}
-		}
-		return builder.toString();
+        builder.append(builderValues.toString());
+        builder.append(")");
 
-	}
+        return builder.toString();
 
-	private String createInsert(Line line) {
+    }
 
-		StringBuilder builder = new StringBuilder();
-		StringBuilder builderValues = new StringBuilder();
-		ReflectionOperations rfp = new ReflectionOperations();
-		SQLUtils sqlUtils = new SQLUtils(obj.getClass().getSimpleName());
+    private String createDelete(Line line) {
 
-		builder.append("insert into ");
-		builder.append(sqlUtils.getMainEntity() + " ");
-		builder.append(sqlUtils.getColumnsToInsertComand());
-		builder.append(" values");
-		builder.append(" (");
+        var entityName = obj.getClass().getSimpleName();
+        var IdName = line.findPrimaryKey();
+        var IdValue = (idValue != null ? idValue : line
+                .getValueByFieldName(IdName)).toString();
+        var query = String.format("delete from %s where %s = %s",
+                entityName, IdName, IdValue).toLowerCase();
+        return query;
+    }
 
-		boolean firstValue = true;
-		for (String column : sqlUtils.getListOfColumnsToInsertComand()) {
+    private String createSelectByExample(Line line) {
 
-			if (!firstValue) {
-				builderValues.append(",");
-			}
+        var builder = new StringBuilder();
+        var sqlUtils = new SQLUtils(obj.getClass().getSimpleName());
 
-			if (column.contains(".")) {
+        builder.append("select ");
+        builder.append(sqlUtils.getFieldsEntities());
+        builder.append(" from ");
+        builder.append(sqlUtils.getChildEntities());
 
-				column.indexOf(".");
-				column = (column.substring((column.indexOf(".") + 1)));
+        var firstValue = true;
+        for (var column : sqlUtils.getListOfFieldsEntities()) {
 
-			}
+            if (line.getValueByFieldName(column.substring((column.indexOf(".") + 1))) == null) {
+                continue;
+            }
 
-			Object value = null;
+            if (firstValue) {
+                firstValue = false;
+                builder.append(" where ");
+                builder.append(column
+                        + " = "
+                        + encapsulateValue(line.getValueByFieldName(column
+                                .substring((column.indexOf(".") + 1)))));
+            } else {
+                builder.append(" and ");
+                builder.append(column
+                        + " = "
+                        + encapsulateValue(line.getValueByFieldName(column
+                                .substring((column.indexOf(".") + 1)))));
+            }
 
-			if (sqlUtils.isJoinColumn(column)) {
+        }
 
-				value = rfp.findAttributeInClass(obj, column);
+        if (firstValue) {
+            builder.append(" where 1=1");
+        }
 
-			} else {
+        if (sqlUtils.haveJoinColumn()) {
+            builder.append(" and "
+                    + sqlUtils.getJoinExpressions().toLowerCase());
+        }
 
-				value = line.getValueByFieldName(column);
+        return builder.toString();
 
-			}
-
-			if (value == null) {
-				builderValues.append("null");
-			} else {
-				builderValues.append(encapsulateValue(value).toString());
-			}
-
-			firstValue = false;
-		}
-
-		builder.append(builderValues.toString());
-		builder.append(")");
-
-		return builder.toString();
-
-	}
-
-	private String createDelete(Line line) {
-
-		String entityName = obj.getClass().getSimpleName();
-		String IdName = line.findPrimaryKey();
-		String IdValue = (idValue != null ? idValue : line
-				.getValueByFieldName(IdName)).toString();
-		String query = String.format("delete from %s where %s = %s",
-				entityName, IdName, IdValue).toLowerCase();
-		return query;
-	}
-
-	private String createSelectByExample(Line line) {
-
-		StringBuilder builder = new StringBuilder();
-		SQLUtils sqlUtils = new SQLUtils(obj.getClass().getSimpleName());
-
-		builder.append("select ");
-		builder.append(sqlUtils.getFieldsEntities());
-		builder.append(" from ");
-		builder.append(sqlUtils.getChildEntities());
-
-		boolean firstValue = true;
-
-		for (String column : sqlUtils.getListOfFieldsEntities()) {
-
-			if (line.getValueByFieldName(column.substring((column.indexOf(".") + 1))) == null) {
-				continue;
-			}
-
-			if (firstValue) {
-				firstValue = false;
-				builder.append(" where ");
-				builder.append(column
-						+ " = "
-						+ encapsulateValue(line.getValueByFieldName(column
-								.substring((column.indexOf(".") + 1)))));
-			} else {
-				builder.append(" and ");
-				builder.append(column
-						+ " = "
-						+ encapsulateValue(line.getValueByFieldName(column
-								.substring((column.indexOf(".") + 1)))));
-			}
-
-		}
-
-		if (firstValue) {
-			builder.append(" where 1=1");
-		}
-
-		if (sqlUtils.haveJoinColumn()) {
-			builder.append(" and "
-					+ sqlUtils.getJoinExpressions().toLowerCase());
-		}
-
-		return builder.toString();
-
-	}
+    }
 
 }

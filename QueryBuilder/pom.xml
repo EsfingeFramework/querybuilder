@@ -1,22 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-		 					 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.sf.esfinge</groupId>
+    <groupId>com.github.esfingeframework</groupId>
     <artifactId>querybuilder-core</artifactId>
-    <version>1.7.0</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Esfinge QueryBuilder Core</name>
-    <url>http://esfinge.sourceforge.net/</url>
+    <url>https://github.com/EsfingeFramework/querybuilder</url>
     <description>The Esfinge QueryBuilder is a framework for creating queries based on method names.</description>
 
     <organization>
         <name>Esfinge Framework</name>
-        <url>http://esfinge.sourceforge.net/</url>
+        <url>https://github.com/EsfingeFramework</url>
     </organization>
 
     <licenses>
@@ -47,6 +43,7 @@
             <organizationUrl />
         </developer>
     </developers>
+
     <scm>
         <connection>scm:git:git://github.com/EsfingeFramework/querybuilder.git</connection>
         <developerConnection>scm:git:ssh://github.com:EsfingeFramework/querybuilder.git</developerConnection>
@@ -55,6 +52,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
@@ -62,16 +60,51 @@
             <groupId>net.sf.esfinge</groupId>
             <artifactId>classmock</artifactId>
             <version>1.1.3</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib-nodep</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-library</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jasper-el</artifactId>
-            <version>7.0.8</version>
+            <version>9.0.40</version>
         </dependency>
         <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>3.0.0</version>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>2.2.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -79,33 +112,31 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
-                    <goals>deploy</goals>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <id>enforce-maven</id>
                         <goals>
-                            <goal>jar-no-fork</goal>
+                            <goal>enforce</goal>
                         </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.8,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[11,)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.6.3</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -114,11 +145,40 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <doclint>all,-missing</doclint>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -130,25 +190,95 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <source>11</source>
+                    <target>11</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <skipTests>false</skipTests>
+                    <argLine>
+                        -Dfile.encoding=UTF-8
+                        --add-opens java.base/java.lang=cglib.nodep
+                        --add-opens java.base/java.net=ALL-UNNAMED
+                        --add-opens java.base/java.lang.ref=ALL-UNNAMED
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.security=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens java.base/java.nio=ALL-UNNAMED
+                        --add-exports java.base/sun.reflect.annotation=ALL-UNNAMED
+                        --add-opens java.prefs/java.util.prefs=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing.text=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing=ALL-UNNAMED
+                        --add-opens java.desktop/java.awt=ALL-UNNAMED
+                        --add-opens java.desktop/java.awt.event=ALL-UNNAMED
+                        --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED
+                        --add-opens java.desktop/javax.swing.plaf.synth=ALL-UNNAMED
+                        --add-opens java.desktop/com.sun.java.swing.plaf.gtk=ALL-UNNAMED
+                        --add-opens java.desktop/sun.awt.shell=ALL-UNNAMED
+                        --add-opens java.desktop/sun.awt.im=ALL-UNNAMED
+                        --add-exports java.desktop/sun.awt=ALL-UNNAMED
+                        --add-exports java.desktop/java.awt.peer=ALL-UNNAMED
+                        --add-exports java.desktop/com.sun.beans.editors=ALL-UNNAMED
+                        --add-exports java.desktop/sun.swing=ALL-UNNAMED
+                        --add-exports java.desktop/sun.awt.im=ALL-UNNAMED
+                        --add-exports java.desktop/com.sun.java.swing.plaf.motif=ALL-UNNAMED
+                        --add-exports java.desktop/com.apple.eio=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+                        --add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+                        --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+                        --add-modules=jdk.jshell
+                        --add-opens jdk.jshell/jdk.jshell=ALL-UNNAMED
+                        --add-exports jdk.jdeps/com.sun.tools.classfile=ALL-UNNAMED
+                        --add-exports jdk.jdeps/com.sun.tools.javap=ALL-UNNAMED
+                        --add-exports jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED
+                        --add-exports jdk.internal.opt/jdk.internal.opt=ALL-UNNAMED
+                        --add-exports java.management/sun.management=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>

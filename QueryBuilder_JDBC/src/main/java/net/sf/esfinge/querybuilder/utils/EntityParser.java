@@ -1,81 +1,77 @@
 package net.sf.esfinge.querybuilder.utils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.sf.esfinge.querybuilder.annotations.Column;
 import net.sf.esfinge.querybuilder.utils.reflection.ClassFieldExtractor;
 import net.sf.esfinge.querybuilder.utils.reflection.ReflectionOperations;
 
 public class EntityParser {
 
-	private Class<?> innerClass;
+    private Class<?> innerClass;
 
-	public EntityParser(Class<?> innerClass) {
-		this.setInnerClass(innerClass);
-	}
+    public EntityParser(Class<?> innerClass) {
+        this.setInnerClass(innerClass);
+    }
 
-	public ArrayList<Object> parseEntity(List<Line> tableLines)
-			throws ClassNotFoundException, Exception {
-		ArrayList<Object> Result = new ArrayList<Object>();
-		String columnName = "";
+    public ArrayList<Object> parseEntity(List<Line> tableLines)
+            throws ClassNotFoundException, Exception {
+        var Result = new ArrayList<>();
+        var columnName = "";
+        for (var line : tableLines) {
+            var object = Class.forName(innerClass.getName()).newInstance();
+            var find = false;
+            var fieldExtractor = new ClassFieldExtractor(
+                    innerClass);
+            fieldExtractor.ExtractAllClassFields();
 
-		for (Line line : tableLines) {
-			Object object = Class.forName(innerClass.getName()).newInstance();
-			boolean find = false;
+            for (var f : fieldExtractor.GetAllClassFields()) {
 
-			ClassFieldExtractor fieldExtractor = new ClassFieldExtractor(
-					innerClass);
-			fieldExtractor.ExtractAllClassFields();
+                if (f.isAnnotationPresent(Column.class)) {
+                    var column = f.getAnnotation(Column.class);
+                    columnName = column.name().toUpperCase();
+                } else {
+                    columnName = f.getName().toUpperCase();
+                }
 
-			for (Field f : fieldExtractor.GetAllClassFields()) {
+                var value = line.getValueByFieldName(columnName);
 
-				if (f.isAnnotationPresent(Column.class)) {
-					Column column = f.getAnnotation(Column.class);
-					columnName = column.name().toUpperCase();
-				} else {
-					columnName = f.getName().toUpperCase();
-				}
+                if (value != null) {
 
-				Object value = line.getValueByFieldName(columnName);
+                    var childClass = f.getDeclaringClass();
+                    var fatherClass = object.getClass();
+                    if (childClass.equals(fatherClass)) {
+                        ReflectionOperations.SetFieldValue(f, object, value);
+                        find = true;
+                    } else {
 
-				if (value != null) {
+                        Object childObject = null;
+                        childObject = ReflectionOperations
+                                .findAttributeInClass(object,
+                                        f.getDeclaringClass());
+                        ReflectionOperations.SetFieldValue(f, childObject,
+                                value);
+                        find = true;
+                    }
+                }
+                columnName = "";
+                value = null;
+            }
 
-					Class<?> childClass = f.getDeclaringClass();
-					Class<?> fatherClass = object.getClass();
-					if (childClass.equals(fatherClass)) {
-						ReflectionOperations.SetFieldValue(f, object, value);
-						find = true;
-					} else {
+            if (find) {
 
-						Object childObject = null;
-						childObject = ReflectionOperations
-								.findAttributeInClass(object,
-										f.getDeclaringClass());
-						ReflectionOperations.SetFieldValue(f, childObject,
-								value);
-						find = true;
-					}
-				}
-				columnName = "";
-				value = null;
-			}
+                Result.add(object);
+            }
+        }
+        return Result;
+    }
 
-			if (find) {
+    public Class<?> getInnerClass() {
+        return innerClass;
+    }
 
-				Result.add(object);
-			}
-		}
-		return Result;
-	}
-
-	public Class<?> getInnerClass() {
-		return innerClass;
-	}
-
-	public void setInnerClass(Class<?> innerClass) {
-		this.innerClass = innerClass;
-	}
+    public void setInnerClass(Class<?> innerClass) {
+        this.innerClass = innerClass;
+    }
 
 }

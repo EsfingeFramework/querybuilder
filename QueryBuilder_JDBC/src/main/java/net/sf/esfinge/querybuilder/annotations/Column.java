@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Column {
 
-	String name() default "";
+    String name() default "";
 
-	String type() default "";
+    String type() default "";
 
-	boolean autoIncrement() default false;
+    boolean autoIncrement() default false;
 
 }
