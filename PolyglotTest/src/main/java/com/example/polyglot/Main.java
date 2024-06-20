@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         MongoDBExample mongoDBExample = QueryBuilder.create(MongoDBExample.class);
-        for (var person : mongoDBExample.getPersonByName("Fernando")) {
+        for (var person : mongoDBExample.getPersonByNameOrLastName("Fernando", "Albuquerque")) {
             System.out.println(person.getId());
             System.out.println(person.getName());
             System.out.println(person.getLastName());

@@ -20,7 +20,6 @@ public class Person {
     @ExternalPersistence
     @PolyglotOneToOne(mappedBy = "person", joinColumn = "id")
     private Address address;
-    //private L
 
     public Integer getId() {
         return id;
