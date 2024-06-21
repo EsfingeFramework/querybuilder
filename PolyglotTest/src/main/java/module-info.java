@@ -2,6 +2,7 @@ module polyglot {
     requires querybuilder.jpaone;
     requires querybuilder.mongodb;
     requires morphia;
+    requires lombok;
 
     exports com.example.polyglot;
     exports com.example.polyglot.entities;

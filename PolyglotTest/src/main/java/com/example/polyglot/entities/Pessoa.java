@@ -10,15 +10,14 @@ import org.mongodb.morphia.annotations.Transient;
 @Entity
 @PersistenceType(value = "MONGODB", secondary = "JPA1")
 @Data
-public class Person {
+public class Pessoa {
 
     @Id
     private Integer id;
     private String name;
     private String lastName;
     private Integer age;
-    private Integer addressId;
     @Transient
-    @PolyglotOneToOne(joinColumn = "addressId", referencedColumnName = "id")
-    private Address address;
+    @PolyglotOneToOne(mappedBy = "person", referencedColumnName = "id")
+    private Endereco address;
 }

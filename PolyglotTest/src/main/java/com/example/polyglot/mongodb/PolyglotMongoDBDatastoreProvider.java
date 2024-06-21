@@ -1,6 +1,7 @@
 package com.example.polyglot.mongodb;
 
 import com.example.polyglot.entities.Person;
+import com.example.polyglot.entities.Pessoa;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 import esfinge.querybuilder.mongodb.DatastoreProvider;
@@ -15,6 +16,7 @@ public class PolyglotMongoDBDatastoreProvider extends DatastoreProvider {
             e.printStackTrace();
         }
 
+        getMorphia().map(Pessoa.class);
         getMorphia().map(Person.class);
     }
 

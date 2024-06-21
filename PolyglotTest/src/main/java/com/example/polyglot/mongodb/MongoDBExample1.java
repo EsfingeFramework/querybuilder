@@ -15,7 +15,7 @@ import java.util.List;
 @DomainTerm(term = "carioca", conditions = @Condition(property = "address.city", comparison = ComparisonType.EQUALS, value = "Rio de Janeiro"))
 
 @TargetEntity(Person.class)
-public interface MongoDBExample extends Repository<Person> {
+public interface MongoDBExample1 extends Repository<Person> {
 
     public List<Person> getPerson();
 

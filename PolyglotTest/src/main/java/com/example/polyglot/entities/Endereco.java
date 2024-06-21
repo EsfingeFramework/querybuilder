@@ -11,11 +11,12 @@ import lombok.Data;
 @Entity
 @PersistenceType("JPA1")
 @Data
-public class Address implements Serializable {
+public class Endereco implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String city;
     private String state;
+    private Integer person;
 }

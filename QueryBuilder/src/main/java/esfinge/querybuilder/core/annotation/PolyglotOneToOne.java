@@ -9,8 +9,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface PolyglotOneToOne {
 
-    String mappedBy();
+    String mappedBy() default "NONE";
 
-    String joinColumn();
+    String joinColumn() default "NONE";
+
+    String referencedColumnName();
 
 }

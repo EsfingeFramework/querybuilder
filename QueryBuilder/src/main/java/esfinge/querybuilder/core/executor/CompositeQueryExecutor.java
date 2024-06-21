@@ -1,6 +1,5 @@
 package esfinge.querybuilder.core.executor;
 
-import esfinge.querybuilder.core.annotation.ExternalPersistence;
 import esfinge.querybuilder.core.annotation.PolyglotOneToMany;
 import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
@@ -28,45 +27,75 @@ public class CompositeQueryExecutor implements QueryExecutor {
         Class entityType = info.getEntityType();
         Field[] fields = entityType.getDeclaredFields();
         for (Field field : fields) {
-            if (field.isAnnotationPresent(ExternalPersistence.class)) {
-                if (field.isAnnotationPresent(PolyglotOneToOne.class)) {
-                    result = invokePolyglotOneToOneMethod(field, info, result);
-                } else if (field.isAnnotationPresent(PolyglotOneToMany.class)) {
-                    result = invokePolyglotOneToManyMethod(field, result);
-                }
+            if (field.isAnnotationPresent(PolyglotOneToOne.class)) {
+                result = invokeOneToOne(field, info, result);
+            } else if (field.isAnnotationPresent(PolyglotOneToMany.class)) {
+                result = invokeOneToMany(field, result);
             }
         }
         return result;
     }
 
-    private Object invokePolyglotOneToOneMethod(Field field, QueryInfo primaryInfo, Object primaryResult) {
+    private Object invokeOneToOne(Field field, QueryInfo primaryInfo, Object primaryResult) {
         var mappedBy = field.getAnnotation(PolyglotOneToOne.class).mappedBy();
         var joinColumn = field.getAnnotation(PolyglotOneToOne.class).joinColumn();
+        var referencedColumnName = field.getAnnotation(PolyglotOneToOne.class).referencedColumnName();
 
-        var secondaryInfo = new QueryInfo();
-        secondaryInfo.setQueryType(RETRIEVE_LIST);
-        secondaryInfo.setEntityType(field.getType());
-        secondaryInfo.setEntityName(field.getType().getSimpleName());
-        var qc = new SimpleCondition();
-        qc.setName(mappedBy);
-        secondaryInfo.setQueryStyle(QueryStyle.METHOD_SIGNATURE);
-        secondaryInfo.addCondition(qc);
+        if ((mappedBy.equals("NONE") && joinColumn.equals("NONE"))
+                || (!mappedBy.equals("NONE") && !joinColumn.equals("NONE"))) {
+            throw new RuntimeException("The PolyglotOneToOne annotation must have the mappedBy or joinColumn attribute defined.");
+        } else if (!mappedBy.equals("NONE") && joinColumn.equals("NONE")) {
+            var secondaryInfo = new QueryInfo();
+            secondaryInfo.setQueryType(RETRIEVE_LIST);
+            secondaryInfo.setEntityType(field.getType());
+            secondaryInfo.setEntityName(field.getType().getSimpleName());
+            var qc = new SimpleCondition();
+            qc.setName(mappedBy);
+            secondaryInfo.setQueryStyle(QueryStyle.METHOD_SIGNATURE);
+            secondaryInfo.addCondition(qc);
 
-        var primaryClass = primaryInfo.getEntityType();
-        if (primaryInfo.getQueryType().equals(RETRIEVE_LIST)) {
-            var primaryResultList = (List<?>) primaryResult;
+            var primaryClass = primaryInfo.getEntityType();
+            if (primaryInfo.getQueryType().equals(RETRIEVE_LIST)) {
+                var primaryResultList = (List<?>) primaryResult;
 
-            for (var priItem : primaryResultList) {
+                for (var priItem : primaryResultList) {
+                    try {
+                        var castItem = primaryClass.cast(priItem);
+
+                        // Obtem o valor do campo referenciado de castItem
+                        Field fieldPrimary = primaryClass.getDeclaredField(referencedColumnName);
+                        fieldPrimary.setAccessible(true);
+                        var valuePrimary = fieldPrimary.get(castItem);
+
+                        // Executa a query secundária
+                        var secondaryResult = (List<?>) secondary.executeQuery(secondaryInfo, new Object[]{valuePrimary});
+                        for (var secItem : secondaryResult) {
+                            // Obtem o valor do campo mappedBy de secItem
+                            Field mappedByFieldSecondary = secItem.getClass().getDeclaredField(mappedBy);
+                            mappedByFieldSecondary.setAccessible(true);
+                            var mappedByValueSecondary = mappedByFieldSecondary.get(secItem);
+
+                            // Compara os valores
+                            if (valuePrimary.equals(mappedByValueSecondary)) {
+                                field.setAccessible(true);
+                                field.set(castItem, secItem);
+                            }
+                        }
+                    } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            } else if (primaryInfo.getQueryType().equals(RETRIEVE_SINGLE)) {
                 try {
-                    var castItem = primaryClass.cast(priItem);
+                    var castItem = primaryClass.cast(primaryResult);
 
-                    // Obtem o valor do campo joinColumn de castItem
-                    Field joinColumnFieldPrimary = primaryClass.getDeclaredField(joinColumn);
-                    joinColumnFieldPrimary.setAccessible(true);
-                    var joinColumnValuePrimary = joinColumnFieldPrimary.get(castItem);
+                    // Obtem o valor do campo referenciado de castItem
+                    Field fieldPrimary = primaryClass.getDeclaredField(referencedColumnName);
+                    fieldPrimary.setAccessible(true);
+                    var valuePrimary = fieldPrimary.get(castItem);
 
                     // Executa a query secundária
-                    var secondaryResult = (List<?>) secondary.executeQuery(secondaryInfo, new Object[]{joinColumnValuePrimary});
+                    var secondaryResult = (List<?>) secondary.executeQuery(secondaryInfo, new Object[]{valuePrimary});
                     for (var secItem : secondaryResult) {
                         // Obtem o valor do campo mappedBy de secItem
                         Field mappedByFieldSecondary = secItem.getClass().getDeclaredField(mappedBy);
@@ -74,7 +103,7 @@ public class CompositeQueryExecutor implements QueryExecutor {
                         var mappedByValueSecondary = mappedByFieldSecondary.get(secItem);
 
                         // Compara os valores
-                        if (joinColumnValuePrimary.equals(mappedByValueSecondary)) {
+                        if (valuePrimary.equals(mappedByValueSecondary)) {
                             field.setAccessible(true);
                             field.set(castItem, secItem);
                         }
@@ -83,37 +112,80 @@ public class CompositeQueryExecutor implements QueryExecutor {
                     ex.printStackTrace();
                 }
             }
-        } else if (primaryInfo.getQueryType().equals(RETRIEVE_SINGLE)) {
-            try {
-                var castItem = primaryClass.cast(primaryResult);
+        } else if (mappedBy.equals("NONE") && !joinColumn.equals("NONE")) {
+            var secondaryInfo = new QueryInfo();
+            secondaryInfo.setQueryType(RETRIEVE_LIST);
+            secondaryInfo.setEntityType(field.getType());
+            secondaryInfo.setEntityName(field.getType().getSimpleName());
+            var qc = new SimpleCondition();
+            qc.setName(referencedColumnName);
+            secondaryInfo.setQueryStyle(QueryStyle.METHOD_SIGNATURE);
+            secondaryInfo.addCondition(qc);
 
-                // Obtem o valor do campo joinColumn de castItem
-                Field joinColumnFieldPrimary = primaryClass.getDeclaredField(joinColumn);
-                joinColumnFieldPrimary.setAccessible(true);
-                var joinColumnValuePrimary = joinColumnFieldPrimary.get(castItem);
+            var primaryClass = primaryInfo.getEntityType();
+            if (primaryInfo.getQueryType().equals(RETRIEVE_LIST)) {
+                var primaryResultList = (List<?>) primaryResult;
 
-                // Executa a query secundária
-                var secondaryResult = (List<?>) secondary.executeQuery(secondaryInfo, null);
-                for (var secItem : secondaryResult) {
-                    // Obtem o valor do campo mappedBy de secItem
-                    Field mappedByFieldSecondary = secItem.getClass().getDeclaredField(mappedBy);
-                    mappedByFieldSecondary.setAccessible(true);
-                    var mappedByValueSecondary = mappedByFieldSecondary.get(secItem);
+                for (var priItem : primaryResultList) {
+                    try {
+                        var castItem = primaryClass.cast(priItem);
 
-                    // Compara os valores
-                    if (joinColumnValuePrimary.equals(mappedByValueSecondary)) {
-                        field.setAccessible(true);
-                        field.set(castItem, secItem);
+                        // Obtem o valor do campo joinColumn de castItem
+                        Field fieldPrimary = primaryClass.getDeclaredField(joinColumn);
+                        fieldPrimary.setAccessible(true);
+                        var valuePrimary = fieldPrimary.get(castItem);
+
+                        // Executa a query secundária
+                        var secondaryResult = (List<?>) secondary.executeQuery(secondaryInfo, new Object[]{valuePrimary});
+                        for (var secItem : secondaryResult) {
+                            // Obtem o valor do campo mappedBy de secItem
+                            Field mappedByFieldSecondary = secItem.getClass().getDeclaredField(referencedColumnName);
+                            mappedByFieldSecondary.setAccessible(true);
+                            var mappedByValueSecondary = mappedByFieldSecondary.get(secItem);
+
+                            // Compara os valores
+                            if (valuePrimary.equals(mappedByValueSecondary)) {
+                                field.setAccessible(true);
+                                field.set(castItem, secItem);
+                            }
+                        }
+                    } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                        ex.printStackTrace();
                     }
                 }
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-                ex.printStackTrace();
+            } else if (primaryInfo.getQueryType().equals(RETRIEVE_SINGLE)) {
+                try {
+                    var castItem = primaryClass.cast(primaryResult);
+
+                    // Obtem o valor do campo joinColumn de castItem
+                    Field fieldPrimary = primaryClass.getDeclaredField(joinColumn);
+                    fieldPrimary.setAccessible(true);
+                    var valuePrimary = fieldPrimary.get(castItem);
+
+                    // Executa a query secundária
+                    var secondaryResult = (List<?>) secondary.executeQuery(secondaryInfo, new Object[]{valuePrimary});
+                    for (var secItem : secondaryResult) {
+                        // Obtem o valor do campo mappedBy de secItem
+                        Field mappedByFieldSecondary = secItem.getClass().getDeclaredField(mappedBy);
+                        mappedByFieldSecondary.setAccessible(true);
+                        var mappedByValueSecondary = mappedByFieldSecondary.get(secItem);
+
+                        // Compara os valores
+                        if (valuePrimary.equals(mappedByValueSecondary)) {
+                            field.setAccessible(true);
+                            field.set(castItem, secItem);
+                        }
+                    }
+                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
+
         return primaryResult;
     }
 
-    private Object invokePolyglotOneToManyMethod(Field field, Object result) {
+    private Object invokeOneToMany(Field field, Object result) {
         return null;
     }
 
