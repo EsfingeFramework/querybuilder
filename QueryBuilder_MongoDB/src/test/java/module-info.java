@@ -1,6 +1,6 @@
 module querybuilder.mongodb_tests {
     requires querybuilder.mongodb;
-    requires junit;
+    requires junit; 
 
     exports esfinge.querybuilder.mongodb_tests;
     exports esfinge.querybuilder.mongodb_tests.dynamic;

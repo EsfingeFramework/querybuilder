@@ -15,7 +15,7 @@ module querybuilder.core_tests {
     uses esfinge.querybuilder.core_tests.utils.InterfacePriority;
     uses esfinge.querybuilder.core_tests.utils.TestInterface;
 
-    provides esfinge.querybuilder.core.Repository with 
+    provides esfinge.querybuilder.core.Repository with
             esfinge.querybuilder.core_tests.DummyRepository;
 
     provides esfinge.querybuilder.core.executor.QueryExecutor with

@@ -19,6 +19,6 @@ public class Person {
     private Integer age;
     private Integer addressId;
     @Transient
-    @PolyglotOneToOne(joinColumn = "addressId", referencedColumnName = "id")
+    @PolyglotOneToOne(joinAttribute = "addressId", referencedAttributeKey = "id")
     private Address address;
 }

@@ -18,6 +18,6 @@ public class Pessoa {
     private String lastName;
     private Integer age;
     @Transient
-    @PolyglotOneToOne(mappedBy = "person", referencedColumnName = "id")
+    @PolyglotOneToOne(mappedByAttribute = "person", referencedAttributeKey = "id")
     private Endereco address;
 }

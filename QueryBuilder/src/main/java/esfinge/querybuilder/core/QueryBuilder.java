@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class QueryBuilder implements InvocationHandler {
 
-    //Static Part
+    // Static Part
     private static MethodParser configuredMethodParser;
     private static Map<String, QueryExecutor> configuredQueryExecutors;
     private static Map<String, NeedClassConfiguration> configuredClassConfigs;
@@ -32,9 +32,8 @@ public class QueryBuilder implements InvocationHandler {
 
     public static MethodParser getConfiguredMethodParser(Class<?> interf) {
         if (configuredMethodParser == null) {
-            var mp = new SelectorMethodParser();
-            mp.setInterface(interf);
-            return mp;
+            configuredMethodParser = new SelectorMethodParser();
+            configuredMethodParser.setInterface(interf);
         }
         return configuredMethodParser;
     }
@@ -62,56 +61,73 @@ public class QueryBuilder implements InvocationHandler {
     }
 
     public static <E> E create(Class<E> interf) {
-        if (cachedProxies.containsKey(interf)) {
-            return (E) cachedProxies.get(interf);
-        }
+        return (E) cachedProxies.computeIfAbsent(interf, k -> {
+            var qb = new QueryBuilder();
+            var persistenceConfig = getPersistenceConfig(interf);
+            qb.setMethodParser(getConfiguredMethodParser(interf));
+            qb.setQueryExecutor(createQueryExecutor(persistenceConfig));
+            configureImplementations(interf, qb, persistenceConfig);
+            return Proxy.newProxyInstance(interf.getClassLoader(), new Class[]{interf}, qb);
+        });
+    }
 
-        var primaryPersistence = "";
-        var secondaryPersistence = "";
+    private static PersistenceConfig getPersistenceConfig(Class<?> interf) {
         if (interf.isAnnotationPresent(TargetEntity.class)) {
             var entityClass = interf.getAnnotation(TargetEntity.class).value();
-            if (entityClass != null) {
-                if (entityClass.isAnnotationPresent(PersistenceType.class)) {
-                    primaryPersistence = entityClass.getAnnotation(PersistenceType.class).value();
-                    secondaryPersistence = entityClass.getAnnotation(PersistenceType.class).secondary();
-                } else {
-                    System.out.println("There is no @PersistenceType annotation.");
-                }
-            } else {
-                System.out.println("EntityClass in @TargetEntity is null.");
+            if (entityClass != null && entityClass.isAnnotationPresent(PersistenceType.class)) {
+                var annotation = entityClass.getAnnotation(PersistenceType.class);
+                return new PersistenceConfig(annotation.value(), annotation.secondary());
             }
-        } else {
-            System.out.println("There is no @TargetEntity annotation.");
         }
+        System.out.println("There is no @TargetEntity or @PersistenceType annotation.");
+        return new PersistenceConfig("", "");
+    }
 
-        var qb = new QueryBuilder();
-        qb.setMethodParser(getConfiguredMethodParser(interf));
-        if (!secondaryPersistence.equalsIgnoreCase("NONE")) {
-            var primaryQueryExecutor = getConfiguredQueryExecutor(primaryPersistence);
-            var secondaryQueryExecutor = getConfiguredQueryExecutor(secondaryPersistence);
-            qb.setQueryExecutor(new CompositeQueryExecutor(primaryQueryExecutor, secondaryQueryExecutor));
-        } else {
-            qb.setQueryExecutor(getConfiguredQueryExecutor(primaryPersistence));
-        }
+    private static QueryExecutor createQueryExecutor(PersistenceConfig config) {
+        var primaryExecutor = getConfiguredQueryExecutor(config.primary);
+        return config.secondary.equalsIgnoreCase("NONE")
+                ? primaryExecutor
+                : new CompositeQueryExecutor(primaryExecutor, getConfiguredQueryExecutor(config.secondary));
+    }
 
-        for (Class superinterf : interf.getInterfaces()) {
-            var impl = getConfiguredClassConfig(superinterf, primaryPersistence);
-            if (impl != null) {
-                qb.addImplementation(superinterf, impl);
+    private static <E> void configureImplementations(Class<E> interf, QueryBuilder qb, PersistenceConfig persistenceConfig) {
+        for (var superinterf : interf.getInterfaces()) {
+            var priImpl = getConfiguredClassConfig(superinterf, persistenceConfig.primary);
+            if (priImpl != null) {
+
                 if (NeedClassConfiguration.class.isAssignableFrom(superinterf)) {
-                    Class clazz = ReflectionUtils.getFirstGenericTypeFromInterfaceImplemented(interf, superinterf);
-                    ((NeedClassConfiguration) impl).configureClass(clazz);
+                    Class<?> clazz = ReflectionUtils.getFirstGenericTypeFromInterfaceImplemented(interf, superinterf);
+                    priImpl.setConfiguredClass(clazz);
+                }
+
+                var secImpl = getConfiguredClassConfig(superinterf, persistenceConfig.secondary);
+                if (secImpl == null) {
+                    qb.addImplementation(superinterf, priImpl);
+                } else if (isRepository(priImpl.getClass()) && isRepository(secImpl.getClass())) {
+                    var composite = new CompositeRepository<E>(
+                            Repository.class.cast(priImpl),
+                            Repository.class.cast(secImpl),
+                            qb.getQueryExecutor());
+                    ((NeedClassConfiguration) composite).setConfiguredClass(priImpl.getConfiguredClass());
+                    qb.addImplementation(interf, composite);
+                } else {
+                    System.out.println("Does not implement Repository.");
                 }
             }
         }
-
-        var proxy = (E) Proxy.newProxyInstance(interf.getClassLoader(), new Class[]{interf}, qb);
-        cachedProxies.put(interf, proxy);
-        return proxy;
     }
 
     public static void clearCache() {
         cachedProxies.clear();
+    }
+
+    private static boolean isRepository(Class<?> clazz) {
+        for (Class<?> interf : clazz.getInterfaces()) {
+            if (interf.equals(Repository.class)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //Concrete Part
@@ -123,6 +139,10 @@ public class QueryBuilder implements InvocationHandler {
         this.mp = mp;
     }
 
+    public QueryExecutor getQueryExecutor() {
+        return qe;
+    }
+
     public void setQueryExecutor(QueryExecutor qe) {
         this.qe = qe;
     }
@@ -132,21 +152,28 @@ public class QueryBuilder implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object obj, Method m, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         for (var superinterf : implementedInterfaces.keySet()) {
             try {
-                var customMethod = superinterf.getMethod(m.getName(), m.getParameterTypes());
-                var target = implementedInterfaces.get(superinterf);
-                return customMethod.invoke(target, args);
-            } catch (NoSuchMethodException e) {
-            } catch (InvocationTargetException e) {
-                throw e.getTargetException();
+                var customMethod = superinterf.getMethod(method.getName(), method.getParameterTypes());
+                return customMethod.invoke(implementedInterfaces.get(superinterf), args);
+            } catch (NoSuchMethodException | IllegalArgumentException ignored) {
+            } catch (InvocationTargetException ex) {
+                throw ex.getTargetException();
             }
         }
-        if (!queryInfoCache.containsKey(m)) {
-            queryInfoCache.put(m, mp.parse(m));
-        }
-        return qe.executeQuery(queryInfoCache.get(m), args);
+        queryInfoCache.computeIfAbsent(method, mp::parse);
+        return qe.executeQuery(queryInfoCache.get(method), args);
     }
 
+    private static class PersistenceConfig {
+
+        String primary;
+        String secondary;
+
+        PersistenceConfig(String primary, String secondary) {
+            this.primary = primary;
+            this.secondary = secondary;
+        }
+    }
 }
