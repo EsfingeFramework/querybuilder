@@ -12,17 +12,17 @@ import java.util.List;
 
 public class CompositeQueryExecutor implements QueryExecutor {
 
-    private final QueryExecutor primary;
-    private final QueryExecutor secondary;
+    private final QueryExecutor primaryExec;
+    private final QueryExecutor secondaryExec;
 
-    public CompositeQueryExecutor(QueryExecutor primary, QueryExecutor secondary) {
-        this.primary = primary;
-        this.secondary = secondary;
+    public CompositeQueryExecutor(QueryExecutor primaryExec, QueryExecutor secondaryExec) {
+        this.primaryExec = primaryExec;
+        this.secondaryExec = secondaryExec;
     }
 
     @Override
     public Object executeQuery(QueryInfo info, Object[] args) {
-        var result = primary.executeQuery(info, args);
+        var result = primaryExec.executeQuery(info, args);
         var entityType = info.getEntityType();
         var fields = entityType.getDeclaredFields();
         for (var field : fields) {
@@ -84,7 +84,7 @@ public class CompositeQueryExecutor implements QueryExecutor {
             var primaryField = primaryClass.getDeclaredField(columnToMatch);
             primaryField.setAccessible(true);
             var valuePrimary = primaryField.get(castItem);
-            var secondaryResults = (List<?>) secondary.executeQuery(secondaryInfo, new Object[]{valuePrimary});
+            var secondaryResults = (List<?>) secondaryExec.executeQuery(secondaryInfo, new Object[]{valuePrimary});
             for (var secItem : secondaryResults) {
                 var secondaryField = secItem.getClass().getDeclaredField(mappedByAttribute.equals("NONE") ? referencedAttributeKey : mappedByAttribute);
                 secondaryField.setAccessible(true);

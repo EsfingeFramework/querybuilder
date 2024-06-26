@@ -2,9 +2,7 @@ package esfinge.querybuilder.core_tests;
 
 import esfinge.querybuilder.core.Repository;
 import java.util.List;
-import lombok.Data;
 
-@Data
 public class DummyRepository<E> implements Repository<E> {
 
     private String lastMethodCalled;
@@ -14,6 +12,10 @@ public class DummyRepository<E> implements Repository<E> {
     public DummyRepository() {
         super();
         instance = this;
+    }
+
+    @Override
+    public void configureClass(Class<E> clazz) {
     }
 
     @Override

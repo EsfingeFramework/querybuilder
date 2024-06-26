@@ -9,14 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
-import lombok.Data;
 
 @QueryExecutorType("JPA1")
-@Data
 public class JPARepository<E> implements Repository<E> {
 
     protected EntityManager em;
     protected Class<E> configuredClass;
+
+    @Override
+    public void configureClass(Class<E> clazz) {
+        configuredClass = clazz;
+    }
 
     public JPARepository() {
         var emp = ServiceLocator.getServiceImplementation(EntityManagerProvider.class);
@@ -82,5 +85,4 @@ public class JPARepository<E> implements Repository<E> {
         }
         return q.getResultList();
     }
-
 }

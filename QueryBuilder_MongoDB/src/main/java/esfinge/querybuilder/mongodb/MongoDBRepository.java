@@ -6,12 +6,10 @@ import esfinge.querybuilder.core.exception.InvalidPropertyException;
 import esfinge.querybuilder.core.utils.ServiceLocator;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import lombok.Data;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Key;
 
 @QueryExecutorType("MONGODB")
-@Data
 public class MongoDBRepository<E> implements Repository<E> {
 
     protected Datastore ds;
@@ -20,6 +18,11 @@ public class MongoDBRepository<E> implements Repository<E> {
     public MongoDBRepository() {
         var dsp = ServiceLocator.getServiceImplementation(DatastoreProvider.class);
         ds = dsp.getDatastore();
+    }
+
+    @Override
+    public void configureClass(Class<E> clazz) {
+        configuredClass = clazz;
     }
 
     @Override

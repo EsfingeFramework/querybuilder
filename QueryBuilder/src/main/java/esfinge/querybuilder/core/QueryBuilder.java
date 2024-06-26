@@ -95,23 +95,25 @@ public class QueryBuilder implements InvocationHandler {
             var priImpl = getConfiguredClassConfig(superinterf, persistenceConfig.primary);
             if (priImpl != null) {
 
+                Class<?> clazz = null;
+
                 if (NeedClassConfiguration.class.isAssignableFrom(superinterf)) {
-                    Class<?> clazz = ReflectionUtils.getFirstGenericTypeFromInterfaceImplemented(interf, superinterf);
-                    priImpl.setConfiguredClass(clazz);
+                    clazz = ReflectionUtils.getFirstGenericTypeFromInterfaceImplemented(interf, superinterf);
+                    priImpl.configureClass(clazz);
                 }
 
                 var secImpl = getConfiguredClassConfig(superinterf, persistenceConfig.secondary);
                 if (secImpl == null) {
                     qb.addImplementation(superinterf, priImpl);
-                } else if (isRepository(priImpl.getClass()) && isRepository(secImpl.getClass())) {
+                } else if (areRepositories(priImpl.getClass(), secImpl.getClass())) {
                     var composite = new CompositeRepository<E>(
                             Repository.class.cast(priImpl),
                             Repository.class.cast(secImpl),
                             qb.getQueryExecutor());
-                    ((NeedClassConfiguration) composite).setConfiguredClass(priImpl.getConfiguredClass());
+                    ((NeedClassConfiguration) composite).configureClass(clazz);
                     qb.addImplementation(interf, composite);
                 } else {
-                    System.out.println("Does not implement Repository.");
+                    throw new RuntimeException(priImpl + " and " + secImpl + " must be <Reposity> implementations.");
                 }
             }
         }
@@ -121,13 +123,22 @@ public class QueryBuilder implements InvocationHandler {
         cachedProxies.clear();
     }
 
-    private static boolean isRepository(Class<?> clazz) {
-        for (Class<?> interf : clazz.getInterfaces()) {
+    private static boolean areRepositories(Class<?> priImpl, Class<?> secImpl) {
+        var priResult = false;
+        var secResult = false;
+        for (Class<?> interf : priImpl.getInterfaces()) {
             if (interf.equals(Repository.class)) {
-                return true;
+                priResult = true;
+                break;
             }
         }
-        return false;
+        for (Class<?> interf : secImpl.getInterfaces()) {
+            if (interf.equals(Repository.class)) {
+                secResult = true;
+                break;
+            }
+        }
+        return priResult && secResult;
     }
 
     //Concrete Part
