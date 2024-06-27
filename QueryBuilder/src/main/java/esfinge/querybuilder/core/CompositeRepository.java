@@ -1,12 +1,17 @@
 package esfinge.querybuilder.core;
 
+import esfinge.querybuilder.core.annotation.PolyglotJoin;
+import esfinge.querybuilder.core.annotation.PolyglotOneToMany;
+import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
 import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.QueryStyle;
 import esfinge.querybuilder.core.methodparser.QueryType;
 import static esfinge.querybuilder.core.methodparser.QueryType.RETRIEVE_LIST;
 import static esfinge.querybuilder.core.methodparser.QueryType.RETRIEVE_SINGLE;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 
 public class CompositeRepository<E> implements Repository<E> {
 
@@ -29,8 +34,57 @@ public class CompositeRepository<E> implements Repository<E> {
     @Override
     public E save(E obj) {
         if (primaryRepo != null) {
-            E savedObj = primaryRepo.save(obj);
+            obj = primaryRepo.save(obj);
+            if (obj != null) {
+                for (var field : obj.getClass().getDeclaredFields()) {
+                    if (field.isAnnotationPresent(PolyglotOneToOne.class)) {
+                        obj = saveForOneToOne(field, obj);
+                    } else if (field.isAnnotationPresent(PolyglotOneToMany.class)) {
+                        obj = saveForOneToMany(field, obj);
+                    }
+                }
+                return obj;
+            }
         }
+        return null;
+    }
+
+    private E saveForOneToOne(Field field, E priSaved) {
+        var fieldType = field.getType();
+        var oneToOneAnn = field.getAnnotation(PolyglotOneToOne.class);
+        var joinAnn = Objects.requireNonNull(field.getAnnotation(PolyglotJoin.class), "PolyglotJoin is required on field annotated with PolyglotOneToOne.");
+
+        var referencedEntity = oneToOneAnn.referencedEntity();
+        var joinName = joinAnn.name();
+        var referencedAttributeName = joinAnn.referencedAttributeName();
+        try {
+            if (fieldType.equals(referencedEntity)) {
+                field.setAccessible(true);
+                var fieldValue = field.get(priSaved);
+                if (fieldValue != null) {
+                    secondaryRepo.configureClass(fieldType);
+                    var secSaved = secondaryRepo.save(fieldValue);
+                    if (secSaved != null) {
+                        field.set(priSaved, secSaved);
+                        var castSec = fieldType.cast(secSaved);
+                        var joinField = priSaved.getClass().getDeclaredField(joinName);
+                        joinField.setAccessible(true);
+                        Field secKey = castSec.getClass().getDeclaredField(referencedAttributeName);
+                        secKey.setAccessible(true);
+                        var secKeyValue = secKey.get(castSec);
+                        joinField.set(priSaved, secKeyValue);
+                        return priSaved;
+                    }
+                }
+            } else {
+            }
+        } catch (IllegalAccessException | NoSuchFieldException | SecurityException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    private E saveForOneToMany(Field field, E priSaved) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -65,5 +119,4 @@ public class CompositeRepository<E> implements Repository<E> {
         qi.setQueryType(queryType);
         return qi;
     }
-
 }

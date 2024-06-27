@@ -18,5 +18,5 @@ public class Endereco implements Serializable {
     private Integer id;
     private String city;
     private String state;
-    private Integer person;
+    private String person;
 }

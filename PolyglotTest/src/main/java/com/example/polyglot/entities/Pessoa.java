@@ -1,8 +1,10 @@
 package com.example.polyglot.entities;
 
 import esfinge.querybuilder.core.annotation.PersistenceType;
+import esfinge.querybuilder.core.annotation.PolyglotJoin;
 import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Transient;
@@ -13,11 +15,12 @@ import org.mongodb.morphia.annotations.Transient;
 public class Pessoa {
 
     @Id
-    private Integer id;
+    private ObjectId id;
     private String name;
     private String lastName;
     private Integer age;
     @Transient
-    @PolyglotOneToOne(mappedByAttribute = "person", referencedAttributeKey = "id")
+    @PolyglotOneToOne(referencedEntity = Person.class)
+    @PolyglotJoin(name = "person", referencedAttributeName = "id")
     private Endereco address;
 }

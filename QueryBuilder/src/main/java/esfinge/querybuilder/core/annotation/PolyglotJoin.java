@@ -7,8 +7,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface PolyglotOneToOne {
+public @interface PolyglotJoin {
 
-    Class<?> referencedEntity();
+    String name();
+
+    String referencedAttributeName();
 
 }

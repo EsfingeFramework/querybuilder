@@ -1,5 +1,6 @@
 package esfinge.querybuilder.core.executor;
 
+import esfinge.querybuilder.core.annotation.PolyglotJoin;
 import esfinge.querybuilder.core.annotation.PolyglotOneToMany;
 import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
@@ -9,6 +10,7 @@ import static esfinge.querybuilder.core.methodparser.QueryType.RETRIEVE_SINGLE;
 import esfinge.querybuilder.core.methodparser.conditions.SimpleCondition;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 
 public class CompositeQueryExecutor implements QueryExecutor {
 
@@ -16,16 +18,19 @@ public class CompositeQueryExecutor implements QueryExecutor {
     private final QueryExecutor secondaryExec;
 
     public CompositeQueryExecutor(QueryExecutor primaryExec, QueryExecutor secondaryExec) {
-        this.primaryExec = primaryExec;
-        this.secondaryExec = secondaryExec;
+        this.primaryExec = Objects.requireNonNull(primaryExec, "Primary executor cannot be null");
+        this.secondaryExec = Objects.requireNonNull(secondaryExec, "Secondary executor cannot be null");
     }
 
     @Override
     public Object executeQuery(QueryInfo info, Object[] args) {
+        Objects.requireNonNull(info, "QueryInfo cannot be null");
         var result = primaryExec.executeQuery(info, args);
+        if (result == null) {
+            return null;
+        }
         var entityType = info.getEntityType();
-        var fields = entityType.getDeclaredFields();
-        for (var field : fields) {
+        for (var field : entityType.getDeclaredFields()) {
             if (field.isAnnotationPresent(PolyglotOneToOne.class)) {
                 result = processOneToOne(field, info, result);
             } else if (field.isAnnotationPresent(PolyglotOneToMany.class)) {
@@ -36,57 +41,56 @@ public class CompositeQueryExecutor implements QueryExecutor {
     }
 
     private Object processOneToOne(Field field, QueryInfo primaryInfo, Object primaryResult) {
-        var annotation = field.getAnnotation(PolyglotOneToOne.class);
-        var mappedByAttribute = annotation.mappedByAttribute();
-        var joinAttribute = annotation.joinAttribute();
-        var referencedAttributeKey = annotation.referencedAttributeKey();
+        var oneToOneAnn = field.getAnnotation(PolyglotOneToOne.class);
+        var joinAnn = Objects.requireNonNull(field.getAnnotation(PolyglotJoin.class), "PolyglotJoin is required on field annotated with PolyglotOneToOne.");
 
-        if ((mappedByAttribute.equals("NONE") && joinAttribute.equals("NONE"))
-                || (!mappedByAttribute.equals("NONE") && !joinAttribute.equals("NONE"))) {
-            throw new RuntimeException("The PolyglotOneToOne annotation must have the mappedByAttribute or joinAttribute attribute defined.");
-        }
+        var referencedEntity = oneToOneAnn.referencedEntity();
+        var joinName = joinAnn.name();
+        var referencedAttributeName = joinAnn.referencedAttributeName();
 
-        var secondaryInfo = createSecondaryQueryInfo(field, mappedByAttribute, referencedAttributeKey);
-        return processPrimaryResult(primaryInfo, primaryResult, field, secondaryInfo, mappedByAttribute, joinAttribute, referencedAttributeKey);
+        var secondaryInfo = createSecondaryQueryInfo(field, referencedEntity, joinName, referencedAttributeName);
+        return processPrimaryResult(primaryInfo, primaryResult, field, secondaryInfo, referencedEntity, joinName, referencedAttributeName);
     }
 
-    private QueryInfo createSecondaryQueryInfo(Field field, String mappedByAttribute, String referencedAttributeKey) {
+    private QueryInfo createSecondaryQueryInfo(Field field, Class<?> referencedEntity, String joinName, String referencedAttributeName) {
+        var fieldType = field.getType();
         var secondaryInfo = new QueryInfo();
         secondaryInfo.setQueryType(RETRIEVE_LIST);
-        secondaryInfo.setEntityType(field.getType());
-        secondaryInfo.setEntityName(field.getType().getSimpleName());
+        secondaryInfo.setEntityType(fieldType);
+        secondaryInfo.setEntityName(fieldType.getSimpleName());
         var condition = new SimpleCondition();
-        condition.setName(!mappedByAttribute.equals("NONE") ? mappedByAttribute : referencedAttributeKey);
+        condition.setName(fieldType.equals(referencedEntity) ? referencedAttributeName : joinName);
         secondaryInfo.setQueryStyle(QueryStyle.METHOD_SIGNATURE);
         secondaryInfo.addCondition(condition);
         return secondaryInfo;
     }
 
     private Object processPrimaryResult(QueryInfo primaryInfo, Object primaryResult, Field field, QueryInfo secondaryInfo,
-            String mappedByAttribute, String joinAttribute, String referencedAttributeKey) {
+            Class<?> referencedEntity, String joinName, String referencedAttributeName) {
         var primaryClass = primaryInfo.getEntityType();
         if (primaryInfo.getQueryType().equals(RETRIEVE_LIST)) {
             var primaryResultList = (List<?>) primaryResult;
             for (var priItem : primaryResultList) {
-                processSingleResult(priItem, primaryClass, field, secondaryInfo, mappedByAttribute, joinAttribute, referencedAttributeKey);
+                processSingleResult(priItem, primaryClass, field, secondaryInfo, referencedEntity, joinName, referencedAttributeName);
             }
         } else if (primaryInfo.getQueryType().equals(RETRIEVE_SINGLE)) {
-            processSingleResult(primaryResult, primaryClass, field, secondaryInfo, mappedByAttribute, joinAttribute, referencedAttributeKey);
+            processSingleResult(primaryResult, primaryClass, field, secondaryInfo, referencedEntity, joinName, referencedAttributeName);
         }
         return primaryResult;
     }
 
     private void processSingleResult(Object primaryResult, Class<?> primaryClass, Field field, QueryInfo secondaryInfo,
-            String mappedByAttribute, String joinAttribute, String referencedAttributeKey) {
+            Class<?> referencedEntity, String joinName, String referencedAttributeName) {
         try {
+            var fieldType = field.getType();
             var castItem = primaryClass.cast(primaryResult);
-            var columnToMatch = !joinAttribute.equals("NONE") ? joinAttribute : referencedAttributeKey;
+            var columnToMatch = fieldType.equals(referencedEntity) ? joinName : referencedAttributeName;
             var primaryField = primaryClass.getDeclaredField(columnToMatch);
             primaryField.setAccessible(true);
             var valuePrimary = primaryField.get(castItem);
             var secondaryResults = (List<?>) secondaryExec.executeQuery(secondaryInfo, new Object[]{valuePrimary});
             for (var secItem : secondaryResults) {
-                var secondaryField = secItem.getClass().getDeclaredField(mappedByAttribute.equals("NONE") ? referencedAttributeKey : mappedByAttribute);
+                var secondaryField = secItem.getClass().getDeclaredField(fieldType.equals(referencedEntity) ? referencedAttributeName : joinName);
                 secondaryField.setAccessible(true);
                 var valueSecondary = secondaryField.get(secItem);
                 if (valuePrimary.equals(valueSecondary)) {

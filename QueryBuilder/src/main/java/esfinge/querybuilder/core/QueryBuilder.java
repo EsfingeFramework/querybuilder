@@ -13,6 +13,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,7 +106,7 @@ public class QueryBuilder implements InvocationHandler {
                 var secImpl = getConfiguredClassConfig(superinterf, persistenceConfig.secondary);
                 if (secImpl == null) {
                     qb.addImplementation(superinterf, priImpl);
-                } else if (areRepositories(priImpl.getClass(), secImpl.getClass())) {
+                } else if (isRepository(priImpl.getClass()) && isRepository(secImpl.getClass())) {
                     var composite = new CompositeRepository<E>(
                             Repository.class.cast(priImpl),
                             Repository.class.cast(secImpl),
@@ -123,22 +124,19 @@ public class QueryBuilder implements InvocationHandler {
         cachedProxies.clear();
     }
 
-    private static boolean areRepositories(Class<?> priImpl, Class<?> secImpl) {
-        var priResult = false;
-        var secResult = false;
-        for (Class<?> interf : priImpl.getInterfaces()) {
-            if (interf.equals(Repository.class)) {
-                priResult = true;
-                break;
+    private static boolean isRepository(Class<?> implementation) {
+        if (implementation == null) {
+            return false;
+        }
+        if (Arrays.stream(implementation.getInterfaces()).anyMatch(i -> i.equals(Repository.class))) {
+            return true;
+        }
+        for (Class<?> iface : implementation.getInterfaces()) {
+            if (isRepository(iface)) {
+                return true;
             }
         }
-        for (Class<?> interf : secImpl.getInterfaces()) {
-            if (interf.equals(Repository.class)) {
-                secResult = true;
-                break;
-            }
-        }
-        return priResult && secResult;
+        return isRepository(implementation.getSuperclass());
     }
 
     //Concrete Part

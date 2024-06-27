@@ -1,6 +1,7 @@
 module polyglot {
     requires querybuilder.jpaone;
-    requires querybuilder.mongodb;
+    requires querybuilder.jpaone_local;
+    requires querybuilder.mongodb; 
     requires morphia;
     requires lombok;
 
