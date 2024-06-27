@@ -17,9 +17,9 @@ public class JPALocalRepository<E> extends JPARepository<E> {
     }
 
     @Override
-    public void delete(Object id) {
+    public void delete(E obj) {
         em.getTransaction().begin();
-        super.delete(id);
+        super.delete(obj);
         em.getTransaction().commit();
     }
 

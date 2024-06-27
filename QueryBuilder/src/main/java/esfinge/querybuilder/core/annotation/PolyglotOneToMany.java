@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface PolyglotOneToMany {
 
-    String mappedBy();
-
-    String joinColumn();
+    Class<?> referencedEntity();
 
 }

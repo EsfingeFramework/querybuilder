@@ -32,10 +32,8 @@ public class MongoDBRepository<E> implements Repository<E> {
     }
 
     @Override
-    public void delete(Object id) {
-        var key = new Key<>(configuredClass, null, id);
-        var e = ds.getByKey(configuredClass, key);
-        ds.delete(e);
+    public void delete(E obj) {
+        ds.delete(obj);
     }
 
     @Override

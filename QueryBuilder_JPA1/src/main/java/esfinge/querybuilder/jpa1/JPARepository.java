@@ -4,11 +4,13 @@ import esfinge.querybuilder.core.Repository;
 import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import esfinge.querybuilder.core.exception.InvalidPropertyException;
 import esfinge.querybuilder.core.utils.ServiceLocator;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.Id;
 
 @QueryExecutorType("JPA1")
 public class JPARepository<E> implements Repository<E> {
@@ -33,9 +35,29 @@ public class JPARepository<E> implements Repository<E> {
     }
 
     @Override
-    public void delete(Object id) {
-        var e = em.find(configuredClass, id);
-        em.remove(e);
+    public void delete(E obj) {
+        try {
+            Field idField = null;
+            for (Field field : obj.getClass().getDeclaredFields()) {
+                if (field.isAnnotationPresent(Id.class)) {
+                    idField = field;
+                    break;
+                }
+            }
+            if (idField == null) {
+                throw new IllegalStateException("No @Id field found in the entity class " + obj.getClass().getName());
+            }
+            idField.setAccessible(true);
+            Object id = idField.get(obj);
+            var e = em.find(configuredClass, id);
+            if (e != null) {
+                em.remove(e);
+            } else {
+                throw new IllegalStateException("Entity not found in the context with ID: " + id);
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Failed to access ID field", e);
+        }
     }
 
     @Override

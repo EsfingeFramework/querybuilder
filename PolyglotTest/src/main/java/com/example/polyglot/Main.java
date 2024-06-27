@@ -7,6 +7,7 @@ import com.example.polyglot.entities.Pessoa;
 import com.example.polyglot.mongodb.MongoDBExample1;
 import com.example.polyglot.mongodb.MongoDBExample2;
 import esfinge.querybuilder.core.QueryBuilder;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -28,10 +29,25 @@ public class Main {
         pessoa.setAge(30);
         pessoa.setName("Fernando");
         pessoa.setLastName("De Tal");
-        var endereco = new Endereco();
-        endereco.setCity("Brasília");
-        endereco.setUf("DF");
-        pessoa.setAddress(endereco);
+
+        var endereco1 = new Endereco();
+        endereco1.setCity("Brasília");
+        endereco1.setUf("DF");
+
+        var endereco2 = new Endereco();
+        endereco2.setCity("Itamonte");
+        endereco2.setUf("MG");
+
+        var endereco3 = new Endereco();
+        endereco3.setCity("Porto Alegre");
+        endereco3.setUf("RS");
+
+        var addresses = new ArrayList<Endereco>();
+        addresses.add(endereco1);
+        addresses.add(endereco2);
+        addresses.add(endereco3);
+
+        pessoa.setAddresses(addresses);
 
         var mongoDBExample2 = QueryBuilder.create(MongoDBExample2.class);
         mongoDBExample2.save(pessoa);
@@ -39,13 +55,13 @@ public class Main {
         var persons1 = mongoDBExample1.getPersonByName("Fernando");
         for (var p1 : persons1) {
             System.out.println(p1);
-            mongoDBExample1.delete(p1.getId());
+            //mongoDBExample1.delete(p1);
         }
 
         var persons2 = mongoDBExample2.getPessoaByName("Fernando");
         for (var p2 : persons2) {
             System.out.println(p2);
-            mongoDBExample2.delete(p2.getId());
+            //mongoDBExample2.delete(p2);
         }
     }
 }
