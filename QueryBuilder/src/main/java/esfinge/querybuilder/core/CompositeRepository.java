@@ -34,7 +34,6 @@ public class CompositeRepository<E> implements Repository<E> {
     @Override
     public E save(E obj) {
         if (primaryRepo != null) {
-            obj = primaryRepo.save(obj);
             if (obj != null) {
                 for (var field : obj.getClass().getDeclaredFields()) {
                     if (field.isAnnotationPresent(PolyglotOneToOne.class)) {
@@ -49,7 +48,7 @@ public class CompositeRepository<E> implements Repository<E> {
         return null;
     }
 
-    private E saveForOneToOne(Field field, E priSaved) {
+    private E saveForOneToOne(Field field, E obj) {
         var fieldType = field.getType();
         var oneToOneAnn = field.getAnnotation(PolyglotOneToOne.class);
         var joinAnn = Objects.requireNonNull(field.getAnnotation(PolyglotJoin.class), "PolyglotJoin is required on field annotated with PolyglotOneToOne.");
@@ -60,23 +59,40 @@ public class CompositeRepository<E> implements Repository<E> {
         try {
             if (fieldType.equals(referencedEntity)) {
                 field.setAccessible(true);
-                var fieldValue = field.get(priSaved);
+                var fieldValue = field.get(obj);
                 if (fieldValue != null) {
                     secondaryRepo.configureClass(fieldType);
                     var secSaved = secondaryRepo.save(fieldValue);
                     if (secSaved != null) {
-                        field.set(priSaved, secSaved);
+                        field.set(obj, secSaved);
                         var castSec = fieldType.cast(secSaved);
-                        var joinField = priSaved.getClass().getDeclaredField(joinName);
+                        var joinField = obj.getClass().getDeclaredField(joinName);
                         joinField.setAccessible(true);
                         Field secKey = castSec.getClass().getDeclaredField(referencedAttributeName);
                         secKey.setAccessible(true);
                         var secKeyValue = secKey.get(castSec);
-                        joinField.set(priSaved, secKeyValue);
-                        return priSaved;
+                        joinField.set(obj, secKeyValue);
+                        return primaryRepo.save(obj);
                     }
                 }
             } else {
+                obj = primaryRepo.save(obj);
+                field.setAccessible(true);
+                var fieldValue = field.get(obj);
+                if (fieldValue != null) {
+                    Field priKey = obj.getClass().getDeclaredField(referencedAttributeName);
+                    priKey.setAccessible(true);
+                    var priKeyValue = priKey.get(obj);
+                    Field joinField = fieldValue.getClass().getDeclaredField(joinName);
+                    joinField.setAccessible(true);
+                    joinField.set(fieldValue, priKeyValue);
+                    secondaryRepo.configureClass(fieldType);
+                    var secSaved = secondaryRepo.save(fieldValue);
+                    if (secSaved != null) {
+                        field.set(obj, secSaved);
+                        return obj;
+                    }
+                }
             }
         } catch (IllegalAccessException | NoSuchFieldException | SecurityException ex) {
             ex.printStackTrace();
@@ -91,8 +107,41 @@ public class CompositeRepository<E> implements Repository<E> {
     @Override
     public void delete(Object id) {
         if (primaryRepo != null) {
-            primaryRepo.delete(id);
+            E obj = getById(id);
+            if (obj != null) {
+                for (var field : obj.getClass().getDeclaredFields()) {
+                    if (field.isAnnotationPresent(PolyglotOneToOne.class)) {
+                        deleteForOneToOne(field, obj);
+                    } else if (field.isAnnotationPresent(PolyglotOneToMany.class)) {
+                        deleteForOneToMany(field, obj);
+                    }
+                }
+                primaryRepo.delete(id);
+            }
         }
+    }
+
+    private void deleteForOneToOne(Field field, E obj) {
+        var joinAnn = Objects.requireNonNull(field.getAnnotation(PolyglotJoin.class), "PolyglotJoin is required on field annotated with PolyglotOneToOne.");
+        var referencedAttributeName = joinAnn.referencedAttributeName();
+        try {
+            field.setAccessible(true);
+            var fieldValue = field.get(obj);
+            if (fieldValue != null) {
+                secondaryRepo.configureClass(field.getType());
+                var fieldKey = fieldValue.getClass().getDeclaredField(referencedAttributeName);
+                fieldKey.setAccessible(true);
+                var fieldKeyValue = fieldKey.get(fieldValue);
+                if (fieldKeyValue != null) {
+                    secondaryRepo.delete(fieldKeyValue);
+                }
+            }
+        } catch (IllegalAccessException | NoSuchFieldException | SecurityException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void deleteForOneToMany(Field field, E priSaved) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

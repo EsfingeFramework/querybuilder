@@ -7,6 +7,7 @@ import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.MethodParser;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.SelectorMethodParser;
+import esfinge.querybuilder.core.utils.Cloner;
 import esfinge.querybuilder.core.utils.ReflectionUtils;
 import esfinge.querybuilder.core.utils.ServiceLocator;
 import java.lang.reflect.InvocationHandler;
@@ -94,27 +95,29 @@ public class QueryBuilder implements InvocationHandler {
     private static <E> void configureImplementations(Class<E> interf, QueryBuilder qb, PersistenceConfig persistenceConfig) {
         for (var superinterf : interf.getInterfaces()) {
             var priImpl = getConfiguredClassConfig(superinterf, persistenceConfig.primary);
-            if (priImpl != null) {
+            var priImplCloned = Cloner.cloneObject(priImpl);
+            if (priImplCloned != null) {
 
                 Class<?> clazz = null;
 
                 if (NeedClassConfiguration.class.isAssignableFrom(superinterf)) {
                     clazz = ReflectionUtils.getFirstGenericTypeFromInterfaceImplemented(interf, superinterf);
-                    priImpl.configureClass(clazz);
+                    priImplCloned.configureClass(clazz);
                 }
 
                 var secImpl = getConfiguredClassConfig(superinterf, persistenceConfig.secondary);
-                if (secImpl == null) {
-                    qb.addImplementation(superinterf, priImpl);
-                } else if (isRepository(priImpl.getClass()) && isRepository(secImpl.getClass())) {
+                var secImplCloned = Cloner.cloneObject(secImpl);
+                if (secImplCloned == null) {
+                    qb.addImplementation(superinterf, priImplCloned);
+                } else if (isRepository(priImplCloned.getClass()) && isRepository(secImplCloned.getClass())) {
                     var composite = new CompositeRepository<E>(
-                            Repository.class.cast(priImpl),
-                            Repository.class.cast(secImpl),
+                            Repository.class.cast(priImplCloned),
+                            Repository.class.cast(secImplCloned),
                             qb.getQueryExecutor());
                     ((NeedClassConfiguration) composite).configureClass(clazz);
                     qb.addImplementation(interf, composite);
                 } else {
-                    throw new RuntimeException(priImpl + " and " + secImpl + " must be <Reposity> implementations.");
+                    throw new RuntimeException(priImplCloned + " and " + secImplCloned + " must be <Reposity> implementations.");
                 }
             }
         }
