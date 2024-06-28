@@ -55,13 +55,13 @@ public class Main {
         var persons1 = mongoDBExample1.getPersonByName("Fernando");
         for (var p1 : persons1) {
             System.out.println(p1);
-            //mongoDBExample1.delete(p1);
+            mongoDBExample1.delete(p1);
         }
 
         var persons2 = mongoDBExample2.getPessoaByName("Fernando");
         for (var p2 : persons2) {
             System.out.println(p2);
-            //mongoDBExample2.delete(p2);
+            mongoDBExample2.delete(p2);
         }
     }
 }
