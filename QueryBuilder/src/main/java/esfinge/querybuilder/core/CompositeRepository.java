@@ -19,7 +19,7 @@ public class CompositeRepository<E> implements Repository<E> {
 
     private final Repository<E> primaryRepo;
     private final Repository secondaryRepo;
-    private final QueryExecutor compQueryExecutor;
+    private final QueryExecutor queryExecutor;
     private Class<E> configuredClass;
 
     @Override
@@ -27,10 +27,10 @@ public class CompositeRepository<E> implements Repository<E> {
         configuredClass = clazz;
     }
 
-    public CompositeRepository(Repository<E> primaryRepo, Repository secondaryRepo, QueryExecutor compQueryExecutor) {
+    public CompositeRepository(Repository<E> primaryRepo, Repository secondaryRepo, QueryExecutor queryExecutor) {
         this.primaryRepo = primaryRepo;
         this.secondaryRepo = secondaryRepo;
-        this.compQueryExecutor = compQueryExecutor;
+        this.queryExecutor = queryExecutor;
     }
 
     @Override
@@ -188,12 +188,12 @@ public class CompositeRepository<E> implements Repository<E> {
 
     @Override
     public List<E> list() {
-        return (List<E>) compQueryExecutor.executeQuery(createQueryInfo(RETRIEVE_LIST), null);
+        return (List<E>) queryExecutor.executeQuery(createQueryInfo(RETRIEVE_LIST), null);
     }
 
     @Override
     public E getById(Object id) {
-        return (E) compQueryExecutor.executeQuery(createQueryInfo(RETRIEVE_SINGLE), null);
+        return (E) queryExecutor.executeQuery(createQueryInfo(RETRIEVE_SINGLE), null);
     }
 
     @Override
