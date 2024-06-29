@@ -1,12 +1,16 @@
-package esfinge.querybuilder.core;
+package esfinge.querybuilder.core.repository;
 
+import esfinge.querybuilder.core.Repository;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
-public abstract class AbstractRelationHandler<E> implements RelationHandler<E> {
+public interface RelationHandler<E> {
 
-    @Override
-    public void handleDelete(Field field, E obj, Repository secRepository) {
+    boolean supports(Field field);
+
+    E handleSave(Field field, E obj, Repository<E> priRepository, Repository secRepository);
+
+    default void handleDelete(Field field, E obj, Repository secRepository) {
         try {
             field.setAccessible(true);
             var fieldValue = field.get(obj);
@@ -27,5 +31,4 @@ public abstract class AbstractRelationHandler<E> implements RelationHandler<E> {
             ex.printStackTrace();
         }
     }
-
 }

@@ -1,10 +1,11 @@
-package esfinge.querybuilder.core;
+package esfinge.querybuilder.core.repository;
 
+import esfinge.querybuilder.core.Repository;
 import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
 import static esfinge.querybuilder.core.utils.QueryUtils.validateAndGetJoinAnnotation;
 import java.lang.reflect.Field;
 
-public class OneToOneRightHandler<E> extends AbstractRelationHandler<E> {
+public class OneToOneRightHandler<E> implements RelationHandler<E> {
 
     @Override
     public boolean supports(Field field) {

@@ -1,5 +1,6 @@
 package esfinge.querybuilder.core;
 
+import esfinge.querybuilder.core.repository.CompositeRepository;
 import esfinge.querybuilder.core.annotation.PersistenceType;
 import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.executor.CompositeQueryExecutor;

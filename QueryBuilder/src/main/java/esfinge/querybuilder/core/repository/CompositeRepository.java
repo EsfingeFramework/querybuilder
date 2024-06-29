@@ -1,5 +1,6 @@
-package esfinge.querybuilder.core;
+package esfinge.querybuilder.core.repository;
 
+import esfinge.querybuilder.core.Repository;
 import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.QueryStyle;

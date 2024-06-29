@@ -11,6 +11,7 @@ module querybuilder.core {
     exports esfinge.querybuilder.core.methodparser.conditions;
     exports esfinge.querybuilder.core.methodparser.conversor;
     exports esfinge.querybuilder.core.methodparser.formater;
+    exports esfinge.querybuilder.core.repository;
     exports esfinge.querybuilder.core.utils;
 
     opens esfinge.querybuilder.core.annotation;
@@ -20,6 +21,7 @@ module querybuilder.core {
     opens esfinge.querybuilder.core.methodparser.conditions;
     opens esfinge.querybuilder.core.methodparser.conversor;
     opens esfinge.querybuilder.core.methodparser.formater;
+    opens esfinge.querybuilder.core.repository;
     opens esfinge.querybuilder.core.utils;
 
     uses esfinge.querybuilder.core.Repository;

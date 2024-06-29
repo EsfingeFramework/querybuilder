@@ -7,5 +7,7 @@ public interface RelationExecutor {
 
     boolean supports(Field field);
 
+    void configure(Field field);
+
     Object correlate(Field field, QueryInfo priInfo, Object priResult);
 }
