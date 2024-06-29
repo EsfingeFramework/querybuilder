@@ -12,13 +12,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractRelationExecutor implements RelationExecutor {
+public abstract class AbstractRelationProcessor implements RelationProcessor {
 
     protected final QueryExecutor secExecutor;
     private String priAttribute;
     private String secAttribute;
 
-    protected AbstractRelationExecutor(QueryExecutor secExecutor) {
+    protected AbstractRelationProcessor(QueryExecutor secExecutor) {
         this.secExecutor = secExecutor;
     }
 

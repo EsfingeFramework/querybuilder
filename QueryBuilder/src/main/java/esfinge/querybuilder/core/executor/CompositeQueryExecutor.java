@@ -8,15 +8,15 @@ public class CompositeQueryExecutor implements QueryExecutor {
 
     private final QueryExecutor priExecutor;
     private final QueryExecutor secExecutor;
-    private final List<RelationExecutor> relationExecutors;
+    private final List<RelationProcessor> relationProcessors;
 
     public CompositeQueryExecutor(QueryExecutor priExecutor, QueryExecutor secExecutor) {
         this.priExecutor = Objects.requireNonNull(priExecutor, "Primary QueryExecutor cannot be null");
         this.secExecutor = Objects.requireNonNull(secExecutor, "Secondary QueryExecutor cannot be null");
-        this.relationExecutors = List.of(
-                new OneToOneLeftExecutor(this.secExecutor),
-                new OneToOneRightExecutor(this.secExecutor),
-                new OneToManyExecutor(this.secExecutor)
+        this.relationProcessors = List.of(
+                new OneToOneLeftProcessor(this.secExecutor),
+                new OneToOneRightProcessor(this.secExecutor),
+                new OneToManyProcessor(this.secExecutor)
         );
     }
 
@@ -29,9 +29,9 @@ public class CompositeQueryExecutor implements QueryExecutor {
         }
         var entityType = info.getEntityType();
         for (var field : entityType.getDeclaredFields()) {
-            for (var relationExecutor : relationExecutors) {
-                if (relationExecutor.supports(field)) {
-                    priResult = relationExecutor.correlate(field, info, priResult);
+            for (var processor : relationProcessors) {
+                if (processor.supports(field)) {
+                    priResult = processor.correlate(field, info, priResult);
                 }
             }
         }

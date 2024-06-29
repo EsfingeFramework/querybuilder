@@ -4,9 +4,9 @@ import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
 import static esfinge.querybuilder.core.utils.QueryUtils.validateAndGetJoinAnnotation;
 import java.lang.reflect.Field;
 
-public class OneToOneLeftExecutor extends AbstractRelationExecutor {
+public class OneToOneLeftProcessor extends AbstractRelationProcessor {
 
-    public OneToOneLeftExecutor(QueryExecutor secExecutor) {
+    public OneToOneLeftProcessor(QueryExecutor secExecutor) {
         super(secExecutor);
     }
 
