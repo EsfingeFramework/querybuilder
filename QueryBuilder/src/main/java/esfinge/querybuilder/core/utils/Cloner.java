@@ -7,10 +7,9 @@ public class Cloner {
 
     public static <T> T cloneObject(T original) {
         try {
-            Class<?> clazz = original.getClass();
-            T clone = (T) clazz.getDeclaredConstructor().newInstance();
-
-            for (Field field : clazz.getDeclaredFields()) {
+            var clazz = original.getClass();
+            var clone = (T) clazz.getDeclaredConstructor().newInstance();
+            for (var field : clazz.getDeclaredFields()) {
                 field.setAccessible(true);
                 field.set(clone, field.get(original));
             }

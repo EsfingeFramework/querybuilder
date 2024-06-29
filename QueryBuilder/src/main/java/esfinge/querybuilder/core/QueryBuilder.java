@@ -134,7 +134,7 @@ public class QueryBuilder implements InvocationHandler {
         if (Arrays.stream(implementation.getInterfaces()).anyMatch(i -> i.equals(Repository.class))) {
             return true;
         }
-        for (Class<?> iface : implementation.getInterfaces()) {
+        for (var iface : implementation.getInterfaces()) {
             if (isRepository(iface)) {
                 return true;
             }
