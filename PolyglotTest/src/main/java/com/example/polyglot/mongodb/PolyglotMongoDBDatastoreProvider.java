@@ -1,13 +1,16 @@
 package com.example.polyglot.mongodb;
 
-import com.example.polyglot.entities.Person;
-import com.example.polyglot.entities.Pessoa;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 import esfinge.querybuilder.mongodb.DatastoreProvider;
+import org.esfinge.virtuallab.demo.polyglot.Address;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 
-public class PolyglotMongoDBDatastoreProvider extends DatastoreProvider {
+public class PolyglotMongoDBDatastoreProvider implements DatastoreProvider {
+
+    private final Morphia morphia;
+    protected MongoClient mongo;
 
     public PolyglotMongoDBDatastoreProvider() {
         try {
@@ -15,14 +18,23 @@ public class PolyglotMongoDBDatastoreProvider extends DatastoreProvider {
         } catch (MongoException e) {
             e.printStackTrace();
         }
-
-        getMorphia().map(Pessoa.class);
-        getMorphia().map(Person.class);
+        morphia = new Morphia();
+        morphia.map(Address.class);
     }
 
     @Override
     public Datastore getDatastore() {
         return getMorphia().createDatastore(mongo, "testdb");
+    }
+
+    @Override
+    public Morphia getMorphia() {
+        return morphia;
+    }
+
+    @Override
+    public void mappClass(Class<?> clazz) {
+        morphia.map(clazz);
     }
 
 }

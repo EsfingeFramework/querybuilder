@@ -1,67 +1,70 @@
 package com.example.polyglot;
 
-import com.example.polyglot.entities.Address;
-import com.example.polyglot.entities.Endereco;
-import com.example.polyglot.entities.Person;
-import com.example.polyglot.entities.Pessoa;
-import com.example.polyglot.mongodb.MongoDBExample1;
-import com.example.polyglot.mongodb.MongoDBExample2;
+import com.example.polyglot.mongodb.Example1;
 import esfinge.querybuilder.core.QueryBuilder;
-import java.util.ArrayList;
+import org.esfinge.virtuallab.demo.polyglot.Address;
+import org.esfinge.virtuallab.demo.polyglot.Person;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        var person = new Person();
-        person.setAge(30);
-        person.setName("Fernando");
-        person.setLastName("De Tal");
-        var address = new Address();
-        address.setCity("Brasília");
-        address.setUf("DF");
-        person.setAddress(address);
+        var p1 = new Person();
+        p1.setAge(40);
+        p1.setName("Fernando");
+        p1.setLastName("de Oliveira Pereira");
+        var a1 = new Address();
+        a1.setCity("Caçapava");
+        a1.setUf("SP");
+        p1.setAddress(a1);
 
-        var mongoDBExample1 = QueryBuilder.create(MongoDBExample1.class);
-        mongoDBExample1.save(person);
+        var p2 = new Person();
+        p2.setAge(40);
+        p2.setName("André");
+        p2.setLastName("Aparecido de Souza Ivo");
+        var a2 = new Address();
+        a2.setCity("São José dos Campos");
+        a2.setUf("SP");
+        p2.setAddress(a2);
 
-        var pessoa = new Pessoa();
-        pessoa.setAge(30);
-        pessoa.setName("Fernando");
-        pessoa.setLastName("De Tal");
+        var p3 = new Person();
+        p3.setAge(44);
+        p3.setName("Daniel");
+        p3.setLastName(" Silveira de Oliveira");
+        var a3 = new Address();
+        a3.setCity("Brasília");
+        a3.setUf("DF");
+        p3.setAddress(a3);
 
-        var endereco1 = new Endereco();
-        endereco1.setCity("Brasília");
-        endereco1.setUf("DF");
+        var p4 = new Person();
+        p4.setAge(41);
+        p4.setName("Eduardo");
+        p4.setLastName("Pacheco da Luz");
+        var a4 = new Address();
+        a4.setCity("Belo Horizonte");
+        a4.setUf("MG");
+        p4.setAddress(a4);
 
-        var endereco2 = new Endereco();
-        endereco2.setCity("Itamonte");
-        endereco2.setUf("MG");
+        var p5 = new Person();
+        p5.setAge(29);
+        p5.setName("Klaifer");
+        p5.setLastName("Garcia");
+        var a5 = new Address();
+        a5.setCity("Goiânia");
+        a5.setUf("Goiás");
+        p5.setAddress(a5);
 
-        var endereco3 = new Endereco();
-        endereco3.setCity("Porto Alegre");
-        endereco3.setUf("RS");
+        var example1 = QueryBuilder.create(Example1.class);
+        example1.save(p1);
+        example1.save(p2);
+        example1.save(p3);
+        example1.save(p4);
+        example1.save(p5);
 
-        var addresses = new ArrayList<Endereco>();
-        addresses.add(endereco1);
-        addresses.add(endereco2);
-        addresses.add(endereco3);
-
-        pessoa.setAddresses(addresses);
-
-        var mongoDBExample2 = QueryBuilder.create(MongoDBExample2.class);
-        mongoDBExample2.save(pessoa);
-
-        var persons1 = mongoDBExample1.getPersonByName("Fernando");
-        for (var p1 : persons1) {
-            System.out.println(p1);
-            mongoDBExample1.delete(p1);
-        }
-
-        var persons2 = mongoDBExample2.getPessoaByName("Fernando");
-        for (var p2 : persons2) {
-            System.out.println(p2);
-            mongoDBExample2.delete(p2);
+        var persons1 = example1.getPerson();
+        for (var p : persons1) {
+            System.out.println(p);
+            //example1.delete(p);
         }
     }
 }

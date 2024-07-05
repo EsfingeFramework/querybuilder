@@ -1,22 +1,14 @@
 package esfinge.querybuilder.mongodb;
 
-import com.mongodb.MongoClient;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
-public abstract class DatastoreProvider {
+public interface DatastoreProvider {
 
-    private final Morphia morphia = new Morphia();
-    protected MongoClient mongo;
+    Datastore getDatastore();
 
-    public abstract Datastore getDatastore();
+    Morphia getMorphia();
 
-    public Morphia getMorphia() {
-        return morphia;
-    }
-
-    protected void mappClass(Class<?> clazz) {
-        morphia.map(clazz);
-    }
+    void mappClass(Class<?> clazz);
 
 }

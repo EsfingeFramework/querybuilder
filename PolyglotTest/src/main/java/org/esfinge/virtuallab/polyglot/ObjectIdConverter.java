@@ -1,4 +1,4 @@
-package com.example.polyglot.entities;
+package org.esfinge.virtuallab.polyglot;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

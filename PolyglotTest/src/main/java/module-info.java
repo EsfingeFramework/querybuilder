@@ -1,17 +1,17 @@
 module polyglot {
     requires querybuilder.jpaone;
     requires querybuilder.jpaone_local;
-    requires querybuilder.mongodb; 
+    requires querybuilder.mongodb;
     requires morphia;
     requires lombok;
 
     exports com.example.polyglot;
-    exports com.example.polyglot.entities;
+    exports org.esfinge.virtuallab.demo.polyglot;
     exports com.example.polyglot.jpa1;
     exports com.example.polyglot.mongodb;
 
     opens com.example.polyglot;
-    opens com.example.polyglot.entities;
+    opens org.esfinge.virtuallab.demo.polyglot;
     opens com.example.polyglot.jpa1;
     opens com.example.polyglot.mongodb;
 

@@ -1,6 +1,5 @@
 package com.example.polyglot.mongodb;
 
-import com.example.polyglot.entities.Person;
 import esfinge.querybuilder.core.Repository;
 import esfinge.querybuilder.core.annotation.CompareToNull;
 import esfinge.querybuilder.core.annotation.Condition;
@@ -11,11 +10,12 @@ import esfinge.querybuilder.core.annotation.Starts;
 import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.methodparser.ComparisonType;
 import java.util.List;
+import org.esfinge.virtuallab.demo.polyglot.Person;
 
 @DomainTerm(term = "carioca", conditions = @Condition(property = "address.city", comparison = ComparisonType.EQUALS, value = "Rio de Janeiro"))
 
 @TargetEntity(Person.class)
-public interface MongoDBExample1 extends Repository<Person> {
+public interface Example1 extends Repository<Person> {
 
     public List<Person> getPerson();
 

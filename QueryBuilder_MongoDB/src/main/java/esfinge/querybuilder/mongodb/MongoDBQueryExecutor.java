@@ -1,9 +1,9 @@
 package esfinge.querybuilder.mongodb;
 
+import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.QueryType;
-import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import org.mongodb.morphia.query.Query;
 
 @QueryExecutorType("MONGODB")
