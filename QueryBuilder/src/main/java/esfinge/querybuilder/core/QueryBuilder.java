@@ -1,6 +1,5 @@
 package esfinge.querybuilder.core;
 
-import esfinge.querybuilder.core.repository.CompositeRepository;
 import esfinge.querybuilder.core.annotation.PersistenceType;
 import esfinge.querybuilder.core.annotation.TargetEntity;
 import esfinge.querybuilder.core.executor.CompositeQueryExecutor;
@@ -8,6 +7,7 @@ import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.MethodParser;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.SelectorMethodParser;
+import esfinge.querybuilder.core.repository.CompositeRepository;
 import esfinge.querybuilder.core.utils.Cloner;
 import esfinge.querybuilder.core.utils.ReflectionUtils;
 import esfinge.querybuilder.core.utils.ServiceLocator;
@@ -107,7 +107,10 @@ public class QueryBuilder implements InvocationHandler {
                 }
 
                 var secImpl = getConfiguredClassConfig(superinterf, persistenceConfig.secondary);
-                var secImplCloned = Cloner.cloneObject(secImpl);
+                NeedClassConfiguration secImplCloned = null;
+                if (secImpl != null) {
+                    secImplCloned = Cloner.cloneObject(secImpl);
+                }
                 if (secImplCloned == null) {
                     qb.addImplementation(superinterf, priImplCloned);
                 } else if (isRepository(priImplCloned.getClass()) && isRepository(secImplCloned.getClass())) {

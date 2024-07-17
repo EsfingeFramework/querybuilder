@@ -19,7 +19,6 @@ public class TestMongoDBQueryVisitor {
     @Before
     public void init() {
         mp.setInterface(TestQuery.class);
-        //mp.setEntityClassProvider(ServiceLocator.getServiceImplementation(EntityClassProvider.class));
     }
 
     @Test
@@ -52,7 +51,7 @@ public class TestMongoDBQueryVisitor {
             e.printStackTrace();
         }
         var args = new Object[1];
-        args[0] = new String("nome");
+        args[0] = "nome";
 
         visitor = MongoDBVisitorFactory.createQueryVisitor(mp.parse(m), args);
 
@@ -169,8 +168,8 @@ public class TestMongoDBQueryVisitor {
             e.printStackTrace();
         }
         var args = new Object[2];
-        args[0] = new String("nome");
-        args[1] = new String("sobrenome");
+        args[0] = "nome";
+        args[1] = "sobrenome";
 
         visitor = MongoDBVisitorFactory.createQueryVisitor(mp.parse(m), args);
 
@@ -192,8 +191,8 @@ public class TestMongoDBQueryVisitor {
             e.printStackTrace();
         }
         var args = new Object[2];
-        args[0] = new String("nome");
-        args[1] = new String("sobrenome");
+        args[0] = "nome";
+        args[1] = "sobrenome";
 
         visitor = MongoDBVisitorFactory.createQueryVisitor(mp.parse(m), args);
 
@@ -214,7 +213,7 @@ public class TestMongoDBQueryVisitor {
             e.printStackTrace();
         }
         var args = new Object[1];
-        args[0] = new String("cidade");
+        args[0] = "cidade";
 
         visitor = MongoDBVisitorFactory.createQueryVisitor(mp.parse(m), args);
 
@@ -237,9 +236,9 @@ public class TestMongoDBQueryVisitor {
             e.printStackTrace();
         }
         var args = new Object[3];
-        args[0] = new String("nome");
-        args[1] = new String("sobrenome");
-        args[2] = new String("cidade");
+        args[0] = "nome";
+        args[1] = "sobrenome";
+        args[2] = "cidade";
 
         visitor = MongoDBVisitorFactory.createQueryVisitor(mp.parse(m), args);
 
@@ -282,7 +281,7 @@ public class TestMongoDBQueryVisitor {
             e.printStackTrace();
         }
         var args = new Object[1];
-        args[0] = new String("nome");
+        args[0] = "nome";
 
         visitor = MongoDBVisitorFactory.createQueryVisitor(mp.parse(m), args);
 
