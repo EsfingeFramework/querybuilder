@@ -1,40 +1,45 @@
 package com.example.polyglot.mongodb;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoException;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 import esfinge.querybuilder.mongodb.DatastoreProvider;
+import java.util.Collections;
 import org.esfinge.virtuallab.demo.polyglot.Address;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
 
 public class PolyglotMongoDBDatastoreProvider implements DatastoreProvider {
 
-    private final Morphia morphia;
-    protected MongoClient mongo;
+    private final Datastore datastore;
 
     public PolyglotMongoDBDatastoreProvider() {
+        MongoClient mongo = null;
         try {
-            mongo = new MongoClient("localhost", 27017);
-        } catch (MongoException e) {
+            mongo = MongoClients.create(
+                    MongoClientSettings.builder()
+                            .applyToClusterSettings(builder
+                                    -> builder.hosts(Collections.singletonList(new ServerAddress("localhost", 27017))))
+                            .build()
+            );
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        morphia = new Morphia();
-        morphia.map(Address.class);
+        datastore = Morphia.createDatastore(mongo, "testdb");
+        datastore.getMapper().map(Address.class);
+        datastore.ensureIndexes();
     }
 
     @Override
     public Datastore getDatastore() {
-        return getMorphia().createDatastore(mongo, "testdb");
-    }
-
-    @Override
-    public Morphia getMorphia() {
-        return morphia;
+        return datastore;
     }
 
     @Override
     public void mappClass(Class<?> clazz) {
-        morphia.map(clazz);
+        datastore.getMapper().map(clazz);
+        datastore.ensureIndexes();
     }
 
 }

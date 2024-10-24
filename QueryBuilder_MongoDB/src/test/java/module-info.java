@@ -11,7 +11,7 @@ module querybuilder.mongodb_tests {
     uses esfinge.querybuilder.mongodb.DatastoreProvider;
 
     provides esfinge.querybuilder.mongodb.DatastoreProvider with
-            esfinge.querybuilder.mongodb_tests.TestMongoDBDatastoreProvider; 
+            esfinge.querybuilder.mongodb_tests.TestMongoDBDatastoreProvider;
 
 
 }

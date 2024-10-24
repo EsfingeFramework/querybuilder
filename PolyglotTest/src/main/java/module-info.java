@@ -2,7 +2,7 @@ module polyglot {
     requires querybuilder.jpaone;
     requires querybuilder.jpaone_local;
     requires querybuilder.mongodb;
-    requires morphia;
+    requires morphia.core;
     requires lombok;
 
     exports com.example.polyglot;

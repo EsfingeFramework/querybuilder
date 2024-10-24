@@ -1,9 +1,9 @@
 package esfinge.querybuilder.mongodb;
 
+import dev.morphia.query.Query;
 import esfinge.querybuilder.core.methodparser.QueryRepresentation;
 import java.util.Map;
 import java.util.Set;
-import org.mongodb.morphia.query.Query;
 
 @SuppressWarnings("rawtypes")
 public class MongoDBQueryRepresentation implements QueryRepresentation {

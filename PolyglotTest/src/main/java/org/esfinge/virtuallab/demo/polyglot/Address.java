@@ -1,11 +1,11 @@
 package org.esfinge.virtuallab.demo.polyglot;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 import esfinge.querybuilder.core.annotation.PersistenceType;
 import java.io.Serializable;
 import lombok.Data;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
 @Entity
 @PersistenceType("MONGODB")

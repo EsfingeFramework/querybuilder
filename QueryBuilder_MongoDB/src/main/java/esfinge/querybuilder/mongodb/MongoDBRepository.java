@@ -1,13 +1,14 @@
 package esfinge.querybuilder.mongodb;
 
+import dev.morphia.Datastore;
+import dev.morphia.query.Query;
+import dev.morphia.query.filters.Filters;
 import esfinge.querybuilder.core.Repository;
 import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import esfinge.querybuilder.core.exception.InvalidPropertyException;
 import esfinge.querybuilder.core.utils.ServiceLocator;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
 
 @QueryExecutorType("MONGODB")
 public class MongoDBRepository<E> implements Repository<E> {
@@ -38,37 +39,33 @@ public class MongoDBRepository<E> implements Repository<E> {
 
     @Override
     public List<E> list() {
-        return ds.find(configuredClass).asList();
+        return ds.find(configuredClass).iterator().toList();  // `asList()` foi substituído por `iterator().toList()`
     }
 
     @Override
     public E getById(Object id) {
-        var key = new Key<>(configuredClass, null, id);
-        return ds.getByKey(configuredClass, key);
+        return ds.find(configuredClass).filter(Filters.eq("_id", id)).first();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<E> queryByExample(E obj) {
         var clazzObj = obj.getClass();
-        var query = ds.createQuery(clazzObj);
+        var query = (Query<E>) ds.find(clazzObj);
+
         try {
             for (var m : clazzObj.getMethods()) {
-                if (!m.getName().equals("getClass")
-                        && MongoDBDAOUtils.isGetterWhichIsNotTransient(m, clazzObj)) {
+                if (!m.getName().equals("getClass") && MongoDBDAOUtils.isGetterWhichIsNotTransient(m, clazzObj)) {
                     var value = m.invoke(obj);
                     if (value != null && !value.toString().trim().equals("")) {
-                        var prop = m.getName().substring(3, 4).toLowerCase()
-                                + m.getName().substring(4);
-                        query.field(prop).equal(value);
+                        var prop = m.getName().substring(3, 4).toLowerCase() + m.getName().substring(4);
+                        query.filter(Filters.eq(prop, value));
                     }
-
                 }
             }
         } catch (IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException e) {
             throw new InvalidPropertyException("Error building query", e);
         }
-        return (List<E>) query.asList();
+        return (List<E>) query.iterator().toList();
     }
-
 }

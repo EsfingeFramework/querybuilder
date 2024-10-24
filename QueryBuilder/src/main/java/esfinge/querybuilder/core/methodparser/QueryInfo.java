@@ -1,13 +1,13 @@
 package esfinge.querybuilder.core.methodparser;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import esfinge.querybuilder.core.exception.EntityClassNotFoundException;
 import esfinge.querybuilder.core.methodparser.conditions.CompositeCondition;
 import esfinge.querybuilder.core.methodparser.conditions.NullCondition;
 import esfinge.querybuilder.core.methodparser.conditions.QueryCondition;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class QueryInfo {
 
@@ -72,6 +72,10 @@ public class QueryInfo {
 
     public void addOrdering(String property, OrderingDirection direction) {
         order.add(new QueryOrder(property, direction));
+    }
+
+    public List<QueryOrder> getOrder() {
+        return order;
     }
 
     public void visit(QueryVisitor visitor) {

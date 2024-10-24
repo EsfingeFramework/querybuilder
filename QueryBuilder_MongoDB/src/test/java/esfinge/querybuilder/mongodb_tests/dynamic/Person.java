@@ -1,8 +1,8 @@
 package esfinge.querybuilder.mongodb_tests.dynamic;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 import esfinge.querybuilder.core.annotation.PersistenceType;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
 @Entity
 @PersistenceType("MONGODB")

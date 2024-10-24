@@ -1,7 +1,9 @@
 module querybuilder.mongodb {
     requires transitive querybuilder.core;
-    requires morphia;
-    requires mongo.java.driver;
+    requires morphia.core;
+    requires org.mongodb.bson;
+    requires org.mongodb.driver.core;
+    requires org.mongodb.driver.sync.client;
 
     exports esfinge.querybuilder.mongodb;
     exports esfinge.querybuilder.mongodb.formaters;

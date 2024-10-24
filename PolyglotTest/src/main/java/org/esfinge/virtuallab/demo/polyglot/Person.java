@@ -3,6 +3,7 @@ package org.esfinge.virtuallab.demo.polyglot;
 import esfinge.querybuilder.core.annotation.PersistenceType;
 import esfinge.querybuilder.core.annotation.PolyglotJoin;
 import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -18,7 +19,7 @@ import org.esfinge.virtuallab.polyglot.ObjectIdConverter;
 @Entity
 @PersistenceType(value = "JPA1", secondary = "MONGODB")
 @Data
-public class Person {
+public class Person implements Serializable {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "personSequence")
