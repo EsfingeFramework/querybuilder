@@ -21,7 +21,6 @@ public class TestDynamicQueriesMongoDBQueryVisitor {
     @Before
     public void init() {
         mp.setInterface(TestQuery.class);
-        //mp.setEntityClassProvider(ServiceLocator.getServiceImplementation(EntityClassProvider.class));
     }
 
     @Test

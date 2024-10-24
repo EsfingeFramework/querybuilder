@@ -1,9 +1,9 @@
 package esfinge.querybuilder.mongodb;
 
+import dev.morphia.Datastore;
+import dev.morphia.mapping.codec.pojo.EntityModel;
 import esfinge.querybuilder.core.utils.ServiceLocator;
-import java.util.Set;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.mapping.MappedClass;
+import java.util.List;
 
 public class MongoDBEntityClassProvider {
 
@@ -12,24 +12,17 @@ public class MongoDBEntityClassProvider {
 
     public static Class<?> getEntityClass(String name) {
         DatastoreProvider dsp = ServiceLocator.getServiceImplementation(DatastoreProvider.class);
-
-        Morphia morphia = dsp.getMorphia();
-
-        Set<String> keyset = morphia.getMapper().getMCMap().keySet();
-        MappedClass mappedClass = null;
-
-        for (String className : keyset) {
-            if (name.equalsIgnoreCase(className) || name.equalsIgnoreCase(className.substring(className.lastIndexOf(".") + 1))) {
-                mappedClass = morphia.getMapper().getMCMap().get(className);
+        Datastore datastore = dsp.getDatastore();
+        List<EntityModel> mappedEntities = datastore.getMapper().getMappedEntities();
+        for (EntityModel entityModel : mappedEntities) {
+            Class<?> entityClass = entityModel.getType();
+            String className = entityClass.getName();
+            String simpleClassName = entityClass.getSimpleName();
+            if (name.equalsIgnoreCase(className) || name.equalsIgnoreCase(simpleClassName)) {
+                return entityClass;
             }
         }
 
-        if (mappedClass == null) {
-            return null;
-        } else {
-            return mappedClass.getClazz();
-        }
-
+        return null;
     }
-
 }

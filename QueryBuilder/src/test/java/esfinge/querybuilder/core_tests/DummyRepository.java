@@ -1,10 +1,12 @@
 package esfinge.querybuilder.core_tests;
 
-import java.util.List;
 import esfinge.querybuilder.core.Repository;
+import java.util.List;
 
 public class DummyRepository<E> implements Repository<E> {
 
+    private String lastMethodCalled;
+    private Class configuredClass;
     public static DummyRepository<?> instance;
 
     public DummyRepository() {
@@ -12,8 +14,9 @@ public class DummyRepository<E> implements Repository<E> {
         instance = this;
     }
 
-    private String lastMethodCalled;
-    private Class configuredClass;
+    @Override
+    public void configureClass(Class<E> clazz) {
+    }
 
     @Override
     public E save(E obj) {
@@ -40,22 +43,8 @@ public class DummyRepository<E> implements Repository<E> {
     }
 
     @Override
-    public void configureClass(Class<E> clazz) {
-        configuredClass = clazz;
-    }
-
-    public String getLastMethodCalled() {
-        return lastMethodCalled;
-    }
-
-    public Class getConfiguredClass() {
-        return configuredClass;
-    }
-
-    @Override
     public List<E> queryByExample(E obj) {
         lastMethodCalled = "queryByExample";
         return null;
     }
-
 }

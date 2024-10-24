@@ -1,8 +1,8 @@
 package esfinge.querybuilder.mongodb;
 
+import dev.morphia.annotations.Transient;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import org.mongodb.morphia.annotations.Transient;
 
 public class MongoDBDAOUtils {
 

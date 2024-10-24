@@ -27,18 +27,24 @@
         </dependency>
         <dependency>
             <groupId>com.github.esfingeframework</groupId>
-            <artifactId>querybuilder-mongodb</artifactId>
+            <artifactId>querybuilder-jpa1-local</artifactId>
             <version>2.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.6.15.Final</version>
+            <groupId>com.github.esfingeframework</groupId>
+            <artifactId>querybuilder-mongodb</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 
@@ -128,9 +134,15 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.32</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <release>11</release>
                 </configuration>
             </plugin>
             <plugin>

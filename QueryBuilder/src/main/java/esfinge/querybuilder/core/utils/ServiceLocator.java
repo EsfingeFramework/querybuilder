@@ -1,7 +1,7 @@
 package esfinge.querybuilder.core.utils;
 
-import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import esfinge.querybuilder.core.annotation.ClassBasedService;
+import esfinge.querybuilder.core.annotation.QueryExecutorType;
 import esfinge.querybuilder.core.annotation.ServicePriority;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,22 +1,29 @@
 package esfinge.querybuilder.mongodb;
 
+import dev.morphia.Datastore;
+import dev.morphia.query.Query;
+import dev.morphia.query.filters.Filters;
 import esfinge.querybuilder.core.Repository;
-import esfinge.querybuilder.core.exception.InvalidPropertyException;
 import esfinge.querybuilder.core.annotation.QueryExecutorType;
+import esfinge.querybuilder.core.exception.InvalidPropertyException;
 import esfinge.querybuilder.core.utils.ServiceLocator;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Key;
 
 @QueryExecutorType("MONGODB")
 public class MongoDBRepository<E> implements Repository<E> {
 
     protected Datastore ds;
-    protected Class<E> clazz;
+    protected Class<E> configuredClass;
 
     public MongoDBRepository() {
         var dsp = ServiceLocator.getServiceImplementation(DatastoreProvider.class);
         ds = dsp.getDatastore();
+    }
+
+    @Override
+    public void configureClass(Class<E> clazz) {
+        configuredClass = clazz;
     }
 
     @Override
@@ -26,54 +33,39 @@ public class MongoDBRepository<E> implements Repository<E> {
     }
 
     @Override
-    public void delete(Object id) {
-        var key = new Key<>(clazz, null, id);
-        var e = ds.getByKey(clazz, key);
-        ds.delete(e);
+    public void delete(E obj) {
+        ds.delete(obj);
     }
 
     @Override
     public List<E> list() {
-        return ds.find(clazz).asList();
+        return ds.find(configuredClass).iterator().toList();  // `asList()` foi substituído por `iterator().toList()`
     }
 
     @Override
     public E getById(Object id) {
-        var key = new Key<>(clazz, null, id);
-        return ds.getByKey(clazz, key);
-    }
-
-    @Override
-    public void configureClass(Class<E> clazz) {
-        this.clazz = clazz;
+        return ds.find(configuredClass).filter(Filters.eq("_id", id)).first();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<E> queryByExample(E obj) {
-
-        var clazz = obj.getClass();
-        var query = ds.createQuery(clazz);
+        var clazzObj = obj.getClass();
+        var query = (Query<E>) ds.find(clazzObj);
 
         try {
-            for (var m : clazz.getMethods()) {
-                if (!m.getName().equals("getClass")
-                        && MongoDBDAOUtils.isGetterWhichIsNotTransient(m, clazz)) {
+            for (var m : clazzObj.getMethods()) {
+                if (!m.getName().equals("getClass") && MongoDBDAOUtils.isGetterWhichIsNotTransient(m, clazzObj)) {
                     var value = m.invoke(obj);
                     if (value != null && !value.toString().trim().equals("")) {
-                        var prop = m.getName().substring(3, 4).toLowerCase()
-                                + m.getName().substring(4);
-                        query.field(prop).equal(value);
+                        var prop = m.getName().substring(3, 4).toLowerCase() + m.getName().substring(4);
+                        query.filter(Filters.eq(prop, value));
                     }
-
                 }
             }
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException e) {
             throw new InvalidPropertyException("Error building query", e);
         }
-
-        return (List<E>) query.asList();
-
+        return (List<E>) query.iterator().toList();
     }
-
 }

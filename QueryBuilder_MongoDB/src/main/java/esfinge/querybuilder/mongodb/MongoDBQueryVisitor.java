@@ -1,5 +1,8 @@
 package esfinge.querybuilder.mongodb;
 
+import dev.morphia.query.Query;
+import dev.morphia.query.filters.Filter;
+import dev.morphia.query.filters.Filters;
 import esfinge.querybuilder.core.methodparser.ComparisonType;
 import esfinge.querybuilder.core.methodparser.OrderingDirection;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
@@ -15,14 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.mongodb.morphia.query.Criteria;
-import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.QueryImpl;
 
-@SuppressWarnings("rawtypes")
 public class MongoDBQueryVisitor implements QueryVisitor {
 
-    private Query query;
+    private Query<?> query;
     private final QueryInfo info;
     private final Object[] args;
     private final List<ConditionDescription> conditions = new ArrayList<>();
@@ -37,7 +36,7 @@ public class MongoDBQueryVisitor implements QueryVisitor {
     @Override
     public void visitEntity(String entity) {
         var ds = ServiceLocator.getServiceImplementation(DatastoreProvider.class).getDatastore();
-        query = ds.createQuery(info.getEntityType());
+        query = ds.find(info.getEntityType());
     }
 
     @Override
@@ -69,6 +68,7 @@ public class MongoDBQueryVisitor implements QueryVisitor {
         return propertyName.substring(propertyName.lastIndexOf(".") + 1);
     }
 
+    @Override
     public String getQuery() {
         throw new UnsupportedOperationException();
     }
@@ -89,6 +89,7 @@ public class MongoDBQueryVisitor implements QueryVisitor {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean isDynamic() {
         for (var cond : conditions) {
             if (cond.getNullOption() != NullOption.NONE) {
@@ -98,6 +99,7 @@ public class MongoDBQueryVisitor implements QueryVisitor {
         return false;
     }
 
+    @Override
     public String getQuery(Map<String, Object> params) {
         throw new UnsupportedOperationException();
     }
@@ -105,13 +107,11 @@ public class MongoDBQueryVisitor implements QueryVisitor {
     @Override
     public void visitEnd() {
         addConditions();
-        addOrderBy();
     }
 
     protected void addConditions() {
-
-        var criteriaOR = new ArrayList<ArrayList<Criteria>>();
-        criteriaOR.add(new ArrayList<>());
+        var filtersOR = new ArrayList<List<Filter>>();
+        filtersOR.add(new ArrayList<>());
 
         var fixedValueIndex = 0;
         var formatters = info.getCondition().getParameterFormatters();
@@ -120,9 +120,8 @@ public class MongoDBQueryVisitor implements QueryVisitor {
             var cond = conditions.get(i);
 
             if (cond.getFixedValue() != null) {
-                cond.addCondition(criteriaOR, info.getEntityType(), formatters.get(fixedValueIndex));
+                cond.addCondition(filtersOR, info.getEntityType(), formatters.get(fixedValueIndex));
             } else {
-
                 var namedParameters = info.getNamedParemeters();
                 var parameterIndex = -1;
 
@@ -137,9 +136,9 @@ public class MongoDBQueryVisitor implements QueryVisitor {
                 if (info.getQueryStyle() == QueryStyle.METHOD_SIGNATURE) {
 
                     if (args[parameterIndex] != null) {
-                        cond.addCondition(criteriaOR, formatters.get(formatterIndex).formatParameter(args[parameterIndex]), info.getEntityType());
+                        cond.addCondition(filtersOR, formatters.get(formatterIndex).formatParameter(args[parameterIndex]), info.getEntityType());
                     } else {
-                        cond.addCondition(criteriaOR, null, info.getEntityType());
+                        cond.addCondition(filtersOR, null, info.getEntityType());
                     }
 
                 } else if (info.getQueryStyle() == QueryStyle.QUERY_OBJECT) {
@@ -147,55 +146,35 @@ public class MongoDBQueryVisitor implements QueryVisitor {
                     var paramMap = ReflectionUtils.toParameterMap(args[0]);
 
                     if (paramMap.get(namedParameters.get(parameterIndex)) != null) {
-                        cond.addCondition(criteriaOR, formatters.get(formatterIndex).formatParameter(paramMap.get(namedParameters.get(parameterIndex))), info.getEntityType());
+                        cond.addCondition(filtersOR, formatters.get(formatterIndex).formatParameter(paramMap.get(namedParameters.get(parameterIndex))), info.getEntityType());
                     } else {
-                        cond.addCondition(criteriaOR, null, info.getEntityType());
+                        cond.addCondition(filtersOR, null, info.getEntityType());
                     }
 
                 }
             }
         }
 
-        addConectors(criteriaOR);
+        addConectors(filtersOR);
     }
 
-    protected void addOrderBy() {
-        var orderBy = "";
-
-        for (var i = 0; i < order.size(); i++) {
-            if (i != 0) {
-                orderBy += ",";
-            }
-            if (order.get(i).getDiretion() == OrderingDirection.DESC) {
-                orderBy += "-";
-            }
-            orderBy += order.get(i).getProperty();
-        }
-
-        if (order.size() != 0) {
-            query.order(orderBy);
-        }
-    }
-
-    protected void addConectors(ArrayList<ArrayList<Criteria>> criteriaOR) {
-
-        var OR = new ArrayList<Criteria>();
-        for (var criteriaAND : criteriaOR) {
-            if (!criteriaAND.isEmpty()) {
-                if (criteriaAND.size() != 1) {
-                    OR.add(createQuery().and(criteriaAND.toArray(new Criteria[0])));
+    protected void addConectors(List<List<Filter>> filtersOR) {
+        var orFilters = new ArrayList<Filter>();
+        for (var andFilters : filtersOR) {
+            if (!andFilters.isEmpty()) {
+                if (andFilters.size() > 1) {
+                    orFilters.add(Filters.and(andFilters.toArray(Filter[]::new)));
                 } else {
-                    OR.add(criteriaAND.get(0));
+                    orFilters.add(andFilters.get(0));
                 }
             }
         }
 
-        if (!OR.isEmpty()) {
-            if (OR.size() == 1) {
-                var qi = (QueryImpl) query;
-                qi.add(OR.get(0));
+        if (!orFilters.isEmpty()) {
+            if (orFilters.size() == 1) {
+                query.filter(orFilters.get(0));
             } else {
-                query.or(OR.toArray(new Criteria[0]));
+                query.filter(Filters.or(orFilters.toArray(Filter[]::new)));
             }
         }
     }
@@ -212,14 +191,7 @@ public class MongoDBQueryVisitor implements QueryVisitor {
 
     @Override
     public QueryRepresentation getQueryRepresentation() {
-        var qr = new MongoDBQueryRepresentation(query, isDynamic(), getFixParameterMap());
-        return qr;
-    }
-
-    private Query<?> createQuery() {
-        var dsp = ServiceLocator.getServiceImplementation(DatastoreProvider.class);
-        var ds = dsp.getDatastore();
-        return ds.createQuery(Object.class);
+        return new MongoDBQueryRepresentation(query, isDynamic(), getFixParameterMap());
     }
 
     public void printConditions() {

@@ -6,7 +6,7 @@ public interface Repository<E> extends NeedClassConfiguration<E> {
 
     E save(E obj);
 
-    void delete(Object id);
+    void delete(E obj);
 
     List<E> list();
 

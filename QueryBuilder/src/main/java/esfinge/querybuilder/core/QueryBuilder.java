@@ -2,22 +2,26 @@ package esfinge.querybuilder.core;
 
 import esfinge.querybuilder.core.annotation.PersistenceType;
 import esfinge.querybuilder.core.annotation.TargetEntity;
+import esfinge.querybuilder.core.executor.CompositeQueryExecutor;
 import esfinge.querybuilder.core.executor.QueryExecutor;
 import esfinge.querybuilder.core.methodparser.MethodParser;
 import esfinge.querybuilder.core.methodparser.QueryInfo;
 import esfinge.querybuilder.core.methodparser.SelectorMethodParser;
+import esfinge.querybuilder.core.repository.CompositeRepository;
+import esfinge.querybuilder.core.utils.Cloner;
 import esfinge.querybuilder.core.utils.ReflectionUtils;
 import esfinge.querybuilder.core.utils.ServiceLocator;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class QueryBuilder implements InvocationHandler {
 
-    //Static Part
+    // Static Part
     private static MethodParser configuredMethodParser;
     private static Map<String, QueryExecutor> configuredQueryExecutors;
     private static Map<String, NeedClassConfiguration> configuredClassConfigs;
@@ -31,9 +35,8 @@ public class QueryBuilder implements InvocationHandler {
 
     public static MethodParser getConfiguredMethodParser(Class<?> interf) {
         if (configuredMethodParser == null) {
-            var mp = new SelectorMethodParser();
-            mp.setInterface(interf);
-            return mp;
+            configuredMethodParser = new SelectorMethodParser();
+            configuredMethodParser.setInterface(interf);
         }
         return configuredMethodParser;
     }
@@ -61,48 +64,86 @@ public class QueryBuilder implements InvocationHandler {
     }
 
     public static <E> E create(Class<E> interf) {
-        if (cachedProxies.containsKey(interf)) {
-            return (E) cachedProxies.get(interf);
-        }
+        return (E) cachedProxies.computeIfAbsent(interf, k -> {
+            var qb = new QueryBuilder();
+            var persistenceConfig = getPersistenceConfig(interf);
+            qb.setMethodParser(getConfiguredMethodParser(interf));
+            qb.setQueryExecutor(createQueryExecutor(persistenceConfig));
+            configureImplementations(interf, qb, persistenceConfig);
+            return Proxy.newProxyInstance(interf.getClassLoader(), new Class[]{interf}, qb);
+        });
+    }
 
-        var persistenceType = "";
+    private static PersistenceConfig getPersistenceConfig(Class<?> interf) {
         if (interf.isAnnotationPresent(TargetEntity.class)) {
             var entityClass = interf.getAnnotation(TargetEntity.class).value();
-            if (entityClass != null) {
-                if (entityClass.isAnnotationPresent(PersistenceType.class)) {
-                    persistenceType = entityClass.getAnnotation(PersistenceType.class).value();
-                } else {
-                    System.out.println("There is no @PersistenceType annotation.");
-                }
-            } else {
-                System.out.println("EntityClass in @TargetEntity is null.");
+            if (entityClass != null && entityClass.isAnnotationPresent(PersistenceType.class)) {
+                var annotation = entityClass.getAnnotation(PersistenceType.class);
+                return new PersistenceConfig(annotation.value(), annotation.secondary());
             }
-        } else {
-            System.out.println("There is no @TargetEntity annotation.");
         }
+        System.out.println("There is no @TargetEntity or @PersistenceType annotation.");
+        return new PersistenceConfig("", "");
+    }
 
-        var qb = new QueryBuilder();
-        qb.setMethodParser(getConfiguredMethodParser(interf));
-        qb.setQueryExecutor(getConfiguredQueryExecutor(persistenceType));
+    private static QueryExecutor createQueryExecutor(PersistenceConfig config) {
+        var primaryExecutor = getConfiguredQueryExecutor(config.primary);
+        return config.secondary.equalsIgnoreCase("NONE")
+                ? primaryExecutor
+                : new CompositeQueryExecutor(primaryExecutor, getConfiguredQueryExecutor(config.secondary));
+    }
 
-        for (Class superinterf : interf.getInterfaces()) {
-            var impl = getConfiguredClassConfig(superinterf, persistenceType);
-            if (impl != null) {
-                qb.addImplementation(superinterf, impl);
+    private static <E> void configureImplementations(Class<E> interf, QueryBuilder qb, PersistenceConfig persistenceConfig) {
+        for (var superinterf : interf.getInterfaces()) {
+            var priImpl = getConfiguredClassConfig(superinterf, persistenceConfig.primary);
+            var priImplCloned = Cloner.cloneObject(priImpl);
+            if (priImplCloned != null) {
+
+                Class<?> clazz = null;
+
                 if (NeedClassConfiguration.class.isAssignableFrom(superinterf)) {
-                    Class clazz = ReflectionUtils.getFirstGenericTypeFromInterfaceImplemented(interf, superinterf);
-                    ((NeedClassConfiguration) impl).configureClass(clazz);
+                    clazz = ReflectionUtils.getFirstGenericTypeFromInterfaceImplemented(interf, superinterf);
+                    priImplCloned.configureClass(clazz);
+                }
+
+                var secImpl = getConfiguredClassConfig(superinterf, persistenceConfig.secondary);
+                NeedClassConfiguration secImplCloned = null;
+                if (secImpl != null) {
+                    secImplCloned = Cloner.cloneObject(secImpl);
+                }
+                if (secImplCloned == null) {
+                    qb.addImplementation(superinterf, priImplCloned);
+                } else if (isRepository(priImplCloned.getClass()) && isRepository(secImplCloned.getClass())) {
+                    var composite = new CompositeRepository<E>(
+                            Repository.class.cast(priImplCloned),
+                            Repository.class.cast(secImplCloned),
+                            qb.getQueryExecutor());
+                    ((NeedClassConfiguration) composite).configureClass(clazz);
+                    qb.addImplementation(interf, composite);
+                } else {
+                    throw new RuntimeException(priImplCloned + " and " + secImplCloned + " must be <Reposity> implementations.");
                 }
             }
         }
-
-        var proxy = (E) Proxy.newProxyInstance(interf.getClassLoader(), new Class[]{interf}, qb);
-        cachedProxies.put(interf, proxy);
-        return proxy;
     }
 
     public static void clearCache() {
         cachedProxies.clear();
+    }
+
+    private static boolean isRepository(Class<?> implementation) {
+        if (implementation == null) {
+            return false;
+        }
+        if (Arrays.stream(implementation.getInterfaces()).anyMatch(i -> i.equals(Repository.class))) {
+            return true;
+        }
+        for (var iface : implementation.getInterfaces()) {
+            if (isRepository(iface)) {
+                return true;
+            }
+        }
+        return isRepository(implementation.getSuperclass());
     }
 
     //Concrete Part
@@ -114,6 +155,10 @@ public class QueryBuilder implements InvocationHandler {
         this.mp = mp;
     }
 
+    public QueryExecutor getQueryExecutor() {
+        return qe;
+    }
+
     public void setQueryExecutor(QueryExecutor qe) {
         this.qe = qe;
     }
@@ -123,21 +168,28 @@ public class QueryBuilder implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object obj, Method m, Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         for (var superinterf : implementedInterfaces.keySet()) {
             try {
-                var customMethod = superinterf.getMethod(m.getName(), m.getParameterTypes());
-                var target = implementedInterfaces.get(superinterf);
-                return customMethod.invoke(target, args);
-            } catch (NoSuchMethodException e) {
-            } catch (InvocationTargetException e) {
-                throw e.getTargetException();
+                var customMethod = superinterf.getMethod(method.getName(), method.getParameterTypes());
+                return customMethod.invoke(implementedInterfaces.get(superinterf), args);
+            } catch (NoSuchMethodException | IllegalArgumentException ignored) {
+            } catch (InvocationTargetException ex) {
+                throw ex.getTargetException();
             }
         }
-        if (!queryInfoCache.containsKey(m)) {
-            queryInfoCache.put(m, mp.parse(m));
-        }
-        return qe.executeQuery(queryInfoCache.get(m), args);
+        queryInfoCache.computeIfAbsent(method, mp::parse);
+        return qe.executeQuery(queryInfoCache.get(method), args);
     }
 
+    private static class PersistenceConfig {
+
+        String primary;
+        String secondary;
+
+        PersistenceConfig(String primary, String secondary) {
+            this.primary = primary;
+            this.secondary = secondary;
+        }
+    }
 }

@@ -11,4 +11,6 @@ public @interface PersistenceType {
 
     String value();
 
+    String secondary() default "NONE";
+
 }
