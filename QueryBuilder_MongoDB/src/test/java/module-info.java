@@ -1,17 +1,17 @@
 module querybuilder.mongodb_tests {
     requires querybuilder.mongodb;
-    requires junit;
+    requires junit; 
 
-    exports esfinge.querybuilder.mongodb_tests;
-    exports esfinge.querybuilder.mongodb_tests.dynamic;
+    exports ef.qb.mongodb_tests;
+    exports ef.qb.mongodb_tests.dynamic;
 
-    opens esfinge.querybuilder.mongodb_tests;
-    opens esfinge.querybuilder.mongodb_tests.dynamic;
+    opens ef.qb.mongodb_tests;
+    opens ef.qb.mongodb_tests.dynamic;
 
-    uses esfinge.querybuilder.mongodb.DatastoreProvider;
+    uses ef.qb.mongodb.DatastoreProvider;
 
-    provides esfinge.querybuilder.mongodb.DatastoreProvider with
-            esfinge.querybuilder.mongodb_tests.TestMongoDBDatastoreProvider;
+    provides ef.qb.mongodb.DatastoreProvider with
+            ef.qb.mongodb_tests.TestMongoDBDatastoreProvider;
 
 
 }

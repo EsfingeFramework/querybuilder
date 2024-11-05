@@ -2,33 +2,33 @@ module querybuilder.core_tests {
     requires querybuilder.core;
     requires junit.dep;
 
-    exports esfinge.querybuilder.core_tests;
-    exports esfinge.querybuilder.core_tests.methodparser;
-    exports esfinge.querybuilder.core_tests.methodparser.conversor;
-    exports esfinge.querybuilder.core_tests.utils; 
+    exports ef.qb.core_tests;
+    exports ef.qb.core_tests.methodparser;
+    exports ef.qb.core_tests.methodparser.conversor;
+    exports ef.qb.core_tests.utils;
 
-    opens esfinge.querybuilder.core_tests;
-    opens esfinge.querybuilder.core_tests.methodparser;
-    opens esfinge.querybuilder.core_tests.methodparser.conversor;
-    opens esfinge.querybuilder.core_tests.utils;
+    opens ef.qb.core_tests;
+    opens ef.qb.core_tests.methodparser;
+    opens ef.qb.core_tests.methodparser.conversor;
+    opens ef.qb.core_tests.utils;
 
-    uses esfinge.querybuilder.core_tests.utils.InterfacePriority;
-    uses esfinge.querybuilder.core_tests.utils.TestInterface;
+    uses ef.qb.core_tests.utils.InterfacePriority;
+    uses ef.qb.core_tests.utils.TestInterface;
 
-    provides esfinge.querybuilder.core.Repository with
-            esfinge.querybuilder.core_tests.DummyRepository;
+    provides ef.qb.core.Repository with
+            ef.qb.core_tests.DummyRepository;
 
-    provides esfinge.querybuilder.core.executor.QueryExecutor with
-            esfinge.querybuilder.core_tests.DummyQueryExecutor;
+    provides ef.qb.core.executor.QueryExecutor with
+            ef.qb.core_tests.DummyQueryExecutor;
 
-    provides esfinge.querybuilder.core_tests.utils.InterfacePriority with
-            esfinge.querybuilder.core_tests.utils.LowPriority,
-            esfinge.querybuilder.core_tests.utils.MediumPriority,
-            esfinge.querybuilder.core_tests.utils.HighPriority;
+    provides ef.qb.core_tests.utils.InterfacePriority with
+            ef.qb.core_tests.utils.LowPriority,
+            ef.qb.core_tests.utils.MediumPriority,
+            ef.qb.core_tests.utils.HighPriority;
 
-    provides esfinge.querybuilder.core_tests.utils.TestInterface with
-            esfinge.querybuilder.core_tests.utils.TestString,
-            esfinge.querybuilder.core_tests.utils.TestInt;
+    provides ef.qb.core_tests.utils.TestInterface with
+            ef.qb.core_tests.utils.TestString,
+            ef.qb.core_tests.utils.TestInt;
 
 
 }

@@ -1,14 +1,14 @@
 package com.example.polyglot.mongodb;
 
-import esfinge.querybuilder.core.Repository;
-import esfinge.querybuilder.core.annotation.CompareToNull;
-import esfinge.querybuilder.core.annotation.Condition;
-import esfinge.querybuilder.core.annotation.DomainTerm;
-import esfinge.querybuilder.core.annotation.GreaterOrEquals;
-import esfinge.querybuilder.core.annotation.IgnoreWhenNull;
-import esfinge.querybuilder.core.annotation.Starts;
-import esfinge.querybuilder.core.annotation.TargetEntity;
-import esfinge.querybuilder.core.methodparser.ComparisonType;
+import ef.qb.core.Repository;
+import ef.qb.core.annotation.CompareToNull;
+import ef.qb.core.annotation.Condition;
+import ef.qb.core.annotation.DomainTerm;
+import ef.qb.core.annotation.GreaterOrEquals;
+import ef.qb.core.annotation.IgnoreWhenNull;
+import ef.qb.core.annotation.Starts;
+import ef.qb.core.annotation.TargetEntity;
+import ef.qb.core.methodparser.ComparisonType;
 import java.util.List;
 import org.esfinge.virtuallab.demo.polyglot.Person;
 

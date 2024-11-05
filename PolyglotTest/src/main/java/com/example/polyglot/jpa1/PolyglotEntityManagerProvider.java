@@ -1,6 +1,6 @@
 package com.example.polyglot.jpa1;
 
-import esfinge.querybuilder.jpa1.EntityManagerProvider;
+import ef.qb.jpa1.EntityManagerProvider;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
