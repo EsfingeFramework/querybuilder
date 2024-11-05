@@ -5,20 +5,20 @@ module querybuilder.mongodb {
     requires org.mongodb.driver.core;
     requires org.mongodb.driver.sync.client;
 
-    exports esfinge.querybuilder.mongodb;
-    exports esfinge.querybuilder.mongodb.formaters;
+    exports ef.qb.mongodb;
+    exports ef.qb.mongodb.formaters;
 
-    opens esfinge.querybuilder.mongodb;
-    opens esfinge.querybuilder.mongodb.formaters;
+    opens ef.qb.mongodb;
+    opens ef.qb.mongodb.formaters;
 
-    uses esfinge.querybuilder.mongodb.DatastoreProvider;
+    uses ef.qb.mongodb.DatastoreProvider;
 
-    provides esfinge.querybuilder.core.Repository with
-        esfinge.querybuilder.mongodb.MongoDBRepository;
+    provides ef.qb.core.Repository with
+        ef.qb.mongodb.MongoDBRepository;
 
-    provides esfinge.querybuilder.core.executor.QueryExecutor with
-        esfinge.querybuilder.mongodb.MongoDBQueryExecutor;
+    provides ef.qb.core.executor.QueryExecutor with
+        ef.qb.mongodb.MongoDBQueryExecutor;
 
-    provides esfinge.querybuilder.core.methodparser.formater.FormaterFactory with
-        esfinge.querybuilder.mongodb.formaters.MongoDBFormaterFactory;
+    provides ef.qb.core.methodparser.formater.FormaterFactory with
+        ef.qb.mongodb.formaters.MongoDBFormaterFactory;
 }

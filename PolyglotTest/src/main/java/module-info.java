@@ -15,12 +15,12 @@ module polyglot {
     opens com.example.polyglot.jpa1;
     opens com.example.polyglot.mongodb;
 
-    uses esfinge.querybuilder.jpa1.EntityManagerProvider;
-    uses esfinge.querybuilder.mongodb.DatastoreProvider;
+    uses ef.qb.jpa1.EntityManagerProvider;
+    uses ef.qb.mongodb.DatastoreProvider;
 
-    provides esfinge.querybuilder.jpa1.EntityManagerProvider with
+    provides ef.qb.jpa1.EntityManagerProvider with
         com.example.polyglot.jpa1.PolyglotEntityManagerProvider;
 
-    provides esfinge.querybuilder.mongodb.DatastoreProvider with
+    provides ef.qb.mongodb.DatastoreProvider with
         com.example.polyglot.mongodb.PolyglotMongoDBDatastoreProvider;
 }

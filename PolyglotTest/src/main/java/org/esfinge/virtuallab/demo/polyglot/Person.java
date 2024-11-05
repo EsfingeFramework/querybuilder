@@ -1,8 +1,8 @@
 package org.esfinge.virtuallab.demo.polyglot;
 
-import esfinge.querybuilder.core.annotation.PersistenceType;
-import esfinge.querybuilder.core.annotation.PolyglotJoin;
-import esfinge.querybuilder.core.annotation.PolyglotOneToOne;
+import ef.qb.core.annotation.PersistenceType;
+import ef.qb.core.annotation.PolyglotJoin;
+import ef.qb.core.annotation.PolyglotOneToOne;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Convert;

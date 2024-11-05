@@ -3,11 +3,11 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
 			 					 http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
- 
+
     <persistence-unit name="database_test" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>net.sf.esfinge.querybuilder.jpa1.testresources.Person</class>
-        <class>net.sf.esfinge.querybuilder.jpa1.testresources.Address</class>
+        <class>ef.qb.jpa1_tests.resources.Person</class>
+        <class>ef.qb.jpa1_tests.resources.Address</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:hsqldb:file:./db/example-db"/>
             <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>

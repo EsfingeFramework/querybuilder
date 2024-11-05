@@ -3,10 +3,10 @@ module querybuilder.jpaone_local {
     requires querybuilder.jpaone;
     requires java.persistence;
 
-    exports esfinge.querybuilder.jpa1_local;
+    exports ef.qb.jpa1_local;
 
-    opens esfinge.querybuilder.jpa1_local;
+    opens ef.qb.jpa1_local;
 
-    provides esfinge.querybuilder.core.Repository with
-        esfinge.querybuilder.jpa1_local.JPALocalRepository;
+    provides ef.qb.core.Repository with
+        ef.qb.jpa1_local.JPALocalRepository;
 }

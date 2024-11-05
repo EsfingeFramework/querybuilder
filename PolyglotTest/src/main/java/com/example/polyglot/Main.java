@@ -1,7 +1,7 @@
 package com.example.polyglot;
 
 import com.example.polyglot.mongodb.Example1;
-import esfinge.querybuilder.core.QueryBuilder;
+import ef.qb.core.QueryBuilder;
 import org.esfinge.virtuallab.demo.polyglot.Address;
 import org.esfinge.virtuallab.demo.polyglot.Person;
 
@@ -64,7 +64,7 @@ public class Main {
         var persons1 = example1.getPerson();
         for (var p : persons1) {
             System.out.println(p);
-            //example1.delete(p);
+            example1.delete(p);
         }
     }
 }
