@@ -1,6 +1,6 @@
 module querybuilder.mongodb_tests {
     requires querybuilder.mongodb;
-    requires junit; 
+    requires junit;
 
     exports ef.qb.mongodb_tests;
     exports ef.qb.mongodb_tests.dynamic;

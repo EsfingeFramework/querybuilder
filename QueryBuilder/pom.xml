@@ -3,7 +3,7 @@
 
     <groupId>io.github.esfinge-framework</groupId>
     <artifactId>querybuilder-core</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
 
     <name>Esfinge QueryBuilder Core</name>
@@ -106,12 +106,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.32</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
 
     <build>
@@ -196,14 +190,8 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                    <release>11</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>1.18.32</version>
-                        </path>
-                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>

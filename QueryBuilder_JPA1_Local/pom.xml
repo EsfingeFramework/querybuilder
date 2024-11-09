@@ -3,7 +3,7 @@
 
     <groupId>io.github.esfinge-framework</groupId>
     <artifactId>querybuilder-jpa1-local</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
 
     <name>Esfinge QueryBuilder JPA1 Local</name>
@@ -53,13 +53,13 @@
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-core</artifactId>
-            <version>2.0.0</version>
+            <version>2.1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-jpa1</artifactId>
-            <version>2.0.0</version>
+            <version>2.1.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -71,15 +71,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.12.1</version>
                 <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>1.18.32</version>
-                        </path>
-                    </annotationProcessorPaths>
+                    <source>11</source>
+                    <target>11</target>
                     <release>11</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>

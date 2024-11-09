@@ -7,11 +7,7 @@ import static ef.qb.core.utils.QueryUtils.validateAndGetJoinAnnotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public abstract class AbstractRelationProcessor implements RelationProcessor {
 
     protected final QueryExecutor secExecutor;
@@ -20,6 +16,22 @@ public abstract class AbstractRelationProcessor implements RelationProcessor {
 
     protected AbstractRelationProcessor(QueryExecutor secExecutor) {
         this.secExecutor = secExecutor;
+    }
+
+    public String getPriAttribute() {
+        return priAttribute;
+    }
+
+    public void setPriAttribute(String priAttribute) {
+        this.priAttribute = priAttribute;
+    }
+
+    public String getSecAttribute() {
+        return secAttribute;
+    }
+
+    public void setSecAttribute(String secAttribute) {
+        this.secAttribute = secAttribute;
     }
 
     @Override
