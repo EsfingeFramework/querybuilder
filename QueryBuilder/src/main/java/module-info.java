@@ -1,7 +1,6 @@
 module querybuilder.core {
     requires org.apache.tomcat.jasper.el;
     requires static cglib.nodep;
-    requires transitive lombok;
 
     exports ef.qb.core;
     exports ef.qb.core.annotation;

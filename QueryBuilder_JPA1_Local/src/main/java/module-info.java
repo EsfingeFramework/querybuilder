@@ -1,6 +1,6 @@
 module querybuilder.jpaone_local {
     requires transitive querybuilder.core;
-    requires querybuilder.jpaone;
+    requires transitive querybuilder.jpaone;
     requires java.persistence;
 
     exports ef.qb.jpa1_local;
