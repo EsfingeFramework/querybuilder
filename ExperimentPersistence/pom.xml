@@ -9,7 +9,7 @@
 
     <name>ExperimentPersistence</name>
     <url>https://github.com/EsfingeFramework/querybuilder</url>
-    <description>The Experiment Persistence module is useful for generating polyglot persistence experiments with Sphinx Query Builder (JPA Local and MongoDB)</description>
+    <description>The Experiment Persistence module is useful for generating polyglot persistence experiments with Esfinge Query Builder (JPA Local and MongoDB)</description>
 
     <organization>
         <name>Esfinge Framework</name>
