@@ -1,1 +1,1 @@
-com.example.polyglot.mongodb.PolyglotMongoDBDatastoreProvider
+persistence.TestDatastoreProvider

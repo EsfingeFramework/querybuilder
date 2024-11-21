@@ -6,11 +6,12 @@ import dev.morphia.query.filters.Filters;
 import ef.qb.core.Repository;
 import ef.qb.core.annotation.QueryExecutorType;
 import ef.qb.core.exception.InvalidPropertyException;
+import static ef.qb.core.utils.PersistenceTypeConstants.MONGODB;
 import ef.qb.core.utils.ServiceLocator;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-@QueryExecutorType("MONGODB")
+@QueryExecutorType(MONGODB)
 public class MongoDBRepository<E> implements Repository<E> {
 
     protected Datastore ds;

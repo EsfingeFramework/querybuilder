@@ -1,1 +1,1 @@
-com.example.polyglot.jpa1.PolyglotEntityManagerProvider
+persistence.TestEntityManagerProvider

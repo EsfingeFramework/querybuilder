@@ -9,10 +9,11 @@ import ef.qb.core.methodparser.OrderingDirection;
 import ef.qb.core.methodparser.QueryInfo;
 import ef.qb.core.methodparser.QueryOrder;
 import ef.qb.core.methodparser.QueryType;
+import static ef.qb.core.utils.PersistenceTypeConstants.MONGODB;
 import java.util.ArrayList;
 import java.util.List;
 
-@QueryExecutorType("MONGODB")
+@QueryExecutorType(MONGODB)
 public class MongoDBQueryExecutor implements QueryExecutor {
 
     @Override

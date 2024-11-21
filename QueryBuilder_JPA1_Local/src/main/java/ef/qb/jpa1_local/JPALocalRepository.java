@@ -2,10 +2,11 @@ package ef.qb.jpa1_local;
 
 import ef.qb.core.annotation.QueryExecutorType;
 import ef.qb.core.annotation.ServicePriority;
+import static ef.qb.core.utils.PersistenceTypeConstants.JPA1;
 import ef.qb.jpa1.JPARepository;
 
 @ServicePriority(1)
-@QueryExecutorType("JPA1")
+@QueryExecutorType(JPA1)
 public class JPALocalRepository<E> extends JPARepository<E> {
 
     @Override

@@ -3,6 +3,7 @@ package ef.qb.jpa1;
 import ef.qb.core.Repository;
 import ef.qb.core.annotation.QueryExecutorType;
 import ef.qb.core.exception.InvalidPropertyException;
+import static ef.qb.core.utils.PersistenceTypeConstants.JPA1;
 import ef.qb.core.utils.ServiceLocator;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +13,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
 
-@QueryExecutorType("JPA1")
+@QueryExecutorType(JPA1)
 public class JPARepository<E> implements Repository<E> {
 
     protected EntityManager em;

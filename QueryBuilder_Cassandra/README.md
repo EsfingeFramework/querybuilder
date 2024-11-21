@@ -18,7 +18,7 @@ trusted by thousands of companies for scalability and high availability without 
 
 # Prerequisites
 
-* Java 1.8 or higher.
+* Java 11 or higher.
 * Maven
 
 # How to configure the project (on IntelliJ Idea)
@@ -49,8 +49,8 @@ any other method to manage dependencies.
 ```
 
 * In the `META-INF/services/` folder you need to create the following three files:
-    * net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider
-    * net.sf.esfinge.querybuilder.cassandra.entity.CassandraEntity
+    * ef.qb.cassandra.CassandraSessionProvider
+    * ef.qb.cassandra.entity.CassandraEntity
 * In the `META-INF/` folder you can also add an optional `config.json` file, see [framework limitations](#framework-limitations) 
 for more information. 
 * Now you need to provide the concrete implementations of these two intefaces, namely: `CassandraSessionProvider`
@@ -94,7 +94,7 @@ framework to do the object mapping.
 
 * In the files contained in the `META-INF/services` folder you need to include the full path to your implementation of
   the
-  specific interface, for example in the `net.sf.esfinge.querybuilder.cassandra.CassandraSessionProvider`, supposing you
+  specific interface, for example in the `ef.qb.cassandra.CassandraSessionProvider`, supposing you
   named the implementation as `MySessionProvider` in the package `org.example` you will include the
   path `org.example.MySessionProvider`.
 * Create an interface that extends the `net.sf.esfinge.querybuilder.Repository` interface, by parametrizing it with an
@@ -191,71 +191,20 @@ CREATE TABLE test.Person
 ```xml
 
 <dependencies>
-
-    <!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-core -->
     <dependency>
-        <groupId>com.datastax.cassandra</groupId>
-        <artifactId>cassandra-driver-core</artifactId>
-        <version>3.1.0</version>
-        <exclusions>
-            <exclusion>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-mapping -->
-    <dependency>
-        <groupId>com.datastax.cassandra</groupId>
-        <artifactId>cassandra-driver-mapping</artifactId>
-        <version>3.1.0</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.6.1</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>1.6.4</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>2.13.3</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/net.sf.esfinge/querybuilder-core -->
-    <dependency>
-        <groupId>net.sf.esfinge</groupId>
+        <groupId>io.github.esfinge-framework</groupId>
         <artifactId>querybuilder-core</artifactId>
-        <version>1.7.0</version>
+        <version>2.1.0</version>
+        <scope>compile</scope>
     </dependency>
-
-    <!-- this is a local dependency -->
     <dependency>
-        <groupId>net.sf.esfinge</groupId>
-        <artifactId>querybuilder-cassandra</artifactId>
-        <version>1.0.0</version>
-        <scope>system</scope>
-        <systemPath>${project.basedir}/resources/querybuilder-cassandra-1.0.0.jar</systemPath>
+        <groupId>io.github.esfinge-framework</groupId>
+        <artifactId>querybuilder-jpa1</artifactId>
+        <version>2.1.0</version>
+        <scope>compile</scope>
     </dependency>
-
 </dependencies>
 ```
-
-* You will notice that the `querybuilder-cassandra` dependency is the only local one. This i because the software has
-  not been released in the maven repository, but needs to be added as local `.jar` file. In order to create the `.jar`
-  file for use you can open this project with maven and run `mvn package`, the `.jar` file will be created in
-  the `/target` folder.
 
 ## Example application
 
@@ -297,10 +246,14 @@ If this file is omitted, the configuration will automatically default to:
 }
 ```
 
-# Author
+# Authors
 
 **Name**: Samuel Dalvai <br>
-**Email**: samdalvai@unibz.it <br>
+**Email**: samdalvai@unibz.it <br><br>
+
+(Refactoring)
+**Name**: Fernando Pereira <br>
+**Email**: fernando.opc@gmail.com <br>
 
 # Notes
 

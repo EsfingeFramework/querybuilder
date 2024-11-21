@@ -1,19 +1,20 @@
 package ef.qb.jpa1;
 
+import ef.qb.core.annotation.QueryExecutorType;
 import ef.qb.core.executor.QueryExecutor;
 import ef.qb.core.methodparser.QueryInfo;
 import ef.qb.core.methodparser.QueryRepresentation;
 import ef.qb.core.methodparser.QueryStyle;
 import ef.qb.core.methodparser.QueryType;
+import static ef.qb.core.utils.PersistenceTypeConstants.JPA1;
 import ef.qb.core.utils.ReflectionUtils;
 import ef.qb.core.utils.ServiceLocator;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import ef.qb.core.annotation.QueryExecutorType;
 
-@QueryExecutorType("JPA1")
+@QueryExecutorType(JPA1)
 public class JPAQueryExecutor implements QueryExecutor {
 
     private static final Map<QueryInfo, QueryRepresentation> cache = new HashMap<>();
