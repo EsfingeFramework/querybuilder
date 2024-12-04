@@ -3,7 +3,7 @@ module querybuilder.cassandra {
     requires cassandra.driver.core;
     requires cassandra.driver.mapping;
     requires java.logging;
-    requires jackson.databind;
+    requires com.fasterxml.jackson.databind;
 
     exports ef.qb.cassandra;
     exports ef.qb.cassandra.cassandrautils;
