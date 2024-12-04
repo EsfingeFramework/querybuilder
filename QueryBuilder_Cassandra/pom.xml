@@ -7,14 +7,14 @@
     <packaging>jar</packaging>
 
     <name>Esfinge QueryBuilder Cassandra</name>
-    <url>http://esfinge.sourceforge.net/</url>
+    <url>https://github.com/EsfingeFramework/querybuilder</url>
     <description>The Esfinge QueryBuilder Cassandra is the persistence framework for Esfinge QueryBuilder using
         Cassandra.
     </description>
 
     <organization>
         <name>Esfinge Framework</name>
-        <url>http://esfinge.sourceforge.net/</url>
+        <url>https://github.com/EsfingeFramework</url>
     </organization>
 
     <licenses>
