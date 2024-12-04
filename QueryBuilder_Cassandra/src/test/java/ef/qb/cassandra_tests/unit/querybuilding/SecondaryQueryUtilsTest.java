@@ -11,24 +11,24 @@ public class SecondaryQueryUtilsTest {
 
     @Test
     public void twoEqualObjectsShouldBeEqualTest() {
-        TestClass obj1 = new TestClass(1, "Pedro", "Silva");
-        TestClass obj2 = new TestClass(1, "Pedro", "Silva");
+        var obj1 = new TestClass(1, "Pedro", "Silva");
+        var obj2 = new TestClass(1, "Pedro", "Silva");
 
         assertTrue(reflectiveEquals(obj1, obj2));
     }
 
     @Test
     public void twoDifferentObjectsShouldNotBeEqualTest() {
-        TestClass obj1 = new TestClass(1, "Pedro", "Silva");
-        TestClass obj2 = new TestClass(1, "Pedros", "Silva");
+        var obj1 = new TestClass(1, "Pedro", "Silva");
+        var obj2 = new TestClass(1, "Pedros", "Silva");
 
         assertFalse(reflectiveEquals(obj1, obj2));
     }
 
     @Test
     public void twoObjectsWithDifferentClassShouldNotBeEqualTest() {
-        TestClass obj1 = new TestClass(1, "Pedro", "Silva");
-        TestClass1 obj2 = new TestClass1(1, "Pedro", "Silva");
+        var obj1 = new TestClass(1, "Pedro", "Silva");
+        var obj2 = new TestClass1(1, "Pedro", "Silva");
 
         assertFalse(reflectiveEquals(obj1, obj2));
     }

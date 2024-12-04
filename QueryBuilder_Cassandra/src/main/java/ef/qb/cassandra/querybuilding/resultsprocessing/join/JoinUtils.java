@@ -96,9 +96,9 @@ public class JoinUtils {
         if (list.size() == 0)
             return list;
 
-        Class<?> mainClass = list.get(0).getClass();
-        Method[] mainGetters = getClassGetters(mainClass);
-        Method mainGetter = getClassGetterForField(mainClass, mainGetters, joinClause.getJoinTypeName());
+        var mainClass = list.get(0).getClass();
+        var mainGetters = getClassGetters(mainClass);
+        var mainGetter = getClassGetterForField(mainClass, mainGetters, joinClause.getJoinTypeName());
 
         return list.stream().filter(obj -> {
             Method joinGetter = null;
@@ -106,10 +106,10 @@ public class JoinUtils {
             try {
                 Class joinClass = mainGetter.invoke(list.get(0)).getClass();
 
-                Method[] joinGetters = getClassGetters(joinClass);
+                var joinGetters = getClassGetters(joinClass);
                 joinGetter = getClassGetterForField(joinClass, joinGetters, joinClause.getJoinAttributeName());
 
-                Object nestedClass = mainGetter.invoke(obj);
+                var nestedClass = mainGetter.invoke(obj);
 
                 // If we have the @CompareToNull annotation on the parameter of the query method
                 // but we pass a non null value to the method, then we should skip attributes
@@ -132,7 +132,7 @@ public class JoinUtils {
         if (args == null)
             return jcs;
 
-        for (JoinClause j : jcs) {
+        for (var j : jcs) {
             if (j.getValue() == null)
                 j.setValue(args[j.getArgPosition()]);
 

@@ -7,7 +7,6 @@ import ef.qb.cassandra.querybuilding.resultsprocessing.specialcomparison.Special
 import ef.qb.cassandra.validation.CassandraVisitorFactory;
 import ef.qb.core.exception.InvalidQuerySequenceException;
 import ef.qb.core.methodparser.ComparisonType;
-import ef.qb.core.methodparser.QueryRepresentation;
 import ef.qb.core.methodparser.QueryVisitor;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -23,10 +22,9 @@ public class CassandraSpecialComparisonQueryVisitorTest {
         visitor.visitCondition("name", ComparisonType.NOT_EQUALS);
         visitor.visitEnd();
 
-        SpecialComparisonClause expected = new SpecialComparisonClause("name", SpecialComparisonType.NOT_EQUALS);
-
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var expected = new SpecialComparisonClause("name", SpecialComparisonType.NOT_EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals(query, "SELECT * FROM <#keyspace-name#>.Person");
         assertEquals(expected, ((CassandraQueryRepresentation) qr).getSpecialComparisonClauses().get(0));
@@ -40,11 +38,10 @@ public class CassandraSpecialComparisonQueryVisitorTest {
         visitor.visitCondition("age", ComparisonType.STARTS);
         visitor.visitEnd();
 
-        SpecialComparisonClause expected1 = new SpecialComparisonClause("name", SpecialComparisonType.NOT_EQUALS);
-        SpecialComparisonClause expected2 = new SpecialComparisonClause("age", SpecialComparisonType.STARTS);
-
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var expected1 = new SpecialComparisonClause("name", SpecialComparisonType.NOT_EQUALS);
+        var expected2 = new SpecialComparisonClause("age", SpecialComparisonType.STARTS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals(query, "SELECT * FROM <#keyspace-name#>.Person");
         assertEquals(expected1, ((CassandraQueryRepresentation) qr).getSpecialComparisonClauses().get(0));
@@ -61,11 +58,10 @@ public class CassandraSpecialComparisonQueryVisitorTest {
         visitor.visitCondition("age", ComparisonType.STARTS);
         visitor.visitEnd();
 
-        SpecialComparisonClause expected1 = new SpecialComparisonClause("name", SpecialComparisonType.NOT_EQUALS);
-        SpecialComparisonClause expected2 = new SpecialComparisonClause("age", SpecialComparisonType.STARTS);
-
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var expected1 = new SpecialComparisonClause("name", SpecialComparisonType.NOT_EQUALS);
+        var expected2 = new SpecialComparisonClause("age", SpecialComparisonType.STARTS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE lastName = 1? ALLOW FILTERING", query);
         assertEquals(expected1, ((CassandraQueryRepresentation) qr).getSpecialComparisonClauses().get(0));

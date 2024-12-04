@@ -5,8 +5,6 @@ import ef.qb.cassandra.exceptions.MethodInvocationException;
 import static ef.qb.cassandra.reflection.CassandraReflectionUtils.getClassGetterForField;
 import static ef.qb.cassandra.reflection.CassandraReflectionUtils.getClassGetters;
 import ef.qb.core.annotation.CompareToNull;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
@@ -41,8 +39,8 @@ public class SpecialComparisonUtils {
 
         Class clazz = list.get(0).getClass();
 
-        Method[] getters = getClassGetters(clazz);
-        Method getter = getClassGetterForField(clazz, getters, clause.getPropertyName());
+        var getters = getClassGetters(clazz);
+        var getter = getClassGetterForField(clazz, getters, clause.getPropertyName());
 
         return list.stream().filter(obj -> {
             try {
@@ -63,7 +61,7 @@ public class SpecialComparisonUtils {
     public static List<SpecialComparisonClause> getSpecialComparisonClausesWithValues(Object[] args, List<SpecialComparisonClause> spc) {
         List<SpecialComparisonClause> newSpc = new ArrayList<>();
 
-        for (SpecialComparisonClause c : spc) {
+        for (var c : spc) {
             if (c.getValue() == null) {
                 c.setValue(args[c.getArgPosition()]);
             }
@@ -76,7 +74,7 @@ public class SpecialComparisonUtils {
 
     public static boolean hasCompareToNullAnnotationOnFields(Object obj) {
         if (obj != null) {
-            for (Field f : obj.getClass().getDeclaredFields()) {
+            for (var f : obj.getClass().getDeclaredFields()) {
                 if (f.isAnnotationPresent(CompareToNull.class)) {
                     return true;
                 }

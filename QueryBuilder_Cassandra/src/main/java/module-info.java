@@ -41,4 +41,7 @@ module querybuilder.cassandra {
 
     provides ef.qb.core.executor.QueryExecutor with
         ef.qb.cassandra.CassandraQueryExecutor;
+
+    provides ef.qb.cassandra.CassandraSessionProvider with
+            ef.qb.cassandra.DefaultCassandraSessionProvider;
 }

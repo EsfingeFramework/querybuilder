@@ -66,7 +66,7 @@ public class ConditionStatement extends Clause {
     }
 
     private String getConditionRepresentation() {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         // Only append if NullOption is equal to NONE, otherwise
         // ignore condition

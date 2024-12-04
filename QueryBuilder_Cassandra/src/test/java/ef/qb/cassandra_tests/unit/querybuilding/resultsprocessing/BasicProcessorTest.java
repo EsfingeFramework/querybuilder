@@ -13,11 +13,11 @@ public class BasicProcessorTest {
     public void init() {
         objectList = new ArrayList<>();
 
-        TestClass obj1 = new TestClass(1, "Pedro", "Silva");
-        TestClass obj2 = new TestClass(2, "Marcos", "Ferreira");
-        TestClass obj3 = new TestClass(3, "Antonio", "Marques");
-        TestClass obj4 = new TestClass(4, "Marcos", "Silva");
-        TestClass obj5 = new TestClass(5, "Silvia", "Bressan");
+        var obj1 = new TestClass(1, "Pedro", "Silva");
+        var obj2 = new TestClass(2, "Marcos", "Ferreira");
+        var obj3 = new TestClass(3, "Antonio", "Marques");
+        var obj4 = new TestClass(4, "Marcos", "Silva");
+        var obj5 = new TestClass(5, "Silvia", "Bressan");
 
         objectList.add(obj1);
         objectList.add(obj2);

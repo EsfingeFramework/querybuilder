@@ -13,4 +13,7 @@ module querybuilder.jpaone {
 
     provides ef.qb.core.executor.QueryExecutor with
         ef.qb.jpa1.JPAQueryExecutor;
+
+    provides ef.qb.jpa1.EntityManagerProvider with
+            ef.qb.jpa1.DefaultEntityManagerProvider;
 }

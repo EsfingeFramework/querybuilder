@@ -6,7 +6,6 @@ import ef.qb.core.exception.InvalidQuerySequenceException;
 import static ef.qb.core.methodparser.ComparisonType.EQUALS;
 import static ef.qb.core.methodparser.ComparisonType.GREATER;
 import static ef.qb.core.methodparser.ComparisonType.GREATER_OR_EQUALS;
-import ef.qb.core.methodparser.QueryRepresentation;
 import ef.qb.core.methodparser.QueryVisitor;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -20,8 +19,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitEntity("Person");
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals("SELECT * FROM <#keyspace-name#>.Person", query);
     }
@@ -38,8 +37,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("name", EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? ALLOW FILTERING",
@@ -54,8 +53,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("city", EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND city = 1? ALLOW FILTERING",
@@ -72,8 +71,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("age", GREATER_OR_EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND city = 1? AND age >= 2? ALLOW FILTERING",
@@ -152,9 +151,9 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("name", EQUALS, "Maria");
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-        String comparisonQuery = "SELECT * FROM <#keyspace-name#>.Person WHERE name = 'Maria' ALLOW FILTERING";
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var comparisonQuery = "SELECT * FROM <#keyspace-name#>.Person WHERE name = 'Maria' ALLOW FILTERING";
         assertEquals(comparisonQuery, query);
         assertEquals("Maria", qr.getFixParameterValue("name"));
         assertTrue(qr.getFixParameters().contains("name"));
@@ -166,9 +165,9 @@ public class CassandraQueryVisitorTest {
         visitor.visitCondition("age", EQUALS, 30);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-        String comparisonQuery = "SELECT * FROM <#keyspace-name#>.Person WHERE age = 30 ALLOW FILTERING";
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var comparisonQuery = "SELECT * FROM <#keyspace-name#>.Person WHERE age = 30 ALLOW FILTERING";
         assertEquals(comparisonQuery, query);
         assertEquals(30, qr.getFixParameterValue("age"));
         assertTrue(qr.getFixParameters().contains("age"));
@@ -181,8 +180,8 @@ public class CassandraQueryVisitorTest {
         visitor.visitConector("and");
         visitor.visitCondition("age", GREATER);
         visitor.visitEnd();
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
         assertEquals("SELECT * FROM <#keyspace-name#>.Person WHERE name = 'Maria' AND age > 0? ALLOW FILTERING", query);
         assertEquals("Maria", qr.getFixParameterValue("name"));
         assertTrue(qr.getFixParameters().contains("name"));

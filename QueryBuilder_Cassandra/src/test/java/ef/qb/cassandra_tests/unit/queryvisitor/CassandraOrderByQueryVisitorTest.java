@@ -7,7 +7,6 @@ import ef.qb.core.exception.InvalidQuerySequenceException;
 import static ef.qb.core.methodparser.ComparisonType.EQUALS;
 import static ef.qb.core.methodparser.OrderingDirection.ASC;
 import static ef.qb.core.methodparser.OrderingDirection.DESC;
-import ef.qb.core.methodparser.QueryRepresentation;
 import ef.qb.core.methodparser.QueryVisitor;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -22,9 +21,9 @@ public class CassandraOrderByQueryVisitorTest {
         visitor.visitOrderBy("age", ASC);
         visitor.visitEnd();
 
-        OrderByClause expected = new OrderByClause("age", ASC);
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var expected = new OrderByClause("age", ASC);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals(query, "SELECT * FROM <#keyspace-name#>.Person");
         assertEquals(expected, ((CassandraQueryRepresentation) qr).getOrderByClauses().get(0));
@@ -37,10 +36,10 @@ public class CassandraOrderByQueryVisitorTest {
         visitor.visitOrderBy("name", DESC);
         visitor.visitEnd();
 
-        OrderByClause expected1 = new OrderByClause("age", ASC);
-        OrderByClause expected2 = new OrderByClause("name", DESC);
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var expected1 = new OrderByClause("age", ASC);
+        var expected2 = new OrderByClause("name", DESC);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         assertEquals(query, "SELECT * FROM <#keyspace-name#>.Person");
         assertEquals(expected1, ((CassandraQueryRepresentation) qr).getOrderByClauses().get(0));

@@ -22,7 +22,7 @@ public class OrderingProcessorTest extends BasicProcessorTest {
         orderByClauseList.add(new OrderByClause("name", ASC));
 
         ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
-        List<TestClass> sorted = processor.postProcess(objectList);
+        var sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{3, 2, 4, 1, 5}, sorted));
     }
@@ -33,7 +33,7 @@ public class OrderingProcessorTest extends BasicProcessorTest {
         orderByClauseList.add(new OrderByClause("name", DESC));
 
         ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
-        List<TestClass> sorted = processor.postProcess(objectList);
+        var sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{5, 1, 2, 4, 3}, sorted));
     }
@@ -45,7 +45,7 @@ public class OrderingProcessorTest extends BasicProcessorTest {
         orderByClauseList.add(new OrderByClause("lastName", ASC));
 
         ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
-        List<TestClass> sorted = processor.postProcess(objectList);
+        var sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{3, 2, 4, 1, 5}, sorted));
     }
@@ -57,7 +57,7 @@ public class OrderingProcessorTest extends BasicProcessorTest {
         orderByClauseList.add(new OrderByClause("lastName", DESC));
 
         ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
-        List<TestClass> sorted = processor.postProcess(objectList);
+        var sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{3, 4, 2, 1, 5}, sorted));
     }
@@ -69,7 +69,7 @@ public class OrderingProcessorTest extends BasicProcessorTest {
         orderByClauseList.add(new OrderByClause("lastName", DESC));
 
         ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
-        List<TestClass> sorted = processor.postProcess(objectList);
+        var sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{5, 1, 4, 2, 3}, sorted));
     }
@@ -84,7 +84,7 @@ public class OrderingProcessorTest extends BasicProcessorTest {
         objectList.add(new TestClass(1, "AAAAA", "AAAA"));
 
         ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
-        List<TestClass> sorted = processor.postProcess(objectList);
+        var sorted = processor.postProcess(objectList);
 
         assertTrue(assertOrdering(new int[]{5, 4, 3, 2, 1, 1}, sorted));
     }
@@ -95,11 +95,11 @@ public class OrderingProcessorTest extends BasicProcessorTest {
         orderByClauseList.add(new OrderByClause("notFoundField", ASC));
 
         ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
-        List<TestClass> sorted = processor.postProcess(objectList);
+        var sorted = processor.postProcess(objectList);
     }
 
     private boolean assertOrdering(int[] ids, List<TestClass> sorted) {
-        for (int i = 0; i < sorted.size(); i++) {
+        for (var i = 0; i < sorted.size(); i++) {
             if (ids[i] != sorted.get(i).getId()) {
                 return false;
             }
@@ -115,7 +115,7 @@ public class OrderingProcessorTest extends BasicProcessorTest {
 
         ResultsProcessor processor = new OrderingProcessor(orderByClauseList);
 
-        for (int i = 0; i < 6; i++) {
+        for (var i = 0; i < 6; i++) {
             objectList.add(new TestClass(1, "test", "test"));
         }
 

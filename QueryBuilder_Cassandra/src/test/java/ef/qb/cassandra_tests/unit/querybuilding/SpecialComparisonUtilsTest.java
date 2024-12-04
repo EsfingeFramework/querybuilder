@@ -70,11 +70,11 @@ public class SpecialComparisonUtilsTest {
 
     @Test
     public void filterBySpecialComparisonWithNotAvailableAttributeTest() {
-        SpecialComparisonClause clause = new SpecialComparisonClause("whatever", NOT_EQUALS);
+        var clause = new SpecialComparisonClause("whatever", NOT_EQUALS);
         clause.setValue("whatever");
 
         List<Person> list = new ArrayList<>();
-        Person p = new Person();
+        var p = new Person();
         p.setId(1);
         p.setLastName("testlastname");
         p.setAge(33);

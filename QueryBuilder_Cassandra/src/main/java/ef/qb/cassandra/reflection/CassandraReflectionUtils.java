@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.toList;
 public class CassandraReflectionUtils {
 
     public static <E> Method[] getClassGetters(Class<E> clazz) {
-        List<String> fieldNames = stream(clazz.getDeclaredFields())
+        var fieldNames = stream(clazz.getDeclaredFields())
                 .map(field -> field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1))
                 .collect(toList());
 
@@ -20,7 +20,7 @@ public class CassandraReflectionUtils {
     }
 
     public static <E> Method[] getClassGettersForFields(Class<E> clazz, List<String> fieldNames) {
-        Method[] getters = getClassGetters(clazz);
+        var getters = getClassGetters(clazz);
 
         // Need to order the methods with the same ordering as the fieldNames,
         // otherwise on runtime the chain ordering for multiple fields might change,
@@ -31,11 +31,11 @@ public class CassandraReflectionUtils {
     }
 
     public static <E> Method getClassGetterForField(Class<E> clazz, Method[] methods, String fieldName) {
-        String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+        var getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
         Method getter = null;
 
-        for (Method m : methods) {
+        for (var m : methods) {
             if (m.getName().equals(getterName)) {
                 getter = m;
             }

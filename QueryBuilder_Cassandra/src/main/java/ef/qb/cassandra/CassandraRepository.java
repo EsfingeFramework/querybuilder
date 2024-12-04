@@ -1,8 +1,5 @@
 package ef.qb.cassandra;
 
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.Result;
 import com.datastax.driver.mapping.annotations.Table;
 import static ef.qb.cassandra.cassandrautils.CassandraUtils.checkValidClassConfiguration;
 import ef.qb.cassandra.cassandrautils.MappingManagerProvider;
@@ -11,7 +8,6 @@ import static ef.qb.cassandra.reflection.CassandraReflectionUtils.getClassGetter
 import ef.qb.core.Repository;
 import ef.qb.core.annotation.QueryExecutorType;
 import static ef.qb.core.utils.PersistenceTypeConstants.CASSANDRA;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +23,7 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public E save(E e) {
-        Mapper<E> mapper = provider.getManager().mapper(clazz);
+        var mapper = provider.getManager().mapper(clazz);
         mapper.save(e);
 
         return e;
@@ -35,18 +31,18 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public void delete(Object id) {
-        Mapper<E> mapper = provider.getManager().mapper(clazz);
+        var mapper = provider.getManager().mapper(clazz);
         mapper.delete(id);
     }
 
     @Override
     public List<E> list() {
-        Mapper<E> mapper = provider.getManager().mapper(clazz);
-        ResultSet results = provider.getSession().execute("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName());
-        Result<E> objects = mapper.map(results);
+        var mapper = provider.getManager().mapper(clazz);
+        var results = provider.getSession().execute("SELECT * FROM " + clazz.getDeclaredAnnotation(Table.class).keyspace() + "." + clazz.getSimpleName());
+        var objects = mapper.map(results);
         List<E> objectsList = new ArrayList<>();
 
-        for (E u : objects) {
+        for (var u : objects) {
             objectsList.add(u);
         }
 
@@ -55,25 +51,25 @@ public class CassandraRepository<E> implements Repository<E> {
 
     @Override
     public E getById(Object id) {
-        Mapper<E> mapper = provider.getManager().mapper(clazz);
+        var mapper = provider.getManager().mapper(clazz);
 
         return mapper.get(id);
     }
 
     @Override
     public List<E> queryByExample(E e) {
-        Method[] getters = getClassGetters(e.getClass());
+        var getters = getClassGetters(e.getClass());
 
         if (getters.length == 0) {
             throw new NotEnoughExamplesException("At least one attribute needed for class " + e.getClass());
         }
 
-        StringBuilder queryBuilder = new StringBuilder();
+        var queryBuilder = new StringBuilder();
 
         queryBuilder.append("SELECT * FROM ").append(clazz.getDeclaredAnnotation(Table.class).keyspace()).append(".").append(clazz.getSimpleName()).append(" WHERE ");
 
-        int conditions = 0;
-        for (Method ter : getters) {
+        var conditions = 0;
+        for (var ter : getters) {
             try {
                 if (ter.invoke(e) != null) {
                     if (conditions > 0) {
@@ -94,12 +90,12 @@ public class CassandraRepository<E> implements Repository<E> {
 
         queryBuilder.append(" ALLOW FILTERING");
 
-        Mapper<E> mapper = provider.getManager().mapper(clazz);
-        ResultSet results = provider.getSession().execute(queryBuilder.toString());
-        Result<E> objects = mapper.map(results);
+        var mapper = provider.getManager().mapper(clazz);
+        var results = provider.getSession().execute(queryBuilder.toString());
+        var objects = mapper.map(results);
         List<E> objectsList = new ArrayList<>();
 
-        for (E u : objects) {
+        for (var u : objects) {
             objectsList.add(u);
         }
 

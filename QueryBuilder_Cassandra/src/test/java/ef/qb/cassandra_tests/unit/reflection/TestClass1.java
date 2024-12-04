@@ -56,7 +56,7 @@ public class TestClass1 {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TestClass1 testClass = (TestClass1) o;
+        var testClass = (TestClass1) o;
         return id == testClass.id && Objects.equals(name, testClass.name) && Objects.equals(lastName, testClass.lastName);
     }
 

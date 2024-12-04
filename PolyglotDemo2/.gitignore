@@ -1,0 +1,3 @@
+/target/
+/src/main/resources/META-INF/morphia-config.properties
+/src/main/resources/META-INF/persistence.xml

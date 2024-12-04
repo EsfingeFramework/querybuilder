@@ -8,7 +8,6 @@ import ef.qb.cassandra.validation.CassandraValidationQueryVisitor;
 import ef.qb.cassandra.validation.CassandraVisitorFactory;
 import ef.qb.core.exception.InvalidQuerySequenceException;
 import ef.qb.core.methodparser.ComparisonType;
-import ef.qb.core.methodparser.QueryRepresentation;
 import ef.qb.core.methodparser.QueryVisitor;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -25,11 +24,11 @@ public class CassandraSecondaryQueryVisitorTest {
         visitor.visitCondition("lastname", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         qr = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getQueryRepresentation();
-        String secondaryQuery = qr.getQuery().toString();
+        var secondaryQuery = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? ALLOW FILTERING",
@@ -52,11 +51,11 @@ public class CassandraSecondaryQueryVisitorTest {
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         qr = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getQueryRepresentation();
-        String secondaryQuery = qr.getQuery().toString();
+        var secondaryQuery = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND lastname = 1? ALLOW FILTERING",
@@ -77,14 +76,14 @@ public class CassandraSecondaryQueryVisitorTest {
         visitor.visitCondition("age", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         qr = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getQueryRepresentation();
-        String secondaryQuery = qr.getQuery().toString();
+        var secondaryQuery = qr.getQuery().toString();
 
         qr = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getSecondaryVisitor().getQueryRepresentation();
-        String tertiaryQuery = qr.getQuery().toString();
+        var tertiaryQuery = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? ALLOW FILTERING",
@@ -115,14 +114,14 @@ public class CassandraSecondaryQueryVisitorTest {
         visitor.visitCondition("id", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         qr = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getQueryRepresentation();
-        String secondaryQuery = qr.getQuery().toString();
+        var secondaryQuery = qr.getQuery().toString();
 
         qr = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getSecondaryVisitor().getQueryRepresentation();
-        String tertiaryQuery = qr.getQuery().toString();
+        var tertiaryQuery = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? AND id = 1? ALLOW FILTERING",
@@ -187,11 +186,11 @@ public class CassandraSecondaryQueryVisitorTest {
         visitor.visitCondition("lastname", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         qr = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getQueryRepresentation();
-        String secondaryQuery = qr.getQuery().toString();
+        var secondaryQuery = qr.getQuery().toString();
 
         assertEquals(null, ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getSecondaryVisitor());
     }
@@ -204,11 +203,11 @@ public class CassandraSecondaryQueryVisitorTest {
         visitor.visitCondition("lastname", ComparisonType.STARTS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
 
         qr = ((CassandraValidationQueryVisitor) visitor).getSecondaryVisitor().getQueryRepresentation();
-        String secondaryQuery = qr.getQuery().toString();
+        var secondaryQuery = qr.getQuery().toString();
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 0? ALLOW FILTERING",
@@ -218,7 +217,7 @@ public class CassandraSecondaryQueryVisitorTest {
                 "SELECT * FROM <#keyspace-name#>.Person",
                 secondaryQuery);
 
-        SpecialComparisonClause expected = new SpecialComparisonClause("lastname", SpecialComparisonType.STARTS);
+        var expected = new SpecialComparisonClause("lastname", SpecialComparisonType.STARTS);
 
         assertEquals(expected, ((CassandraQueryRepresentation) qr).getSpecialComparisonClauses().get(0));
     }

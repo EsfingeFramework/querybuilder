@@ -108,11 +108,11 @@ public class JoinUtilsTest {
 
     @Test
     public void filterByJoinClauseWithNotAvailableAttributeTest() {
-        JoinClause clause = new JoinClause("whatever", "whatever", NOT_EQUALS);
+        var clause = new JoinClause("whatever", "whatever", NOT_EQUALS);
         clause.setValue("whatever");
 
         List<Person> list = new ArrayList<>();
-        Person p = new Person();
+        var p = new Person();
         p.setId(1);
         p.setLastName("testlastname");
         p.setAge(33);

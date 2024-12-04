@@ -24,9 +24,9 @@ public class SpecialComparisonProcessorTest extends BasicProcessorTest {
         ResultsProcessor processor = new SpecialComparisonProcessor(specialComparisonClauses);
 
         List<TestClass> expected = new ArrayList<>();
-        TestClass exp1 = new TestClass(2, "Marcos", "Ferreira");
-        TestClass exp2 = new TestClass(3, "Antonio", "Marques");
-        TestClass exp3 = new TestClass(5, "Silvia", "Bressan");
+        var exp1 = new TestClass(2, "Marcos", "Ferreira");
+        var exp2 = new TestClass(3, "Antonio", "Marques");
+        var exp3 = new TestClass(5, "Silvia", "Bressan");
         expected.add(exp1);
         expected.add(exp2);
         expected.add(exp3);
@@ -46,8 +46,8 @@ public class SpecialComparisonProcessorTest extends BasicProcessorTest {
         ResultsProcessor processor = new SpecialComparisonProcessor(specialComparisonClauses);
 
         List<TestClass> expected = new ArrayList<>();
-        TestClass exp1 = new TestClass(3, "Antonio", "Marques");
-        TestClass exp2 = new TestClass(5, "Silvia", "Bressan");
+        var exp1 = new TestClass(3, "Antonio", "Marques");
+        var exp2 = new TestClass(5, "Silvia", "Bressan");
         expected.add(exp1);
         expected.add(exp2);
 
@@ -63,8 +63,8 @@ public class SpecialComparisonProcessorTest extends BasicProcessorTest {
         ResultsProcessor processor = new SpecialComparisonProcessor(specialComparisonClauses);
 
         List<TestClass> expected = new ArrayList<>();
-        TestClass exp1 = new TestClass(1, "Pedro", "Silva");
-        TestClass exp2 = new TestClass(4, "Marcos", "Silva");
+        var exp1 = new TestClass(1, "Pedro", "Silva");
+        var exp2 = new TestClass(4, "Marcos", "Silva");
         expected.add(exp1);
         expected.add(exp2);
 
@@ -82,7 +82,7 @@ public class SpecialComparisonProcessorTest extends BasicProcessorTest {
         ResultsProcessor processor = new SpecialComparisonProcessor(specialComparisonClauses);
 
         List<TestClass> expected = new ArrayList<>();
-        TestClass exp1 = new TestClass(1, "Pedro", "Silva");
+        var exp1 = new TestClass(1, "Pedro", "Silva");
         expected.add(exp1);
 
         assertEquals(expected, processor.postProcess(objectList));
@@ -97,8 +97,8 @@ public class SpecialComparisonProcessorTest extends BasicProcessorTest {
         ResultsProcessor processor = new SpecialComparisonProcessor(specialComparisonClauses);
 
         List<TestClass> expected = new ArrayList<>();
-        TestClass exp1 = new TestClass(1, "Pedro", "Silva");
-        TestClass exp2 = new TestClass(4, "Marcos", "Silva");
+        var exp1 = new TestClass(1, "Pedro", "Silva");
+        var exp2 = new TestClass(4, "Marcos", "Silva");
         expected.add(exp1);
         expected.add(exp2);
 
@@ -116,7 +116,7 @@ public class SpecialComparisonProcessorTest extends BasicProcessorTest {
         ResultsProcessor processor = new SpecialComparisonProcessor(specialComparisonClauses);
 
         List<TestClass> expected = new ArrayList<>();
-        TestClass exp1 = new TestClass(1, "Pedro", "Silva");
+        var exp1 = new TestClass(1, "Pedro", "Silva");
         expected.add(exp1);
 
         assertEquals(expected, processor.postProcess(objectList));
@@ -131,8 +131,8 @@ public class SpecialComparisonProcessorTest extends BasicProcessorTest {
         ResultsProcessor processor = new SpecialComparisonProcessor(specialComparisonClauses);
 
         List<TestClass> expected = new ArrayList<>();
-        TestClass exp1 = new TestClass(1, "Pedro", "Silva");
-        TestClass exp2 = new TestClass(4, "Marcos", "Silva");
+        var exp1 = new TestClass(1, "Pedro", "Silva");
+        var exp2 = new TestClass(4, "Marcos", "Silva");
         expected.add(exp1);
         expected.add(exp2);
 
@@ -150,7 +150,7 @@ public class SpecialComparisonProcessorTest extends BasicProcessorTest {
         ResultsProcessor processor = new SpecialComparisonProcessor(specialComparisonClauses);
 
         List<TestClass> expected = new ArrayList<>();
-        TestClass exp1 = new TestClass(1, "Pedro", "Silva");
+        var exp1 = new TestClass(1, "Pedro", "Silva");
         expected.add(exp1);
 
         assertEquals(expected, processor.postProcess(objectList));

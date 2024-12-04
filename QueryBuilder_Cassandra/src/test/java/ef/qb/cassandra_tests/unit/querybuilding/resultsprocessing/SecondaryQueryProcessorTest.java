@@ -14,7 +14,7 @@ public class SecondaryQueryProcessorTest extends BasicProcessorTest {
     @Test
     public void mergeTwoQueriesResultWithDifferentElementsTest() {
         List<TestClass> secondList = new ArrayList<>();
-        TestClass obj1 = new TestClass(1, "NewName", "NewLastname");
+        var obj1 = new TestClass(1, "NewName", "NewLastname");
         secondList.add(obj1);
 
         List<TestClass> expected = new ArrayList<>();
@@ -34,8 +34,8 @@ public class SecondaryQueryProcessorTest extends BasicProcessorTest {
     @Test
     public void mergeTwoQueriesResultWithEqualElementsTest() {
         List<TestClass> secondList = new ArrayList<>();
-        TestClass obj1 = new TestClass(1, "Pedro", "Silva");
-        TestClass obj2 = new TestClass(2, "Marcos", "Ferreira");
+        var obj1 = new TestClass(1, "Pedro", "Silva");
+        var obj2 = new TestClass(2, "Marcos", "Ferreira");
         secondList.add(obj1);
         secondList.add(obj2);
 
@@ -54,11 +54,11 @@ public class SecondaryQueryProcessorTest extends BasicProcessorTest {
     @Test
     public void mergeThreeQueriesResultWithDifferentElementsTest() {
         List<TestClass> secondList = new ArrayList<>();
-        TestClass obj1 = new TestClass(1, "NewName", "NewLastname");
+        var obj1 = new TestClass(1, "NewName", "NewLastname");
         secondList.add(obj1);
 
         List<TestClass> thirdList = new ArrayList<>();
-        TestClass obj2 = new TestClass(1, "NewName2", "NewLastname2");
+        var obj2 = new TestClass(1, "NewName2", "NewLastname2");
         secondList.add(obj2);
 
         List<TestClass> expected = new ArrayList<>();

@@ -24,7 +24,7 @@ public class OrderingProcessor extends BasicResultsProcessor {
 
     @Override
     public <E> List<E> resultsProcessing(List<E> list) {
-        int orderingLimit = getConfiguration().getOrderingLimit();
+        var orderingLimit = getConfiguration().getOrderingLimit();
 
         if (orderByClauses.isEmpty() || list.isEmpty())
             return list;
@@ -33,8 +33,8 @@ public class OrderingProcessor extends BasicResultsProcessor {
             throw new OrderingLimitExceededException("Ordering limit has been set to " + orderingLimit + ", but the query returned " + list.size() + " results.");
         }
 
-        Class<?> clazz = list.get(0).getClass();
-        ChainComparator comparator = createChainComparator(clazz, orderByClauses);
+        var clazz = list.get(0).getClass();
+        var comparator = createChainComparator(clazz, orderByClauses);
 
         return list.stream().sorted(comparator).collect(toList());
     }

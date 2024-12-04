@@ -80,7 +80,7 @@ public class Person implements CassandraEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Person person = (Person) o;
+        var person = (Person) o;
         return Objects.equals(id, person.id) && Objects.equals(name, person.name) && Objects.equals(lastName, person.lastName) && Objects.equals(age, person.age);
     }
 

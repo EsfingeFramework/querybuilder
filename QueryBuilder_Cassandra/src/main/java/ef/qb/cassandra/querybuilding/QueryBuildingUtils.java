@@ -8,13 +8,13 @@ import java.util.Arrays;
 public class QueryBuildingUtils {
 
     public static String replaceQueryArgs(String query, Object[] args) {
-        int paramOccurrence = countOccurrenceOfCharacterInString(query, '?');
-        int substituted = 0;
-        String newQuery = query;
+        var paramOccurrence = countOccurrenceOfCharacterInString(query, '?');
+        var substituted = 0;
+        var newQuery = query;
 
         // Skip substituting values equal to null. Arguments that have no placeholder are used in
         // SpecialComparison clauses and do not need to be substituted
-        for (int i = 0; i < args.length; i++) {
+        for (var i = 0; i < args.length; i++) {
             if (args[i] != null && newQuery.contains(i + "?")) {
                 newQuery = newQuery.replace(i + "?", getValueRepresentationByType(args[i]));
                 substituted++;
@@ -35,7 +35,7 @@ public class QueryBuildingUtils {
     }
 
     public static String getValueRepresentationByType(Object value) {
-        String className = value.getClass().getSimpleName();
+        var className = value.getClass().getSimpleName();
 
         if (className.equals("String") || className.equals("Character")) {
             return "'" + value + "'";
@@ -45,21 +45,21 @@ public class QueryBuildingUtils {
     }
 
     public static String extractParameterNameFromParameterWithComparison(String namedParameter) {
-        ComparisonType cp = getComparisonType(namedParameter);
+        var cp = getComparisonType(namedParameter);
 
         return cp == null ? namedParameter : namedParameter.replace(cp.getOpName(), "");
     }
 
     public static ComparisonType getComparisonType(String property) {
-        ComparisonType[] comparisons = values();
+        var comparisons = values();
         ComparisonType out = null;
 
         // Get the longest comparison match among the comparisons
         // Starting from the right
-        int longest = 0;
-        for (ComparisonType c : comparisons) {
-            int i = 0;
-            int currentMatch = 0;
+        var longest = 0;
+        for (var c : comparisons) {
+            var i = 0;
+            var currentMatch = 0;
 
             while (i < property.length() - 1 && i < c.getOpName().length() - 1) {
                 if (property.charAt(property.length() - 1 - i) == c.getOpName().charAt(c.getOpName().length() - 1 - i)) {

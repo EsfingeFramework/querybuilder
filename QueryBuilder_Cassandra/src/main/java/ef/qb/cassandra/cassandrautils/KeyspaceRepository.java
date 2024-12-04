@@ -26,7 +26,7 @@ public class KeyspaceRepository {
             throw new InvalidNumberOfReplicasException("Invalid number of replicas: " + numberOfReplicas);
         }
 
-        String sb = "CREATE KEYSPACE IF NOT EXISTS "
+        var sb = "CREATE KEYSPACE IF NOT EXISTS "
                 + keyspaceName
                 + " WITH replication = {"
                 + "'class':'"
@@ -49,7 +49,7 @@ public class KeyspaceRepository {
      */
     public void deleteKeyspace(String keyspaceName) {
 
-        final String query = "DROP KEYSPACE IF EXISTS " + keyspaceName;
+        final var query = "DROP KEYSPACE IF EXISTS " + keyspaceName;
 
         session.execute(query);
     }

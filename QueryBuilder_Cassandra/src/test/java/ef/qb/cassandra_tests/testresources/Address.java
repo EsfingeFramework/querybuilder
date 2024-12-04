@@ -7,6 +7,7 @@ import static java.util.Objects.hash;
 
 @UDT(keyspace = "test", name = "address")
 public class Address implements CassandraEntity {
+
     private String city;
     private String state;
 
@@ -28,17 +29,21 @@ public class Address implements CassandraEntity {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                '}';
+        return "Address{"
+                + "city='" + city + '\''
+                + ", state='" + state + '\''
+                + '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        var address = (Address) o;
         return Objects.equals(city, address.city) && Objects.equals(state, address.state);
     }
 

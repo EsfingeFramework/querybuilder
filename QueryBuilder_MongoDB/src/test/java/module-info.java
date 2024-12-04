@@ -11,7 +11,7 @@ module querybuilder.mongodb_tests {
     uses ef.qb.mongodb.DatastoreProvider;
 
     provides ef.qb.mongodb.DatastoreProvider with
-            ef.qb.mongodb_tests.TestMongoDBDatastoreProvider;
+            ef.qb.mongodb_tests.TestDatastoreProvider;
 
 
 }

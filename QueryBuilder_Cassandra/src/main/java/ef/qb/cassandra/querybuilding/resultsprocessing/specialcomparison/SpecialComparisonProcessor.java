@@ -25,7 +25,7 @@ public class SpecialComparisonProcessor extends BasicResultsProcessor {
             return list;
         }
 
-        for (SpecialComparisonClause c : specialComparisonClauses) {
+        for (var c : specialComparisonClauses) {
             list = filterListBySpecialComparisonClause(list, c);
         }
 

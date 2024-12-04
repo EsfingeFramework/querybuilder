@@ -16,8 +16,8 @@ public class CassandraReflectionUtilsTest {
 
     @Test
     public void getClassGettersTest() {
-        Method[] getters = getClassGetters(TestClass.class);
-        List<String> actual = stream(getters).map(Method::getName).collect(toList());
+        var getters = getClassGetters(TestClass.class);
+        var actual = stream(getters).map(Method::getName).collect(toList());
 
         List<String> expected = new ArrayList<>();
         expected.add("getName");
@@ -35,8 +35,8 @@ public class CassandraReflectionUtilsTest {
         fields.add("lastName");
         fields.add("id");
 
-        Method[] gettersForFields = getClassGettersForFields(TestClass.class, fields);
-        List<String> actual = stream(gettersForFields).map(Method::getName).collect(toList());
+        var gettersForFields = getClassGettersForFields(TestClass.class, fields);
+        var actual = stream(gettersForFields).map(Method::getName).collect(toList());
 
         List<String> expected = new ArrayList<>();
         expected.add("getName");

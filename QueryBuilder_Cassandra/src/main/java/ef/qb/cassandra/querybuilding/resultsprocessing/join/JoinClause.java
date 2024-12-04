@@ -69,7 +69,7 @@ public class JoinClause extends Clause {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        JoinClause that = (JoinClause) o;
+        var that = (JoinClause) o;
         return argPosition == that.argPosition && Objects.equals(propertyName, that.propertyName) && Objects.equals(joinAttributeName, that.joinAttributeName) && comparisonType == that.comparisonType && Objects.equals(value, that.value);
     }
 

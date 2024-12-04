@@ -67,7 +67,7 @@ public class TestClassWithAddress {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TestClassWithAddress that = (TestClassWithAddress) o;
+        var that = (TestClassWithAddress) o;
         return id == that.id && Objects.equals(name, that.name) && Objects.equals(lastName, that.lastName) && Objects.equals(address, that.address);
     }
 

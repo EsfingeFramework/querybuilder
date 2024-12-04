@@ -142,7 +142,7 @@ public class CassandraValidationQueryVisitor implements QueryVisitor {
     public List<CassandraChainQueryVisitor> getSecondaryVisitorsList() {
         List<CassandraChainQueryVisitor> visitors = new ArrayList<>();
 
-        CassandraChainQueryVisitor current = this.visitor;
+        var current = this.visitor;
 
         if (current != null) {
             visitors.add(current);
@@ -157,7 +157,7 @@ public class CassandraValidationQueryVisitor implements QueryVisitor {
     }
 
     public List<OrderByClause> getOrderByClauses() {
-        CassandraChainQueryVisitor current = this.visitor;
+        var current = this.visitor;
 
         while (current.getSecondaryVisitor() != null) {
             current = current.getSecondaryVisitor();
@@ -167,7 +167,7 @@ public class CassandraValidationQueryVisitor implements QueryVisitor {
     }
 
     public List<JoinClause> getJoinClauses() {
-        CassandraChainQueryVisitor current = this.visitor;
+        var current = this.visitor;
 
         while (current.getSecondaryVisitor() != null) {
             current = current.getSecondaryVisitor();

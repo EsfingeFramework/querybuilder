@@ -56,7 +56,7 @@ public class TestAddress {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TestAddress that = (TestAddress) o;
+        var that = (TestAddress) o;
         return code == that.code && Objects.equals(city, that.city) && Objects.equals(province, that.province);
     }
 

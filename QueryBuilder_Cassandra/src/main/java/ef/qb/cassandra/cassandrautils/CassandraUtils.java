@@ -4,7 +4,6 @@ import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import ef.qb.cassandra.exceptions.MissingAnnotationException;
 import ef.qb.cassandra.exceptions.MissingKeySpaceNameException;
-import java.lang.reflect.Field;
 
 public class CassandraUtils {
 
@@ -13,9 +12,9 @@ public class CassandraUtils {
             throw new MissingAnnotationException("@Table annotation missing from class " + aClass.getSimpleName());
         }
 
-        Field[] classFields = aClass.getDeclaredFields();
-        boolean partitionAnnotationFound = false;
-        for (Field f : classFields) {
+        var classFields = aClass.getDeclaredFields();
+        var partitionAnnotationFound = false;
+        for (var f : classFields) {
             if (f.isAnnotationPresent(PartitionKey.class)) {
                 partitionAnnotationFound = true;
                 break;

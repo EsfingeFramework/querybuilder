@@ -46,7 +46,7 @@ public class OrderByClause extends Clause {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        OrderByClause that = (OrderByClause) o;
+        var that = (OrderByClause) o;
         return Objects.equals(propertyName, that.propertyName) && direction == that.direction;
     }
 

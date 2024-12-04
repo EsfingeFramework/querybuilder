@@ -24,7 +24,7 @@ public class JoinProcessor extends BasicResultsProcessor {
         if (joinClauses.isEmpty() || list.isEmpty())
             return list;
 
-        for (JoinClause c : joinClauses) {
+        for (var c : joinClauses) {
             list = filterListByJoinClause(list, c);
         }
 

@@ -21,4 +21,7 @@ module querybuilder.mongodb {
 
     provides ef.qb.core.methodparser.formater.FormaterFactory with
         ef.qb.mongodb.formaters.MongoDBFormaterFactory;
+
+     provides ef.qb.mongodb.DatastoreProvider with
+            ef.qb.mongodb.DefaultDatastoreProvider;
 }

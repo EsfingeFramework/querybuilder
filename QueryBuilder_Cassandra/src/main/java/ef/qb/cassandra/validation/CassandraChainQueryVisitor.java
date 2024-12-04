@@ -40,7 +40,7 @@ public class CassandraChainQueryVisitor implements QueryVisitor {
             if (connector.equalsIgnoreCase("OR")) {
                 primaryVisitor.visitEnd();
 
-                int queryLimit = getConfiguration().getSecondaryQueryLimit();
+                var queryLimit = getConfiguration().getSecondaryQueryLimit();
 
                 if (queryDepth >= queryLimit) {
                     throw new SecondaryQueryLimitExceededException("Current query depth is " + queryDepth + ", but the configured limit is " + queryLimit);

@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ef.qb.cassandra.exceptions.WrongConfigurationException;
 import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
 import static java.nio.file.Paths.get;
-import java.util.logging.Logger;
 import static java.util.logging.Logger.getLogger;
 
 public class ConfigReader {
@@ -16,8 +14,8 @@ public class ConfigReader {
     }
 
     public static CassandraConfig getConfiguration(String resourcePath) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        URL res = ConfigReader.class.getClassLoader().getResource(resourcePath);
+        var objectMapper = new ObjectMapper();
+        var res = ConfigReader.class.getClassLoader().getResource(resourcePath);
 
         if (res == null) {
             return getDefaultConfig();
@@ -42,10 +40,10 @@ public class ConfigReader {
     }
 
     private static CassandraConfig getDefaultConfig() {
-        Logger logger = getLogger("InfoLogging");
+        var logger = getLogger("InfoLogging");
         logger.info("No valid \"config.json\" file found in resource folder, using default configuration.");
 
-        CassandraConfig defaultConfig = new CassandraConfig();
+        var defaultConfig = new CassandraConfig();
         defaultConfig.setOrderingLimit(1000);
         defaultConfig.setSecondaryQueryLimit(3);
 

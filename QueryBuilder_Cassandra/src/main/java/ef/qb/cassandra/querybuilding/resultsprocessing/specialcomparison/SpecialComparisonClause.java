@@ -5,7 +5,6 @@ import ef.qb.cassandra.querybuilding.Clause;
 import static ef.qb.cassandra.querybuilding.resultsprocessing.specialcomparison.SpecialComparisonUtils.hasCompareToNullAnnotationOnFields;
 import static ef.qb.cassandra.reflection.CassandraReflectionUtils.getClassGetterForField;
 import static ef.qb.cassandra.reflection.CassandraReflectionUtils.getClassGetters;
-import java.lang.reflect.Method;
 import java.util.Objects;
 import static java.util.Objects.hash;
 
@@ -36,8 +35,8 @@ public class SpecialComparisonClause extends Clause {
 
     public Object getValue() {
         if (hasCompareToNullAnnotationOnFields(this.value)) {
-            Method[] getters = getClassGetters(this.value.getClass());
-            Method getter = getClassGetterForField(this.value.getClass(), getters, propertyName);
+            var getters = getClassGetters(this.value.getClass());
+            var getter = getClassGetterForField(this.value.getClass(), getters, propertyName);
 
             try {
                 return getter.invoke(this.value);
@@ -79,7 +78,7 @@ public class SpecialComparisonClause extends Clause {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        SpecialComparisonClause that = (SpecialComparisonClause) o;
+        var that = (SpecialComparisonClause) o;
         return Objects.equals(propertyName, that.propertyName) && specialComparisonType == that.specialComparisonType;
     }
 

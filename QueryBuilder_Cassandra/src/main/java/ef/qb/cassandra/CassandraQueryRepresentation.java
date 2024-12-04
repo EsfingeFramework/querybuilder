@@ -46,12 +46,12 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     public Object getQuery(Map<String, Object> parameters) {
         updateConditions(parameters);
 
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         builder.append("SELECT * FROM <#keyspace-name#>.").append(entity);
 
         // Set the statement value based on the parameters
-        for (ConditionStatement statement : conditions) {
-            String propertyName = statement.getPropertyName();
+        for (var statement : conditions) {
+            var propertyName = statement.getPropertyName();
 
             // Check if the property name in the parameter map is named after the param name + comparison convention
             // if so, update the name of the property for the search this is used for the Query objects with comparison
@@ -65,8 +65,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
 
         }
         // Set the Special comparison clause value based on the parameters
-        for (JoinClause clause : joinClauses) {
-            String propertyName = clause.getJoinTypeName() + clause.getJoinAttributeName().substring(0, 1).toUpperCase() + clause.getJoinAttributeName().substring(1);
+        for (var clause : joinClauses) {
+            var propertyName = clause.getJoinTypeName() + clause.getJoinAttributeName().substring(0, 1).toUpperCase() + clause.getJoinAttributeName().substring(1);
 
             if (parameters.get(propertyName) == null) {
                 if (parameters.get(propertyName + clause.getComparisonType().getOpName()) != null) {
@@ -77,8 +77,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
             clause.setValue(parameters.get(propertyName));
         }
         // Set the join clause value based on the parameters
-        for (SpecialComparisonClause clause : specialComparisonClauses) {
-            String propertyName = clause.getPropertyName();
+        for (var clause : specialComparisonClauses) {
+            var propertyName = clause.getPropertyName();
 
             if (parameters.get(propertyName) == null) {
                 if (parameters.get(propertyName + clause.getSpecialComparisonType().getOpName()) != null) {
@@ -89,7 +89,7 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
             clause.setValue(parameters.get(propertyName));
         }
         // Append the statement value according to the rules
-        for (ConditionStatement statement : conditions) {
+        for (var statement : conditions) {
             if (!(statement.getValue() == null && statement.getNullOption() == IGNORE_WHEN_NULL)) {
                 if (!builder.toString().contains("WHERE")) {
                     builder.append(" WHERE ");
@@ -106,7 +106,7 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     }
 
     public void updateConditions(Map<String, Object> parameters) {
-        for (ConditionStatement statement : conditions) {
+        for (var statement : conditions) {
             if (parameters.get(statement.getPropertyName()) != null || statement.getNullOption() != IGNORE_WHEN_NULL) {
 
                 statement.setValue(parameters.get(statement.getPropertyName()));
@@ -115,8 +115,8 @@ public class CassandraQueryRepresentation implements QueryRepresentation {
     }
 
     private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex) {
-        for (int i = currentConditionIndex + 1; i < conditions.size(); i++) {
-            ConditionStatement c = conditions.get(i);
+        for (var i = currentConditionIndex + 1; i < conditions.size(); i++) {
+            var c = conditions.get(i);
 
             if (c.getNullOption() != IGNORE_WHEN_NULL || c.getValue() != null) {
                 return true;

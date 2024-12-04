@@ -23,11 +23,11 @@ public class JoinProcessorTest {
     public void init() {
         objectList = new ArrayList<>();
 
-        TestClassWithAddress obj1 = new TestClassWithAddress(1, "Pedro", "Silva", new TestAddress("Bolzano", "BZ", 39100));
-        TestClassWithAddress obj2 = new TestClassWithAddress(2, "Marcos", "Ferreira", new TestAddress("Trento", "TN", 38100));
-        TestClassWithAddress obj3 = new TestClassWithAddress(3, "Antonio", "Marques", new TestAddress("Bolzano", "BZ", 39100));
-        TestClassWithAddress obj4 = new TestClassWithAddress(4, "Marcos", "Silva", new TestAddress("Roma", "RM", 12345));
-        TestClassWithAddress obj5 = new TestClassWithAddress(5, "Silvia", "Bressan", new TestAddress("Napoli", "NA", 54321));
+        var obj1 = new TestClassWithAddress(1, "Pedro", "Silva", new TestAddress("Bolzano", "BZ", 39100));
+        var obj2 = new TestClassWithAddress(2, "Marcos", "Ferreira", new TestAddress("Trento", "TN", 38100));
+        var obj3 = new TestClassWithAddress(3, "Antonio", "Marques", new TestAddress("Bolzano", "BZ", 39100));
+        var obj4 = new TestClassWithAddress(4, "Marcos", "Silva", new TestAddress("Roma", "RM", 12345));
+        var obj5 = new TestClassWithAddress(5, "Silvia", "Bressan", new TestAddress("Napoli", "NA", 54321));
 
         objectList.add(obj1);
         objectList.add(obj2);
@@ -45,8 +45,8 @@ public class JoinProcessorTest {
         ResultsProcessor processor = new JoinProcessor(joinClauses);
 
         List<TestClassWithAddress> expected = new ArrayList<>();
-        TestClassWithAddress exp1 = new TestClassWithAddress(1, "Pedro", "Silva", new TestAddress("Bolzano", "BZ", 39100));
-        TestClassWithAddress exp2 = new TestClassWithAddress(3, "Antonio", "Marques", new TestAddress("Bolzano", "BZ", 39100));
+        var exp1 = new TestClassWithAddress(1, "Pedro", "Silva", new TestAddress("Bolzano", "BZ", 39100));
+        var exp2 = new TestClassWithAddress(3, "Antonio", "Marques", new TestAddress("Bolzano", "BZ", 39100));
         expected.add(exp1);
         expected.add(exp2);
 
@@ -64,8 +64,8 @@ public class JoinProcessorTest {
         ResultsProcessor processor = new JoinProcessor(joinClauses);
 
         List<TestClassWithAddress> expected = new ArrayList<>();
-        TestClassWithAddress exp1 = new TestClassWithAddress(1, "Pedro", "Silva", new TestAddress("Bolzano", "BZ", 39100));
-        TestClassWithAddress exp2 = new TestClassWithAddress(3, "Antonio", "Marques", new TestAddress("Bolzano", "BZ", 39100));
+        var exp1 = new TestClassWithAddress(1, "Pedro", "Silva", new TestAddress("Bolzano", "BZ", 39100));
+        var exp2 = new TestClassWithAddress(3, "Antonio", "Marques", new TestAddress("Bolzano", "BZ", 39100));
         expected.add(exp1);
         expected.add(exp2);
 
@@ -85,8 +85,8 @@ public class JoinProcessorTest {
         ResultsProcessor processor = new JoinProcessor(joinClauses);
 
         List<TestClassWithAddress> expected = new ArrayList<>();
-        TestClassWithAddress exp1 = new TestClassWithAddress(1, "Pedro", "Silva", new TestAddress("Bolzano", "BZ", 39100));
-        TestClassWithAddress exp2 = new TestClassWithAddress(3, "Antonio", "Marques", new TestAddress("Bolzano", "BZ", 39100));
+        var exp1 = new TestClassWithAddress(1, "Pedro", "Silva", new TestAddress("Bolzano", "BZ", 39100));
+        var exp2 = new TestClassWithAddress(3, "Antonio", "Marques", new TestAddress("Bolzano", "BZ", 39100));
         expected.add(exp1);
         expected.add(exp2);
 

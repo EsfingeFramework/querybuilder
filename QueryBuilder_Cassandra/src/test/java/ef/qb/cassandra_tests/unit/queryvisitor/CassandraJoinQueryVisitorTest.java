@@ -10,7 +10,6 @@ import ef.qb.cassandra.querybuilding.resultsprocessing.specialcomparison.Special
 import ef.qb.cassandra.validation.CassandraVisitorFactory;
 import ef.qb.core.methodparser.ComparisonType;
 import ef.qb.core.methodparser.OrderingDirection;
-import ef.qb.core.methodparser.QueryRepresentation;
 import ef.qb.core.methodparser.QueryVisitor;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -26,10 +25,9 @@ public class CassandraJoinQueryVisitorTest {
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        JoinClause expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person",
@@ -46,11 +44,10 @@ public class CassandraJoinQueryVisitorTest {
         visitor.visitCondition("address.city", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        JoinClause expected1 = new JoinClause("address", "state", JoinComparisonType.EQUALS);
-        JoinClause expected2 = new JoinClause("address", "city", JoinComparisonType.EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var expected1 = new JoinClause("address", "state", JoinComparisonType.EQUALS);
+        var expected2 = new JoinClause("address", "city", JoinComparisonType.EQUALS);
         expected2.setArgPosition(1);
 
         assertEquals(
@@ -69,10 +66,9 @@ public class CassandraJoinQueryVisitorTest {
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        JoinClause expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
         expected.setArgPosition(1);
 
         assertEquals(
@@ -92,10 +88,9 @@ public class CassandraJoinQueryVisitorTest {
         visitor.visitCondition("address.state", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        JoinClause expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
         expected.setArgPosition(2);
 
         assertEquals(
@@ -112,10 +107,9 @@ public class CassandraJoinQueryVisitorTest {
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        JoinClause expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var expected = new JoinClause("address", "state", JoinComparisonType.EQUALS);
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person WHERE name = 1? ALLOW FILTERING",
@@ -134,11 +128,10 @@ public class CassandraJoinQueryVisitorTest {
         visitor.visitCondition("name", ComparisonType.EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        JoinClause expected1 = new JoinClause("address", "state", JoinComparisonType.EQUALS);
-        JoinClause expected2 = new JoinClause("address", "city", JoinComparisonType.EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var expected1 = new JoinClause("address", "state", JoinComparisonType.EQUALS);
+        var expected2 = new JoinClause("address", "city", JoinComparisonType.EQUALS);
         expected2.setArgPosition(1);
 
         assertEquals(
@@ -155,11 +148,10 @@ public class CassandraJoinQueryVisitorTest {
         visitor.visitOrderBy("age", OrderingDirection.ASC);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        OrderByClause expectedOrderBy = new OrderByClause("age", OrderingDirection.ASC);
-        JoinClause expectedJoin = new JoinClause("address", "state", JoinComparisonType.EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var expectedOrderBy = new OrderByClause("age", OrderingDirection.ASC);
+        var expectedJoin = new JoinClause("address", "state", JoinComparisonType.EQUALS);
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person",
@@ -176,12 +168,10 @@ public class CassandraJoinQueryVisitorTest {
         visitor.visitCondition("name", ComparisonType.NOT_EQUALS);
         visitor.visitEnd();
 
-        QueryRepresentation qr = visitor.getQueryRepresentation();
-        String query = qr.getQuery().toString();
-
-        SpecialComparisonClause expectedSpecialClause = new SpecialComparisonClause("name", SpecialComparisonType.NOT_EQUALS);
-
-        JoinClause expectedJoin = new JoinClause("address", "state", JoinComparisonType.EQUALS);
+        var qr = visitor.getQueryRepresentation();
+        var query = qr.getQuery().toString();
+        var expectedSpecialClause = new SpecialComparisonClause("name", SpecialComparisonType.NOT_EQUALS);
+        var expectedJoin = new JoinClause("address", "state", JoinComparisonType.EQUALS);
 
         assertEquals(
                 "SELECT * FROM <#keyspace-name#>.Person",

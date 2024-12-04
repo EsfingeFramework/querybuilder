@@ -69,8 +69,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
     public void visitCondition(String parameter, ComparisonType comparisonType) {
         if (parameter.contains(".")) {
             verifyJoinLimit(parameter);
-            String joinTypeName = parameter.substring(0, parameter.indexOf("."));
-            String joinAttributeName = parameter.substring(parameter.indexOf(".") + 1);
+            var joinTypeName = parameter.substring(0, parameter.indexOf("."));
+            var joinAttributeName = parameter.substring(parameter.indexOf(".") + 1);
 
             joinClauses.add(new JoinClause(joinTypeName, joinAttributeName, JoinComparisonType.fromComparisonType(comparisonType)));
             joinClauses.get(joinClauses.size() - 1).setArgPosition(conditions.size() + specialComparisonClauses.size() + joinClauses.size() - 1 - numberOfFixedValues + argumentPositionOffset);
@@ -96,8 +96,8 @@ public class CassandraQueryVisitor implements QueryVisitor {
     public void visitCondition(String parameter, ComparisonType comparisonType, NullOption nullOption) {
         if (parameter.contains(".")) {
             verifyJoinLimit(parameter);
-            String joinTypeName = parameter.substring(0, parameter.indexOf("."));
-            String joinAttributeName = parameter.substring(parameter.indexOf(".") + 1);
+            var joinTypeName = parameter.substring(0, parameter.indexOf("."));
+            var joinAttributeName = parameter.substring(parameter.indexOf(".") + 1);
 
             if (nullOption == NullOption.COMPARE_TO_NULL) {
                 if (comparisonType == ComparisonType.NOT_EQUALS) {
@@ -163,7 +163,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public void visitEnd() {
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         builder.append("SELECT * FROM <#keyspace-name#>.").append(entity);
 
         if (!conditions.isEmpty()) {
@@ -177,7 +177,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     private boolean hasOneNoIgnorableProperty() {
-        for (ConditionStatement cond : conditions) {
+        for (var cond : conditions) {
             if (cond.getNullOption() != NullOption.IGNORE_WHEN_NULL) {
                 return true;
             }
@@ -186,9 +186,9 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     private String getConditionsQuery() {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
-        for (int i = 0; i < conditions.size(); i++) {
+        for (var i = 0; i < conditions.size(); i++) {
             sb.append(conditions.get(i).toString());
 
             if (i < conditions.size() - 1) {
@@ -204,7 +204,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
     }
 
     private boolean hasConditionNotToBeIgnoredNext(int currentConditionIndex) {
-        for (int i = currentConditionIndex + 1; i < conditions.size(); i++) {
+        for (var i = currentConditionIndex + 1; i < conditions.size(); i++) {
             if (conditions.get(i).getNullOption() != NullOption.IGNORE_WHEN_NULL || conditions.get(i).getValue() != null) {
                 return true;
             }
@@ -215,13 +215,12 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     @Override
     public boolean isDynamic() {
-        for (ConditionStatement cond : conditions) {
+        for (var cond : conditions) {
             if (cond.getNullOption() != NullOption.NONE) {
                 return true;
             }
         }
-
-        for (SpecialComparisonClause c : specialComparisonClauses) {
+        for (var c : specialComparisonClauses) {
             if (c.getSpecialComparisonType() == SpecialComparisonType.COMPARE_TO_NULL) {
                 return true;
             }
@@ -255,7 +254,7 @@ public class CassandraQueryVisitor implements QueryVisitor {
 
     private Map<String, Object> getFixParametersMap() {
         Map<String, Object> fixParameters = new HashMap<>();
-        for (ConditionStatement cond : conditions) {
+        for (var cond : conditions) {
             if (cond.getValue() != null) {
                 fixParameters.put(cond.getPropertyName(), cond.getValue());
             }

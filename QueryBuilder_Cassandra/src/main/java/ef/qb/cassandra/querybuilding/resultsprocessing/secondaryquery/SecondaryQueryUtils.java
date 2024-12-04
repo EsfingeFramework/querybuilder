@@ -2,7 +2,6 @@ package ef.qb.cassandra.querybuilding.resultsprocessing.secondaryquery;
 
 import ef.qb.cassandra.exceptions.MethodInvocationException;
 import static ef.qb.cassandra.reflection.CassandraReflectionUtils.getClassGetters;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
@@ -14,13 +13,13 @@ public class SecondaryQueryUtils {
             return false;
         }
 
-        Method[] obj1Getters = getClassGetters(obj1.getClass());
-        Method[] obj2Getters = getClassGetters(obj2.getClass());
+        var obj1Getters = getClassGetters(obj1.getClass());
+        var obj2Getters = getClassGetters(obj2.getClass());
 
-        for (int i = 0; i < obj1Getters.length; i++) {
+        for (var i = 0; i < obj1Getters.length; i++) {
             try {
-                Object result1 = obj1Getters[i].invoke(obj1);
-                Object result2 = obj2Getters[i].invoke(obj2);
+                var result1 = obj1Getters[i].invoke(obj1);
+                var result2 = obj2Getters[i].invoke(obj2);
 
                 if (result1 == null) {
                     if (result2 != null) {
@@ -49,7 +48,7 @@ public class SecondaryQueryUtils {
     public static <E> List removeDuplicateElementsFromList(List<E> list) {
         List<E> result = new ArrayList<>();
 
-        for (E e : list) {
+        for (var e : list) {
             if (!isObjectInList(e, result)) {
                 result.add(e);
             }
@@ -59,7 +58,7 @@ public class SecondaryQueryUtils {
     }
 
     private static <E> boolean isObjectInList(E object, List<E> list) {
-        for (E e : list) {
+        for (var e : list) {
             if (reflectiveEquals(e, object)) {
                 return true;
             }
