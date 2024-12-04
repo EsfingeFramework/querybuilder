@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/test/asm-all-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/test/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib/test/classmock_1.1.jar"/>
+	<classpathentry kind="lib" path="lib/test/hamcrest-core-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/test/hamcrest-library-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/test/objenesis-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/test/jmock-2.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/test/jmock-junit4-2.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/test/jmock-legacy-2.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/el-api.jar"/>
+	<classpathentry kind="lib" path="lib/jasper-el.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
