@@ -2,4 +2,4 @@
 
 Framework for creating queries based on method names.
 
-Archive projects.
+Archived projects.
