@@ -1,4 +1,4 @@
-# esfinge_querybuilder
+# Esfinge Query Builder
 
 Framework for creating queries based on method names.
 
