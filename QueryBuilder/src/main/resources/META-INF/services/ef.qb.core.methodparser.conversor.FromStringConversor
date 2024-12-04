@@ -1,7 +1,0 @@
-ef.qb.core.methodparser.conversor.ToIntConversor
-ef.qb.core.methodparser.conversor.ToBooleanConversor
-ef.qb.core.methodparser.conversor.ToShortConversor
-ef.qb.core.methodparser.conversor.ToByteConversor
-ef.qb.core.methodparser.conversor.ToDoubleConversor
-ef.qb.core.methodparser.conversor.ToFloatConversor
-ef.qb.core.methodparser.conversor.ToLongConversor
