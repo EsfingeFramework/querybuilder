@@ -131,12 +131,12 @@ The following describes each of the entities mapped in the project.
 
 ### MongoDB
 
-![JPA](docs/mongodb.svg)
+![MongoDB](docs/mongodb.svg)
 
 ### Cassandra
 
-![JPA](docs/cassandra.svg)
+![Cassandra](docs/cassandra.svg)
 
 ### Neo4J
 
-![JPA](docs/neo4j.svg)
+![Neo4J](docs/neo4j.svg)
