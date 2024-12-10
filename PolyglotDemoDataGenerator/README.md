@@ -129,3 +129,35 @@ The following table discusses each of the entities mapped in the project. All en
 |------------------|------------------|------------------|------------------|
 | ![JPA](docs/jpa.svg) | ![MongoDB](docs/mongodb.svg) | ![Cassandra](docs/cassandra.svg) | ![Neo4J](docs/neo4j.svg)|
 Entity `Customer` for stored customers. Address for stored customer addresses. `Product` for stored products.| `Rating` entity to record product ratings with values from 1 to 5, with 1 being poor and 5 being excellent. | Entity `Cart` that represents a shopping cart and `Item` to represent the purchased products. | Entities `Start`, `Stage`, and `Transition` represent a graph demonstrating the customer's path while navigating the web store. A `Transition` shows where the customer came from (`Start`) and to which page they went (`Stage`). |
+
+## Data generation
+
+Given that all four database instances are operational and setup, simply execute the 'PolyglotDataGeneration' project to generate all of the data. This is accomplished by the test class 'DataGeneratorTest'. Uncomment the line 'populate();' in the 'init()' method before running the 'Test File' command. The application will output the following:
+
+```` Plain
+25 addresses recorded.
+200 carts recorded.
+100 customers recorded.
+753 items recorded.
+50 products recorded.
+500 rating recorded.
+500 stages recorded.
+500 starts recorded.
+500 transitions recorded.
+````
+
+## Polyglot Tests
+
+We built four projects to test applications within the cited domain. The goal is to demonstrate that Esfinge Query Builder`s polyglot functionalities operate with a variety of databases.
+
+### PolyglotDemo1
+[PolyglotDemo1](https://github.com/EsfingeFramework/querybuilder/tree/develop/PolyglotDemo1) - `polyglot.demo.DemoTest` - Project that correlates data from `PostgreSQL` and `MongoDB`. In this example, it retrieves product information along with specific ratings.
+
+### PolyglotDemo2
+[PolyglotDemo2](https://github.com/EsfingeFramework/querybuilder/tree/develop/PolyglotDemo2) - `polyglot.demo.DemoTest` - Project that correlates data from `Cassandra` and `PostgreSQL`. In this example, it retrieves both shopping cart and customer data.
+
+### PolyglotDemo3
+[PolyglotDemo3](https://github.com/EsfingeFramework/querybuilder/tree/develop/PolyglotDemo3)] - `polyglot.demo.DemoTest` - Project that correlates data from `MongoDB` with data from `Cassandra`. In this example, it retrieves information on the shopped items with the highest ratings.
+
+### PolyglotDemo4
+[PolyglotDemo4](https://github.com/EsfingeFramework/querybuilder/tree/develop/PolyglotDemo4) - `polyglot.demo.DemoTest` - Project that correlates data from `PostgreSQL` and `Neo4J`. In this example, it retrieves data from customers as they navigate through the shopping site`s pages.
