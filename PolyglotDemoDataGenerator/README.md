@@ -123,25 +123,9 @@ That is it! With this, you can run the project in your preferred IDE and generat
 
 ## Data Dictionary
 
-The following describes each of the entities mapped in the project.
+The following table discusses each of the entities mapped in the project. All entities belong to the same application domain, and each database holds domain-related information based on the database's nature. In the created sample, the domain pertains to e-commerce, and the entities embody web store procedures.
 
 | JPA (PostgreSQL) |     MongoDB      |    Cassandra     |       Neo4J      |
 |------------------|------------------|------------------|------------------|
 | ![JPA](docs/jpa.svg) | ![MongoDB](docs/mongodb.svg) | ![Cassandra](docs/cassandra.svg) | ![Neo4J](docs/neo4j.svg)|
-
-
-### JPA (PostgreSQL)
-
-![JPA](docs/jpa.svg)
-
-### MongoDB
-
-![MongoDB](docs/mongodb.svg)
-
-### Cassandra
-
-![Cassandra](docs/cassandra.svg)
-
-### Neo4J
-
-![Neo4J](docs/neo4j.svg)
+Entity `Customer` for stored customers. Address for stored customer addresses. `Product` for stored products.| `Rating` entity to record product ratings with values from 1 to 5, with 1 being poor and 5 being excellent. | Entity `Cart` that represents a shopping cart and `Item` to represent the purchased products. | Entities `Start`, `Stage`, and `Transition` represent a graph demonstrating the customer's path while navigating the web store. A `Transition` shows where the customer came from (`Start`) and to which page they went (`Stage`). |
