@@ -1,0 +1,9 @@
+@startuml
+    class Rating {
+        - id: ObjectId
+        - product: String
+        - comment: String
+        - value: int
+        - source: String
+    }
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+    class Cart {
+        - id: UUID
+        - timestamp: Date
+        - customer: String
+        - status: String
+    }
+
+    class Item {
+        - cart: UUID
+        - product: String
+        - quantity: Integr
+        - price: Double
+    }
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+    class Address {
+        - id: int
+        - city: String
+        - street: String
+        - number: Long
+        - complement: String
+        - federalunit: String
+        - zipcode: String
+    }
+    class Customer {
+        - id: Long
+        - login: String
+        - name: String
+        - email: String
+        - phone: String
+        - address: Address
+    }
+    class Product {
+        - id: Long
+        - name: String
+        - description: String
+        - price: Double
+        - category: String
+        - page: String
+    }
+@enduml

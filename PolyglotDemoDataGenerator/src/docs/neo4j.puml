@@ -1,0 +1,20 @@
+@startuml
+    class Start {
+        - id: Long
+        - customer: String
+        - session: String
+    }
+
+    class Stage {
+        - id: Long
+        - location: String
+        - url: String
+    }
+
+    class Transition {
+        - id: Long
+        - customer: Start
+        - page: Stage
+        - timestamp: Date
+    }
+@enduml

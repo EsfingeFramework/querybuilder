@@ -1,6 +1,6 @@
 # Querybuilder Cassandra
 
-This project extends the [Esfinge Querybuilder](http://esfinge.sourceforge.net/Query%20Builder.html) framework whith an 
+This project extends the [Esfinge Querybuilder](https://github.com/EsfingeFramework/querybuilder) framework whith an 
 integration for the `NoSQL` database Apache Cassandra. Cassandra is an open source NoSQL distributed database
 trusted by thousands of companies for scalability and high availability without compromising performance
 
@@ -259,5 +259,5 @@ If this file is omitted, the configuration will automatically default to:
 
 This project has been developed at the Free University of Bolzano, as argument for the final thesis
 of a BSc in Computer Science, with the supervision of Professor Martins Guerra Eduardo, which is also the author of 
-the `Esfinge Querybuilde Framework`. Please visit [Esfinge Querybuilder](http://esfinge.sourceforge.net/Query%20Builder.html)
+the `Esfinge Querybuilde Framework`. Please visit [Esfinge Querybuilder](https://github.com/EsfingeFramework/querybuilder)
 for more information on the framework.
