@@ -125,6 +125,11 @@ That is it! With this, you can run the project in your preferred IDE and generat
 
 The following describes each of the entities mapped in the project.
 
+| JPA (PostgreSQL) |     MongoDB      |    Cassandra     |       Neo4J      |
+|------------------|------------------|------------------|------------------|
+| ![JPA](docs/jpa.svg) | ![MongoDB](docs/mongodb.svg) | ![Cassandra](docs/cassandra.svg) | ![Neo4J](docs/neo4j.svg)|
+
+
 ### JPA (PostgreSQL)
 
 ![JPA](docs/jpa.svg)
