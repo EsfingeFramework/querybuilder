@@ -9,6 +9,7 @@ import ef.qb.core.methodparser.conditions.SimpleCondition;
 import ef.qb.core.utils.QueryUtils;
 import static ef.qb.core.utils.QueryUtils.validateAndGetJoinAnnotation;
 import ef.qb.core.utils.StringUtils;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -32,30 +33,30 @@ public class CompositeQueryExecutor implements QueryExecutor {
     @Override
     public Object executeQuery(QueryInfo info, Object[] args) {
         Objects.requireNonNull(info, "QueryInfo cannot be null");
-
-        var compQueryObj = processDifferentPersistences(info, args);
-        info = compQueryObj.info;
-        args = compQueryObj.args;
-
-        var priResult = priExecutor.executeQuery(info, args);
-        if (priResult == null) {
-            return null;
-        }
-        var entityType = info.getEntityType();
-        for (var field : entityType.getDeclaredFields()) {
-            for (var processor : relationProcessors) {
-                if (processor.supports(field)) {
-                    priResult = processor.correlate(field, info, priResult);
+        var compQueryObjList = processDifferentPersistences(info, args);
+        var result = new ArrayList<Object>();
+        for (var compQueryObj : compQueryObjList) {
+            var priResult = priExecutor.executeQuery(compQueryObj.info, compQueryObj.args);
+            if (priResult == null) {
+                continue;
+            }
+            var entityType = info.getEntityType();
+            for (var field : entityType.getDeclaredFields()) {
+                for (var processor : relationProcessors) {
+                    if (processor.supports(field)) {
+                        priResult = processor.correlate(field, info, priResult);
+                    }
                 }
             }
+            result.addAll((Collection) priResult);
         }
-        return priResult;
+        return result;
     }
 
-    private CompositeQueryObject processDifferentPersistences(final QueryInfo info, final Object[] args) {
-        var result = new CompositeQueryObject(info, args);
+    private List<CompositeQueryObject> processDifferentPersistences(final QueryInfo info, final Object[] args) {
+        var result = new ArrayList<CompositeQueryObject>();
         var parameterNames = info.getCondition().getParameterNames();
-        int index = 0;
+        var index = 0;
         for (var parameterName : parameterNames) {
             if (parameterName.contains(".")) {
                 try {
@@ -65,40 +66,44 @@ public class CompositeQueryExecutor implements QueryExecutor {
                     Class<?> entityClass = info.getEntityType();
                     var returnType = entityClass.getMethod("get" + StringUtils.firstCharWithUppercase(secFieldName)).getReturnType();
                     if (returnType.isAnnotationPresent(PersistenceType.class)) {
-                        String principal = entityClass.getAnnotation(PersistenceType.class).value();
-                        String child = returnType.getAnnotation(PersistenceType.class).value();
+                        var principal = entityClass.getAnnotation(PersistenceType.class).value();
+                        var child = returnType.getAnnotation(PersistenceType.class).value();
                         if (!principal.equals(child)) {
+                            // different persistences
                             var secField = entityClass.getDeclaredField(secFieldName);
                             secField.setAccessible(true);
                             var secInfo = QueryUtils.createSimpleQueryInfo(secField, secAttribute);
-                            Object[] secArgs = new Object[]{args[index]};
+                            var secArgs = new Object[]{args[index]};
                             var secResult = (Collection<?>) secExecutor.executeQuery(secInfo, secArgs);
-                            var secItem = (secResult.iterator().hasNext()) ? secResult.iterator().next() : null;
-                            String newSecFieldName;
-                            String priFieldName;
-                            Object newArg = null;
-                            var joinAnn = validateAndGetJoinAnnotation(secField);
-                            if (secField.isAnnotationPresent(PolyglotOneToOne.class)) {
-                                if (secField.getType().equals(secField.getAnnotation(PolyglotOneToOne.class).referencedEntity())) {
-                                    newSecFieldName = joinAnn.referencedAttributeName();
-                                    priFieldName = joinAnn.name();
+                            var iterator = secResult.iterator();
+                            while (iterator.hasNext()) {
+                                var secItem = iterator.next();
+                                String newSecFieldName;
+                                String priFieldName;
+                                Object newArg = null;
+                                var joinAnn = validateAndGetJoinAnnotation(secField);
+                                if (secField.isAnnotationPresent(PolyglotOneToOne.class)) {
+                                    if (secField.getType().equals(secField.getAnnotation(PolyglotOneToOne.class).referencedEntity())) {
+                                        newSecFieldName = joinAnn.referencedAttributeName();
+                                        priFieldName = joinAnn.name();
+                                    } else {
+                                        newSecFieldName = joinAnn.name();
+                                        priFieldName = joinAnn.referencedAttributeName();
+                                    }
+                                    if (secItem != null) {
+                                        var secObj = secField.getType().cast(secItem);
+                                        var field = secObj.getClass().getDeclaredField(newSecFieldName);
+                                        field.setAccessible(true);
+                                        newArg = field.get(secObj);
+                                    }
+                                    var newInfo = updateQueryInfo(info, index, priFieldName);
+                                    @SuppressWarnings("MismatchedReadAndWriteOfArray")
+                                    var newArgs = args.clone();
+                                    newArgs[index] = newArg;
+                                    result.add(new CompositeQueryObject(newInfo, newArgs));
                                 } else {
-                                    newSecFieldName = joinAnn.name();
-                                    priFieldName = joinAnn.referencedAttributeName();
+                                    throw new UnsupportedOperationException("Limitation: Only implemented for @PolyglotOneToOne.");
                                 }
-                                if (secItem != null) {
-                                    var secObj = secField.getType().cast(secItem);
-                                    var field = secObj.getClass().getDeclaredField(newSecFieldName);
-                                    field.setAccessible(true);
-                                    newArg = field.get(secObj);
-                                }
-                                result.info = updateQueryInfo(info, index, priFieldName);
-                                @SuppressWarnings("MismatchedReadAndWriteOfArray")
-                                var newArgs = args.clone();
-                                newArgs[index] = newArg;
-                                result.args = newArgs;
-                            } else {
-                                throw new UnsupportedOperationException("Limitation: Only implemented for @PolyglotOneToOne.");
                             }
                         }
                     } else {
@@ -109,6 +114,9 @@ public class CompositeQueryExecutor implements QueryExecutor {
                 }
             }
             index++;
+        }
+        if (result.isEmpty()) {
+            result.add(new CompositeQueryObject(info, args));
         }
         return result;
     }
