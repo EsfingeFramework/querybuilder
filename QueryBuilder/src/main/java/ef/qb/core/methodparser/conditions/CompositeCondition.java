@@ -1,8 +1,8 @@
 package ef.qb.core.methodparser.conditions;
 
-import java.util.List;
 import ef.qb.core.methodparser.QueryVisitor;
 import ef.qb.core.methodparser.formater.ParameterFormater;
+import java.util.List;
 
 public class CompositeCondition implements QueryCondition {
 
@@ -16,6 +16,14 @@ public class CompositeCondition implements QueryCondition {
         this.firstCondition = firstCondition;
         this.conector = conector;
         this.secondCondition = secondCondition;
+    }
+
+    public QueryCondition getFirstCondition() {
+        return firstCondition;
+    }
+
+    public QueryCondition getSecondCondition() {
+        return secondCondition;
     }
 
     @Override
