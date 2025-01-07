@@ -194,7 +194,7 @@ CREATE TABLE test.Person
     <dependency>
         <groupId>io.github.esfinge-framework</groupId>
         <artifactId>querybuilder-core</artifactId>
-        <version>2.2.0</version>
+        <version>2.2.1</version>
         <scope>compile</scope>
     </dependency>
     <dependency>
