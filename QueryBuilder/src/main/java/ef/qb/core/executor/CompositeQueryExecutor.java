@@ -64,7 +64,12 @@ public class CompositeQueryExecutor implements QueryExecutor {
                     var secFieldName = words[0];
                     var secAttribute = words[1];
                     Class<?> entityClass = info.getEntityType();
-                    var returnType = entityClass.getMethod("get" + StringUtils.firstCharWithUppercase(secFieldName)).getReturnType();
+                    Class<?> returnType;
+                    try {
+                        returnType = entityClass.getMethod("get" + StringUtils.firstCharWithUppercase(secFieldName)).getReturnType();
+                    } catch (NoSuchMethodException | SecurityException ex0) {
+                        returnType = entityClass.getMethod("is" + StringUtils.firstCharWithUppercase(secFieldName)).getReturnType();
+                    }
                     if (returnType.isAnnotationPresent(PersistenceType.class)) {
                         var principal = entityClass.getAnnotation(PersistenceType.class).value();
                         var child = returnType.getAnnotation(PersistenceType.class).value();
