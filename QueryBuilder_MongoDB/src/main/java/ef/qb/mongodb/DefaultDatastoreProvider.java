@@ -11,7 +11,7 @@ import java.util.Properties;
 @ServicePriority(0)
 public class DefaultDatastoreProvider implements DatastoreProvider {
 
-    private final Datastore datastore;
+    private Datastore datastore;
 
     @SuppressWarnings("CallToPrintStackTrace")
     public DefaultDatastoreProvider() {
@@ -23,10 +23,10 @@ public class DefaultDatastoreProvider implements DatastoreProvider {
             var uri = properties.getProperty("morphia.uri");
             database = uri.substring(uri.lastIndexOf('/') + 1);
             client = MongoClients.create(new ConnectionString(uri));
+            datastore = Morphia.createDatastore(client, database);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         }
-        datastore = Morphia.createDatastore(client, database);
     }
 
     @Override
