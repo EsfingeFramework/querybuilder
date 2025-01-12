@@ -23,18 +23,13 @@
     <dependencies>
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
-            <artifactId>querybuilder-jpa1</artifactId>
-            <version>2.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-jpa1-local</artifactId>
-            <version>2.2.0</version>
+            <version>2.3.2</version>
         </dependency>
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-mongodb</artifactId>
-            <version>2.2.0</version>
+            <version>2.3.3</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

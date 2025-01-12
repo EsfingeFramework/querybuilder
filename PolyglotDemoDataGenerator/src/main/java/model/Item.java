@@ -17,9 +17,14 @@ import lombok.Data;
 public class Item implements CassandraEntity {
 
     @PartitionKey
+    private UUID id;
     private UUID cart;
     private String product;
     private Integer quantity;
     private Double price;
+
+    public Item() {
+        this.id = UUID.randomUUID();
+    }
 
 }

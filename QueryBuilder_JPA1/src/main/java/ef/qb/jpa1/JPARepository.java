@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @QueryExecutorType(JPA1)
 public class JPARepository<E> implements Repository<E> {
@@ -31,8 +33,22 @@ public class JPARepository<E> implements Repository<E> {
 
     @Override
     public E save(E obj) {
-        var saved = em.merge(obj);
-        return saved;
+        try {
+            for (var field : obj.getClass().getDeclaredFields()) {
+                if (field.isAnnotationPresent(OneToOne.class) || field.isAnnotationPresent(ManyToOne.class)) {
+                    field.setAccessible(true);
+                    var associatedEntity = field.get(obj);
+                    if (associatedEntity != null) {
+                        if (!em.contains(associatedEntity)) {
+                            field.set(obj, em.merge(associatedEntity));
+                        }
+                    }
+                }
+            }
+            return em.merge(obj);
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException("Error: ", ex);
+        }
     }
 
     @Override

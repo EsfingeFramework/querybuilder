@@ -14,6 +14,8 @@ public interface CartDAO extends Repository<Cart> {
 
     List<Cart> getCart();
 
-    List<Cart> getCartActive();
+    List<Cart> getCartByStatus(String status);
+
+    List<Cart> getCartByShopperEmail(String email);
 
 }

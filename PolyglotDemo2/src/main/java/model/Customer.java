@@ -3,6 +3,7 @@ package model;
 import ef.qb.core.annotation.PersistenceType;
 import static ef.qb.core.utils.PersistenceTypeConstants.JPA1;
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import static javax.persistence.FetchType.LAZY;
 import javax.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ public class Customer implements Serializable {
     private String name;
     private String email;
     private String phone;
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_id")
     private Address address;
 }

@@ -1,6 +1,5 @@
 package model;
 
-import com.datastax.driver.mapping.annotations.ClusteringColumn;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import com.datastax.driver.mapping.annotations.Transient;
@@ -24,7 +23,6 @@ public class Cart implements CassandraEntity {
 
     @PartitionKey
     private UUID id;
-    @ClusteringColumn
     private Date timestamp;
     private String customer;
     private String status;
@@ -32,5 +30,9 @@ public class Cart implements CassandraEntity {
     @PolyglotOneToOne(referencedEntity = Cart.class)
     @PolyglotJoin(name = "login", referencedAttributeName = "customer")
     private Customer shopper;
+
+    public Cart() {
+        this.id = UUID.randomUUID();
+    }
 
 }

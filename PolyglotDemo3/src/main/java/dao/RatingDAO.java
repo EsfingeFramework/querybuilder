@@ -14,4 +14,6 @@ public interface RatingDAO extends Repository<Rating> {
 
     List<Rating> getRatingMax();
 
+    List<Rating> getRatingBySource(String source);
+
 }

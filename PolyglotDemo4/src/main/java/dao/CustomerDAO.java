@@ -8,6 +8,6 @@ import model.Customer;
 @TargetEntity(Customer.class)
 public interface CustomerDAO extends Repository<Customer> {
 
-    List<Customer> getCustomer();
+    List<Customer> getCustomerByEmail(String email);
 
 }

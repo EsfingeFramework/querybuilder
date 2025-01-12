@@ -20,6 +20,7 @@ public class Neo4JRepository<E> implements Repository<E> {
 
     private final int DEPTH_ENTITY = 0;
     private final int DEPTH_LIST = 1;
+    private final int DEPTH_RELATIONSHIP = 1;
 
     protected Neo4jSession neo4j;
     protected Class<E> clazz;
@@ -36,8 +37,8 @@ public class Neo4JRepository<E> implements Repository<E> {
     }
 
     @Override
-    public void delete(Object id) {
-        neo4j.delete(getById(id));
+    public void delete(E obj) {
+        neo4j.delete(obj);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class Neo4JRepository<E> implements Repository<E> {
 
     @Override
     public E getById(Object id) {
-        return neo4j.load(clazz, (Serializable) id, DEPTH_ENTITY);
+        return neo4j.load(clazz, (Serializable) id, DEPTH_RELATIONSHIP);
     }
 
     @Override

@@ -29,7 +29,7 @@
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-jpa1</artifactId>
-            <version>2.2.0</version>
+            <version>2.3.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.jboss.logging</groupId>
@@ -44,12 +44,12 @@
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-jpa1-local</artifactId>
-            <version>2.2.0</version>
+            <version>2.3.2</version>
         </dependency>
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-mongodb</artifactId>
-            <version>2.2.0</version>
+            <version>2.3.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.jboss.logging</groupId>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-cassandra</artifactId>
-            <version>2.1.0</version>
+            <version>2.2.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>io.github.esfinge-framework</groupId>
             <artifactId>querybuilder-neo4j</artifactId>
-            <version>2.0.0</version>
+            <version>2.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

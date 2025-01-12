@@ -48,6 +48,12 @@ public class ServiceLocator {
         while (it.hasNext()) {
             var implementation = it.next();
             var implementationName = implementation.getClass().getAnnotation(QueryExecutorType.class).value();
+            if (implementation.getClass().isAnnotationPresent(ServicePriority.class)) {
+                var priority = implementation.getClass().getAnnotation(ServicePriority.class).value();
+                implementationName += "_priority=" + priority;
+            } else {
+                implementationName += "_priority=0";
+            }
             map.put(implementationName, implementation);
         }
         return map;

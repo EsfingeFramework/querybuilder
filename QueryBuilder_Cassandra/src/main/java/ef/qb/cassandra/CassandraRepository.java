@@ -8,8 +8,12 @@ import static ef.qb.cassandra.reflection.CassandraReflectionUtils.getClassGetter
 import ef.qb.core.Repository;
 import ef.qb.core.annotation.QueryExecutorType;
 import static ef.qb.core.utils.PersistenceTypeConstants.CASSANDRA;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @QueryExecutorType(CASSANDRA)
 public class CassandraRepository<E> implements Repository<E> {
@@ -30,9 +34,15 @@ public class CassandraRepository<E> implements Repository<E> {
     }
 
     @Override
-    public void delete(Object id) {
-        var mapper = provider.getManager().mapper(clazz);
-        mapper.delete(id);
+    public void delete(E e) {
+        try {
+            var mapper = provider.getManager().mapper(clazz);
+            var getIdMethod = e.getClass().getMethod("getId");
+            var idValue = (UUID) getIdMethod.invoke(e);
+            mapper.delete(idValue);
+        } catch (SecurityException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(CassandraRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -83,7 +93,7 @@ public class CassandraRepository<E> implements Repository<E> {
                         queryBuilder.append(ter.invoke(e));
                     }
                 }
-            }catch (Exception ex) {
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }

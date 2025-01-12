@@ -21,7 +21,7 @@ public class OneToManyHandler<E> implements RelationHandler<E> {
         var joinName = joinAnn.name();
         var referencedAttributeName = joinAnn.referencedAttributeName();
         try {
-            obj = priRepository.save(obj);
+            var mergeObj = priRepository.save(obj);
             field.setAccessible(true);
             var collection = (Collection<?>) field.get(obj);
             if (collection != null) {
@@ -29,20 +29,22 @@ public class OneToManyHandler<E> implements RelationHandler<E> {
                 for (var item : collection) {
                     if (item != null) {
                         secRepository.configureClass(item.getClass());
-                        var joinField = item.getClass().getDeclaredField(joinName);
-                        joinField.setAccessible(true);
-                        var priKey = obj.getClass().getDeclaredField(referencedAttributeName);
-                        priKey.setAccessible(true);
-                        var priKeyValue = priKey.get(obj);
-                        joinField.set(item, priKeyValue);
+                        if (!joinName.contains(".")) {
+                            var joinField = item.getClass().getDeclaredField(joinName);
+                            joinField.setAccessible(true);
+                            var priKey = mergeObj.getClass().getDeclaredField(referencedAttributeName);
+                            priKey.setAccessible(true);
+                            var priKeyValue = priKey.get(mergeObj);
+                            joinField.set(item, priKeyValue);
+                        }
                         savedItems.add(secRepository.save(item));
                     }
                 }
                 if (!savedItems.isEmpty()) {
-                    field.set(obj, savedItems);
+                    field.set(mergeObj, savedItems);
                 }
             }
-            return obj;
+            return mergeObj;
         } catch (IllegalAccessException | NoSuchFieldException | SecurityException | NoSuchMethodException | InstantiationException | IllegalArgumentException | InvocationTargetException ex) {
             ex.printStackTrace();
         }

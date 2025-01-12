@@ -18,7 +18,7 @@ public class Address implements Serializable {
     @Id
     @SequenceGenerator(name = "addressSequence", sequenceName = "address_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = SEQUENCE, generator = "addressSequence")
-    private int id;
+    private Long id;
     private String city;
     private String street;
     private Long number;

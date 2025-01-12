@@ -93,22 +93,21 @@ CREATE TABLE store.cart (
     timestamp timestamp,
     customer text,
     status text,
-    PRIMARY KEY (id, timestamp)
-) WITH CLUSTERING ORDER BY (timestamp ASC)
-  AND gc_grace_seconds = 864000
+    PRIMARY KEY (id)
+) WITH gc_grace_seconds = 864000
   AND bloom_filter_fp_chance = 0.01
   AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
   AND comment = 'Table for storing shopping cart data'
   AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy'};
   
   CREATE TABLE store.item (
+    id UUID,
     cart UUID,
     product text,
     quantity int,
     price double,
-    PRIMARY KEY (cart, product)
-) WITH CLUSTERING ORDER BY (product ASC)
-  AND gc_grace_seconds = 864000
+    PRIMARY KEY (id)
+) WITH gc_grace_seconds = 864000
   AND bloom_filter_fp_chance = 0.01
   AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
   AND comment = 'Table for storing items in shopping carts'

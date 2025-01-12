@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.UUID;
 import model.Address;
 import model.Cart;
 import model.Customer;
@@ -121,7 +120,6 @@ public class DataGeneratorTest {
         Instant oneYearAgo = now.minusSeconds(365L * 24 * 60 * 60);
         for (int i = 0; i < 200; i++) {
             var cart = new Cart();
-            cart.setId(UUID.randomUUID());
             cart.setCustomer(customers.get(random.nextInt(customers.size())));
             cart.setStatus(weightedRandomStatus());
             long randomTimestamp = oneYearAgo.getEpochSecond()

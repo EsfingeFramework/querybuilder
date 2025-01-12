@@ -10,4 +10,6 @@ public interface ProductDAO extends Repository<Product> {
 
     List<Product> getProduct();
 
+    List<Product> getProductByName(String name);
+
 }

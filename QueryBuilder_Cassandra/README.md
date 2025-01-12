@@ -194,13 +194,13 @@ CREATE TABLE test.Person
     <dependency>
         <groupId>io.github.esfinge-framework</groupId>
         <artifactId>querybuilder-core</artifactId>
-        <version>2.2.1</version>
+        <version>2.2.2</version>
         <scope>compile</scope>
     </dependency>
     <dependency>
         <groupId>io.github.esfinge-framework</groupId>
-        <artifactId>querybuilder-jpa1</artifactId>
-        <version>2.1.0</version>
+        <artifactId>querybuilder-cassandra</artifactId>
+        <version>2.3.2</version>
         <scope>compile</scope>
     </dependency>
 </dependencies>

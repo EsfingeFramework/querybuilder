@@ -49,7 +49,30 @@ public class QueryBuilder implements InvocationHandler {
         if (configuredQueryExecutors == null) {
             configuredQueryExecutors = ServiceLocator.getServiceImplementationMap(QueryExecutor.class);
         }
-        return configuredQueryExecutors.get(implementationName);
+        return getConfiguredQueryExecutorWithHP(implementationName);
+    }
+
+    private static QueryExecutor getConfiguredQueryExecutorWithHP(String implementationName) {
+        var maxPriority = Integer.MIN_VALUE;
+        QueryExecutor result = null;
+        for (String key : configuredQueryExecutors.keySet()) {
+            String[] parts = key.split("_priority=");
+            if (parts.length == 2) {
+                try {
+                    var name = parts[0];
+                    var priority = Integer.parseInt(parts[1]);
+                    if (name.toLowerCase().equals(implementationName.toLowerCase())) {
+                        if (priority > maxPriority) {
+                            maxPriority = priority;
+                            result = configuredQueryExecutors.get(key);
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid priority value for key: " + key);
+                }
+            }
+        }
+        return result;
     }
 
     public static void configureQueryExecutors(Map<String, QueryExecutor> qes) {
@@ -60,7 +83,30 @@ public class QueryBuilder implements InvocationHandler {
         if (configuredClassConfigs == null) {
             configuredClassConfigs = ServiceLocator.getServiceImplementationMap(superinterf);
         }
-        return configuredClassConfigs.get(implementationName);
+        return getConfiguredClassConfigWithHP(implementationName);
+    }
+
+    private static NeedClassConfiguration getConfiguredClassConfigWithHP(String implementationName) {
+        var maxPriority = Integer.MIN_VALUE;
+        NeedClassConfiguration result = null;
+        for (String key : configuredClassConfigs.keySet()) {
+            String[] parts = key.split("_priority=");
+            if (parts.length == 2) {
+                try {
+                    var name = parts[0];
+                    var priority = Integer.parseInt(parts[1]);
+                    if (name.toLowerCase().equals(implementationName.toLowerCase())) {
+                        if (priority > maxPriority) {
+                            maxPriority = priority;
+                            result = configuredClassConfigs.get(key);
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid priority value for key: " + key);
+                }
+            }
+        }
+        return result;
     }
 
     public static <E> E create(Class<E> interf) {
